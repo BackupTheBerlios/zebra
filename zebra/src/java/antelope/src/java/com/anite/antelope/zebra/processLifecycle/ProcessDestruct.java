@@ -133,7 +133,7 @@ public class ProcessDestruct implements IProcessDestruct {
 	private void mapProcessOutputs(AntelopeProcessInstance processInstance,
 			AntelopeTaskInstance parentTaskInstance) throws Exception {
 
-		if (log.isInfoEnabled()) {
+	    if (log.isInfoEnabled()) {
 			log.info("Attempting to map Outputs from \""
 					+ ((AntelopeProcessDefinition) (processInstance
 							.getProcessDef())).getDisplayName() + "\" to \""

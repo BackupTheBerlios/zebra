@@ -63,7 +63,7 @@ import com.anite.zebra.core.state.api.ITransaction;
  * 
  * @author Matthew.Norris
  * @author Ben Gidley
- * @hibernate.class 
+ * @hibernate.class lazy="true"
  * @hibernate.query name="tasks" query="from AntelopeTaskInstance ati where ati.processInstance = :processInstance and ati.showInTaskList=:showInTaskList"
  * @hibernate.cache usage="transactional"
  */

@@ -104,7 +104,7 @@ public class FormattedDateValidator extends AbstractBasePerFieldValidator
      * @see com.anite.penguin.formInformation.MaxLength#getMaxLength()
      */
     public String getMaxLength() {
-        return "10";
+        return "30";
     }
 
     /* (non-Javadoc)

@@ -1006,7 +1006,7 @@
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-state</artifactId>
-			<version>0.41-dev</version>
+			<version>0.42-dev</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>

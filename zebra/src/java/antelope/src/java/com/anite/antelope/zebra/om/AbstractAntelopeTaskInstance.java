@@ -281,10 +281,10 @@ public abstract class AbstractAntelopeTaskInstance implements ITaskInstance {
     public String getStringDateCreated() {
         if (this.getDateCreated() == null) {
             return "";
-        } else {
-            return CalendarHelper.getInstance().getFormattedDate(
-                    this.getDateCreated());
         }
+        return CalendarHelper.getInstance().getFormattedDate(
+                this.getDateCreated());
+
     }
 
     /**

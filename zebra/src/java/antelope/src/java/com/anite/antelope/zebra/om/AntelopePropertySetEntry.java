@@ -23,7 +23,7 @@ import java.io.Serializable;
  * @author Matthew.Norris
  * @author Ben Gidley
  * @author John Rae
- * @hibernate.class table="PropertySet"
+ * @hibernate.class lazy="true" table="PropertySet"
  * @hibernate.cache usage="transactional"
  */
 public class AntelopePropertySetEntry implements Serializable {

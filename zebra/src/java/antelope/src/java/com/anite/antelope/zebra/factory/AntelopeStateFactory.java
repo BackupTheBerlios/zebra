@@ -49,6 +49,7 @@ import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.IStateObject;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.ext.state.hibernate.HibernateStateFactory;
+import com.anite.zebra.ext.state.hibernate.LockManager;
 
 /**
  * Extends the standard HibernateStateFactory, only overriding methods where
@@ -62,6 +63,12 @@ import com.anite.zebra.ext.state.hibernate.HibernateStateFactory;
 public class AntelopeStateFactory extends HibernateStateFactory implements
         Serviceable {
 
+    private LockManager lockManager = new NotClusterSafeLockManager();
+    
+    public LockManager getLockManager() {
+        // TODO Auto-generated method stub
+        return lockManager;
+    }
     private static Log log = LogFactory.getLog(AntelopeStateFactory.class);
 
     private ServiceManager manager;
