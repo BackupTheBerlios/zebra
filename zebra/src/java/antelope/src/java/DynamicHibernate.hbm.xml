@@ -39,21 +39,16 @@
 			<cache usage="transactional" />
 			<key column="ROLE_ID"/>
 			<many-to-many 
-				class="com.anite.monkey.security.CentreAwareDynamicGroup" 
+				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" 
 				column="GROUP_ID"/>
 		</set>
 	</class>
-	<class name="com.anite.monkey.security.CentreAwareDynamicGroup" 
+	<class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" 
 		table="GROUPS" >
-		<cache usage="transactional" />
 		<id name="id" type="long" column="GROUP_ID" unsaved-value="0">
 			<generator class="native"/>
 		</id>
 		<property name="name" column="NAME" type="string"/>
-		<property name="hidden" column="HIDDEN" type="boolean"/>
-		<many-to-one name="centre" class="com.anite.monkey.om.centre.Centre" 
-			cascade="save-update" outer-join="auto" update="true" insert="true" 
-			access="property" column="centre" />
 		<set name="rolesAsSet" lazy="true" table="GROUP_ROLE" cascade="none" >
 			<cache usage="transactional" />
 			<key column="GROUP_ID"/>
@@ -83,7 +78,7 @@
 			<cache usage="transactional" />
 			<key column="USER_ID"/>
 			<many-to-many 
-				class="com.anite.monkey.security.CentreAwareDynamicGroup" 
+				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" 
 				column="GROUP_ID"/>
 		</set>
 		<set name="delegators" lazy="true" table="HIBUSER_DELEGATES" 

@@ -26,6 +26,6 @@ $page.setTitle($task.Caption)
 ##set ($age = $form.Fields.get("age"))
 <p>Hello $name</p>
 <p>You are $age years old</p>
-<p>and you are going to die on $expiry</p>
+<p>and you are going to expire on $expiry</p>
 <input type="submit" name="done" value="Done" />
 </form>

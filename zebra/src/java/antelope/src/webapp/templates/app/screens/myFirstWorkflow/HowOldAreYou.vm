@@ -40,7 +40,7 @@ $page.setTitle($task.Caption)
 ## $name is taken straight from the string placed into the context in the screen class
 ## $age is a field which is then filled in
 <p>Hello $name</p>
-<p>How old are you?<input type="text" name="age" value="$age.value" size="$age.size" maxlength="$age.maxLength"/></p>
+<p>How old are you? <input type="text" name="age" value="$age.value" size="$age.size" maxlength="$age.maxLength"/></p>
 
 
 <p><input type="submit" name="cancel" value="Cancel"/>
