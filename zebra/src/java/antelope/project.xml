@@ -18,7 +18,7 @@
 	<url>http://zebra.berlios.de</url>
 	<issueTrackingUrl>http://developer.berlios.de/bugs/?group_id=2683</issueTrackingUrl>
 	<siteAddress>shell.berlios.de</siteAddress>
-	<siteDirectory>/home/groups/zebra/htdocs</siteDirectory>
+	<siteDirectory>/home/groups/zebra/htdocs/cc/antelope</siteDirectory>
 	<distributionDirectory>/var/www/repo</distributionDirectory>
 	<repository>
 		<connection>scm:cvs:pserver:anoncvs@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/antelope</connection>
