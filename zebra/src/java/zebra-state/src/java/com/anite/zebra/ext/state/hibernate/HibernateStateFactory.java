@@ -138,6 +138,7 @@ public abstract class HibernateStateFactory implements IStateFactory {
                     } catch (HibernateException e) {
                         // It is vaguely possible someone beat us to it 
                         try {
+                            lock = null;
                             Thread.sleep(10);
                         } catch (InterruptedException e1) {
                             log
