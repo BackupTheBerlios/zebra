@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Ocelot">
+
+  <title>Ocelot</title>
+
+  <body>
+    <links>
+      <item name="Zebra" href="http://zebra.tigris.org/"/>
+      <item name="Download" href="http://zebra.tigris.org/servlets/ProjectDocumentList?folderID=2676"></item>
+    </links>
+    <menu>
+    </menu>
+  </body>
+</project>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validation SYSTEM "WEB-INF/conf/Validation.dtd">
+
+<validation requestLookupKey="action.security.ChangeUserGroup">
+  <!--Validation Specification : action.security.ChangeUserGroup-->
+  <parametervalidators>
+    <parameter-validator name="action">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="template">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="username">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="availablegroups">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="doaddgroup">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="doremovegroup">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="allocatedgroups">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+  </parametervalidators>
+  <request-validator name="action.security.ChangeUserGroup" />
+</validation>
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validation SYSTEM "WEB-INF/conf/Validation.dtd">
+
+<validation requestLookupKey="action.security.ChangeRolePermission">
+  <!--Validation Specification : action.security.ChangeRolePermission-->
+  <parametervalidators>
+    <parameter-validator name="action">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="allocatedroles">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="template">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="allocatedperms">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="doaddperm">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="availableperms">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="doremoveperm">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+  </parametervalidators>
+  <request-validator name="action.security.ChangeRolePermission" />
+</validation>
+

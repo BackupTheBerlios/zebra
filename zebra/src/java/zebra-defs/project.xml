@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<pomVersion>3</pomVersion>
+	<groupId>zebra</groupId>
+	<id>zebra-defs</id>
+	<name>Zebra Process Definitions</name>
+	<currentVersion>0.3-dev</currentVersion>
+	<inceptionYear>2004</inceptionYear>
+	<package>com.anite.zebra.ext.definitions</package>
+	<logo/>
+	<organization>
+		<name>Anite</name>
+		<url>http://www.aniteps.com</url>
+		<logo>/images/APS_logo.gif</logo>
+	</organization>
+	<gumpRepositoryId/>
+	<description>This project is the base XML loader for Zebra Process Definitions. </description>
+	<shortDescription>Zebra Process Definitions</shortDescription>
+	<url>http://www.aniteps.com</url>
+    <siteDirectory>/var/www/docs/zebra-defs</siteDirectory>
+    <distributionDirectory>/var/www/repo</distributionDirectory>
+    <repository>
+        <connection>scm:cvs:pserver:anoncvs@cvs.tigris.org:/cvs:zebra/src/java/zebra-defs</connection>
+        <url>http://zebra.tigris.org/source/browse/zebra/src/java/zebra-defs</url>
+    </repository>        
+	<developers>
+		<developer>
+			<name>Matt Norris</name>
+			<id>mpn_uk</id>
+			<email>matthew.norris@anite.com</email>
+			<organization/>
+			<roles>
+				<role>Senior Architect</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Eric Pugh</name>
+			<id>dep4b</id>
+			<email>epugh@opensourceconnections.com</email>
+			<organization>
+				<name>OpenSource Connections</name>
+				<url>http://www.opensourceconnections.com/</url>
+			</organization>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>	
+	</developers>
+	<dependencies>
+		<dependency>
+			<groupId>commons-convert</groupId>
+			<artifactId>commons-convert</artifactId>			
+			<version>20040714.191311</version>
+		</dependency>	
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>			
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>				
+			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>zebra</groupId>
+			<artifactId>zebra-core</artifactId>				
+			<version>0.4-dev</version>
+		</dependency>		 
+<!-- Needed for Hibernate Implementation -->
+     <dependency>
+       <groupId>mckoi</groupId>      
+       <artifactId>mckoi</artifactId>             
+       <version>1.0.2</version>
+     </dependency>   
+       <dependency>
+       <id>commons-collections</id>      
+       <version>2.1</version>
+     </dependency>
+     <dependency>
+       <id>hibernate</id>      
+       <version>2.1.1</version>
+     </dependency>
+	<dependency>
+      <groupId>hibernate</groupId>      
+      <artifactId>ehcache</artifactId>            
+      <version>0.7</version> 
+      <url>http://ehcache.sf.net</url> 
+    </dependency>             
+    <dependency>
+       <id>odmg</id>      
+       <version>3.0</version>
+    </dependency>                  
+    <dependency>
+      <groupId>hibernate</groupId>      
+      <artifactId>hibernate-cglib</artifactId>            
+      <version>2.1.1</version>
+      <url>http://www.hibernate.org</url>  
+    </dependency>
+ 	<dependency>
+      <groupId>hibernate</groupId>      
+      <artifactId>jta</artifactId>            
+      <version>hib2.1</version>
+      <url>http://www.hibernate.org</url> 
+    </dependency>                                 
+    <dependency>
+       <id>dom4j</id>      
+       <version>1.4</version>
+       <url>http://www.dom4j.org/</url>
+    </dependency> 		
+    
+    <!-- Needed for XDoclet -->
+    
+    <dependency>
+      <groupId>xdoclet</groupId>
+      <artifactId>xdoclet-hibernate-module</artifactId>
+      <version>1.2.1</version>
+    </dependency>   					
+	</dependencies>
+	
+	<build>
+		<nagEmailAddress>matthew.norris@anite.com</nagEmailAddress>
+		<sourceDirectory>src/java</sourceDirectory>
+		<unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+		<unitTest>
+			<includes>
+				<include>**/*Test*.java</include>
+			</includes>
+			<excludes>
+				<exclude>**/*TestCase.java</exclude>
+			</excludes>
+			<resources/>
+		</unitTest>
+		<resources/>
+	</build>
+	
+	<reports>
+        <report>maven-changelog-plugin</report>
+        <report>maven-changes-plugin</report>
+        <report>maven-jdepend-plugin</report>
+        <report>maven-checkstyle-plugin</report>
+        <report>maven-pmd-plugin</report>
+        <report>maven-findbugs-plugin</report>
+        <report>maven-javadoc-plugin</report>
+        <report>maven-jxr-plugin</report>
+        <report>maven-tasklist-plugin</report>
+        <report>maven-developer-activity-plugin</report>
+        <report>maven-simian-plugin</report>
+        <report>maven-jcoverage-plugin</report>
+        <report>maven-statcvs-plugin</report>    	
+        <report>maven-junit-report-plugin</report> 
+	</reports>
+</project>

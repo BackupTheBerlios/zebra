@@ -1,0 +1,17 @@
+#* ------------------------------------------------------------------
+#
+#  Macros shared over multiple .vm templates go here.
+#
+*# ------------------------------------------------------------------
+
+#macro (showAllFieldErrors $form)
+	#if(!$form.allValid)
+		#foreach ($field in $form.Fields)			
+			#if(! $field.Valid )		
+		    	#foreach($message in $field.Messages)
+		    		<p class="error">$message</p>
+				#end
+			#end
+		#end
+	#end
+#end

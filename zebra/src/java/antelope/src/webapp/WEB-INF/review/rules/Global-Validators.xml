@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE global-validators SYSTEM "WEB-INF/conf/Global-Validators.dtd">
+
+<global-validators>
+  <!--This file contains a list of global parameter validators.-->
+  <parametervalidators />
+</global-validators>
+

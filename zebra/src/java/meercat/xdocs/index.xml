@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>Meercat</title>
+		<author email="bengidley@tigris.org">Ben Gidley</author>
+	</properties>
+	<body>
+		<section name="What is this?">
+			<p>This is the maven site for the meercat component of Zebra and Antelope</p>
+			<p>It is a simple way of having 1 Hibernate Session within Tomcat per request.</p>
+		</section>
+		<section name="Known Issues">
+			<p>See <a 
+				href="http://zebra.tigris.org/servlets/ProjectIssues">issuezilla</a> 
+				for known issues with antelope</p>
+		</section>
+		<section name="Future Plans">
+			<p>If we have time we will make this work using the Turbine Pipeline rather than ThreadLocal's as they 
+				are quite messy.</p>
+		</section>
+	</body>
+</document>
