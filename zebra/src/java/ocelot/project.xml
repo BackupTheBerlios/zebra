@@ -12,14 +12,45 @@
 	<gumpRepositoryId/>
 	<description>Ocelot</description>
 	<shortDescription>Ocelot</shortDescription>
-	<issueTrackingUrl>http://zebra.tigris.org/servlets/ProjectIssues</issueTrackingUrl>
-	<siteAddress>http://zebra.tigris.org/ocelot</siteAddress>
-    <siteDirectory>/var/www/docs/ocelot</siteDirectory>
-    <distributionDirectory>/var/www/repo</distributionDirectory>
+	<url>http://zebra.berlios.de</url>
+	<issueTrackingUrl>http://developer.berlios.de/bugs/?group_id=2683</issueTrackingUrl>
+	<siteAddress>shell.berlios.de</siteAddress>
+	<siteDirectory>/home/groups/zebra/htdocs/cc/ocelot</siteDirectory>
+	<distributionDirectory>/var/www/repo</distributionDirectory>
 	<repository>
-		<connection>scm:cvs:pserver:anoncvs@cvs.tigris.org:/cvs:zebra/src/java/ocelot</connection> 
-		<url>http://zebra.tigris.org/source/browse/zebra/src/java/ocelot/</url> 
+		<connection>scm:cvs:pserver:anonymous@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/ocelot</connection>
+		<url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/zebra/zebra/src/java/ocelot/</url>
 	</repository>
+	<mailingLists>
+		<mailingList>
+			<name>zebra-users@lists.berlios.de</name>
+			<subscribe>zebra-users-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>zebra-users-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>https://lists.berlios.de/pipermail/zebra-users/</archive>
+		</mailingList>
+		<mailingList>
+			<name>zebra-dev@lists.berlios.de</name>
+			<subscribe>zebra-dev-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>zebra-dev-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>https://lists.berlios.de/pipermail/zebra-dev/</archive>
+		</mailingList>
+		<mailingList>
+			<name>zebra-announce@lists.berlios.de</name>
+			<subscribe>zebra-announce-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>
+				zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>
+				https://lists.berlios.de/pipermail/zebra-announce/</archive>
+		</mailingList>
+		<mailingList>
+			<name>zebra-checkins@lists.berlios.de</name>
+			<subscribe>zebra-checkins-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>
+				zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>
+				https://lists.berlios.de/pipermail/zebra-checkins/</archive>
+		</mailingList>
+	</mailingLists>
 	<developers>
 		<developer>
 			<name>Matt Norris</name>
