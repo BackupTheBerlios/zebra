@@ -42,12 +42,6 @@ public abstract class MenuItem {
      */
     protected String htmlClass;
 
-    /**
-     *  
-     */
-    public MenuItem() {
-
-    }
 
     /**
      * This method return the html for the menu item this is basically a link
@@ -64,10 +58,12 @@ public abstract class MenuItem {
      */    
     protected void buildParams(StringBuffer sb) {
         // only add the params if they have been set
-        if(!StringUtils.isEmpty(htmlId))
+        if(!StringUtils.isEmpty(htmlId)) {
             sb.append(createParameter("id", htmlId));
-        if(!StringUtils.isEmpty(htmlClass))
+        }
+        if(!StringUtils.isEmpty(htmlClass)) {
             sb.append(createParameter("class", htmlClass));
+        }
     }
     
     protected String createParameter(String name, String value) {

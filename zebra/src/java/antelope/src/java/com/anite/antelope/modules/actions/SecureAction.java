@@ -26,9 +26,6 @@ import com.anite.antelope.modules.tools.SecurityTool;
 
 /**
  * @author Michael.Jones
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public abstract class SecureAction extends VelocitySecureAction {
 	

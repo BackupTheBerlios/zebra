@@ -20,7 +20,6 @@ package com.anite.antelope.modules.tools;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.turbine.services.pull.ApplicationTool;
-import org.apache.turbine.util.RunData;
 
 import com.anite.antelope.menu.Menu;
 
@@ -46,35 +45,23 @@ public class MenuTool implements ApplicationTool {
 	 * This method is called after every request
 	 */
 	public void init(Object data) {
-		RunData runData = (RunData) data;
+		
 		
 		log.info("Menu tool initialising");
 		// if the menu has alread been build dont bother
 		// doing it again
 		if(menu==null) {
-			menu = new Menu();
-			/*try {
-                Session session = PersistenceLocator.getInstance().getCurrentSession();
-                Transaction tx = session.beginTransaction();
-                session.save(menu);
-                tx.commit();
-            } catch (PersistenceException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (HibernateException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }*/
+			menu = new Menu();			
 		}		
 		log.info("Menu built");		
 	}
 
 	/** 
-	 * This method is NOT called after every request I should 
+	 * This method is NOT called after every request It should 
 	 * only be used for development purposes!!!!!!!!!!
 	 */
 	public void refresh() {
-		// TODO Auto-generated method stub		
+		
 	}
 	
 	public String draw() {

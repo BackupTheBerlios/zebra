@@ -16,7 +16,7 @@
  *#
  
  <a href="$link.setPage('Index.vm')">
-	<img src="/antelope/i/antelope_small.gif" id="logo" alt="A very happy Antelope" />
+	<img src="$content.getURI("i/antelope_small.gif")" id="logo" alt="A very happy Antelope" />
 </a>
 <h1>
 	<a href="$link.setPage('Index.vm')">Antelope Sample Application</a>

@@ -17,8 +17,6 @@
 package com.anite.antelope.modules.actions.security;
 
 import org.apache.fulcrum.security.GroupManager;
-import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.turbine.util.RunData;
@@ -50,15 +48,13 @@ public class DeleteGroup extends SecureAction {
 
 		if (form.isAllValid()) {
 			// Declare variables
-			SecurityService securityService;
-			UserManager usermanager;
+			
 			GroupManager groupManager;
 			DynamicModelManager modelManager;
 			FieldMap fieldMap;
 			Field groupField;
 			DynamicGroup group;
 
-			usermanager = security.getUserManager();
 			modelManager = (DynamicModelManager) security.getModelManager();
 			groupManager = security.getGroupManager();
 

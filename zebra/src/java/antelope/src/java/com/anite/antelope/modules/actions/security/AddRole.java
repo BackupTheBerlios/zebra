@@ -71,9 +71,9 @@ public class AddRole extends SecureAction {
                         + "\"is alread a role name!");
                 data.setScreenTemplate("security,AddRole.vm");
             }
-        } else
+        } else{
             data.setScreenTemplate("security,AddRole.vm");
-
+        }
     }
 
 }

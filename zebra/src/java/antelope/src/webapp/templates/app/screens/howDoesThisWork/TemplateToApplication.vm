@@ -93,7 +93,7 @@ of antelope code.</p>
 	<li>nagEmailAddress = <b>your email</b> </li>
 </ul>
 
-<p> Now run maven antelope:eclipseWeblibs and maven antelope:generateAdminData
+<p> Now run maven antelope:setup
 <h2>Step 6 - Configure Tomcat Eclipse integration</h2>
 <p>On the project right click and bring up the properties.
 In the tomcat page</p>

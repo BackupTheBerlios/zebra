@@ -26,7 +26,7 @@
 		<validator class="com.anite.antelope.validation.SelectList">
 			<args>
 			<argument name="values" type="string" 
-				value="Midget,Short,Average,Tall,Too Tall" 
+				value="Midget,Short,Averge,Tall,Too Tall" 
 				/>
 			</args>
 		</validator>

@@ -23,4 +23,5 @@ to get started.</p>
 	<li><a href="$link.setPage("howDoesThisWork,PullTools.vm")">Standard Pull Tools</a></li>
 	<li><a href="$link.setPage("howDoesThisWork,SavingAndLoadingData.vm")">Saving and loading from the database</a></li>
 	<li><a href="$link.setPage("howDoesThisWork,TemplateToApplication.vm")">Turning this template into your application</a></li>
+    <li><a href="$link.setPage("myFirstWorkflow,HowDoesThisWork.vm")">Workflows</a></li>
 </ul>

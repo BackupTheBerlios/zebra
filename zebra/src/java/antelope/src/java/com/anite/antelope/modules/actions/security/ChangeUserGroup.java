@@ -67,7 +67,8 @@ public class ChangeUserGroup extends SecureAction {
                     .getSecurityService();
             usermanager = securityService.getUserManager();
             groupManager = securityService.getGroupManager();
-            modelManager = (DynamicModelManager) securityService.getModelManager();
+            modelManager = (DynamicModelManager) securityService
+                    .getModelManager();
 
             fieldMap = form.getFields();
 
@@ -75,11 +76,12 @@ public class ChangeUserGroup extends SecureAction {
             usernameField = (Field) fieldMap.get("username");
 
             user = (DynamicUser) usermanager.getUser(usernameField.getValue());
-            
+
             // do this if removegroup has been selected
             // TODO This is going to be changed as the validation should return a 
             // button field with a is clicked method
-            if (!StringUtils.isEmpty(((Field)fieldMap.get("doremovegroup")).getValue())) {
+            if (!StringUtils.isEmpty(((Field) fieldMap.get("doremovegroup"))
+                    .getValue())) {
                 // get the allocated groups and store them in a
                 // string array
                 groupsField = (Field) fieldMap.get("allocatedgroups");
@@ -91,11 +93,12 @@ public class ChangeUserGroup extends SecureAction {
                         group = (DynamicGroup) groupManager
                                 .getGroupById(new Long(groupIds[i]));
                         modelManager.revoke(user, group);
-                        
+
                     }
                 } else
                     data.setMessage("You must select a role to remove.");
-            } else if (!StringUtils.isEmpty(((Field)fieldMap.get("doaddgroup")).getValue())) {
+            } else if (!StringUtils
+                    .isEmpty(((Field) fieldMap.get("doaddgroup")).getValue())) {
                 // get the allocated groups and store them in a
                 // string array
                 groupsField = (Field) fieldMap.get("availablegroups");
@@ -108,8 +111,9 @@ public class ChangeUserGroup extends SecureAction {
                                 .getGroupById(new Long(groupIds[i]));
                         modelManager.grant(user, group);
                     }
-                } else
+                } else {
                     data.setMessage("You must select a role to add.");
+                }
             }
         } // end of if form valid  
         data.setScreenTemplate("security,Users.vm");

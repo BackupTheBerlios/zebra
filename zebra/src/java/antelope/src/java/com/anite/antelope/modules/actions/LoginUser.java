@@ -26,12 +26,10 @@ import org.apache.turbine.modules.actions.VelocityAction;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
+import com.anite.antelope.session.UserLocator;
 import com.anite.antelope.utils.AvalonServiceHelper;
 /**
  * @author Michael.Jones
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class LoginUser extends VelocityAction {
 	/**
@@ -87,8 +85,11 @@ public class LoginUser extends VelocityAction {
 	        
 	        // log the user in, set it as the user in the
 	        // rundata and save it				
-	        data.setUser(userAdapter);
+	        data.setUser(userAdapter);	        
 	        data.save();
+	        
+	        // Tell the user locator
+	        UserLocator.setLoggedInUser(user);
 	        
 	        // set the index page
 	        data.setScreenTemplate("Index.vm");

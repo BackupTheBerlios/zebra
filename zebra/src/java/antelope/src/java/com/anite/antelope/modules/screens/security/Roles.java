@@ -19,10 +19,8 @@ package com.anite.antelope.modules.screens.security;
 import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.util.PermissionSet;
-import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
@@ -48,14 +46,13 @@ public class Roles extends SecureScreen {
             throws Exception {
         //      Retrieve the form tool that has validated the input
         FormTool form = (FormTool) context.get(FormTool.DEFAULT_TOOL_NAME);
-        
-        // User the security tool to get all the managers needed
-        SecurityTool security = (SecurityTool) context.get(SecurityTool.DEFAULT_TOOL_NAME);
-        RoleManager roleManager = security.getRoleManager();
-        PermissionManager permissionManager = security.getPermissionManager();   
 
-        DynamicGroup dynGroup;
-        RoleSet rs;
+        // User the security tool to get all the managers needed
+        SecurityTool security = (SecurityTool) context
+                .get(SecurityTool.DEFAULT_TOOL_NAME);
+        RoleManager roleManager = security.getRoleManager();
+        PermissionManager permissionManager = security.getPermissionManager();
+
         Field role;
 
         context.put("allocatedroles", roleManager.getAllRoles());
@@ -77,7 +74,6 @@ public class Roles extends SecureScreen {
             context.put("availableperms", PermissionHelper.permissionSetXOR(ps,
                     permissionManager.getAllPermissions()));
 
-            role = (Field) form.getFields().get("allocatedroles");
         }
     }
 }

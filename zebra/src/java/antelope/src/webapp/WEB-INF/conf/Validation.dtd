@@ -12,16 +12,19 @@
 <!ATTLIST named-validator name NMTOKEN #REQUIRED>
 
 <!ELEMENT parameter-validator (args,validators)>
-<!ATTLIST parameter-validator name NMTOKEN #REQUIRED>
+<!ATTLIST parameter-validator name CDATA #REQUIRED>
 
 <!ELEMENT parametervalidators (parameter-validator*)>
 
 <!ELEMENT request-validator (args?,validators?)>
 
-<!ELEMENT validation (parametervalidators,request-validator)>
 
-<!ELEMENT validator EMPTY>
+<!ELEMENT validation (parametervalidators,request-validator)>
+<!ATTLIST validation requestLookupKey CDATA #REQUIRED>
+
+<!ELEMENT validator (args)>
 <!ATTLIST validator class NMTOKEN #REQUIRED>
+
 
 <!ELEMENT validators (validator*,named-validator*)>
 

@@ -17,7 +17,6 @@
 package com.anite.antelope.modules.actions.security;
 
 import org.apache.fulcrum.security.PermissionManager;
-import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.turbine.util.RunData;
@@ -46,7 +45,6 @@ public class DeletePermission extends SecureAction {
 
 		if (form.isAllValid()) {
 			// Declare variables
-			SecurityService securityService;
 			PermissionManager permissionManager;			
 			DynamicModelManager modelManager;
 			FieldMap fieldMap;

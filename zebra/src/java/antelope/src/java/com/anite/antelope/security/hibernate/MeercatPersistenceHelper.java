@@ -31,8 +31,6 @@ public class MeercatPersistenceHelper extends AbstractManager implements
 
     protected HibernateService hibernateService;
 
-    private Session session;
-
     protected Transaction transaction;
 
     /**
@@ -47,7 +45,7 @@ public class MeercatPersistenceHelper extends AbstractManager implements
      */
     public void removeEntity(SecurityEntity entity) throws DataBackendException {
         try {
-            session = retrieveSession();
+            Session session = retrieveSession();
             transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
@@ -74,7 +72,7 @@ public class MeercatPersistenceHelper extends AbstractManager implements
     public void updateEntity(SecurityEntity entity) throws DataBackendException {
         try {
 
-            session = retrieveSession();
+            Session session = retrieveSession();
 
             transaction = session.beginTransaction();
             session.update(entity);
@@ -94,6 +92,9 @@ public class MeercatPersistenceHelper extends AbstractManager implements
                             + ")", he);
                 }
             } catch (HibernateException hex) {
+                log.error(hex);
+                throw new DataBackendException("updateEntity(" + entity
+                        + ")", hex);
             }
 
         }
@@ -112,7 +113,7 @@ public class MeercatPersistenceHelper extends AbstractManager implements
      */
     public void addEntity(SecurityEntity entity) throws DataBackendException {
         try {
-            session = retrieveSession();
+            Session session = retrieveSession();
             transaction = session.beginTransaction();
             session.save(entity);
             transaction.commit();
@@ -120,6 +121,7 @@ public class MeercatPersistenceHelper extends AbstractManager implements
             try {
                 transaction.rollback();
             } catch (HibernateException hex) {
+                log.error(hex);
             }
             throw new DataBackendException("addEntity(s,name)", he);
         }
@@ -127,21 +129,19 @@ public class MeercatPersistenceHelper extends AbstractManager implements
     }
 
     /**
-     * Returns a hibernate session that has been opened if it was null or not
-     * connected or not open.
+     * Returns a hibernate session 
      * 
-     * @return An Open hibernate session.
+     * @return An open hibernate session.
      * @throws HibernateException
      */
     public Session retrieveSession() throws HibernateException {
-        if (session == null || (!session.isConnected() && !session.isOpen())) {
-            try {
-                session = PersistenceLocator.getInstance().getCurrentSession();
-            } catch (PersistenceException e) {
-                throw new HibernateException("Session not found!");
-            }
+
+        try {
+            return PersistenceLocator.getInstance().getCurrentSession();
+        } catch (PersistenceException e) {
+            log.error("Failed to get Hibernate session", e);
+            throw new HibernateException(e);            
         }
-        return session;
     }
 
     /**
@@ -161,7 +161,7 @@ public class MeercatPersistenceHelper extends AbstractManager implements
      * 
      * @return the hibernate service
      */
-    public HibernateService getHibernateService() throws HibernateException {       
+    public HibernateService getHibernateService() throws HibernateException {
         return null;
     }
 

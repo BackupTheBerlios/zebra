@@ -16,7 +16,6 @@
  */
 package com.anite.antelope.modules.actions.security;
 
-import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
@@ -46,7 +45,6 @@ public class EditUser extends SecureAction {
 
 		if (form.isAllValid()) {
 			// Declare variables
-			SecurityService securityService;
 			UserManager usermanager;
 			DynamicModelManager modelManager ;
 			FieldMap fieldMap;
@@ -66,6 +64,8 @@ public class EditUser extends SecureAction {
 			// the data so it isnt tried to be selected in the screen class
 			usernameField.setValue("");
 
+			
+			
 		}		
 	}
 

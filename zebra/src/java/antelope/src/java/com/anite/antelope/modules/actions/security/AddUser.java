@@ -17,7 +17,6 @@
 package com.anite.antelope.modules.actions.security;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.turbine.util.RunData;
@@ -36,52 +35,53 @@ import com.anite.penguin.modules.tools.FormTool;
  */
 public class AddUser extends SecureAction {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.turbine.modules.actions.VelocitySecureAction#doPerform(org.apache.turbine.util.RunData,
-	 *      org.apache.velocity.context.Context)
-	 */
-	public void doPerform(RunData data, Context context) throws Exception {
-		FormTool form = (FormTool) context.get(FormTool.DEFAULT_TOOL_NAME);
-		SecurityTool security = (SecurityTool) context
-				.get(SecurityTool.DEFAULT_TOOL_NAME);
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.turbine.modules.actions.VelocitySecureAction#doPerform(org.apache.turbine.util.RunData,
+     *      org.apache.velocity.context.Context)
+     */
+    public void doPerform(RunData data, Context context) throws Exception {
+        FormTool form = (FormTool) context.get(FormTool.DEFAULT_TOOL_NAME);
+        SecurityTool security = (SecurityTool) context
+                .get(SecurityTool.DEFAULT_TOOL_NAME);
 
-		if (form.isAllValid()) {
-			// Declare variables
-			SecurityService securityService;
-			UserManager usermanager;
+        if (form.isAllValid()) {
+            // Declare variables
 
-			FieldMap fieldMap;
-			Field usernameField;
-			Field passwordField, confPasswordField;
+            UserManager usermanager;
 
-			usermanager = security.getUserManager();
-			fieldMap = form.getFields();
+            FieldMap fieldMap;
+            Field usernameField;
+            Field passwordField, confPasswordField;
 
-			usernameField = (Field) fieldMap.get("username");
+            usermanager = security.getUserManager();
+            fieldMap = form.getFields();
 
-			// check the username isnt alreay used
-			if (usermanager.checkExists(usernameField.getValue())) {
-				usernameField.addMessage("Username already taken!");
-				data.setScreenTemplate("security,AddUser.vm");
-				return;
-			}
+            usernameField = (Field) fieldMap.get("username");
 
-			passwordField = (Field) fieldMap.get("password");
-			confPasswordField = (Field) fieldMap.get("confpassword");
+            // check the username isnt alreay used
+            if (usermanager.checkExists(usernameField.getValue())) {
+                usernameField.addMessage("Username already taken!");
+                data.setScreenTemplate("security,AddUser.vm");
+                return;
+            }
 
-			// check the password match before adding the user
-			if (StringUtils.equals(passwordField.getValue(), confPasswordField
-					.getValue())) {
-				User user;
-				user = usermanager.getUserInstance(usernameField.getValue());
-				usermanager.addUser(user, passwordField.getValue());
-			} else {
-				passwordField.addMessage("Passwords dont match!");
-				data.setScreenTemplate("security,AddUser.vm");
-			}
-		} else
-			data.setScreenTemplate("security,AddUser.vm");
-	}
+            passwordField = (Field) fieldMap.get("password");
+            confPasswordField = (Field) fieldMap.get("confpassword");
+
+            // check the password match before adding the user
+            if (StringUtils.equals(passwordField.getValue(), confPasswordField
+                    .getValue())) {
+                User user;
+                user = usermanager.getUserInstance(usernameField.getValue());
+                usermanager.addUser(user, passwordField.getValue());
+            } else {
+                passwordField.addMessage("Passwords dont match!");
+                data.setScreenTemplate("security,AddUser.vm");
+            }
+        } else {
+            data.setScreenTemplate("security,AddUser.vm");
+        }
+    }
 }

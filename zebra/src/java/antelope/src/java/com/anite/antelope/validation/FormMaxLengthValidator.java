@@ -55,6 +55,6 @@ public class FormMaxLengthValidator extends MaxLengthStringValidator implements
     public void checkArguments() throws ReviewConfigurationException {
 
         super.checkArguments();
-        maxLength = ((Integer) args.get(MAXLENGTH)).toString();
+        maxLength = args.get(MAXLENGTH).toString();
     }
 }

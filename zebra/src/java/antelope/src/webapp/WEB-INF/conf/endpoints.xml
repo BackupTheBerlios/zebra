@@ -6,4 +6,5 @@
 	<screen name="formSample,WhichAnimal.vm" endpoint="formSample.WhichAnimal"/>
 	<screen name="formSample,CongratulationsMoorhen.vm" endpoint="formSample.UpdateMoorhen"/>
 	<screen name="formSample,CongratulationsLlama.vm" endpoint="formSample.UpdateLlama"/>
+	<screen name="myFirstWorkflow,Hello.vm" endpoint="myFirstWorkflow.HelloAction"/>
 </application>

@@ -10,20 +10,13 @@
 			
 		</section>
 		<section name="The Goals">
-			<subsection name="antelope:setup-webapp">
-				<p>This goal should be run if you change the project.xml. It will set up eclipse and 
-					copy all the jars marked <code>war.bundle=true</code> to WEB-INF\lib folder.</p>					
+			<subsection name="antelope:setup">
+				<p>This goal builds the application, creates the database 
+					and sets up eclipse for inplace development (e.g. you can 
+					debug it easily).</p>
 			</subsection>
-			<subsection name="antelope:setup-database">
-				<p>This goes should be run to regenerate the database. Before running it make sure your database is running!</p>
-				<p>This will</p>
-				<ol>
-					<li>Generate Hibernate files for XDoclet enabled hibernate 
-						classes </li>
-					<li>Drop your database and regenerate it</li>
-					<li>Run in any admin data specified in a named unit 
-						test suite</li>
-				</ol>
+			<subsection name="antelope:start-hsql">
+				<p>This will start hsql</p>
 			</subsection>
 			<subsection name="site:generate">
 				If you want to build this site and the javadoc etc run this goal.

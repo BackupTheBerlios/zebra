@@ -25,7 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * This class is a representatoin for the menu.
+ * This class is a representation for the menu.
  * TODO this should really be part of the heirachy of menu objecsts
  * 
  * @author <a href="mailTo:michael.jones@anite.com">Mike</a>

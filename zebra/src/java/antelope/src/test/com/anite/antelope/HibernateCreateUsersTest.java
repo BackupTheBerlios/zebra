@@ -33,7 +33,6 @@ public class HibernateCreateUsersTest extends AbstractCreateUsersTest {
      */
     public HibernateCreateUsersTest(String arg0) {
         super(arg0);
-        // TODO Auto-generated constructor stub
     }
 
     public void setUp() {

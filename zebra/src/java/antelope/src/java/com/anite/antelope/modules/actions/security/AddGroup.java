@@ -69,9 +69,10 @@ public class AddGroup extends SecureAction {
             } else {
                 groupField.addMessage("\"" + groupField.getValue()
                         + "\"is alread a group name!");
-                data.setScreenTemplate("security,AddGroup.vm");
+                data.setScreenTemplate("security,GroupMaintenance.vm");
             }
-        } else
-            data.setScreenTemplate("security,AddGroup.vm");
+        } else {
+            data.setScreenTemplate("security,GroupMaintenance.vm");
+        }
     }
 }

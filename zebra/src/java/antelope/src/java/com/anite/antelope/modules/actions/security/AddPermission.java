@@ -72,9 +72,9 @@ public class AddPermission extends SecureAction {
                         + "\"is alread a permission name!");
                 data.setScreenTemplate("security,AddPermission.vm");
             }
-        } else
+        } else{
             data.setScreenTemplate("security,AddPermission.vm");
-
+        }
     }
 
 }

@@ -31,7 +31,7 @@ import com.anite.penguin.formInformation.Options;
  * values. If also prefills the options with the possible values. It assumes the
  * caption is the same as the value Created 20-May-2004
  */
-public class SelectList extends AbstractValidator implements Options {
+public class SelectList extends AbstractBasePerFieldValidator implements Options {
 
     private static final String VALUES = "values";
 
@@ -40,7 +40,7 @@ public class SelectList extends AbstractValidator implements Options {
     /**
      * Load the csv seperated values
      */
-    public void checkArguments() throws ReviewConfigurationException {
+    public void doCheckArguments() throws ReviewConfigurationException {
         try {
             String valuesCombined = (String) args.get(VALUES);
 
@@ -54,7 +54,7 @@ public class SelectList extends AbstractValidator implements Options {
    /**
     * Simply check is item is in list
     */
-    public boolean validate(ParameterParser parameterPaser, String key,
+    public boolean doValidate(ParameterParser parameterPaser, String key,
             ValidationResults validationData) throws ReviewValidationException {
         
         String[] currentValues = parameterPaser.getStrings(key);

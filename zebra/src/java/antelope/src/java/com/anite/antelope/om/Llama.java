@@ -48,7 +48,6 @@ public class Llama extends Animal
      * @see com.anite.antelope.om.Animal#getImage()
      */
     public String getImage() {
-        // TODO Auto-generated method stub
         return "images/llama.gif";
     }
 }

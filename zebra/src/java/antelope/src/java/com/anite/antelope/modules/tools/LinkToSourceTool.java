@@ -105,7 +105,7 @@ public class LinkToSourceTool implements ApplicationTool {
      * @param runData
      */
     private void initialiseScreenInformation() {
-        if (runData.getScreenTemplate() != "") {
+        if (!runData.getScreenTemplate().equals("")) {
             screenSource = runData.getContextPath() + "/templates/app/screens/"
                     + runData.getScreenTemplate().replace(',', '/');
 

@@ -22,8 +22,6 @@ import org.apache.velocity.context.Context;
 
 import com.anite.antelope.modules.actions.formSample.WhichAnimal;
 import com.anite.antelope.om.Animal;
-import com.anite.penguin.form.Field;
-import com.anite.penguin.modules.tools.FormTool;
 
 /**
  * @author Ben
@@ -35,13 +33,11 @@ public class AnimalScreen extends VelocityScreen {
 
     protected void doBuildTemplate(RunData data, Context context)
             throws Exception {
-        FormTool form = (FormTool) context.get(FormTool.DEFAULT_TOOL_NAME);
-
-        Field age = (Field) form.getFields().get(AGE);
+        
 
         Animal animal = (Animal) data.getSession().getAttribute(
                 WhichAnimal.ANIMAL);
-        
+
         context.put("animal", animal);
     }
 

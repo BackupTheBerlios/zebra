@@ -84,7 +84,6 @@ public class SecurityTool implements ApplicationTool {
 	 * @see org.apache.turbine.services.pull.ApplicationTool#refresh()
 	 */
 	public void refresh() {
-		// TODO Auto-generated method stub
 
 	}
 

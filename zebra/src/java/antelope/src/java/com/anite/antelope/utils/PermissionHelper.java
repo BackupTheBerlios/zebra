@@ -34,9 +34,6 @@ import org.apache.fulcrum.security.util.SecuritySet;
 
 /**
  * @author Michael.Jones
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class PermissionHelper {
 
@@ -145,7 +142,7 @@ public class PermissionHelper {
                 // for each group
                 ss1It = ss1.iterator();
                 while (ss1It.hasNext()) {
-                    e2 = (SecurityEntity)ss1It.next();
+                    e2 = (SecurityEntity) ss1It.next();
                     if (e1.getId() == e2.getId()) {
                         shouldAdd = false;
                         break; // come out of the while
@@ -156,11 +153,15 @@ public class PermissionHelper {
                 // should have an abstract add method. there is a method
                 // but it is not abstract and it throws a runtime exception
                 if (shouldAdd) {
-                    if (ss instanceof GroupSet)
-                            ((GroupSet) ss).add((Group) e1);
-                    if (ss instanceof RoleSet) ((RoleSet) ss).add((Role) e1);
-                    if (ss instanceof PermissionSet)
-                            ((PermissionSet) ss).add((Permission) e1);
+                    if (ss instanceof GroupSet) {
+                        ((GroupSet) ss).add((Group) e1);
+                    }
+                    if (ss instanceof RoleSet) {
+                        ((RoleSet) ss).add((Role) e1);
+                    }
+                    if (ss instanceof PermissionSet) {
+                        ((PermissionSet) ss).add((Permission) e1);
+                    }
                 }
             }
 

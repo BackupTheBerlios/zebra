@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="">
+<project>	
 	<pomVersion>3</pomVersion>
-	<id>antelope</id>
 	<name>Antelope</name>
+    <artifactId>antelope</artifactId>
 	<groupId>zebra</groupId>
 	<currentVersion>0.6</currentVersion>
 	<organization>
@@ -13,48 +13,34 @@
 	<inceptionYear>2004</inceptionYear>
 	<package>com.anite.antelope</package>
 	<logo>/images/antelope_small.gif</logo>
-	<!-- Gump integration -->
-	<gumpRepositoryId>
-	</gumpRepositoryId>
 	<description>Antelope - A Zebra sample application</description>
 	<shortDescription>Zebra sample</shortDescription>
 	<url>http://zebra.tigris.org</url>
-	<issueTrackingUrl>
+	<issueTrackingUrl> 
 		http://zebra.tigris.org/servlets/ProjectIssues</issueTrackingUrl>
 	<siteAddress>http://zebra.tigris.org/antelope</siteAddress>
 	<siteDirectory>/var/www/docs/antelope</siteDirectory>
 	<distributionDirectory>/var/www/repo</distributionDirectory>
 	<repository>
-		<connection>
+		<connection> 
 			scm:cvs:pserver:anoncvs@cvs.tigris.org:/cvs:zebra/src/java/antelope</connection>
-		<url>
+		<url> 
 			http://zebra.tigris.org/source/browse/zebra/src/java/antelope/</url>
 	</repository>
 	<mailingLists>
 		<mailingList>
-			<name>users@zebra.tigris.org </name>
-			<subscribe>users-subscribe@zebra.tigris.org </subscribe>
-			<unsubscribe>users-unsubscribe@zebra.tigris.org </unsubscribe>
-			<archive>
-				http://zebra.tigris.org/servlets/SummarizeList?listName=users 
-				</archive>
+			<name>users@zebra.tigris.org</name>
+			<subscribe>users-subscribe@zebra.tigris.org</subscribe>
+			<unsubscribe>users-unsubscribe@zebra.tigris.org</unsubscribe>
+			<archive> 
+				http://zebra.tigris.org/servlets/SummarizeList?listName=users</archive>
 		</mailingList>
 	</mailingLists>
 	<developers>
 		<developer>
-			<name>Peter Courcoux</name>
-			<id>petercourcoux</id>
-			<email>peter.courcoux@anite.com</email>
-			<organization/>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>	
-		<developer>
 			<name>Ben Gidley</name>
 			<id>bengidley</id>
 			<email>bengidley@tigris.org</email>
-			<organization/>
 			<roles>
 				<role>Developer</role>
 			</roles>
@@ -63,7 +49,6 @@
 			<name>Mike Jones</name>
 			<id>mik3_jon3s</id>
 			<email>michael.jones@anite.com</email>
-			<organization/>
 			<roles>
 				<role>Developer</role>
 			</roles>
@@ -72,7 +57,6 @@
 			<name>Matt Norris</name>
 			<id>mpn_uk</id>
 			<email>matthew.norris@anite.com</email>
-			<organization/>
 			<roles>
 				<role>Senior Architect</role>
 			</roles>
@@ -81,17 +65,22 @@
 			<name>Eric Pugh</name>
 			<id>dep4b</id>
 			<email>epugh@opensourceconnections.com</email>
-			<organization>
-				<name>OpenSource Connections</name>
-				<url>http://www.opensourceconnections.com/</url>
-			</organization>
 			<roles>
 				<role>Developer</role>
 			</roles>
 		</developer>
 	</developers>
 	<dependencies>
-		<!-- Turbine 2.4 Standard Dependences -->
+		<!-- Turbine 2.4 standard Dependencies 
+			DO NOT CHANGE THE ORDER
+			These are in exactly the same order
+			as Turbine's project.xml to make it
+			easy to update if/when needed 
+			
+			Some of them are on more recent versions that
+			turbine basic - as Hibernate/Other bits need
+			them
+			-->
 		<dependency>
 			<groupId>commons-xo</groupId>
 			<artifactId>commons-xo</artifactId>
@@ -132,13 +121,13 @@
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
-		<!--dependency>
+		<dependency>
 			<groupId>merlin</groupId>
 			<artifactId>merlin-kernel-spi</artifactId>
 			<version>3.2-dev</version>
 			<properties>
 				<war.bundle>true</war.bundle>
-			</properties>			
+			</properties>
 		</dependency>
 		<dependency>
 			<groupId>merlin</groupId>
@@ -146,8 +135,8 @@
 			<version>3.2-dev</version>
 			<properties>
 				<war.bundle>true</war.bundle>
-			</properties>			
-		</dependency-->
+			</properties>
+		</dependency>
 		<dependency>
 			<groupId>avalon-activation</groupId>
 			<artifactId>avalon-activation-api</artifactId>
@@ -313,10 +302,10 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.6.1</version>
+			<url>http://jakarta.apache.org/commons/beanutils.html</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
-			<url>http://jakarta.apache.org/commons/beanutils.html</url>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -329,7 +318,7 @@
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>2.1</version>
+			<version>3.1</version>
 			<url>http://jakarta.apache.org/commons/collections/</url>
 			<properties>
 				<war.bundle>true</war.bundle>
@@ -338,7 +327,7 @@
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
-			<version>20040328.175011</version>
+			<version>1.0-rc1</version>
 			<url>http://jakarta.apache.org/commons/configuration/</url>
 			<properties>
 				<war.bundle>true</war.bundle>
@@ -392,16 +381,16 @@
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4</version>
+			<url>http://jakarta.apache.org/commons/logging.html</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
-			<url>http://jakarta.apache.org/commons/logging.html</url>
 		</dependency>
 		<dependency>
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
-			<version>1.1</version>
+			<version>1.2</version>
 			<url>http://jakarta.apache.org/commons/pool/</url>
 			<properties>
 				<war.bundle>true</war.bundle>
@@ -420,10 +409,10 @@
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>1.4</version>
+			<url>http://www.dom4j.org/</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
-			<url>http://www.dom4j.org/</url>
 		</dependency>
 		<dependency>
 			<groupId>ecs</groupId>
@@ -474,7 +463,7 @@
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-cache</artifactId>
 			<version>1.0-alpha-3</version>
-			<url>http://jakarta.apache.org/turbine/fulcrum/fulcrum-cache</url>
+			<url> http://jakarta.apache.org/turbine/fulcrum/fulcrum-cache</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -483,7 +472,7 @@
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-crypto-api</artifactId>
 			<version>1.0-alpha-4</version>
-			<url>http://jakarta.apache.org/turbine/fulcrum/fulcrum-crypto</url>
+			<url> http://jakarta.apache.org/turbine/fulcrum/fulcrum-crypto</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -492,7 +481,7 @@
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-crypto-impl</artifactId>
 			<version>1.0-alpha-4</version>
-			<url>http://jakarta.apache.org/turbine/fulcrum/fulcrum-crypto</url>
+			<url> http://jakarta.apache.org/turbine/fulcrum/fulcrum-crypto</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -501,7 +490,7 @@
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-localization-api</artifactId>
 			<version>1.0-alpha-4</version>
-			<url>http://jakarta.apache.org/turbine/fulcrum/localization</url>
+			<url> http://jakarta.apache.org/turbine/fulcrum/localization</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -510,7 +499,7 @@
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-localization-impl</artifactId>
 			<version>1.0-alpha-4</version>
-			<url>http://jakarta.apache.org/turbine/fulcrum/localization</url>
+			<url> http://jakarta.apache.org/turbine/fulcrum/localization</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -566,7 +555,7 @@
 			<groupId>jaf</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.0.2</version>
-			<url>http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
+			<url> http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -580,22 +569,6 @@
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
-		<!-- Removed as included in SDK
-		<dependency>
-			<groupId>jdbc</groupId>
-			<artifactId>jdbc</artifactId>
-			<version>2.0</version>
-			<url>http://java.sun.com/products/jdbc/</url>
-		</dependency>
-		-->
-		<!-- Commented out as included in J2SDK 1.4
-		<dependency>
-			<groupId>jndi</groupId>
-			<artifactId>jndi</artifactId>
-			<version>1.2.1</version>
-			<url>http://java.sun.com/products/jndi/</url>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -615,6 +588,11 @@
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
+		</dependency>
+		<dependency>
+			<id>jython</id>
+			<version>2.1</version>
+			<url>http://www.jython.org/</url>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -665,7 +643,7 @@
 			<groupId>village</groupId>
 			<artifactId>village</artifactId>
 			<version>2.0-dev-20030825</version>
-			<url>http://share.whichever.com/index.php?SCREEN=village</url>
+			<url> http://share.whichever.com/index.php?SCREEN=village</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -706,33 +684,33 @@
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
-		<!-- end of Turbine Dependencies -->
+		<!-- End Turbine Dependencies -->
+		<!-- Turbine Itself -->
 		<dependency>
 			<groupId>turbine</groupId>
 			<artifactId>turbine</artifactId>
-			<version>2.4-dev-anite-CVS-src-20040624</version>
+			<version>2.4-M1</version>
 			<url>http://jakarta.apache.org/turbine/</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
-		<!-- Turbine itself -->
-		<!-- end of Turbine -->
-		<!-- Hibernate Dependencies not included in Turbine 
+		<!-- End Turbine Itself -->
+		<!-- Hibernate stuff not included above 
 		Hibernate requires from the Turbine list above
-		commons-collections.jar (2.1)
+		commons-collections.jar (2.1.1)
 		commons-lang.jar (1.0.1) - Turbine provides 2.0 and this works
-		commons-logging.jar (1.0.3)
-		commons-pool.jar (1.1)
+		commons-logging.jar (1.0.4)
+		commons-pool.jar (1.2)
 		dom4j.jar (1.4)
 		xalan.jar (2.4.0) - Turbine provides 2.5.1
 		xerces.jar (2.4.0)
 		xml-apis.jar
-		-->
+	-->
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-full</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.2</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -740,7 +718,7 @@
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
-			<version>1.1</version>
+			<version>1.2.1</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -748,7 +726,7 @@
 		<dependency>
 			<groupId>ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-			<version>0.7</version>
+			<version>0.9</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -756,7 +734,7 @@
 		<dependency>
 			<groupId>hibernate</groupId>
 			<artifactId>hibernate</artifactId>
-			<version>2.1.3</version>
+			<version>2.1.6</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -765,7 +743,7 @@
 			<groupId>jdbc2_0</groupId>
 			<artifactId>jdbc2_0</artifactId>
 			<version>stdext</version>
-			<url>http://java.sun.com/products/jdbc/download.html#spec</url>
+			<url> http://java.sun.com/products/jdbc/download.html#spec</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -795,13 +773,63 @@
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
-		<!-- end Hibernate -->
-		<!-- Fulcrum Security -->
+		<!-- End Hibernate -->
+		<!-- TreeCache-->
+		<dependency>
+			<groupId>concurrent</groupId>
+			<artifactId>concurrent</artifactId>
+			<version>1.3.3</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>jboss-cache</artifactId>
+			<version>1.1</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>jboss-common</artifactId>
+			<version>1.1</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>jboss-system</artifactId>
+			<version>1.1</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>jboss-jmx</artifactId>
+			<version>1.1</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>jgroups</artifactId>
+			<version>jboss-1.1</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<!-- End TreeCache-->
+		<!-- Start Fulcrum Secruity -->
 		<dependency>
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-security-adapter-turbine</artifactId>
-			<version>1.0-alpha-4</version>
-			<url> http://jakarta.apache.org/turbine/repo/fulcrum/</url>
+			<version>1.0.4</version>
+			<url>http://jakarta.apache.org/turbine/repo/fulcrum/</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -809,8 +837,7 @@
 		<dependency>
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-security-api</artifactId>
-			<version>1.0.6</version>
-			<!--url> http://jakarta.apache.org/turbine/repo/fulcrum/</url-->
+			<version>1.0.7-dev</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -818,13 +845,13 @@
 		<dependency>
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-security-hibernate</artifactId>
-			<version>1.0.6</version>
-			<url> http://jakarta.apache.org/turbine/repo/fulcrum/</url>
+			<version>1.0.7-dev</version>
+			<url>http://jakarta.apache.org/turbine/repo/fulcrum/</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
-		<!-- end Fulcum Security-->
+		<!-- end fulcurm security -->
 		<!-- Turbine Review -->
 		<dependency>
 			<groupId>jdom</groupId>
@@ -837,15 +864,13 @@
 		<dependency>
 			<groupId>turbine-review</groupId>
 			<artifactId>turbine-review</artifactId>
-			<version>1.0-dev-20040521</version>
+			<version>1.0-rd14</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
-		<!-- End Turbine Review-->
-		<!-- Zebra Dependencies -->
-		<!-- End Zebra -->
-		<!-- Antelope Specific Dependencies -->
+		<!-- End Turbine Review -->
+		<!-- Zebra Related tools -->
 		<dependency>
 			<groupId>meercat</groupId>
 			<artifactId>meercat</artifactId>
@@ -857,11 +882,30 @@
 		<dependency>
 			<groupId>penguin</groupId>
 			<artifactId>penguin</artifactId>
-			<version>0.7</version>
+			<version>0.98</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
 		</dependency>
+		<!-- XStream to serialize penguin tool -->
+		<dependency>
+			<groupId>xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.0.2</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>xpp3</groupId>
+			<artifactId>xpp3</artifactId>
+			<version>1.1.3.4-RC8_min</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<!-- end Xstream-->
+		<!-- EndRelated tools -->
 		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>taglibs-response</artifactId>
@@ -872,21 +916,11 @@
 			</properties>
 		</dependency>
 		<dependency>
-			<groupId>hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>1.7.2-rc5</version>
-			<properties>
-				<war.bundle>true</war.bundle>
-			</properties>
-		</dependency>
-		<!-- end Antelope -->
-		<!-- these are the jars needed for the unit tests-->
-		<dependency>
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-testcontainer</artifactId>
 			<version>1.0-alpha-3</version>
 			<properties>
-				<war.bundle>true</war.bundle>
+				<war.bundle>false</war.bundle>
 			</properties>
 		</dependency>
 		<dependency>
@@ -899,58 +933,152 @@
 			<artifactId>mockobjects-core</artifactId>
 			<version>0.09</version>
 		</dependency>
-		<!-- Generate Hibernate from Xdoclet. -->
-		<dependency>
-			<groupId>xdoclet</groupId>
-			<artifactId>xdoclet</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>xdoclet</groupId>
-			<artifactId>xdoclet-hibernate-module</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>xdoclet</groupId>
-			<artifactId>xdoclet-xdoclet-module</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>xdoclet</groupId>
-			<artifactId>xjavadoc</artifactId>
-			<version>1.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1-dev</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>2.1</version>
-		</dependency>
-		<!-- Various Non Standard Plugins -->
+		<!-- End Unit testing helpers -->
+		<!-- Maven Plugins stuff -->
 		<dependency>
 			<groupId>maven</groupId>
 			<artifactId>maven-hibernate-plugin</artifactId>
-			<version>20040601.134548</version>
-			<artifactId>maven-hibernate-plugin</artifactId>			
-			<version>1.2-dev</version>
+			<version>1.2</version>
 			<type>plugin</type>
+			<properties />
 		</dependency>
 		<dependency>
 			<groupId>maven</groupId>
 			<artifactId>maven-eclipse-plugin</artifactId>
-			<version>20040706.083359</version>
+			<version>1.8</version>
 			<type>plugin</type>
+			<properties />
 		</dependency>
 		<dependency>
 			<groupId>maven-plugins</groupId>
 			<artifactId>maven-findbugs-plugin</artifactId>
-			<version>0.7.2</version>
+			<version>0.8.4</version>
 			<type>plugin</type>
+			<properties />
 		</dependency>
+		<!-- End Maven Plugins-->
+		<!-- Database Drivers -->
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>1.7.2-rc5</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>7.4.1-jdbc3</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<!-- End Database Drivers -->
+		<!-- Zebra -->
+		<dependency>
+			<groupId>zebra</groupId>
+			<artifactId>zebra-core</artifactId>
+			<version>0.4-dev</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>zebra</groupId>
+			<artifactId>zebra-defs</artifactId>
+			<version>0.3-dev</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>zebra</groupId>
+			<artifactId>zebra-state</artifactId>
+			<version>0.41-dev</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>zebra</groupId>
+			<artifactId>zebra-xmlloader</artifactId>
+			<version>0.4-dev</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>zebra</groupId>
+			<artifactId>zebra-avalon</artifactId>
+			<version>0.3-dev</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<!-- Used by property groups -->
+		<dependency>
+			<groupId>commons-convert</groupId>
+			<artifactId>commons-convert</artifactId>
+			<version>20040714.191311</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<!-- End Zebra -->
+		<!-- Hibern8ide -->
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>hibern8ide</artifactId>
+			<version>anite</version>
+		</dependency>
+		<dependency>
+			<groupId>jgraph</groupId>
+			<artifactId>jgraph</artifactId>
+			<version>3.1-java1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>looks</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>forms</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>hibernate</groupId>
+			<artifactId>pf</artifactId>
+			<version>joi-full</version>
+		</dependency>
+		<!-- Hibern8ide End-->
+		<!-- Xdoclet -->
+		 <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet</artifactId>
+            <version>1.2.1</version>
+            <properties/>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet-xdoclet-module</artifactId>
+            <version>1.2.1</version>
+            <properties/>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet-hibernate-module</artifactId>
+            <version>1.2.2-20040805-1015</version>
+            <properties/>
+        </dependency>
+		<dependency>
+			<groupId>xdoclet</groupId>
+			<artifactId>xjavadoc</artifactId>
+			<version>1.0.3</version>
+			<properties />
+		</dependency>
+		<!-- End Xdoclet -->
 	</dependencies>
 	<build>
 		<nagEmailAddress>bengidley@tigris.org</nagEmailAddress>
@@ -963,6 +1091,7 @@
 			<excludes>
 				<exclude>**/Abstract*.java</exclude>
 				<exclude>**/HibernateCreateUsersTest.java</exclude>
+				<exclude>**/Turbine*.java</exclude>
 			</excludes>
 			<resources>
 				<resource>
@@ -978,9 +1107,12 @@
 				<targetPath>/</targetPath>
 				<includes>**/*.xml</includes>
 			</resource>
+			<resource>
+				<directory>src/java</directory>
+				<targetPath>/</targetPath>
+				<includes>**/*.properties</includes>
+			</resource>
 		</resources>
-		<jars>
-		</jars>
 	</build>
 	<reports>
 		<report>maven-changelog-plugin</report>
@@ -988,7 +1120,7 @@
 		<report>maven-file-activity-plugin</report>
 		<report>maven-license-plugin</report>
 		<report>maven-linkcheck-plugin</report>
-		<report>maven-jdepend-plugin</report>
+		<!--<report>maven-jdepend-plugin</report>-->
 		<report>maven-junit-report-plugin</report>
 		<report>maven-checkstyle-plugin</report>
 		<report>maven-pmd-plugin</report>

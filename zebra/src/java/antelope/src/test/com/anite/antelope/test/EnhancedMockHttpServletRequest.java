@@ -1,4 +1,5 @@
 package com.anite.antelope.test;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -56,28 +57,27 @@ package com.anite.antelope.test;
 import com.mockobjects.servlet.MockHttpServletRequest;
 
 /**
- * Extension to the basic MockHttpServletRequest to provide some extra parameters
- * required by Turbine.
- *
- * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: EnhancedMockHttpServletRequest.java,v 1.1 2004/12/04 13:26:37 bgidley Exp $
+ * Extension to the basic MockHttpServletRequest to provide some extra
+ * parameters required by Turbine.
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
+ * @version $Id: EnhancedMockHttpServletRequest.java,v 1.1 2004/06/04 14:37:11
+ *          mik3_jon3s Exp $
  */
-public class EnhancedMockHttpServletRequest extends MockHttpServletRequest
-{
+public class EnhancedMockHttpServletRequest extends MockHttpServletRequest {
     /**
-     *
+     *  
      */
-    public EnhancedMockHttpServletRequest()
-    {
+    public EnhancedMockHttpServletRequest() {
         super();
-        // TODO Auto-generated constructor stub
-    }
-    public int getServerPort(){
-      return 8080;
     }
 
-    public String getCharacterEncoding(){
-    return "US-ASCII";
+    public int getServerPort() {
+        return 8080;
+    }
+
+    public String getCharacterEncoding() {
+        return "US-ASCII";
     }
 
 }

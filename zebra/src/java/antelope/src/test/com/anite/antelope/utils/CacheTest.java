@@ -63,7 +63,7 @@ public class CacheTest extends TestCase {
 
         for (int i = 0; i < 100; i++) {
             assertSame(date, cache.get(Date.class));
-            Thread.sleep(100);
+            Thread.sleep(1);
             assertEquals(date.getTime(), ((Date)cache.get(Date.class)).getTime());
         }
     }

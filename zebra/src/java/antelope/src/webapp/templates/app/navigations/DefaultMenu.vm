@@ -21,7 +21,13 @@
  *#
 <div id="navcontainer">
   <ul id="navlist">
-	<li id="active"><a href="#" id="current">Security</a>
+	<li id="active"><a href="#" id="current">Workflow</a>
+      <ul id="subnavlist">
+	    <li><a href="$link.setPage('TaskList.vm')">TaskList</a></li>
+		<li><a href="$link.setPage('Workflows.vm')">Workflows</a></li>
+ 	  </ul>
+ 	</li>
+	<li><a href="#" id="current">Security</a>
       <ul id="subnavlist">
 	    <li><a href="$link.setPage('security,ChangePassword.vm')">Change Password</a></li>
 		<li><a href="$link.setPage('security,PermissionMaintenance.vm')">Permission Maintenance</a></li>

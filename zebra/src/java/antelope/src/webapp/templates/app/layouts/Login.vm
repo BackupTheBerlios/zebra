@@ -20,10 +20,18 @@
 <head>
 	<title>Antelope - $page.title</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	$page.addStyle('style/layout.css')
+	$page.addStyle('style/formatting.css')
 	<style type="text/css">
-	  @import url('$content.getURI("style/style.css")');
+		#foreach ($style in $page.getStyles())
+			@import url('$content.getURI("$style")');
+		#end
 	</style>
-	<script type="text/javascript" src="$content.getURI("scripts/common.js")" ></script>
+
+	$page.addScript('scripts/common.js')
+	#foreach( $script in $page.Scripts )
+		<script type="text/javascript" src="$content.getURI("$script")" language="JavaScript"></script>
+	#end
 </head>
 	<body> 
 		<div id="wrapper" class="backgroundLogin">

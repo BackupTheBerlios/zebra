@@ -22,7 +22,7 @@ import org.apache.velocity.context.Context;
 
 import com.anite.antelope.modules.screens.SecureScreen;
 import com.anite.antelope.modules.tools.SecurityTool;
-import com.anite.penguin.modules.tools.FormTool;
+
 
 /**
  * @author <a href="mailTo:michael.jones@anite.com">Michael.Jones </a>
@@ -38,8 +38,6 @@ public class Permissions extends SecureScreen {
      */
     protected void doBuildTemplate(RunData data, Context context)
             throws Exception {
-        // Retrieve the form tool that has validated the input
-        FormTool form = (FormTool) context.get(FormTool.DEFAULT_TOOL_NAME);
         
         // Get the managers from the tool
         SecurityTool security = (SecurityTool) context.get(SecurityTool.DEFAULT_TOOL_NAME);

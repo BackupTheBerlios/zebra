@@ -14,3 +14,10 @@ turbine.log
 logs
 antelope-pom-snapshot-version
 jcoverage.ser
+default.qa
+*.lck
+*.log
+antelope.properties
+hibern8ide.properties
+antelope.script
+test.properties

@@ -22,7 +22,7 @@
 			<p>You will need</p>
 			<ul>
 				<li>A copy of Antelope either cvs or zip</li>
-				<li>Maven 1.0rc4 <a 
+				<li>Maven 1.0 <a 
 					href="http://maven.apache.org/">http://maven.apache.org/</a></li>
 				<li>Java SDK 1.4.2 <a 
 					href="http://java.sun.com">http://java.sun.com</a></li>
@@ -68,7 +68,7 @@
 			</subsection>
 		</section>
 		<section name="To use">
-			<p>The Headline steps for each item see below for details</p>
+			<p>The Headline steps for each item <strong>see below</strong> for details</p>
 			<ol>
 				<li>Install software</li>
 				<li>Run maven in the antelope folder</li>
@@ -83,6 +83,12 @@
 					apache. If you are on unix unzip it, and put maven in the 
 					path. You will need to have Java set up in the path for it 
 					to work</p>
+				<p>Once maven is installed you will need to upgrade your
+					maven Eclipse plugin by running the following command</p>
+					<p>
+						<code>maven plugin:download -DgroupId=maven -DartifactId=maven-eclipse-plugin -Dversion=1.8</code>
+					</p>
+					
 				<p>You need to install a Java SDK (not just JRE) Sun have 
 					instructions on this.</p>
 				<p>Eclipse comes as a zip file, simply get the right zip for 
@@ -101,15 +107,10 @@
 					use)</p>
 			</subsection>
 			<subsection name = "Run maven in the antelope folder">
-				<p>It is recommended to put maven in your path - as it makes it 
-					easier to use.</p>
-				<p>Change to the folder antelope is in and run</p>
-				<p>
-					<code>maven antelope:setup-webapp</code>
-				</p>
-				<p>You will see various Maven related messages and it will 
-					download the jars Antelope needs and setup the /src/webapp directory. </p>
-				<p>Some jars will fail. Due to licensing issues (they are not 
+				<p>Maven is used to build the project. This first hurdle we 
+					have to cross is to put non redistributable jars in the local
+					maven repository.</p>
+				<p>Due to licensing issues (they are not 
 					redistributable on their own) they are not on the central 
 					maven sites. Instead you should copy them from the antelope 
 					folder to the maven repository</p>
@@ -120,24 +121,29 @@
 				<p>On Linux it will be /home/USERNAME</p>
 				<p>Copy the contents of ANTELOPE/MavenRepo to your local maven 
 					repo run maven eclipse again. It should succeed.</p>
+				<p>It is recommended to put maven in your path - as it makes it 
+					easier to use.</p>
+				<p>Change to the folder antelope is in and run</p>
+				<p>
+					<code>maven antelope:start-hsql</code>
+				</p>
+				<p>This will start the simple hsql database leave this running. 
+					You will need to start this (or change to a proper database)
+					to run the application.</p>
+				<p>You will see various Maven related messages and it will 
+					download the jars Antelope needs</p>
+				<p>Next we will run the build goal. This builds the code,
+					creates the database tables and populates them with some
+					administration data to get us started.</p>
+				<p>
+					<code>maven antelope:setup</code>
+				</p>
+				<p>You need to rerun this goal if you want to change the database
+					structure.</p>
 				<p>In Eclipse Windows -> Preferences -> Java -> Build Path 
 					->Classpath Variables Add a variable called MAVEN_REPO 
 					pointing to the folder holding your local maven 
 					repository</p>
-				<p>By default the project runs using HsqlDB running in 
-					standalone mode. For production it is suggested you change 
-					the hibernate configuration files to point to a slighly 
-					more production database such as Postgresql, Oracle 
-					etc...</p>
-				<p>To use the database start hsql using startHsql.bat or 
-					startHsql.sh in the bin folder.  Note, you may need to edit the paths
-					in these startup scripts. Then run </p>
-				<p>
-					<code>maven antelope:setup-database</code>
-				</p>
-				<p>This will create the database and generate some
-					sample data.  If you change or add hibernate 
-					classes you will need to rerun this to regenerate the database.</p>		
 			</subsection>
 
 			<subsection name = "Open the antelope project">

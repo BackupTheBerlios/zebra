@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validation SYSTEM "WEB-INF/conf/Validation.dtd">
+
+<validation requestLookupKey="action.myFirstWorkflow.HelloAction">
+  <!--Validation Specification : action.myFirstWorkflow.HelloAction-->
+  <parametervalidators>
+    <parameter-validator name="cancel">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="cancel">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+    <parameter-validator name="cancel">
+      <args />
+      <validators>
+        <validator class="org.apache.turbine.component.review.validators.AlwaysTrueValidator">
+          <args />
+        </validator>
+      </validators>
+    </parameter-validator>
+  </parametervalidators>
+  <request-validator name="action.myFirstWorkflow.HelloAction" />
+</validation>
+

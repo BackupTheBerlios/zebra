@@ -19,11 +19,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	$httptool.setNoCacheHeaders()
+	
+	<meta http-equiv="content-type" content="no-cache" ></meta>
+	<meta http-equiv="pragma" content="no-cache" ></meta>
+	<meta http-equiv="expires" content="-1" ></meta>
+	<meta http-equiv="Pragma-directive" content="no-cache" ></meta>
+	<meta http-equiv="cache-directive" content="no-cache" ></meta>
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1"></meta>
+	
+
 	<title>Antelope - $page.title</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	$page.addStyle('style/layout.css')
+	$page.addStyle('style/formatting.css')
+	$page.addStyle('style/menu.css')
 	<style type="text/css">
-	  @import url('$content.getURI("style/style.css")');
-	  @import url('$content.getURI("style/menu.css")');
+		#foreach ($style in $page.getStyles())
+			@import url('$content.getURI("$style")');
+		#end
 	</style>
 	<script type="text/javascript" src="$content.getURI("scripts/common.js")" ></script>
 </head>

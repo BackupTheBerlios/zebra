@@ -12,7 +12,18 @@
 	<menu>
 		<item name="Getting Started" href="GettingStarted.html"/>
 		<item name="Buliding" href="building.html"/>
-        	<item name="Download" href="http://zebra.tigris.org/servlets/ProjectDocumentList?folderID=2676"></item>		
+		<item name="Download" 
+			href="http://zebra.tigris.org/servlets/ProjectDocumentList?folderID=2676"></item>
+		<item name="How does this work" href="howDoesThisWork/index.html" 
+			collapse="false">
+			<item name="Pull Tools" href="howDoesThisWork/PullTools.html"/>
+			<item name="Saving and Loading" 
+				href="howDoesThisWork/SavingAndLoadingData.html"/>
+			<item name="Simple Form Submission" 
+				href="howDoesThisWork/SimpleFormSubmission.html"/>
+			<item name="Creating your own application" 
+				href="howDoesThisWork/TemplateToApplication.html"/>
+		</item>
 	</menu>
   </body>
 </project>

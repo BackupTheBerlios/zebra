@@ -23,28 +23,33 @@ import org.apache.turbine.om.security.User;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
+import com.anite.antelope.session.UserLocator;
 import com.anite.antelope.utils.AvalonServiceHelper;
 
 /**
  * @author Michael.Jones
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class LogoutUser extends VelocityAction {
-	/* (non-Javadoc)
-	 * @see org.apache.turbine.modules.actions.VelocityAction#doPerform(org.apache.turbine.util.RunData, org.apache.velocity.context.Context)
-	 */
-	public void doPerform(RunData data, Context context) throws Exception {
-		// TODO this is a very long line! sort it out
-		User anonUser = new UserAdapter(AvalonServiceHelper.instance().getSecurityService().getUserManager().getUserInstance());
-		
-		// This will cause the acl to be removed from the session in
-		// the Turbine servlet code.
-		data.setACL(null);		 
-		
-		// Retrieve an anonymous user.
-		data.setUser(anonUser);
-		data.save();		 
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.turbine.modules.actions.VelocityAction#doPerform(org.apache.turbine.util.RunData,
+     *      org.apache.velocity.context.Context)
+     */
+    public void doPerform(RunData data, Context context) throws Exception {
+
+        User anonUser = new UserAdapter(AvalonServiceHelper.instance()
+                .getSecurityService().getUserManager().getUserInstance());
+
+        // This will cause the acl to be removed from the session in
+        // the Turbine servlet code.
+        data.setACL(null);
+
+        // Retrieve an anonymous user.
+        data.setUser(anonUser);
+        data.save();
+        
+        // tell the user locator
+        UserLocator.setLoggedInUser(null);
+    }
 }

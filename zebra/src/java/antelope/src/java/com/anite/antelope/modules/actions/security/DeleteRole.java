@@ -17,7 +17,6 @@
 package com.anite.antelope.modules.actions.security;
 
 import org.apache.fulcrum.security.RoleManager;
-import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.turbine.util.RunData;
@@ -49,7 +48,6 @@ public class DeleteRole extends SecureAction {
 
 		if (form.isAllValid()) {
 			// Declare variables
-			SecurityService securityService;
 			RoleManager roleManager;			
 			DynamicModelManager modelManager;
 			FieldMap fieldMap;

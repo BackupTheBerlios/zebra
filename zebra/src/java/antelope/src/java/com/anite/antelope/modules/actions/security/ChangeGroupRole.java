@@ -81,8 +81,7 @@ public class ChangeGroupRole extends SecureAction {
 
             // do this if removegroup has been selected
             // TODO This is going to be changed as the validation should return
-            // a
-            // button field with a is clicked method
+            // a button field with a is clicked method
             if (!StringUtils.isEmpty(((Field) fieldMap.get("doremoverole"))
                     .getValue())) {
                 // get the allocated groups and store them in a
@@ -100,10 +99,11 @@ public class ChangeGroupRole extends SecureAction {
                     // remove the values so the permissions for the removed
                     // roles arent displayed in the screen
                     rolesField.setValue("");
-                } else
+                } else {
                     data.setMessage("You must select a role to remove.");
-            } else if (!StringUtils
-                    .isEmpty(((Field) fieldMap.get("doaddrole")).getValue())) {
+                }
+            } else if (!StringUtils.isEmpty(((Field) fieldMap.get("doaddrole"))
+                    .getValue())) {
                 // get the allocated groups and store them in a
                 // string array
                 rolesField = (Field) fieldMap.get("availableroles");
@@ -116,8 +116,8 @@ public class ChangeGroupRole extends SecureAction {
                                 roleIds[i]));
                         modelManager.grant(group, role);
                     }
-                } else
-                    data.setMessage("You must select a group to remove.");
+                } else{
+                    data.setMessage("You must select a group to remove.");}
             }
         } // end of if form valid
         // TODO should the screen be decided in the action? I think it should so its prob

@@ -58,7 +58,7 @@ import com.mockobjects.servlet.MockHttpSession;
  * required by Turbine.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: EnhancedMockHttpSession.java,v 1.1 2004/12/04 13:26:37 bgidley Exp $
+ * @version $Id: EnhancedMockHttpSession.java,v 1.2 2004/12/04 14:39:48 bgidley Exp $
  */
 public class EnhancedMockHttpSession extends MockHttpSession
 {

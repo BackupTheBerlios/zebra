@@ -17,6 +17,8 @@
 package com.anite.antelope.modules.actions.security;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
@@ -37,6 +39,9 @@ import com.anite.penguin.modules.tools.FormTool;
  *  
  */
 public class ChangeRolePermission extends SecureAction {
+
+    private final static Log log = LogFactory
+            .getLog(ChangeRolePermission.class);
 
     /*
      * (non-Javadoc)
@@ -91,10 +96,11 @@ public class ChangeRolePermission extends SecureAction {
                         modelManager.revoke(role, perm);
                         role.removePermission(perm);
                     }
-                } else
+                } else {
                     data.setMessage("You must select a permission to remove.");
-            } else if (!StringUtils
-                    .isEmpty(((Field) fieldMap.get("doaddperm")).getValue())) {
+                }
+            } else if (!StringUtils.isEmpty(((Field) fieldMap.get("doaddperm"))
+                    .getValue())) {
                 // get the allocated groups and store them in a
                 // string array
                 permsField = (Field) fieldMap.get("availableperms");
@@ -107,8 +113,9 @@ public class ChangeRolePermission extends SecureAction {
                                 .getPermissionById(new Long(permIds[i]));
                         modelManager.grant(role, perm);
                     }
-                } else
+                } else {
                     data.setMessage("You must select a permission to add.");
+                }
             }
         } // end of if form valid
     }// end of doPerform

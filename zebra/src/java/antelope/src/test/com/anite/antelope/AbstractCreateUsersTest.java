@@ -27,7 +27,9 @@ import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.turbine.util.TurbineConfig;
 
+import com.anite.antelope.security.UserGroupPermissionsHelper;
 import com.anite.antelope.utils.AntelopeConstants;
 
 /**
@@ -39,136 +41,155 @@ import com.anite.antelope.utils.AntelopeConstants;
  */
 public abstract class AbstractCreateUsersTest extends BaseUnitTest {
 
-	/**
-	 * @param arg0
-	 */
-	public AbstractCreateUsersTest(String arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
+    private static final String BASIC = "basic";
+    private static final String ANTELOPE = "antelope";
+    private static final String SYSTEMACCESS = "systemAccess";
 
-	protected SecurityService securityService;
+    /**
+     * @param arg0
+     */
+    public AbstractCreateUsersTest(String arg0) {
+        super(arg0);
+        //   Initialise Fake Turbine so it can resolve Avalon
+        // In theory calling this twice should only initialise once
+		TurbineConfig config = null;
+		config = new TurbineConfig("./src/webapp/", "WEB-INF/conf/TurbineResources.properties");
+		config.initialize();
+        
 
-	protected DynamicModelManager modelManager;
+    }
 
-	protected UserManager userManager;
+    protected SecurityService securityService;
 
-	protected GroupManager groupManager;
+    protected DynamicModelManager modelManager;
 
-	protected RoleManager roleManager;
+    protected UserManager userManager;
 
-	protected PermissionManager permissionManager;
+    protected GroupManager groupManager;
 
-	public void testCreateUsers() throws Exception {
-		User user;
-		Group group;
-		Role role;
-		Permission permission;
+    protected RoleManager roleManager;
 
-		// build up a simple dynanic user permission model
-		modelManager = (DynamicModelManager) securityService.getModelManager();
+    protected PermissionManager permissionManager;
 
-		// get all the managers
-		userManager = securityService.getUserManager();
-		groupManager = securityService.getGroupManager();
-		roleManager = securityService.getRoleManager();
-		permissionManager = securityService.getPermissionManager();
+    public void testCreateUsers() throws Exception {
+        User user;
+        Group group;
+        Role role;
+        Permission permission;
 
-		// Add all the permissions
-		permission = permissionManager
-				.getPermissionInstance(AntelopeConstants.PERMISSION_ADD_USER);
-		permissionManager.addPermission(permission);
-		permission = permissionManager
-				.getPermissionInstance(AntelopeConstants.PERMISSION_EDIT_PERMISSIONS);
-		permissionManager.addPermission(permission);
-		permission = permissionManager
-				.getPermissionInstance(AntelopeConstants.PERMISSION_CHANGE_PASSWORD);
-		permissionManager.addPermission(permission);
-		permission = permissionManager.getPermissionInstance("security_add");
-		permissionManager.addPermission(permission);
-		permission = permissionManager.getPermissionInstance("security_edit");
-		permissionManager.addPermission(permission);
-		permission = permissionManager.getPermissionInstance("security_delete");
-		permissionManager.addPermission(permission);
+        // build up a simple dynanic user permission model
+        modelManager = (DynamicModelManager) securityService.getModelManager();
 
-		// Add all roles
-		role = roleManager.getRoleInstance(AntelopeConstants.ROLE_USER_ADMIN);
-		roleManager.addRole(role);
-		role = roleManager.getRoleInstance("security");
-		roleManager.addRole(role);
-		role = roleManager.getRoleInstance(AntelopeConstants.ROLE_USER_BASIC);
-		roleManager.addRole(role);
+        // get all the managers
+        userManager = securityService.getUserManager();
+        groupManager = securityService.getGroupManager();
+        roleManager = securityService.getRoleManager();
+        permissionManager = securityService.getPermissionManager();
 
-		// Add all Groups
-		group = groupManager.getGroupInstance(AntelopeConstants.GROUP_ADMIN);
-		groupManager.addGroup(group);
-		group = groupManager.getGroupInstance(AntelopeConstants.GROUP_BASIC);
-		groupManager.addGroup(group);
-		group = groupManager.getGroupInstance("test2");
-		groupManager.addGroup(group);
-		group = groupManager.getGroupInstance("test3");
-		groupManager.addGroup(group);
+        // Add all the permissions
+        permission = permissionManager
+                .getPermissionInstance(AntelopeConstants.PERMISSION_ADD_USER);
+        permissionManager.addPermission(permission);
+        permission = permissionManager
+                .getPermissionInstance(AntelopeConstants.PERMISSION_EDIT_PERMISSIONS);
+        permissionManager.addPermission(permission);
+        permission = permissionManager
+                .getPermissionInstance(AntelopeConstants.PERMISSION_CHANGE_PASSWORD);
+        permissionManager.addPermission(permission);
+        permission = permissionManager.getPermissionInstance("security_add");
+        permissionManager.addPermission(permission);
+        permission = permissionManager.getPermissionInstance("security_edit");
+        permissionManager.addPermission(permission);
+        permission = permissionManager.getPermissionInstance("security_delete");
+        permissionManager.addPermission(permission);
+        permission = permissionManager
+                .getPermissionInstance(AntelopeConstants.PERMISSION_SYSTEM_ACCESS);
+        permissionManager.addPermission(permission);
 
-		// add all users
-		user = userManager.getUserInstance("antelope");
-		userManager.addUser(user, "test");
-		user = userManager.getUserInstance("basic");
-		userManager.addUser(user, "test");
+        // Add all roles
+        role = roleManager.getRoleInstance(AntelopeConstants.ROLE_USER_ADMIN);
+        roleManager.addRole(role);
+        role = roleManager.getRoleInstance("security");
+        roleManager.addRole(role);
+        role = roleManager.getRoleInstance(AntelopeConstants.ROLE_USER_BASIC);
+        roleManager.addRole(role);
+        role = roleManager.getRoleInstance(SYSTEMACCESS);
+        roleManager.addRole(role);
 
-		// set up the stutcuture
-		// add perms to roles
-		modelManager
-				.grant(
-						roleManager
-								.getRoleByName(AntelopeConstants.ROLE_USER_ADMIN),
-						permissionManager
-								.getPermissionByName(AntelopeConstants.PERMISSION_ADD_USER));
-		modelManager
-				.grant(
-						roleManager
-								.getRoleByName(AntelopeConstants.ROLE_USER_ADMIN),
-						permissionManager
-								.getPermissionByName(AntelopeConstants.PERMISSION_EDIT_PERMISSIONS));
-		modelManager
-				.grant(
-						roleManager
-								.getRoleByName(AntelopeConstants.ROLE_USER_ADMIN),
-						permissionManager
-								.getPermissionByName(AntelopeConstants.PERMISSION_CHANGE_PASSWORD));
+        // Add all Groups
+        UserGroupPermissionsHelper.getInstance().createOrFetchGroup(
+                AntelopeConstants.GROUP_ADMIN);
+        UserGroupPermissionsHelper.getInstance().createOrFetchGroup(
+                AntelopeConstants.GROUP_BASIC);
+        UserGroupPermissionsHelper.getInstance().createOrFetchGroup("test2");
+        UserGroupPermissionsHelper.getInstance().createOrFetchGroup("test3");
 
-		modelManager
-				.grant(
-						roleManager
-								.getRoleByName(AntelopeConstants.ROLE_USER_BASIC),
-						permissionManager
-								.getPermissionByName(AntelopeConstants.PERMISSION_CHANGE_PASSWORD));
+        // add all users
+        UserGroupPermissionsHelper.getInstance().createUser(ANTELOPE, "test");
+        UserGroupPermissionsHelper.getInstance().createUser(BASIC, "test");
 
-		modelManager.grant(roleManager.getRoleByName("security"),
-				permissionManager.getPermissionByName("security_add"));
-		modelManager.grant(roleManager.getRoleByName("security"),
-				permissionManager.getPermissionByName("security_edit"));
-		modelManager.grant(roleManager.getRoleByName("security"),
-				permissionManager.getPermissionByName("security_delete"));
+        // set up the stutcuture
+        // add perms to roles
+        modelManager
+                .grant(
+                        roleManager
+                                .getRoleByName(AntelopeConstants.ROLE_USER_ADMIN),
+                        permissionManager
+                                .getPermissionByName(AntelopeConstants.PERMISSION_ADD_USER));
+        modelManager
+                .grant(
+                        roleManager
+                                .getRoleByName(AntelopeConstants.ROLE_USER_ADMIN),
+                        permissionManager
+                                .getPermissionByName(AntelopeConstants.PERMISSION_EDIT_PERMISSIONS));
+        modelManager
+                .grant(
+                        roleManager
+                                .getRoleByName(AntelopeConstants.ROLE_USER_ADMIN),
+                        permissionManager
+                                .getPermissionByName(AntelopeConstants.PERMISSION_CHANGE_PASSWORD));
 
-		// add roles to groups
-		modelManager.grant(groupManager
-				.getGroupByName(AntelopeConstants.GROUP_ADMIN), roleManager
-				.getRoleByName(AntelopeConstants.ROLE_USER_ADMIN));
-		modelManager.grant(groupManager
-				.getGroupByName(AntelopeConstants.GROUP_ADMIN), roleManager
-				.getRoleByName("security"));
-		modelManager.grant(groupManager
-				.getGroupByName(AntelopeConstants.GROUP_BASIC), roleManager
-				.getRoleByName(AntelopeConstants.ROLE_USER_BASIC));
+        modelManager
+                .grant(
+                        roleManager
+                                .getRoleByName(AntelopeConstants.ROLE_USER_BASIC),
+                        permissionManager
+                                .getPermissionByName(AntelopeConstants.PERMISSION_CHANGE_PASSWORD));
 
-		// add groups to users
-		modelManager.grant(userManager.getUser("antelope"), groupManager
-				.getGroupByName(AntelopeConstants.GROUP_ADMIN));
-		modelManager.grant(userManager.getUser("basic"), groupManager
-				.getGroupByName(AntelopeConstants.GROUP_BASIC));
+        modelManager.grant(roleManager.getRoleByName("security"),
+                permissionManager.getPermissionByName("security_add"));
+        modelManager.grant(roleManager.getRoleByName("security"),
+                permissionManager.getPermissionByName("security_edit"));
+        modelManager.grant(roleManager.getRoleByName("security"),
+                permissionManager.getPermissionByName("security_delete"));
+        modelManager
+                .grant(
+                        roleManager.getRoleByName(SYSTEMACCESS),
+                        permissionManager
+                                .getPermissionByName(AntelopeConstants.PERMISSION_SYSTEM_ACCESS));
 
-		//TODO should really put a real test in here to make sure the
-		// users have been made!
-		assertTrue(true);
-	}
+        // add roles to groups
+        modelManager.grant(groupManager
+                .getGroupByName(AntelopeConstants.GROUP_ADMIN), roleManager
+                .getRoleByName(AntelopeConstants.ROLE_USER_ADMIN));
+        modelManager.grant(groupManager
+                .getGroupByName(AntelopeConstants.GROUP_ADMIN), roleManager
+                .getRoleByName("security"));
+        modelManager.grant(groupManager
+                .getGroupByName(AntelopeConstants.GROUP_BASIC), roleManager
+                .getRoleByName(AntelopeConstants.ROLE_USER_BASIC));
+        modelManager.grant(groupManager
+                .getGroupByName(AntelopeConstants.GROUP_BASIC), roleManager
+                .getRoleByName(SYSTEMACCESS));
+        modelManager.grant(groupManager
+                .getGroupByName(AntelopeConstants.GROUP_ADMIN), roleManager
+                .getRoleByName(SYSTEMACCESS));
+
+        // add groups to users
+        modelManager.grant(userManager.getUser(ANTELOPE), groupManager
+                .getGroupByName(AntelopeConstants.GROUP_ADMIN));
+        modelManager.grant(userManager.getUser(BASIC), groupManager
+                .getGroupByName(AntelopeConstants.GROUP_BASIC));
+
+    }
 }
