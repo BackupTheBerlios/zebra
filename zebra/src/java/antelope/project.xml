@@ -15,32 +15,50 @@
 	<logo>/images/antelope_small.gif</logo>
 	<description>Antelope - A Zebra sample application</description>
 	<shortDescription>Zebra sample</shortDescription>
-	<url>http://zebra.tigris.org</url>
-	<issueTrackingUrl> 
-		http://zebra.tigris.org/servlets/ProjectIssues</issueTrackingUrl>
-	<siteAddress>http://zebra.tigris.org/antelope</siteAddress>
-	<siteDirectory>/var/www/docs/antelope</siteDirectory>
+	<url>http://zebra.berlios.de</url>
+	<issueTrackingUrl>http://developer.berlios.de/bugs/?group_id=2683</issueTrackingUrl>
+	<siteAddress>shell.berlios.de</siteAddress>
+	<siteDirectory>/home/groups/zebra/htdocs</siteDirectory>
 	<distributionDirectory>/var/www/repo</distributionDirectory>
 	<repository>
-		<connection> 
-			scm:cvs:pserver:anoncvs@cvs.tigris.org:/cvs:zebra/src/java/antelope</connection>
-		<url> 
-			http://zebra.tigris.org/source/browse/zebra/src/java/antelope/</url>
+		<connection>scm:cvs:pserver:anoncvs@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/antelope</connection>
+		<url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/zebra/zebra/src/java/antelope/</url>
 	</repository>
 	<mailingLists>
 		<mailingList>
-			<name>users@zebra.tigris.org</name>
-			<subscribe>users-subscribe@zebra.tigris.org</subscribe>
-			<unsubscribe>users-unsubscribe@zebra.tigris.org</unsubscribe>
-			<archive> 
-				http://zebra.tigris.org/servlets/SummarizeList?listName=users</archive>
+			<name>zebra-users@lists.berlios.de</name>
+			<subscribe>zebra-users-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>zebra-users-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>https://lists.berlios.de/pipermail/zebra-users/</archive>
+		</mailingList>
+		<mailingList>
+			<name>zebra-dev@lists.berlios.de</name>
+			<subscribe>zebra-dev-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>zebra-dev-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>https://lists.berlios.de/pipermail/zebra-dev/</archive>
+		</mailingList>
+		<mailingList>
+			<name>zebra-announce@lists.berlios.de</name>
+			<subscribe>zebra-announce-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>
+				zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>
+				https://lists.berlios.de/pipermail/zebra-announce/</archive>
+		</mailingList>
+		<mailingList>
+			<name>zebra-checkins@lists.berlios.de</name>
+			<subscribe>zebra-checkins-subscribe@lists.berlios.de</subscribe>
+			<unsubscribe>
+				zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive>
+				https://lists.berlios.de/pipermail/zebra-checkins/</archive>
 		</mailingList>
 	</mailingLists>
 	<developers>
 		<developer>
 			<name>Ben Gidley</name>
 			<id>bengidley</id>
-			<email>bengidley@tigris.org</email>
+			<email>bgidley@berlios.de</email>
 			<roles>
 				<role>Developer</role>
 			</roles>
