@@ -214,8 +214,9 @@ public class ZebraHelper {
                     .getCurrentSession();
             Query tasks = session.getNamedQuery("AllUsersTasks");
             tasks.setBoolean("show", true);
-            tasks.setCacheable(true);
             
+            tasks.setCacheable(true);
+
             List usersTasks = new ArrayList();
 
             UserManager manager = AvalonServiceHelper.instance()
@@ -268,7 +269,7 @@ public class ZebraHelper {
             tasks.setParameter("user", user);
             tasks.setBoolean("show", true);
             tasks.setCacheable(true);
-            
+
             //return tasks.list();
 
             List usersTasks = new ArrayList();
@@ -334,6 +335,14 @@ public class ZebraHelper {
      */
     public String getTaskListScreenName() {
         return "Index.vm";
+    }
+
+    /**
+     * Returns the screen name as used in Exec function
+     * @return
+     */
+    public String getTaskListScreen() {
+        return "Index";
     }
 
     /**
@@ -411,14 +420,13 @@ public class ZebraHelper {
             PermissionManager permissionManager = AvalonServiceHelper
                     .instance().getSecurityService().getPermissionManager();
 
-            if (permissionManager.checkExists(permissionName)) {
+            Permission permission = permissionManager
+                    .getPermissionInstance(permissionName);
+            if (permissionManager.checkExists(permission)) {
                 return permissionManager.getPermissionByName(permissionName);
-            } else {
-                Permission permission = permissionManager
-                        .getPermissionInstance(permissionName);
-                permissionManager.addPermission(permission);
-                return permission;
             }
+            permissionManager.addPermission(permission);
+            return permission;
         } catch (DataBackendException e) {
             log.error("Failed to find or create permission:" + permissionName,
                     e);

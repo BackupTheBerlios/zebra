@@ -19,6 +19,8 @@ package com.anite.antelope.zebra.processLifecycle;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
@@ -63,8 +65,15 @@ public class AntelopeTaskInstancePresets implements Serializable {
 
     private Long userIdDecisionMadeBy;
     
-    private Integer actionTypeId;
+    
+    private Map propertySet = new HashMap();
 
+    public Map getPropertySet() {
+        return propertySet;
+    }
+    public void setPropertySet(Map propertySet) {
+        this.propertySet = propertySet;
+    }
     /**
      * @return Returns the actualCompletionDate.
      */
@@ -225,6 +234,5 @@ public class AntelopeTaskInstancePresets implements Serializable {
     public void setPriorityId(Long priorityId) {
         this.priorityId = priorityId;
     }
-    
     
 }

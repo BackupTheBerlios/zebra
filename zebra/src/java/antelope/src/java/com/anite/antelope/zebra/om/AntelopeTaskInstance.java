@@ -24,7 +24,7 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 
 /**
  * @hibernate.class
- * @hibernate.query name="AllUsersTasks" query="from AntelopeTaskInstance ati where ati.showInTaskList = :show"
+ * @hibernate.query name="AllUsersTasks" query="from AntelopeTaskInstance ati where ati.showInTaskList = :show "
  * @hibernate.query name="UsersTasks" query="from AntelopeTaskInstance ati where (ati.taskOwner = :user or ati.taskOwner is null) and ati.showInTaskList = :show"
  * @hibernate.cache usage="transactional"
  * @author Ben.Gidley
@@ -33,6 +33,8 @@ public class AntelopeTaskInstance extends AbstractAntelopeTaskInstance {
     
     public static final long KILLED = 66;
     public static final String PAUSED_FORM_DETAILS = "paused_form_details";
+    
+    
     
     /** The property set catch all for anything at all 
      * It will be emptied when the history item is constructed */

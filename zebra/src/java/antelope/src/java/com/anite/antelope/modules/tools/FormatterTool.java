@@ -18,6 +18,7 @@
 package com.anite.antelope.modules.tools;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.text.DecimalFormat;
 
 import org.apache.commons.logging.Log;
@@ -51,6 +52,14 @@ public class FormatterTool implements ApplicationTool {
 	
 	public String getFormattedDate(Date theDate){
 	    return CalendarHelper.getInstance().getFormattedDate(theDate);
+	}
+	
+	public String getFormattedDateTime(java.util.Date theDate){
+	    return CalendarHelper.getInstance().getFormattedDateTime(theDate);
+	}
+	
+	public String getFormattedTime(Time theTime){
+	    return CalendarHelper.getInstance().getFormattedTime(theTime);
 	}
 	
 	public String getFormattedMoney(Double value) {

@@ -30,9 +30,12 @@ import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.turbine.services.InitializationException;
 
@@ -162,9 +165,42 @@ public class UserGroupPermissionsHelper {
         modelManager.grant(user, newGroup);
     }
     
-    public void revokeUserGroup(DynamicUser user, DynamicGroup newGroup) throws Exception {
-        modelManager.revoke(user, getUserGroup(user));
+    /**
+     * this method add a permission sepecifically for that user
+     * @param user
+     * @throws Exception
+     */
+    public void grantUserSpecificPermission(DynamicUser user, DynamicPermission permission) 
+    			throws DataBackendException, UnknownEntityException
+    {
+        DynamicModelManager modelManager = getModelManager();
+        modelManager.grant(getUserSpecificRole(user), permission);        
     }
+    
+    /**
+     * Revoke a permission that has been allocated to the user secific group/role
+     * @param user
+     * @param permission
+     * @throws Exception
+     */
+    public void revokeUserSpecificPermission(DynamicUser user, DynamicPermission permission) throws Exception {
+        DynamicModelManager modelManager = getModelManager();
+        modelManager.revoke(getUserSpecificRole(user), permission);        
+    }
+    
+    /**
+     * Get the role that has been created esp for the user to add 
+     * user specific permissions
+     * @param user
+     * @return
+     */
+    protected DynamicRole getUserSpecificRole(DynamicUser user)  {
+        // this gets the specific users group
+        GroupSet usergroups = user.getGroups();
+        DynamicGroup group = (DynamicGroup) usergroups.getByName(user.getName());
+        return (DynamicRole) group.getRoles().getRoleByName(user.getName());
+    }
+
 
     /**
      * @return Returns the groupManager.

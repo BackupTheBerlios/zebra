@@ -94,7 +94,7 @@ public class SubProcess implements ITaskAction {
      * maps the inputs of the specified process to the parameters set against
      * this task
      */
-    private void mapTaskInputs(AntelopeProcessInstance parentProcess,
+    protected void mapTaskInputs(AntelopeProcessInstance parentProcess,
             AntelopeProcessInstance subProcess) throws RunTaskException {
 
         log.debug("Called mapTaskInputs");

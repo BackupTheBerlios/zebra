@@ -62,13 +62,11 @@ public class EitherOrRequestField extends AbstractBasePerFieldValidator {
 
         if (fieldAValue.equals("") ^ fieldBValue.equals("")) {
             return true;
-        } else {
-
-            validationResults.addMessage(fieldA,
-                    "You must select exactly one of the next 2 fields");
-            return false;
-
         }
+
+        validationResults.addMessage(fieldA,
+                "You must select exactly one of the next 2 fields");
+        return false;
     }
 
 }

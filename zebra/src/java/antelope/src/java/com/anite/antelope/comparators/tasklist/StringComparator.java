@@ -28,30 +28,30 @@ public abstract class StringComparator extends TaskListComparator {
     public int compare(AntelopeTaskInstance task0, AntelopeTaskInstance task1) {
         String text0 = task0.getCaption();
         String text1 = task1.getCaption();
-        
+
         if (text0 == null && text1 == null) {
             // both are null so can't call compareTo
             return 0;
         } else if (text0 == null) {
             if (getDirection().equals(ASCENDING)) {
                 return -1;
-            } else {
-                return 1;
             }
+            return 1;
+
         } else if (text1 == null) {
             if (getDirection().equals(ASCENDING)) {
                 return 1;
-            } else {
-                return -1;
             }
+            return -1;
+
         }
-        
+
         if (getDirection().equals(ASCENDING)) {
             return text1.compareTo(text0);
         }
         return text0.compareTo(text1);
     }
-    
+
     public abstract String getField(AntelopeTaskInstance task);
 
 }

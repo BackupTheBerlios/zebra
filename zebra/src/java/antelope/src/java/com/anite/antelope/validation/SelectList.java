@@ -20,7 +20,6 @@ package com.anite.antelope.validation;
 import org.apache.turbine.component.review.datastore.api.ReviewConfigurationException;
 import org.apache.turbine.component.review.main.api.ReviewValidationException;
 import org.apache.turbine.component.review.util.ValidationResults;
-import org.apache.turbine.component.review.validators.AbstractValidator;
 import org.apache.turbine.util.parser.ParameterParser;
 
 import com.anite.penguin.form.Option;

@@ -168,9 +168,10 @@ public class AntelopeDefinitionsFactory implements IAvalonDefsFactory,
                 throw new DefinitionNotFoundException(e);
             }
         }
-        
-        if (taskDefinition==null){
-            throw new DefinitionNotFoundException("Definition not found in DB or Cache:" + id.toString());
+
+        if (taskDefinition == null) {
+            throw new DefinitionNotFoundException(
+                    "Definition not found in DB or Cache:" + id.toString());
         }
         return taskDefinition;
     }
@@ -200,9 +201,9 @@ public class AntelopeDefinitionsFactory implements IAvalonDefsFactory,
         List q = query.list();
         if (q.size() == 1) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+
     }
 
     /**

@@ -59,17 +59,19 @@ public class NotNullValidator extends AbstractValidator {
         if (!args.containsKey(PARAM_ALTKEY)) {
             throw new ReviewConfigurationException("No " + PARAM_ALTKEY
                     + " argument for not null validator");
-        } else {
-            if (StringUtils.isEmpty((String) args.get(PARAM_ALTKEY))) { throw new ReviewConfigurationException(
-                    PARAM_ALTKEY + " argument for not null validator is empty"); }
+        }
+        if (StringUtils.isEmpty((String) args.get(PARAM_ALTKEY))) {
+            throw new ReviewConfigurationException(PARAM_ALTKEY
+                    + " argument for not null validator is empty");
         }
 
         //If we don't have a message not much point in running as will tell
         // user nothing
         if (args.containsKey(PARAM_ISNULLMESSAGE)) {
-            if (StringUtils.isEmpty((String) args.get(PARAM_ISNULLMESSAGE))) { throw new ReviewConfigurationException(
-                    PARAM_ISNULLMESSAGE
-                            + " argument for not null validator is empty"); }
+            if (StringUtils.isEmpty((String) args.get(PARAM_ISNULLMESSAGE))) {
+                throw new ReviewConfigurationException(PARAM_ISNULLMESSAGE
+                        + " argument for not null validator is empty");
+            }
         }
     }
 

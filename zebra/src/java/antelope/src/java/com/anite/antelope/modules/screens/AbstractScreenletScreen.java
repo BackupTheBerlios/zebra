@@ -34,11 +34,13 @@ public abstract class AbstractScreenletScreen extends BaseWorkflowScreen {
 
     
     protected void doBuildTemplate(RunData runData, Context context,
-            AntelopeTaskInstance taskInstance, FormTool tool) throws Exception {
+            AntelopeTaskInstance taskInstance, FormTool form) throws Exception {
 
+        buildPreScreenlets(runData, context, taskInstance, form);
+        
         Screenlet[] screenlets = getScreenlets();
         for (int i =0; i < screenlets.length; i++){
-            screenlets[i].doBuildTemplate(runData, context, taskInstance, tool);
+            screenlets[i].doBuildTemplate(runData, context, taskInstance, form);
         }
         ITransaction t = ZebraHelper.getInstance().getStateFactory().beginTransaction();
         ZebraHelper.getInstance().getStateFactory().saveObject(taskInstance);
@@ -48,4 +50,9 @@ public abstract class AbstractScreenletScreen extends BaseWorkflowScreen {
     
     public abstract Screenlet[] getScreenlets(); 
 
+    public void buildPreScreenlets(RunData runData, Context context,
+            AntelopeTaskInstance taskInstance, FormTool form) throws Exception{
+        
+    }
+    
 }

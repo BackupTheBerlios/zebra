@@ -18,6 +18,7 @@
 package com.anite.antelope.zebra.factory;
 
 import java.util.Date;
+import java.util.Iterator;
 
 import net.sf.hibernate.Session;
 
@@ -35,7 +36,6 @@ import com.anite.antelope.zebra.om.AntelopeProcessInstance;
 import com.anite.antelope.zebra.om.AntelopeTaskDefinition;
 import com.anite.antelope.zebra.om.AntelopeTaskInstance;
 import com.anite.antelope.zebra.om.AntelopeTaskInstanceHistory;
-import com.anite.antelope.zebra.om.Priority;
 import com.anite.antelope.zebra.processLifecycle.AntelopeTaskInstancePresets;
 import com.anite.meercat.PersistenceException;
 import com.anite.meercat.PersistenceLocator;
@@ -186,43 +186,56 @@ public class AntelopeStateFactory extends HibernateStateFactory implements
         antelopeTaskInstance.setProcessInstance(antelopeProcessInstance);
         antelopeTaskInstance.setTaskDefinition(antelopeTaskDefinition);
 
-        AntelopeTaskInstancePresets presets = antelopeProcessInstance.getTaskDefinitionPresets(antelopeTaskDefinition);
+        AntelopeTaskInstancePresets presets = antelopeProcessInstance
+                .getTaskDefinitionPresets(antelopeTaskDefinition);
         if (presets != null) {
-            if (presets.getActualCompletionDate()!= null){
-                antelopeTaskInstance.setActualCompletionDate(presets.getActualCompletionDate());
-            }            
-            if (presets.getCaption()!=null){
-                antelopeTaskInstance.setCaption(presets.getCaption());
-            }else {
-                antelopeTaskInstance.setCaption(antelopeTaskDefinition.getName());
+            if (presets.getActualCompletionDate() != null) {
+                antelopeTaskInstance.setActualCompletionDate(presets
+                        .getActualCompletionDate());
             }
-            if (presets.getDateCreated()!= null){
+            if (presets.getCaption() != null) {
+                antelopeTaskInstance.setCaption(presets.getCaption());
+            } else {
+                antelopeTaskInstance.setCaption(antelopeTaskDefinition
+                        .getName());
+            }
+            if (presets.getDateCreated() != null) {
                 antelopeTaskInstance.setDateCreated(presets.getDateCreated());
-            }else {
+            } else {
                 antelopeTaskInstance.setDateCreated(new Date());
             }
-            if (presets.getDateDue() != null){
+            if (presets.getDateDue() != null) {
                 antelopeTaskInstance.setDateDue(presets.getDateDue());
             }
-            if (presets.getDecisionMadeBy()!= null){
-                antelopeTaskInstance.setDecisionMadeBy(presets.getDecisionMadeBy());
+            if (presets.getDecisionMadeBy() != null) {
+                antelopeTaskInstance.setDecisionMadeBy(presets
+                        .getDecisionMadeBy());
             }
-            if (presets.getDescription()!= null){
+            if (presets.getDescription() != null) {
                 antelopeTaskInstance.setDescription(presets.getDescription());
             }
-            if (presets.getPriority()!= null){
+            if (presets.getPriority() != null) {
                 antelopeTaskInstance.setPriority(presets.getPriority());
-            }else {
+            } else {
                 antelopeTaskInstance.setPriority(PriorityManager.getInstance()
                         .getDefaultPriority());
             }
-            if (presets.getTaskOwner()!= null){
+            if (presets.getTaskOwner() != null) {
                 antelopeTaskInstance.setTaskOwner(presets.getTaskOwner());
-            }           
+            }
+            
+            if (presets.getPropertySet().size() > 0) {
+                for (Iterator iter = presets.getPropertySet().keySet()
+                        .iterator(); iter.hasNext();) {
+                    String key = (String) iter.next();
+                    antelopeTaskInstance.getPropertySet().put(key,
+                            presets.getPropertySet().get(key));
+                }
+            }
         } else {
             // Default values
             antelopeTaskInstance.setDateCreated(new Date());
-            
+
             antelopeTaskInstance.setPriority(PriorityManager.getInstance()
                     .getDefaultPriority());
             antelopeTaskInstance.setCaption(antelopeTaskDefinition.getName());

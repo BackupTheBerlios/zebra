@@ -16,13 +16,14 @@
  */
 package com.anite.antelope.zebra.om;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
 import net.sf.hibernate.Session;
 
 import com.anite.antelope.TurbineTestCase;
+import com.anite.antelope.utils.CalendarHelper;
 import com.anite.antelope.zebra.helper.ZebraHelper;
 
 /**
@@ -72,7 +73,7 @@ public class TurbineAntelopeTaskInstanceHistoryTest extends TestCase {
 
 	public void testGetDateCompleted() {
 		
-		taskInstanceHistory.setDateCompleted(new Date());
+		taskInstanceHistory.setDateCompleted(CalendarHelper.getInstance().getSqlDate());
 		assertNotNull(taskInstanceHistory.getDateCompleted());
 	}
 

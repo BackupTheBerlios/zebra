@@ -25,7 +25,6 @@ import org.apache.commons.lang.exception.NestableException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.UserManager;
-import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.turbine.modules.screens.TemplateScreen;
@@ -38,11 +37,9 @@ import com.anite.antelope.utils.AntelopeConstants;
 import com.anite.antelope.utils.AvalonServiceHelper;
 import com.anite.antelope.zebra.helper.ZebraHelper;
 import com.anite.antelope.zebra.helper.ZebraSessionData;
-import com.anite.antelope.zebra.modules.actions.BaseWorkflowAction;
 import com.anite.antelope.zebra.om.AntelopePropertySetEntry;
 import com.anite.antelope.zebra.om.AntelopeTaskInstance;
 import com.anite.penguin.modules.tools.FormTool;
-import com.anite.zebra.core.state.api.ITransaction;
 
 /**
  * Base Screen for all workflow screens This will check workflow security, call
@@ -141,13 +138,7 @@ public abstract class BasicUserSecurityScreen extends VelocityScreen {
 		// RunData data = this.getRunData(pipelineData);
 
 		FormTool form = (FormTool) context.get(FormTool.DEFAULT_TOOL_NAME);
-		ZebraSessionData sessionData = (ZebraSessionData) data.getSession().getAttribute(
-			ZebraSessionData.SESSION_KEY);
-
-	
-
-	//	AntelopeTaskInstance taskInstance = sessionData.getTaskInstance();
-
+		
 		if (isAuthorized(context)){
 			doBuildUserAuthorisedTemplate(data,context,form);
 		} else {

@@ -62,6 +62,7 @@
 			<roles>
 				<role>Developer</role>
 			</roles>
+			<url>http://www.gidley.co.uk/</url>
 		</developer>
 		<developer>
 			<name>Mike Jones</name>
@@ -900,7 +901,7 @@
 		<dependency>
 			<groupId>penguin</groupId>
 			<artifactId>penguin</artifactId>
-			<version>0.98</version>
+			<version>1.0-rc2</version>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>

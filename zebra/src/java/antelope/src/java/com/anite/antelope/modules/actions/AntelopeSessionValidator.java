@@ -45,8 +45,7 @@ import com.anite.antelope.zebra.helper.ZebraHelper;
  */
 public class AntelopeSessionValidator extends TemplateSessionValidator {
 
-    private final static Log log = LogFactory
-            .getLog(AntelopeSessionValidator.class);
+    private final static Log log = LogFactory.getLog(AntelopeSessionValidator.class);
 
     /**
      * If logged in set up userLocator
@@ -54,20 +53,17 @@ public class AntelopeSessionValidator extends TemplateSessionValidator {
     public void doPerform(RunData data) throws TurbineException {
         super.doPerform(data);
 
-        if (data.getUser() == null
-                || StringUtils.isEmpty(data.getUser().getName())) {
+        if (data.getUser() == null || StringUtils.isEmpty(data.getUser().getName())) {
 
             // Anonymous
             // Check where we are going
-            if (data.getAction().equals(Turbine.getConfiguration().getString(TurbineConstants.ACTION_LOGIN_KEY))){
+            if (data.getAction() == Turbine.getConfiguration().getString(TurbineConstants.ACTION_LOGIN_KEY)) {
                 // Ok
             } else {
                 //Set the screen template to the login page.
-                String loginTemplate =
-                    Turbine.getConfiguration().getString(TurbineConstants.TEMPLATE_LOGIN);
+                String loginTemplate = Turbine.getConfiguration().getString(TurbineConstants.TEMPLATE_LOGIN);
 
-                log.debug("Sending User to the Login Screen (" 
-                        + loginTemplate + ")");
+                log.debug("Sending User to the Login Screen (" + loginTemplate + ")");
                 data.getTemplateInfo().setScreenTemplate(loginTemplate);
 
                 data.setAction(null);
@@ -78,6 +74,7 @@ public class AntelopeSessionValidator extends TemplateSessionValidator {
                 UserLocator.setLoggedInUser(getUserManager().getUser(data.getUser().getName()));
                 // back button fix
                 checkForNoCacheId(data, Turbine.getConfiguration());
+               
             } catch (InitializationException e) {
                 log.error("", e);
             } catch (UnknownEntityException e) {
@@ -97,6 +94,10 @@ public class AntelopeSessionValidator extends TemplateSessionValidator {
         // the session_access_counter can be placed as a hidden field in
         // forms. This can be used to prevent a user from using the
         // browsers back button and submitting stale data.
+        if (!data.getParameters().containsKey("nocacheid")) {
+            //can't compare cache ids so return
+            return;
+        }
         requestTime = data.getParameters().getLong("nocacheid");
 
         /*
@@ -130,8 +131,7 @@ public class AntelopeSessionValidator extends TemplateSessionValidator {
                 data.setAction(null);
                 
                 TemplateScreen.setTemplate(data, ZebraHelper.getInstance().getTaskListScreenName());
-                
-                return;
+               
             }
         }
         data.getSession().setAttribute("lastRequestTime", new Long(requestTime));
@@ -143,8 +143,7 @@ public class AntelopeSessionValidator extends TemplateSessionValidator {
      * @throws InitializationException
      */
     private UserManager getUserManager() throws InitializationException {
-        return AvalonServiceHelper.instance().getSecurityService()
-                .getUserManager();
+        return AvalonServiceHelper.instance().getSecurityService().getUserManager();
     }
 
 }

@@ -17,7 +17,6 @@
 
 package com.anite.antelope.zebra.om;
 
-import java.sql.Time;
 import java.util.Date;
 
 import com.anite.antelope.utils.CalendarHelper;
@@ -32,22 +31,6 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 public class AntelopeTaskInstanceHistory extends AbstractAntelopeTaskInstance {
 
     private Date dateCompleted;
-
-    private Time timeCompleted;
-
-    /**
-     * @return Returns the timeCompleted.
-     */
-    public Time getTimeCompleted() {
-        return timeCompleted;
-    }
-
-    /**
-     * @param timeCompleted The timeCompleted to set.
-     */
-    public void setTimeCompleted(Time timeCompleted) {
-        this.timeCompleted = timeCompleted;
-    }
 
     private Boolean showInHistory;
 
@@ -65,12 +48,12 @@ public class AntelopeTaskInstanceHistory extends AbstractAntelopeTaskInstance {
     public AntelopeTaskInstanceHistory(AbstractAntelopeTaskInstance taskInstance)
             throws DefinitionNotFoundException {
         super(taskInstance);
-        setDateCompleted(CalendarHelper.getInstance().getSqlDate());
-        setTimeCompleted(CalendarHelper.getInstance().getSqlTime());
+        setDateCompleted(CalendarHelper.getInstance().getDateTimeNow());
+
         if (this.getDecisionMadeBy() == null) {
             this.setDecisionMadeBy(this.getTaskOwner());
         }
-        if (this.getOutcome()==null){
+        if (this.getOutcome() == null) {
             this.setOutcome(AbstractAntelopeTaskInstance.COMPLETED);
         }
     }
@@ -90,9 +73,9 @@ public class AntelopeTaskInstanceHistory extends AbstractAntelopeTaskInstance {
     public String getStringDateComplete() {
         if (dateCompleted != null) {
             return CalendarHelper.getInstance().getFormattedDate(dateCompleted);
-        } else {
-            return "";
         }
+        return "";
+
     }
 
     /**

@@ -47,15 +47,15 @@ public abstract class SecureScreen extends VelocitySecureScreen {
     protected boolean isAuthorized(RunData data) throws Exception {
 
         Context context = TurbineVelocity.getContext(data);
-        SecurityTool security = (SecurityTool) context.get(SecurityTool.DEFAULT_TOOL_NAME);
-        
+        SecurityTool security = (SecurityTool) context
+                .get(SecurityTool.DEFAULT_TOOL_NAME);
+
         // Either just null, the name is null or the name is the empty string
         // then the user is annonymous and needs to login
         if (security.isAnonUser(data)) {
             data.setScreenTemplate("Login.vm");
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 }

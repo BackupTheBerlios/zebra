@@ -29,30 +29,31 @@ import org.apache.turbine.util.parser.ParameterParser;
 public abstract class AbstractBasePerFieldValidator extends AbstractValidator {
 
     public static final String FIELD = "field";
+
     private String field = null;
-    
+
     /* (non-Javadoc)
      * @see org.apache.turbine.component.review.main.api.Validator#checkArguments()
      */
     public final void checkArguments() throws ReviewConfigurationException {
-        if (args.containsKey(FIELD)){
-            field = (String) args.get(FIELD);            
+        if (args.containsKey(FIELD)) {
+            field = (String) args.get(FIELD);
         }
         doCheckArguments();
     }
-    
-    public abstract void doCheckArguments() throws ReviewConfigurationException ;
+
+    public abstract void doCheckArguments() throws ReviewConfigurationException;
 
     /* (non-Javadoc)
      * @see org.apache.turbine.component.review.main.api.Validator#validate(org.apache.turbine.util.parser.ParameterParser, java.lang.String, org.apache.turbine.component.review.util.ValidationResults)
      */
     public final boolean validate(ParameterParser params, String key,
             ValidationResults validationData) throws ReviewValidationException {
-        if (field != null){
+        if (field != null) {
             return doValidate(params, field, validationData);
-        } else {
-            return doValidate(params, key, validationData);
         }
+        return doValidate(params, key, validationData);
+
     }
 
     public abstract boolean doValidate(ParameterParser params, String key,

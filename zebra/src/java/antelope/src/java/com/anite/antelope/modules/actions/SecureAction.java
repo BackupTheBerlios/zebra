@@ -28,20 +28,20 @@ import com.anite.antelope.modules.tools.SecurityTool;
  * @author Michael.Jones
  */
 public abstract class SecureAction extends VelocitySecureAction {
-	
 
-	/* (non-Javadoc)
-	 * @see org.apache.turbine.modules.actions.VelocitySecureAction#isAuthorized(org.apache.turbine.util.RunData)
-	 */
-	protected boolean isAuthorized(RunData data) throws Exception {
-		Context context = TurbineVelocity.getContext(data);
-        SecurityTool security = (SecurityTool) context.get(SecurityTool.DEFAULT_TOOL_NAME);
-		if( security.isAnonUser(data)  ) {
-			data.setScreenTemplate("Login.vm");
-			return false;
-		}
-		else {
-			return true;			
-		}
-	}
+    /* (non-Javadoc)
+     * @see org.apache.turbine.modules.actions.VelocitySecureAction#isAuthorized(org.apache.turbine.util.RunData)
+     */
+    protected boolean isAuthorized(RunData data) throws Exception {
+        Context context = TurbineVelocity.getContext(data);
+        SecurityTool security = (SecurityTool) context
+                .get(SecurityTool.DEFAULT_TOOL_NAME);
+        if (security.isAnonUser(data)) {
+            data.setScreenTemplate("Login.vm");
+            return false;
+        }
+
+        return true;
+
+    }
 }

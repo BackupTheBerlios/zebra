@@ -57,10 +57,9 @@ public class IntegerValidator extends AbstractBasePerFieldValidator {
 	public boolean doValidate(ParameterParser params, String key, ValidationResults validationData)
 			throws ReviewValidationException {
 
-		String keyToCheck = key;
-		String value;
+		String keyToCheck = key;		
 		if (params.containsKey(key)) {
-			value = keyToCheck = params.get(key).toString();
+			keyToCheck = params.get(key).toString();
 		} else {
 		    return false;
 		}

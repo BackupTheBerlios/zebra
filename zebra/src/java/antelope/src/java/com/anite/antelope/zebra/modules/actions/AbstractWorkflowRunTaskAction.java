@@ -34,33 +34,31 @@ import com.anite.penguin.modules.tools.FormTool;
 
 /**
  * Provides the functionality to run a task
+ * 
  * @author Ben.Gidley
  */
-public abstract class AbstractWorkflowRunTaskAction extends
-        VelocitySecureAction {
+public abstract class AbstractWorkflowRunTaskAction extends VelocitySecureAction {
 
     /**
      * Work out which screen to show next
+     * 
      * @param data
      * @param form
      * @param processInstance
      * @throws HibernateException
      * @throws NestableException
      */
-    protected void determineNextScreen(RunData data, FormTool form,
-            AntelopeProcessInstance processInstance, Context context)
+    protected void determineNextScreen(RunData data, FormTool form, AntelopeProcessInstance processInstance, Context context)
             throws HibernateException, NestableException {
         data.getSession().removeAttribute(ZebraSessionData.SESSION_KEY);
-        AntelopeTaskInstance nextTaskInstance = processInstance
-                .determineNextScreenTask();
+        AntelopeTaskInstance nextTaskInstance = processInstance.determineNextScreenTask();
 
         if (nextTaskInstance != null) {
             setNextTask(data, form, context, nextTaskInstance);
         } else {
-            this.setTemplate(data, ZebraHelper.getInstance()
-                    .getTaskListScreenName());
+            this.setTemplate(data, ZebraHelper.getInstance().getTaskListScreenName());
             form.reinitialiseForScreenEndpoint();
-        }                
+        }
     }
 
     /**
@@ -69,19 +67,15 @@ public abstract class AbstractWorkflowRunTaskAction extends
      * @param context
      * @param nextTaskInstance
      */
-    protected void setNextTask(RunData data, FormTool form, Context context,
-            AntelopeTaskInstance nextTaskInstance) {
-        
-        this.setTemplate(data, ((AntelopeTaskDefinition) nextTaskInstance
-                .getTaskDefinition()).getScreenName());
-        
+    protected void setNextTask(RunData data, FormTool form, Context context, AntelopeTaskInstance nextTaskInstance) {
+
+        this.setTemplate(data, ((AntelopeTaskDefinition) nextTaskInstance.getTaskDefinition()).getScreenName());
+
         ZebraSessionData zebraSessonData = new ZebraSessionData();
         zebraSessonData.setTaskInstanceId(nextTaskInstance.getTaskInstanceId());
-        
-        data.getSession().setAttribute(ZebraSessionData.SESSION_KEY,
-                zebraSessonData);
-        TaskInstanceTool taskTool = (TaskInstanceTool) context
-                .get(TaskInstanceTool.DEFAULT_TOOL_NAME);
+
+        data.getSession().setAttribute(ZebraSessionData.SESSION_KEY, zebraSessonData);
+        TaskInstanceTool taskTool = (TaskInstanceTool) context.get(TaskInstanceTool.DEFAULT_TOOL_NAME);
         taskTool.initialise();
         form.reinitialiseForScreenEndpoint();
     }

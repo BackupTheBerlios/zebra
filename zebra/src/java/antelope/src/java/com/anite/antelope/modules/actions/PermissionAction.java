@@ -42,9 +42,8 @@ public abstract class PermissionAction extends VelocitySecureAction  {
         if (security.hasPermission(data, pagePermission())) {
             data.setScreenTemplate("Login.vm");
             return false;
-        } else {
-            return true;
-        }
+        } 
+            return true;        
     }
     
     /**

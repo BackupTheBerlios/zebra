@@ -40,22 +40,19 @@ public abstract class DateComparator extends TaskListComparator {
         } else if (date0 == null) {
             if (getDirection().equals(ASCENDING)) {
                 return -1;
-            } else {
-                return 1;
             }
+            return 1;
         } else if (date1 == null) {
             if (getDirection().equals(ASCENDING)) {
                 return 1;
-            } else {
-                return -1;
             }
+            return -1;
         }
 
         if (getDirection().equals(ASCENDING)) {
             return date1.compareTo(date0);
-        } else {
-            return date0.compareTo(date1);
         }
+        return date0.compareTo(date1);
     }
 
     /**

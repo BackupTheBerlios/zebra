@@ -44,7 +44,6 @@ import org.apache.turbine.services.InitializationException;
 
 import com.anite.antelope.session.UserLocator;
 import com.anite.antelope.utils.AvalonServiceHelper;
-import com.anite.antelope.zebra.factory.AntelopeStateFactory;
 import com.anite.antelope.zebra.helper.ZebraHelper;
 import com.anite.antelope.zebra.processLifecycle.AntelopeTaskInstancePresets;
 import com.anite.antelope.zebra.processLifecycle.ProcessDestruct;
@@ -124,7 +123,7 @@ public class AntelopeProcessInstance implements IProcessInstance {
      * Set of FOE's need to make sure they are deleted with process
      */
     private Set fOES = new HashSet();
-        
+
     /**
      * Default constructor for normal construction
      */
@@ -334,9 +333,30 @@ public class AntelopeProcessInstance implements IProcessInstance {
         recursivelyQueryChildProcesses(results, q);
         return results;
     }
-    
+
+    public List getRunningRelatedProcesses() throws PersistenceException,
+            HibernateException {
+
+        if (this.getRelatedKey() != null) {
+
+            String querySQL = "select api from AntelopeProcessInstance api where api.relatedClass =:relatedClass";
+            querySQL += " and api.relatedKey = :relatedKey";
+            querySQL += " and api.state=:state";
+
+            Session s = PersistenceLocator.getInstance().getCurrentSession();
+            Query q = s.createQuery(querySQL);
+            q.setCacheable(true);
+            q.setParameter("relatedClass", this.getRelatedClass());
+            q.setLong("relatedKey", this.getRelatedKey().longValue());
+            q.setLong("state", IProcessInstance.STATE_RUNNING);
+            return q.list();
+        }
+        List results = new ArrayList();
+        return results;
+    }
+
     /**
-     * returns a recursive list of processes that are children of this process and complete
+     * Returns a list of all related processes that are complete
      * 
      * @return list of processes that are children of this process
      * @throws PersistenceException
@@ -344,31 +364,35 @@ public class AntelopeProcessInstance implements IProcessInstance {
      * @throws HibernateException
      *             hibernate exception
      */
-    public List getCompleteChildProcesses() throws PersistenceException,
+    public List getCompleteRelatedProcesses() throws PersistenceException,
             HibernateException, NestableException {
 
-        List results = new ArrayList();
+        if (this.getRelatedKey() != null) {
 
-        String querySQL = "select api from AntelopeProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
-        querySQL += " and api.state=:state";
+            String querySQL = "select api from AntelopeProcessInstance api where api.relatedClass =:relatedClass";
+            querySQL += " and api.relatedKey = :relatedKey";
+            querySQL += " and api.state=:state";
 
-        Session s = PersistenceLocator.getInstance().getCurrentSession();
-        Query q = s.createQuery(querySQL);
-        q.setCacheable(true);
-        q.setLong("state", IProcessInstance.STATE_COMPLETE);
+            Session s = PersistenceLocator.getInstance().getCurrentSession();
+            Query q = s.createQuery(querySQL);
+            q.setCacheable(true);
+            q.setParameter("relatedClass", this.getRelatedClass());
+            q.setParameter("relatedKey", this.getRelatedKey());
+            q.setLong("state", IProcessInstance.STATE_COMPLETE);
 
-        // Recursive Process children
-        recursivelyQueryChildProcesses(results, q);
-        return results;
+            return q.list();
+        }
+        return new ArrayList();
     }
-    
+
     /**
      * Get all child processes not running (e.g. complete and killed)
      * @return
      * @throws PersistenceException
      * @throws HibernateException
      */
-    public List getNotRunningChildProcesses() throws PersistenceException, HibernateException{
+    public List getNotRunningChildProcesses() throws PersistenceException,
+            HibernateException {
         List results = new ArrayList();
 
         String querySQL = "select api from AntelopeProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
@@ -378,17 +402,18 @@ public class AntelopeProcessInstance implements IProcessInstance {
         Query q = s.createQuery(querySQL);
         q.setLong("state", IProcessInstance.STATE_RUNNING);
         q.setCacheable(true);
-        
+
         recursivelyQueryChildProcesses(results, q);
         return results;
     }
-    
+
     /**
      * @param results
      * @param q
      * @throws HibernateException
      */
-    private void recursivelyQueryChildProcesses(List results, Query q) throws HibernateException {
+    private void recursivelyQueryChildProcesses(List results, Query q)
+            throws HibernateException {
         // Recursive Process children
         Stack checkList = new Stack();
         checkList.push(this);
@@ -405,14 +430,15 @@ public class AntelopeProcessInstance implements IProcessInstance {
             }
         }
     }
-    
+
     /**
      * Get all child processes regardless of state
      * @return
      * @throws PersistenceException
      * @throws HibernateException
      */
-    public List getAllChildProcesses() throws PersistenceException, HibernateException{
+    public List getAllChildProcesses() throws PersistenceException,
+            HibernateException {
         List results = new ArrayList();
 
         String querySQL = "select api from AntelopeProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
@@ -420,7 +446,6 @@ public class AntelopeProcessInstance implements IProcessInstance {
         Session s = PersistenceLocator.getInstance().getCurrentSession();
         Query q = s.createQuery(querySQL);
         q.setCacheable(true);
-        
 
         // Recursive Process children
         recursivelyQueryChildProcesses(results, q);
@@ -625,7 +650,7 @@ public class AntelopeProcessInstance implements IProcessInstance {
         this.getDynamicPermissionMap().put(dynamicPermissionName,
                 permission.getName());
     }
-    
+
     /**
      * Register a dynamic permission for passed UserName
      * @param processInstance
@@ -637,10 +662,10 @@ public class AntelopeProcessInstance implements IProcessInstance {
         try {
             PermissionManager permissionManager = AvalonServiceHelper
                     .instance().getSecurityService().getPermissionManager();
-            Permission permission = permissionManager.getPermissionByName(userName);
+            Permission permission = permissionManager
+                    .getPermissionByName(userName);
 
-            this.registerDynamicPermission(dynamicPermissionName,
-                    permission);
+            this.registerDynamicPermission(dynamicPermissionName, permission);
         } catch (InitializationException e) {
             log.error("Failed to get permission manager???", e);
             throw new RunTaskException(e);
@@ -806,8 +831,8 @@ public class AntelopeProcessInstance implements IProcessInstance {
      */
     public void killProcess() throws PersistenceException, HibernateException,
             NestableException, ComponentException {
-        IStateFactory stateFactory = ZebraHelper
-                .getInstance().getStateFactory();
+        IStateFactory stateFactory = ZebraHelper.getInstance()
+                .getStateFactory();
 
         List processesToKill = this.getRunningChildProcesses();
         processesToKill.add(this);
