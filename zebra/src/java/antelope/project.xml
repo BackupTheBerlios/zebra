@@ -21,7 +21,7 @@
 	<siteDirectory>/home/groups/zebra/htdocs/cc/antelope</siteDirectory>
 	<distributionDirectory>/var/www/repo</distributionDirectory>
 	<repository>
-		<connection>scm:cvs:pserver:anoncvs@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/antelope</connection>
+		<connection>scm:cvs:pserver:anonymous@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/antelope</connection>
 		<url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/zebra/zebra/src/java/antelope/</url>
 	</repository>
 	<mailingLists>
@@ -1099,7 +1099,7 @@
 		<!-- End Xdoclet -->
 	</dependencies>
 	<build>
-		<nagEmailAddress>bengidley@tigris.org</nagEmailAddress>
+		<nagEmailAddress>bgidley@berlios.de</nagEmailAddress>
 		<sourceDirectory>src/java</sourceDirectory>
 		<unitTestSourceDirectory>src/test</unitTestSourceDirectory>
 		<unitTest>
@@ -1137,16 +1137,12 @@
 		<report>maven-developer-activity-plugin</report>
 		<report>maven-file-activity-plugin</report>
 		<report>maven-license-plugin</report>
-		<report>maven-linkcheck-plugin</report>
-		<!--<report>maven-jdepend-plugin</report>-->
 		<report>maven-junit-report-plugin</report>
-		<report>maven-checkstyle-plugin</report>
 		<report>maven-pmd-plugin</report>
 		<report>maven-simian-plugin</report>
 		<report>maven-javadoc-plugin</report>
 		<report>maven-jxr-plugin</report>
 		<!--<report>maven-statcvs-plugin</report>-->
-		<report>maven-findbugs-plugin</report>
 		<report>maven-jcoverage-plugin</report>
 	</reports>
 </project>

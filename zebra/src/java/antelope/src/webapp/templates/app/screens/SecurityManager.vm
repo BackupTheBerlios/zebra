@@ -177,7 +177,7 @@
   use the standard hibernate persistence helper. Instead a Persistence Helper 
   has been written that leverages (:P) Meercat. Meercat is a component used 
   by Zebra/Antelope to manage Hibernate sessions, for more information have 
-  a look <a href="http://zebra.tigris.org/nonav/meercat/">here</a>.   
+  a look <a href="http://zebra.berlios.de/nonav/meercat/">here</a>.   
 </p>
 <h3>Using the Security Service</h3>
 <p>

@@ -24,7 +24,7 @@ to reflect a marketing name change!</p>
 <h2>Step 2 - Get a copy</h2>
 <p>Get a copy of antelope either as a zip file or direct from CVS. If you get it from CVS check
 it out as a project called 'bear' in eclipse.</p>
-<p>Run maven as per the instruction in <a href="http://zebra.tigris.org/nonav/antelopeZebraSample/GettingStarted.html">GettingStarted</a></p>
+<p>Run maven as per the instruction in <a href="http://zebra.berlios.de/antelope/GettingStarted.html">GettingStarted</a></p>
 
 <h2>Step 3 - Optional The Java code</h2>
 <p>The Java code with the sample application can be easily converted to a new package

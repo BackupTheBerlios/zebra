@@ -16,7 +16,7 @@
  */
  
 
-Please see http://zebra.tigris.org/antelopeZebraSample/GettingStarted.html
+Please see http://zebra.berlios.de/antelope/GettingStarted.html
 	or look in xdocs/GettingStarted.xml
 	
 If you have maven maven site:generate will build the HTML pages into /target/docs/GettingStarted.html

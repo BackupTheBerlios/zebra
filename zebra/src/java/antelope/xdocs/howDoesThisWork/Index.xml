@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <document>
 	<properties><title>How does this work</title>
-		<author email="bengidley@tigris.org">Ben Gidley</author>
+		<author email="bgidley@berlios.de">Ben Gidley</author>
 	</properties>
 	
 	
@@ -14,7 +14,7 @@
 				started.</p>
 			<p>Antelope aims to provide a good sample of the commonly used 
 				features of Turbine and specicially how to use it with the <a 
-				href="zebra.tigris.org">Zebra</a> workflow engine.</p>
+				href="zebra.berlios.de">Zebra</a> workflow engine.</p>
 		</section>
 		<section name="So what is Turbine">
 			<p>Turbine is a web application framework which makes it easy to 

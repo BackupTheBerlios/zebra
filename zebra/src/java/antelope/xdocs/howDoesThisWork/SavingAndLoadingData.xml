@@ -2,7 +2,7 @@
 <document>
 	<properties>
 		<title>Saving and Loading with Hibernate</title>
-		<author email="bengidley@tigris.org">Ben Gidley</author>
+		<author email="bgidley@berlios.de">Ben Gidley</author>
 	</properties>
 	<body>
 		<section name="What is hibernate"></section>

@@ -47,7 +47,7 @@
  	</li>
  	<li><a href="#">Links</a>
  	  <ul id="subnavlist">		
-	    <li><a href="http://zebra.tigris.org">Zebra</a></li>
+	    <li><a href="http://zebra.berlios.de">Zebra</a></li>
 	    <li><a href="http://jakarta.apache.org/velocity">Velocity</a></li>
 	    <li><a href="http://www.hibernate.org">Hibernate</a></li>
  	  </ul>

@@ -24,7 +24,7 @@ This is a sample Turbine application
 This is aimed to show best-practice in developing a Turbine application with the following technologies
 </p>
 <ul>
-	<li><a href="http://zebra.tigris.org">Zebra</a></li>
+	<li><a href="http://zebra.berlios.de">Zebra</a></li>
 	<li><a href="http://jakarta.apache.org/velocity">Velocity</a></li>
 	<li><a href="http://www.hibernate.org">Hibernate</a></li>
 </ul>

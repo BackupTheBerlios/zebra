@@ -2,7 +2,7 @@
 <document>
 	<properties>
 		<title>Zebra Antelope - Getting Started</title>
-		<author email="bengidley@tigris.org">Ben Gidley</author>
+		<author email="bgidley@berlios.de">Ben Gidley</author>
 	</properties>
 	<body>
 		<section name="Introduction">
@@ -50,10 +50,10 @@
 					<li>In eclipse go to the CVS Perspective.</li>
 					<li>Add a repository with 
 						<ul> 
-							<li>Server - cvs.tigris.org</li> 
-							<li>username anoncvs</li> 
+							<li>Server - cvs.zebra.berlios.de</li> 
+							<li>username anonymous</li> 
 							<li>type pserver</li> 
-							<li>path /cvs</li>
+							<li>path /cvsroot/zebra</li>
 						</ul> 
 					</li>
 					<li>Expand that repository to 
@@ -77,7 +77,7 @@
 			</ol>
 			<p>It should work!</p>
 			<p>any problems please post to the Zebra Users mailing list <a 
-				href="http://zebra.tigris.org/servlets/ProjectMailingListList">http://zebra.tigris.org/servlets/ProjectMailingListList</a></p>
+				href="http://developer.berlios.de/mail/?group_id=2683">http://developer.berlios.de/mail/?group_id=2683</a></p>
 			<subsection name="Install software">
 				<p>Maven should be installed using the installer available from 
 					apache. If you are on unix unzip it, and put maven in the 
@@ -183,7 +183,7 @@
 		</section>
 		<section name="Known Issues">
 			<p>See <a 
-				href="http://zebra.tigris.org/servlets/ProjectIssues">issuezilla</a> 
+				href="http://developer.berlios.de/bugs/?group_id=2683">Bugs</a> 
 				for known issues with antelope</p>
 		</section>
 		<section name="Where to go next">
