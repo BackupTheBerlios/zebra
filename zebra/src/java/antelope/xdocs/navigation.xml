@@ -22,6 +22,17 @@
 					href="howDoesThisWork/SimpleFormSubmission.html"/>
 				<item name="Creating your own application" 
 					href="howDoesThisWork/TemplateToApplication.html"/>
+				<item name="Workflow" 
+					href="howDoesThisWork/MyFirstWorkflow/Index.html">
+					<item name="Hello" 
+					href="howDoesThisWork/MyFirstWorkflow/ExplainHello.html"/>
+					<item name="How Old" 
+					href="howDoesThisWork/MyFirstWorkflow/ExplainHowOld.html"/>
+					<item name="Enter Expiry Date" 
+					href="howDoesThisWork/MyFirstWorkflow/EnterExpiryDate.html"/>
+					<item name="Summary" 
+					href="howDoesThisWork/MyFirstWorkflow/Summary.html"/>					
+				</item>
 			</item>
 			<item name="Review Documentation" href="turbineReview/index.html">
 				<item name="Overview" href="turbineReview/overview.html"/>

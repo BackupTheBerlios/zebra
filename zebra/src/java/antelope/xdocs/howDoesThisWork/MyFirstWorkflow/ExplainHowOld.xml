@@ -5,13 +5,11 @@
         <author email="bgidley@berlios.de">Ben Gidley</author>
     </properties>
     <body>
-        <section name="HowOldAreYou, EnterExpiryDate and Summary">
-            <subsection name="HowOldAreYou">
-                <p>On the "How old are you" page the user's name is confirmed and the age of the
-                    user is requested. As information is to be displayed on this page, the
-                    information must be provided by the screen class. the relevant part of
-                    HowOldAreYou.java is shown here.</p>
-                <source><![CDATA[
+        <section name="HowOldAreYou">
+            <p>On the "How old are you" page the user's name is confirmed and the age of the user is
+                requested. As information is to be displayed on this page, the information must be
+                provided by the screen class. the relevant part of HowOldAreYou.java is shown here.</p>
+            <source><![CDATA[
 public class HowOldAreYou extends BaseWorkflowScreen {
 
 	public static final String	AGE	= "age";
@@ -32,11 +30,11 @@ public class HowOldAreYou extends BaseWorkflowScreen {
 	}
 }
                 ]]></source>
-                <p>This code gets the string value out of the AntelopePropertySetEntry using the
-                    .getValue() method and puts it into the context where it will be cleared once
-                    the page is displayed. As can be seen below in the vm file the template is much
-                    the same as Hello except it has the line which displays the user's name from the context</p>
-                <source><![CDATA[
+            <p>This code gets the string value out of the AntelopePropertySetEntry using the
+                .getValue() method and puts it into the context where it will be cleared once the
+                page is displayed. As can be seen below in the vm file the template is much the same
+                as Hello except it has the line which displays the user's name from the context</p>
+            <source><![CDATA[
 <form name="hello" method="post" action="$link.setAction("myFirstWorkflow.HowOldAreYouAction")">
 
 ## get age field from form tool
@@ -56,48 +54,8 @@ public class HowOldAreYou extends BaseWorkflowScreen {
 <input type="submit" name="done" value="Done" /></p>
 </form>
                 ]]></source>
-                <p>The action class for HowOldAreYou is similar to Hello's and so there's no need to
-                    go into any more detail here.</p>
-            </subsection>
-            <subsection name="Enter Expiry Date">
-                <p>The process for this page is virtually identical to the previous page apart from
-                    it's demonstration of the ability of AntelopePropertySetEntrys to contain
-                    Objects instead of Strings (obviously a String is an object but that is provided
-                    for easier usage). The relevant code is within the EnterExpiryDateAction class.</p>
-                <source><![CDATA[
-public class EnterExpiryDate extends BaseWorkflowScreen {
-
-	public static final String	EXPIRY	= "expiry";
-
-	/**
-	 * Prepare Data if needed
-	 */
-	protected void doBuildTemplate(RunData runData, Context context,
-			AntelopeTaskInstance taskInstance, FormTool tool) throws Exception {
-
-		//put the name and age into the context to be displayed as text
-		context.put(Hello.NAME,
-			((AntelopePropertySetEntry) ((AntelopeProcessInstance) taskInstance
-					.getProcessInstance()).getPropertySet().get(
-				"name")).getValue());
-		
-		context.put(HowOldAreYou.AGE,
-			((AntelopePropertySetEntry) ((AntelopeProcessInstance) taskInstance
-					.getProcessInstance()).getPropertySet().get(
-				HowOldAreYou.AGE)).getValue());
-
-	}
-}
-                ]]></source>
-                <p> line 57 shows where the object is added to the PropertySetEntry. The date is
-                    parsed from the date given to it in a dd/mm/yy format by a date validator.</p>
-            </subsection>
-            <subsection name="Summary">
-                <p> Summary's process has nothing that hasn't already been covered as it simply
-                    displays information in the way that has already been described. The only thing
-                    worth mentioning is to remember to indicate that the process is ready to move on
-                    as is done in the above code on line 62. </p>
-            </subsection>
+            <p>The action class for HowOldAreYou is similar to Hello's and so there's no need to go
+                into any more detail here.</p>
         </section>
     </body>
 </document>
