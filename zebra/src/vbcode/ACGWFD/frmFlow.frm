@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{83B0E423-D4EE-11D4-BEDF-BAB7F1EEA455}#4.2#0"; "addflow4.ocx"
-Object = "{C048E7C2-514E-11D5-9781-0002E30447DE}#3.0#0"; "prnflow3.ocx"
+Object = "{83B0E423-D4EE-11D4-BEDF-BAB7F1EEA455}#4.2#0"; "AddFlow4.ocx"
+Object = "{C048E7C2-514E-11D5-9781-0002E30447DE}#3.0#0"; "prnFlow3.ocx"
 Begin VB.Form frmFlow 
    Caption         =   "Form1"
    ClientHeight    =   3945
@@ -223,8 +223,8 @@ End Property
 Private Sub FlowGUI_AfterAddLink(ByVal NewLink As AddFlow4Lib.afLink)
     Dim oRouting As RoutingDef
     Dim oOrgTaskDef As TaskDef
-    Set oOrgTaskDef = mProcessDef.Tasks(NewLink.Org.Key)
-    Set oRouting = mProcessDef.Routings.Add(oOrgTaskDef, mProcessDef.Tasks(NewLink.Dst.Key))
+    Set oOrgTaskDef = mProcessDef.Tasks(NewLink.Org.key)
+    Set oRouting = mProcessDef.Routings.Add(oOrgTaskDef, mProcessDef.Tasks(NewLink.Dst.key))
     CopyPropGroup moSettings.CommonRoutingProperties, oRouting.PropertyGroup, False, True, False
     
     '# just in case the task template cannot be found - this can happen!
@@ -233,7 +233,7 @@ Private Sub FlowGUI_AfterAddLink(ByVal NewLink As AddFlow4Lib.afLink)
     '# this setting also overrides anything specified in common properties... as it should do
     On Error GoTo 0
     
-    NewLink.Key = oRouting.Guid
+    NewLink.key = oRouting.Guid
     AlignClosestEdge NewLink
     Call Sanitize
 End Sub
@@ -248,7 +248,7 @@ End Sub
 
 Private Sub NodeMoved(oNode As afNode)
     Dim oTaskDef As TaskDef
-    Set oTaskDef = mProcessDef.Tasks(oNode.Key)
+    Set oTaskDef = mProcessDef.Tasks(oNode.key)
     oTaskDef.Left = oNode.Left
     oTaskDef.Top = oNode.Top
     oTaskDef.Width = oNode.Width
@@ -331,15 +331,15 @@ Private Sub FlowGUI_AfterStretch()
     Set oLink = FlowGUI.SelectedLink
     
     Set oPT = oLink.ExtraPoints(oLink.ExtraPoints.Count - 1)
-    Set oTaskDefDest = mProcessDef.Tasks(oLink.Dst.Key)
-    Set oRouting = mProcessDef.Routings(oLink.Key)
+    Set oTaskDefDest = mProcessDef.Tasks(oLink.Dst.key)
+    Set oRouting = mProcessDef.Routings(oLink.key)
     '# check to see if the final point intersects a part of the destination task
     If Not IntersectNodeLine(oTaskDefDest, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).X, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).Y, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).X, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).Y, sglX, sglY) Then
         fCancel = True
     ElseIf oRouting.TaskDest.Guid <> oTaskDefDest.Guid Then
         '# change destination
         mProcessDef.Routings.Remove oRouting.Guid
-        Set oNewRouting = mProcessDef.Routings.Add(mProcessDef.Tasks(oLink.Org.Key), oTaskDefDest, oRouting.Guid)
+        Set oNewRouting = mProcessDef.Routings.Add(mProcessDef.Tasks(oLink.Org.key), oTaskDefDest, oRouting.Guid)
         
         CopyPropGroup oRouting.PropertyGroup, oNewRouting.PropertyGroup, False, True
     End If
@@ -349,10 +349,11 @@ Private Sub FlowGUI_AfterStretch()
         '# reset the link back to our record of it's points
         
         '# remove from the UI
-        oLink.Dst.InLinks.Remove oLink.Key
+        oLink.Dst.InLinks.Remove oLink.key
         
         '# redraw the original link
         AddGUIRouting oRouting
+        Sanitize
         Exit Sub
     End If
     oRouting.ClearPoints
@@ -377,7 +378,7 @@ Private Sub FlowGUI_DblClick()
     Dim oTaskDef As TaskDef
     Dim oRouting As RoutingDef
     If Not (FlowGUI.SelectedNode Is Nothing) Then
-        Set oTaskDef = mProcessDef.Tasks(FlowGUI.SelectedNode.Key)
+        Set oTaskDef = mProcessDef.Tasks(FlowGUI.SelectedNode.key)
         strText = oTaskDef.Name
         If frmInput.ShowInput("Enter the Task Name", strText) Then
             oTaskDef.Name = strText
@@ -389,7 +390,7 @@ Private Sub FlowGUI_DblClick()
         strText = FlowGUI.SelectedLink.Text
         If frmInput.ShowInput("Enter the Routing Name", strText) Then
             FlowGUI.SelectedLink.Text = strText
-            Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.Key)
+            Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.key)
             oRouting.Name = strText
         End If
         Unload frmInput
@@ -443,7 +444,7 @@ Private Sub FlowGUI_DragDrop(Source As Control, X As Single, Y As Single)
     oNode.xTextMargin = 4
     oNode.yTextMargin = 4
     oNode.Text = NodeCaption(oTaskDef)
-    oNode.Key = oTaskDef.Guid
+    oNode.key = oTaskDef.Guid
     With oTaskDef
         .Left = oNode.Left
         .Top = oNode.Top
@@ -506,7 +507,7 @@ Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, X As Single, 
             Set oLink = FlowGUI.GetLinkAtPoint(FlowGUI.xScroll + X, FlowGUI.yScroll + Y)
             If oLink Is Nothing Then Exit Sub
             For Each oLinkCheck In FlowGUI.SelLinks
-                If oLinkCheck.Key = oLink.Key Then
+                If oLinkCheck.key = oLink.key Then
                     fNoChange = True
                     Exit For
                 End If
@@ -516,7 +517,7 @@ Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, X As Single, 
             End If
         Else
             For Each oNodeCheck In FlowGUI.SelNodes
-                If oNode.Key = oNodeCheck.Key Then
+                If oNode.key = oNodeCheck.key Then
                     fNoChange = True
                     Exit For
                 End If
@@ -536,7 +537,7 @@ Private Sub FlowGUI_MouseUp(Button As Integer, Shift As Integer, X As Single, Y 
             ods.Commands.GetPopupMenu("mnuNode").ShowPopup
         ElseIf FlowGUI.SelLinks.Count > 0 Then
             Dim oRouting As RoutingDef
-            Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.Key)
+            Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.key)
             ods.Commands.GetToolButton("tlParallel").State = IIf(oRouting.Parallel, dsxpCommandToolButtonStateChecked, dsxpCommandToolButtonStateUnchecked)
             ods.Commands.GetPopupMenu("mnuLink").ShowPopup
         Else
@@ -567,7 +568,7 @@ Private Sub Sanitize()
     Set mProcessDef.FirstTask = Nothing
     
     For Each oNode In FlowGUI.Nodes
-        Set oTaskDef = mProcessDef.Tasks(oNode.Key)
+        Set oTaskDef = mProcessDef.Tasks(oNode.key)
         oNode.DrawStyle = afInsideSolid
         
         If oNode.OutLinks.Count = 0 Then
@@ -679,7 +680,7 @@ Private Sub SanitizeRouting(oNode As afNode)
     Set colSynchronous = New Collection
     
     For Each oLink In oNode.OutLinks
-        Set oRouting = mProcessDef.Routings(oLink.Key)
+        Set oRouting = mProcessDef.Routings(oLink.key)
         If oRouting.Parallel Then
             colParallel.Add oRouting, oRouting.Guid
         Else
@@ -803,14 +804,14 @@ Private Sub ResetToTemplate()
     Dim oProcessTemplate As ProcessTemplate
     Set oProcessTemplate = moProcessTemplates(mProcessDef.ProcessTemplate)
     For Each oNode In FlowGUI.SelNodes
-        Set oTask = mProcessDef.Tasks(oNode.Key)
+        Set oTask = mProcessDef.Tasks(oNode.key)
         CopyPropGroup oProcessTemplate.CommonTaskProperties, oTask.PropertyGroup, False, True, True
         CopyPropGroup moTaskTemplates(oTask.TaskTemplate).PropertyGroup, oTask.PropertyGroup, False, True, True
     Next
     Dim oLink As afLink
     Dim oRouting As RoutingDef
     For Each oLink In FlowGUI.SelLinks
-        Set oRouting = mProcessDef.Routings(oLink.Key)
+        Set oRouting = mProcessDef.Routings(oLink.key)
         CopyPropGroup oProcessTemplate.CommonRoutingProperties, oRouting.PropertyGroup, False, True, True
     Next
     If (FlowGUI.SelLinks.Count = 0 And FlowGUI.SelNodes.Count = 0) Then
@@ -830,7 +831,7 @@ Err_Handler:
 End Sub
 Private Sub ToggleParallel()
     Dim oRouting As RoutingDef
-    Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.Key)
+    Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.key)
     If oRouting.PropertyGroup("(General)").Item("Parallel").Locked Then
         MsgBox "Cannot change this property", vbInformation
     Else
@@ -852,16 +853,16 @@ Private Function DeleteSelected() As Boolean
     On Error Resume Next
     For Each oNode In FlowGUI.SelNodes
         For Each oLink In oNode.OutLinks
-            colRemoveRouting.Add oLink.Key, oLink.Key
+            colRemoveRouting.Add oLink.key, oLink.key
         Next
         For Each oLink In oNode.InLinks
-            colRemoveRouting.Add oLink.Key, oLink.Key
+            colRemoveRouting.Add oLink.key, oLink.key
         Next
     Next
     '# can get an error here as the link may already be selected for deletion
     
     For Each oLink In FlowGUI.SelLinks
-        colRemoveRouting.Add oLink.Key, oLink.Key
+        colRemoveRouting.Add oLink.key, oLink.key
     Next
     On Error GoTo Err_Raise
     
@@ -876,7 +877,7 @@ Private Function DeleteSelected() As Boolean
         
     '# remove nodes
     Do Until FlowGUI.SelNodes.Count = 0
-        Set oTaskDef = mProcessDef.Tasks(FlowGUI.SelNodes(1).Key)
+        Set oTaskDef = mProcessDef.Tasks(FlowGUI.SelNodes(1).key)
         mProcessDef.Tasks.Remove oTaskDef.Guid
         FlowGUI.Nodes.Remove oTaskDef.Guid
     Loop
@@ -911,7 +912,7 @@ Private Function CopySelected() As Boolean
     Set oNewProcess = New ProcessDef
     
     For Each oNode In FlowGUI.SelNodes
-        Set oTaskDef = mProcessDef.Tasks(oNode.Key)
+        Set oTaskDef = mProcessDef.Tasks(oNode.key)
         
         Set oNewTask = oNewProcess.Tasks.Add(oTaskDef.Guid)
         
@@ -934,15 +935,15 @@ Private Function CopySelected() As Boolean
     Dim oTaskDest As TaskDef
     Dim oNewRouting As RoutingDef
     For Each oLink In FlowGUI.SelLinks
-        Set oRoutingDef = mProcessDef.Routings(oLink.Key)
+        Set oRoutingDef = mProcessDef.Routings(oLink.key)
         On Error Resume Next
         Set oTaskOrg = Nothing
-        Set oTaskOrg = oNewProcess.Tasks(oLink.Org.Key)
+        Set oTaskOrg = oNewProcess.Tasks(oLink.Org.key)
         On Error GoTo Err_Handler
         If Not (oTaskOrg Is Nothing) Then
             On Error Resume Next
             Set oTaskDest = Nothing
-            Set oTaskDest = oNewProcess.Tasks(oLink.Dst.Key)
+            Set oTaskDest = oNewProcess.Tasks(oLink.Dst.key)
             On Error GoTo Err_Handler
             If Not (oTaskDest Is Nothing) Then
                 '# all present and correct
@@ -1189,11 +1190,11 @@ Private Sub ShowPropWin()
     Set moPropList = oDW.Form
     
     If Not (FlowGUI.SelectedNode Is Nothing) Then
-        Set oTaskDef = mProcessDef.Tasks(FlowGUI.SelectedNode.Key)
+        Set oTaskDef = mProcessDef.Tasks(FlowGUI.SelectedNode.key)
         Set moPropList.PropBag = oTaskDef.PropertyGroup
         oDW.Caption = "Task"
     ElseIf Not (FlowGUI.SelectedLink Is Nothing) Then
-        Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.Key)
+        Set oRouting = mProcessDef.Routings(FlowGUI.SelectedLink.key)
         Set moPropList.PropBag = oRouting.PropertyGroup
         oDW.Caption = "Routing"
     Else
@@ -1281,8 +1282,8 @@ Private Function IgnorePoint(oLink As afLink, oPT As afLinkPoint) As Boolean
     Exit Function
     Dim oSrc As TaskDef
     Dim oDst As TaskDef
-    Set oSrc = mProcessDef.Tasks(oLink.Org.Key)
-    Set oDst = mProcessDef.Tasks(oLink.Dst.Key)
+    Set oSrc = mProcessDef.Tasks(oLink.Org.key)
+    Set oDst = mProcessDef.Tasks(oLink.Dst.key)
     
     IgnorePoint = TouchesStep(oSrc, oPT) Or TouchesStep(oDst, oPT)
 End Function
@@ -1310,7 +1311,7 @@ Private Sub SaveFlow()
     
     strErrFunc = "Parse Nodes"
     For Each oNode In FlowGUI.Nodes
-        Set oTaskDef = mProcessDef.Tasks(oNode.Key)
+        Set oTaskDef = mProcessDef.Tasks(oNode.key)
         With oTaskDef
             .Left = oNode.Left
             .Top = oNode.Top
@@ -1322,7 +1323,7 @@ Private Sub SaveFlow()
     For Each oTaskDef In mProcessDef.Tasks
         Set oNode = FlowGUI.Nodes(oTaskDef.Guid)
         For Each oLink In oNode.OutLinks
-            Set oRouting = mProcessDef.Routings(oLink.Key)
+            Set oRouting = mProcessDef.Routings(oLink.key)
             oRouting.ClearPoints
             For Each oPT In oLink.ExtraPoints
                 If Not IgnorePoint(oLink, oPT) Then
@@ -1367,7 +1368,7 @@ Private Function AddGUINode(oTaskDef As TaskDef, Optional OffsetX As Single = 0,
     With oNode
         .Text = NodeCaption(oTaskDef)
         Set .Picture = LoadPicture(App.Path & mcstrImagesPath & moTaskTemplates(oTaskDef.TaskTemplate).Icon)
-        .Key = oTaskDef.Guid
+        .key = oTaskDef.Guid
         .xTextMargin = 4
         .yTextMargin = 4
     End With
@@ -1397,7 +1398,7 @@ Private Function AddGUIRouting(oRouting As RoutingDef, Optional OffsetX As Singl
     
     With oLink
         .Text = oRouting.Name
-        .Key = oRouting.Guid
+        .key = oRouting.Guid
     End With
     
     '# add any additional points to the GUI link line as required
@@ -1408,18 +1409,28 @@ Private Function AddGUIRouting(oRouting As RoutingDef, Optional OffsetX As Singl
             End If
         Next
     Else
-        For lngPointCount = 1 To oRouting.PointCount - 1
+        '# add some temporary extra points to the line
+        
+        lngPointCount = oRouting.PointCount
+        If lngPointCount > 1 Then
+            '# if there is more than one point we need to add an extra point to the total we create
+            lngPointCount = lngPointCount + 1
+        End If
+        
+        Do Until oLink.ExtraPoints.Count >= lngPointCount
+            oLink.ExtraPoints.Add oRouting.TaskDest.Left - OffsetX, oRouting.TaskDest.Top - OffsetY
+        Loop
+        
+        '# now move them into the correct positions
+        For lngPointCount = 1 To oRouting.PointCount
             oRouting.Point sglX, sglY, lngPointCount
-            oLink.ExtraPoints.Add sglX - OffsetX, sglY - OffsetY
+            'Debug.Print "Moving Point", sglX, sglY
+            Set oPT = oLink.ExtraPoints(lngPointCount)
+            oPT.X = sglX - OffsetX
+            oPT.Y = sglY - OffsetY
+            Set oLink.ExtraPoints.Item(lngPointCount) = oPT
         Next
     End If
-    
-    Set oPT = oLink.ExtraPoints(oLink.ExtraPoints.Count - 1)
-    oRouting.Point sglX, sglY, oRouting.PointCount
-    oPT.X = sglX
-    oPT.Y = sglY
-    Set oLink.ExtraPoints.Item(oLink.ExtraPoints.Count - 1) = oPT
-        
     Set AddGUIRouting = oLink
 End Function
 
@@ -1564,9 +1575,9 @@ End Sub
 
 Private Sub moPropList_PropChanged(oProperty As Property)
     If Not (FlowGUI.SelectedNode Is Nothing) Then
-        FlowGUI.SelectedNode.Text = NodeCaption(mProcessDef.Tasks(FlowGUI.SelectedNode.Key))
+        FlowGUI.SelectedNode.Text = NodeCaption(mProcessDef.Tasks(FlowGUI.SelectedNode.key))
     ElseIf Not (FlowGUI.SelectedLink Is Nothing) Then
-        FlowGUI.SelectedLink.Text = mProcessDef.Routings(FlowGUI.SelectedLink.Key).Name
+        FlowGUI.SelectedLink.Text = mProcessDef.Routings(FlowGUI.SelectedLink.key).Name
     Else
         '# flow properties
         Parent.ds.ActiveDocumentWindow.Caption = mProcessDef.Name

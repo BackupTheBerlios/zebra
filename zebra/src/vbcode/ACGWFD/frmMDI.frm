@@ -360,8 +360,10 @@ Private Sub ds_DocumentWindowActivate(ByVal DocumentWindow As InnovaDSXP.Documen
 End Sub
 
 Private Sub ds_DocumentWindowDeactivate(ByVal DocumentWindow As InnovaDSXP.DocumentWindow)
-    moContextMenu.Deactivate
-    Set moContextMenu = Nothing
+    If Not (moContextMenu Is Nothing) Then
+        moContextMenu.Deactivate
+        Set moContextMenu = Nothing
+    End If
     Dim oPropList As frmPropList
     
     Set oPropList = ds.DockWindows.GetForm("dwProperties").Form
