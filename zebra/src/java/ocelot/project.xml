@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 	<pomVersion>3</pomVersion>
-	<id>ocelot</id>
+	<groupId>ocelot</groupId>
+	<artifactId>ocelot</artifactId>
 	<name>Ocelot</name>
 	<currentVersion>0.1</currentVersion>
 	<organization>
@@ -9,6 +10,7 @@
 		<url>http://www.aniteps.com</url>
 		<logo>/images/APS_logo.gif</logo>
 	</organization>
+	<package>com.anite.ocelot</package>
 	<gumpRepositoryId/>
 	<description>Ocelot</description>
 	<shortDescription>Ocelot</shortDescription>
@@ -97,7 +99,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<nagEmailAddress>bengidley@tigris.org</nagEmailAddress>
+		<nagEmailAddress>bgidley@berlios.de</nagEmailAddress>
 		<sourceDirectory>src/java</sourceDirectory>
 		<unitTestSourceDirectory>src/test</unitTestSourceDirectory>
 		<unitTest>
