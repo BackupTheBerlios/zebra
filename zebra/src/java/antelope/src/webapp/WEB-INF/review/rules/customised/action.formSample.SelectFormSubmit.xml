@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE validation SYSTEM "WEB-INF/conf/Validation.dtd">
+<!DOCTYPE validation PUBLIC "-//Apache//TEXT Validation//EN" "http://purl.oclc.org/NET/turbine-review/Validation.dtd">
 
 <validation requestLookupKey="action.formSample.SelectFormSubmit">
   <!--Validation Specification : action.formSample.SelectFormSubmit-->
@@ -23,16 +23,14 @@
     <parameter-validator name="height">
       <args />
       <validators>
-		<validator class="com.anite.antelope.validation.SelectList">
-			<args>
-			<argument name="values" type="string" 
-				value="Midget,Short,Averge,Tall,Too Tall" 
-				/>
-			</args>
-		</validator>
+        <validator class="com.anite.antelope.validation.SelectList">
+          <args>
+            <argument name="values" type="string" value="Midget,Short,Averge,Tall,Too Tall" />
+          </args>
+        </validator>
       </validators>
     </parameter-validator>
   </parametervalidators>
-  <request-validator name="action.formSample.SelectFormSubmit" />
+  <request-validator />
 </validation>
 

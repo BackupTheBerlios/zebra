@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE validation SYSTEM "WEB-INF/conf/Validation.dtd">
+<!DOCTYPE validation PUBLIC "-//Apache//TEXT Validation//EN" "http://purl.oclc.org/NET/turbine-review/Validation.dtd">
 
 <validation requestLookupKey="action.user.DeleteUser">
   <!--Validation Specification : action.user_DeleteUser-->
@@ -29,18 +29,17 @@
       </validators>
     </parameter-validator>
   </parametervalidators>
-  <request-validator name="action.user.DeleteUser">
-		<args/>
-		<validators>
-			<validator class="com.anite.antelope.validation.NotNullValidator">
-				<args>
-					<!-- Arguments for NotNullValidator -->
-					<argument name="isNullMessage" type="string" 
-						value="You must select a user." />
-					<argument name="keys" type="string" value="username" />
-				</args>
-			</validator>
-		</validators>
-	</request-validator>
+  <request-validator>
+    <args />
+    <validators>
+      <validator class="com.anite.antelope.validation.NotNullValidator">
+        <args>
+          <!-- Arguments for NotNullValidator -->
+          <argument name="isNullMessage" type="string" value="You must select a user." />
+          <argument name="keys" type="string" value="username" />
+        </args>
+      </validator>
+    </validators>
+  </request-validator>
 </validation>
 
