@@ -49,7 +49,7 @@ Public Function FileLoadXML(FileName As String, oVersions As Versions, oTaskTemp
     Dim oNode As IXMLDOMNode
     
     If strVersion = mcstrXMLVersion Then
-        FileLoadXML = XMLProcessVersions(oVersions, oRoot.firstChild, oProcessTemplates)
+        FileLoadXML = XMLProcessVersions(oVersions, oRoot.firstChild, oProcessTemplates, oTaskTemplates)
     Else
         '/ bad version number
         FileLoadXML = False
@@ -60,7 +60,7 @@ Err_Handler:
     Resume 0
 End Function
 
-Private Function XMLProcessVersions(oVersions As Versions, oRoot As MSXML2.IXMLDOMNode, oProcessTemplates As ProcessTemplates) As Boolean
+Private Function XMLProcessVersions(oVersions As Versions, oRoot As MSXML2.IXMLDOMNode, oProcessTemplates As ProcessTemplates, oTaskTemplates As TaskTemplates) As Boolean
     On Error GoTo Err_Handler
     
     Dim oNode As IXMLDOMNode
@@ -71,7 +71,7 @@ Private Function XMLProcessVersions(oVersions As Versions, oRoot As MSXML2.IXMLD
     
     For Each oNode In oRoot.childNodes
         If StrComp(oNode.nodeName, "ProcessVersion", vbTextCompare) = 0 Then
-            If Not XMLVersion(oVersions, oNode, oProcessTemplates) Then
+            If Not XMLVersion(oVersions, oNode, oProcessTemplates, oTaskTemplates) Then
                 Exit Function
             End If
         End If
@@ -82,7 +82,7 @@ Err_Handler:
     Stop
     Resume 0
 End Function
-Private Function XMLVersion(oVersions As Versions, oRoot As MSXML2.IXMLDOMNode, oProcessTemplates As ProcessTemplates) As Boolean
+Private Function XMLVersion(oVersions As Versions, oRoot As MSXML2.IXMLDOMNode, oProcessTemplates As ProcessTemplates, oTaskTemplates As TaskTemplates) As Boolean
     On Error GoTo Err_Handler
     
     Dim oNode As IXMLDOMNode
@@ -108,7 +108,7 @@ Private Function XMLVersion(oVersions As Versions, oRoot As MSXML2.IXMLDOMNode, 
     
     For Each oNode In oRoot.childNodes
         If StrComp(oNode.nodeName, "ProcessDef", vbTextCompare) = 0 Then
-            If Not (oImport.XMLProcess(oProcessDef, oNode, oProcessTemplates)) Then
+            If Not (oImport.XMLProcess(oProcessDef, oNode, oProcessTemplates, oTaskTemplates)) Then
                 Exit Function
             End If
             

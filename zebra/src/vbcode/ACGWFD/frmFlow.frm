@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{83B0E423-D4EE-11D4-BEDF-BAB7F1EEA455}#4.2#0"; "AddFlow4.ocx"
-Object = "{C048E7C2-514E-11D5-9781-0002E30447DE}#3.0#0"; "prnFlow3.ocx"
+Object = "{83B0E423-D4EE-11D4-BEDF-BAB7F1EEA455}#4.2#0"; "addflow4.ocx"
+Object = "{C048E7C2-514E-11D5-9781-0002E30447DE}#3.0#0"; "prnflow3.ocx"
 Begin VB.Form frmFlow 
    Caption         =   "Form1"
    ClientHeight    =   3945
@@ -1027,7 +1027,7 @@ Private Function Paste() As Boolean
     Set oImport = New ACGWFDXML.XMLProcessDef
     
     
-    If Not oImport.XMLProcess(oNewProcess, oRoot.firstChild, moProcessTemplates) Then Exit Function
+    If Not oImport.XMLProcess(oNewProcess, oRoot.firstChild, moProcessTemplates, moTaskTemplates) Then Exit Function
     
     '# alter the GUIDs of each task and routing
     '# need to create a seperate collection as we are altering the keys

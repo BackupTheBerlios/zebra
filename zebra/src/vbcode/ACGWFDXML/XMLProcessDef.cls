@@ -231,7 +231,7 @@ Public Function FileLoadXML(FileName As String, oProcessDef As ProcessDef, oTask
     Dim oNode As IXMLDOMNode
     
     If mstrVersion = mcstrXMLVersion Then
-        FileLoadXML = XMLProcess(oProcessDef, oRoot.firstChild, oProcessTemplates)
+        FileLoadXML = XMLProcess(oProcessDef, oRoot.firstChild, oProcessTemplates, oTaskTemplates)
     Else
         '/ bad version number
         FileLoadXML = False
@@ -243,7 +243,7 @@ Err_Handler:
     Resume 0
 End Function
 
-Public Function XMLProcess(oProcessDef As ProcessDef, oRoot As IXMLDOMNode, oProcessTemplates As ProcessTemplates) As Boolean
+Public Function XMLProcess(oProcessDef As ProcessDef, oRoot As IXMLDOMNode, oProcessTemplates As ProcessTemplates, oTaskTemplates As TaskTemplates) As Boolean
     On Error GoTo Err_Handler
     Set mcolIDMAP = New Collection
     Dim oNode As IXMLDOMNode
@@ -256,6 +256,7 @@ Public Function XMLProcess(oProcessDef As ProcessDef, oRoot As IXMLDOMNode, oPro
     
     On Error Resume Next
     Set moProcessTemplate = oProcessTemplates(oProcessDef.ProcessTemplate)
+    Set moTaskTemplates = oTaskTemplates
     On Error GoTo 0
     If Not (moProcessTemplate Is Nothing) Then
         '# copy default props
@@ -287,11 +288,13 @@ Public Function XMLProcess(oProcessDef As ProcessDef, oRoot As IXMLDOMNode, oPro
     Set oProcessDef.FirstTask = oProcessDef.Tasks(GetNodeAttr(oRoot, "FirstTask"))
     On Error GoTo 0
     Set moProcessTemplate = Nothing
+    Set moTaskTemplates = Nothing
     XMLProcess = True
     Exit Function
 Err_Handler:
     Stop
     Resume 0
+
 End Function
 
 Private Function XMLProperties(oPG As PropertyGroup, oRoot As MSXML2.IXMLDOMNode) As Boolean
@@ -345,14 +348,17 @@ Private Function XMLTask(oTasks As Tasks, oRoot As IXMLDOMNode) As Boolean
         .TaskTemplate = GetNodeAttr(oRoot, "TaskTemplate")
     End With
     If Not (moProcessTemplate Is Nothing) Then
+        Debug.Print "Copying process template values"
         CopyProps moProcessTemplate.CommonTaskProperties, oTaskDef.PropertyGroup
     End If
     On Error Resume Next
     Dim oTaskTemplate As TaskTemplate
+    
     Set oTaskTemplate = moTaskTemplates(oTaskDef.TaskTemplate)
     On Error GoTo Err_Handler
     
     If Not (oTaskTemplate Is Nothing) Then
+        Debug.Print "Copying task template values"
         CopyProps oTaskTemplate.PropertyGroup, oTaskDef.PropertyGroup
     End If
     
