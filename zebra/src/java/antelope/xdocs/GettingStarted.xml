@@ -10,7 +10,7 @@
 				engine.</p>
 			<p>It is based on </p>
 			<ul>
-				<li>Turbine 2.4-Dev</li>
+				<li>Turbine 2.4-M1-Dev</li>
 				<li>Hibernate</li>
 				<li>Zebra</li>
 			</ul>
@@ -22,7 +22,7 @@
 			<p>You will need</p>
 			<ul>
 				<li>A copy of Antelope either cvs or zip</li>
-				<li>Maven 1.0 <a 
+				<li>Maven 1.0.2 <a 
 					href="http://maven.apache.org/">http://maven.apache.org/</a></li>
 				<li>Java SDK 1.4.2 <a 
 					href="http://java.sun.com">http://java.sun.com</a></li>
@@ -36,8 +36,7 @@
 			<p> You may want the following eclipse plugins - as they make 
 				development easier</p>
 			<ul>
-				<li>Veloclipse 
-					http://propsorter.sourceforge.net/veloeclipse</li>
+				<li>Veloclipse 				http://propsorter.sourceforge.net/veloeclipse</li>
 				<li>XMLBuddy for eclipse http://xmlbuddy.com/</li>
 			</ul>
 		</section>
@@ -63,8 +62,8 @@
 			</subsection>
 			<subsection name="Zip">
 				<p>You can download a <a 
-					href="http://zebra.tigris.org/servlets/ProjectDocumentList?folderID=2676">zip</a> 
-					of a recent antelope</p>
+					href="https://developer.berlios.de/project/showfiles.php?group_id=2683">zip</a> 
+					of a recent antelope. It is recommend to use CVS rather than this as it make upgrading simpler</p>
 			</subsection>
 		</section>
 		<section name="To use">

@@ -4,7 +4,7 @@
 	<name>Antelope</name>
     <artifactId>antelope</artifactId>
 	<groupId>zebra</groupId>
-	<currentVersion>0.6</currentVersion>
+	<currentVersion>1.0-rc1</currentVersion>
 	<organization>
 		<name>Anite</name>
 		<url>http://www.aniteps.com</url>
@@ -954,25 +954,17 @@
 		<!-- End Unit testing helpers -->
 		<!-- Maven Plugins stuff -->
 		<dependency>
-			<groupId>maven</groupId>
-			<artifactId>maven-hibernate-plugin</artifactId>
-			<version>1.2</version>
-			<type>plugin</type>
-			<properties />
-		</dependency>
-		<dependency>
-			<groupId>maven</groupId>
-			<artifactId>maven-eclipse-plugin</artifactId>
-			<version>1.8</version>
-			<type>plugin</type>
-			<properties />
-		</dependency>
-		<dependency>
 			<groupId>maven-plugins</groupId>
 			<artifactId>maven-findbugs-plugin</artifactId>
 			<version>0.8.4</version>
 			<type>plugin</type>
 			<properties />
+		</dependency>
+		<dependency>
+			<groupId>statcvs</groupId>
+			<artifactId>maven-statcvs-plugin</artifactId>
+			<version>2.5</version>
+			<type>plugin</type>
 		</dependency>
 		<!-- End Maven Plugins-->
 		<!-- Database Drivers -->
@@ -1072,24 +1064,24 @@
 		</dependency>
 		<!-- Hibern8ide End-->
 		<!-- Xdoclet -->
-		 <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet</artifactId>
-            <version>1.2.1</version>
-            <properties/>
-        </dependency>
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet-xdoclet-module</artifactId>
-            <version>1.2.1</version>
-            <properties/>
-        </dependency>
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet-hibernate-module</artifactId>
-            <version>1.2.2-20040805-1015</version>
-            <properties/>
-        </dependency>
+		<dependency>
+			<groupId>xdoclet</groupId>
+			<artifactId>xdoclet</artifactId>
+			<version>1.2.1</version>
+			<properties/>
+		</dependency>
+		<dependency>
+			<groupId>xdoclet</groupId>
+			<artifactId>xdoclet-xdoclet-module</artifactId>
+			<version>1.2.1</version>
+			<properties/>
+		</dependency>
+		<dependency>
+			<groupId>xdoclet</groupId>
+			<artifactId>xdoclet-hibernate-module</artifactId>
+			<version>1.2.2-20040805-1015</version>
+			<properties/>
+		</dependency>
 		<dependency>
 			<groupId>xdoclet</groupId>
 			<artifactId>xjavadoc</artifactId>
@@ -1142,7 +1134,7 @@
 		<report>maven-simian-plugin</report>
 		<report>maven-javadoc-plugin</report>
 		<report>maven-jxr-plugin</report>
-		<!--<report>maven-statcvs-plugin</report>-->
+		<report>maven-statcvs-plugin</report>
 		<report>maven-jcoverage-plugin</report>
 	</reports>
 </project>
