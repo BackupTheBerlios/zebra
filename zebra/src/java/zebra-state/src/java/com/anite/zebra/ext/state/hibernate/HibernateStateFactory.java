@@ -16,10 +16,7 @@
  */
 package com.anite.zebra.ext.state.hibernate;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.LockMode;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +39,8 @@ import com.anite.zebra.core.state.api.ITransaction;
  * 
  */
 public abstract class HibernateStateFactory implements IStateFactory {
+
+    private LockManager lockManager = new LockManager();
 
     private static Log log = LogFactory.getLog(HibernateStateFactory.class);
 
@@ -109,64 +108,8 @@ public abstract class HibernateStateFactory implements IStateFactory {
     public void acquireLock(IProcessInstance processInstance)
             throws LockException {
         try {
-            Session session = getSession();
-            boolean isLocked = false;
-            while (!isLocked) {
-                HibernateLock lock;
-                try {
-                    lock = (HibernateLock) session.get(getLockClass(),
-                            processInstance.getProcessInstanceId());
-                    if(lock!=null){
-                        session.evict(lock);
-                    }
-                } catch (HibernateException e2) {
-                    log.error("Unable to test for lock", e2);
-                    throw new LockException(e2);
-                }
-                if (lock == null) {
-                    try {
-                        Class lockClazz = getLockClass();
-
-                        lock = (HibernateLock) lockClazz.newInstance();
-                        lock.setProcessInstanceId(processInstance
-                                .getProcessInstanceId());
-
-                        Transaction t = session.beginTransaction();
-                        session.save(lock);
-                        t.commit();
-                        isLocked = true;
-                    } catch (HibernateException e) {
-                        // It is vaguely possible someone beat us to it 
-                        try {
-                            lock = null;
-                            Thread.sleep(10);
-                        } catch (InterruptedException e1) {
-                            log
-                                    .error(
-                                            "Interupted while trying to lock - this should not occur",
-                                            e1);
-                            throw new LockException(e1);
-                        }
-                    } catch (InstantiationException e) {
-                        log.error("Unable to create lock class", e);
-                        throw new LockException();
-                    } catch (IllegalAccessException e) {
-                        log.error("Unable to create lock class", e);
-                        throw new LockException();
-                    }
-                } else {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e1) {
-                        log
-                                .error(
-                                        "Interupted while trying to lock - this should not occur",
-                                        e1);
-                        throw new LockException(e1);
-                    }
-                }
-
-            }
+            getLockManager().aquireLockImpl(processInstance, getSession(),
+                    getLockClass());
 
         } catch (StateFailureException e) {
             log.error("Unable to save", e);
@@ -179,23 +122,13 @@ public abstract class HibernateStateFactory implements IStateFactory {
      */
     public void releaseLock(IProcessInstance processInstance)
             throws LockException {
-
         try {
-            Session session = getSession();
-            HibernateLock lock = (HibernateLock) session.load(
-                    getLockClass(), processInstance.getProcessInstanceId());            
-            Transaction t = session.beginTransaction();
-            // Make sure we have a lock (just in case)
-            session.delete(lock);
-            t.commit();
+            getLockManager().releaseLockImpl(processInstance, getSession(),
+                    getLockClass());
         } catch (StateFailureException e) {
             log.error("Releasing Lock should never fail ", e);
             throw new LockException(e);
-        } catch (HibernateException e) {
-            log.error("Releasing Lock should never fail ", e);
-            throw new LockException(e);
         }
-
     }
 
     /**
@@ -203,4 +136,8 @@ public abstract class HibernateStateFactory implements IStateFactory {
      * @return
      */
     public abstract Class getLockClass();
+    
+    public LockManager getLockManager() {
+        return lockManager;
+    }
 }
