@@ -84,6 +84,8 @@ public class FormTool implements PipelineDataApplicationTool, Serializable {
 
     private List requestMessages = new ArrayList();
 
+    private boolean reinitialise = true;
+    
     private transient PipelineData pipelineData;
 
     public boolean isAllValid() {
@@ -124,6 +126,7 @@ public class FormTool implements PipelineDataApplicationTool, Serializable {
             return;
         }
 
+        reinitialise = true;
         RunData data = getRunData((PipelineData) object);
         // Do not do anything if logging in or out - as validation does not work for login/out
         String actionName = data.getAction();
@@ -164,7 +167,7 @@ public class FormTool implements PipelineDataApplicationTool, Serializable {
      */
     public void reinitialiseForScreenEndpoint() {
 
-        if (this.pipelineData != null) {
+        if (this.pipelineData != null && reinitialise ) {
             reinitialiseForScreenEndpoint(pipelineData);
         } else {
             // We have been serialized
@@ -232,5 +235,15 @@ public class FormTool implements PipelineDataApplicationTool, Serializable {
         Map runDataMap = (Map) pipelineData.get(RunData.class);
         data = (RunData) runDataMap.get(RunData.class);
         return data;
+    }
+    
+    /**
+     * Set this to false to prevent this tool reinitialising ever
+     * This is only useful in some rather odd circumstances
+     * Where the tool has been serialized and pipeline data somehow survived. 
+     * @param reinitialise
+     */
+    public void setReinitialise(boolean reinitialise) {
+        this.reinitialise = reinitialise;
     }
 }
