@@ -24,8 +24,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.turbine.services.pull.ApplicationTool;
 
-import com.anite.antelope.menu.Menu;
 import com.anite.antelope.utils.CalendarHelper;
+
 
 /**
  * A tool for formatting dates and numbers.
@@ -41,16 +41,12 @@ public class FormatterTool implements ApplicationTool {
      * The name to get the tool out of the context
      */
     public final static String DEFAULT_TOOL_NAME = "formatter";
-    
-    private Menu menu;
 
 	/**
 	 * This method is called after every request
 	 */
 	public void init(Object data) {
-		
 		log.info("Formatter tool initialising");
-
 	}
 	
 	public String getFormattedDate(Date theDate){
@@ -70,9 +66,5 @@ public class FormatterTool implements ApplicationTool {
 	 */
 	public void refresh() {
 		
-	}
-	
-	public String draw() {
-	    return menu.draw();
 	}
 }

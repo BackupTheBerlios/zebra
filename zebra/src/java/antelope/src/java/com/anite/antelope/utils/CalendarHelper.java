@@ -18,233 +18,273 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * @author John.Rae
- * A Calendar Helper to simplify use of dates and times. 
- * Makes sure that timezone is always correct
+ * @author John.Rae A Calendar Helper to simplify use of dates and times. Makes
+ *         sure that timezone is always correct
  */
 public class CalendarHelper {
 
-    private static final int DAY = 86400000;
+	private static final int DAY = 86400000;
 
-    private static CalendarHelper instance = null;
+	private static CalendarHelper instance = null;
 
-    private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
-    private static final String DEFAULT_TIME_FORMAT ="HH:mm";
+	private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 
-    /** Class logger */
-    private static Log log = LogFactory.getLog(CalendarHelper.class);
+	private static final String DEFAULT_TIME_FORMAT = "HH:mm";
 
-    private CalendarHelper() {
-    }
+	private static final String DEFAULT_DATE_TIME_FORMAT = DEFAULT_DATE_FORMAT
+			+ " " + DEFAULT_TIME_FORMAT;
 
-    /**
-     * Gets a calender (always use this incase we need to set a timezone)
-     */
-    public Calendar getCalendar() {
-        return Calendar.getInstance();
-    }
+	/** Class logger */
+	private static Log log = LogFactory.getLog(CalendarHelper.class);
 
-    public static CalendarHelper getInstance() {
-        if (instance == null) {
-            instance = new CalendarHelper();
-        }
-        return instance;
-    }
+	private CalendarHelper() {
+	}
 
-    /**
-     * Gets the SQL Date for now
-     * @return
-     */
-    public java.sql.Date getSqlDate() {
-        Calendar cal = this.getCalendar();
-        return this.getSqlDate(cal);
-    }
+	/**
+	 * Gets a calender (always use this incase we need to set a timezone)
+	 */
+	public Calendar getCalendar() {
+		return Calendar.getInstance();
+	}
 
-    /**
-     * Convert passed calender to a SQLDate
-     * @param cal
-     * @return
-     */
-    public java.sql.Date getSqlDate(Calendar cal) {
-        cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        return new Date(cal.getTime().getTime());
-    }
+	public static CalendarHelper getInstance() {
+		if (instance == null) {
+			instance = new CalendarHelper();
+		}
+		return instance;
+	}
 
-    /**
-     * Gets a SQL Time object for the passed calender
-     * @param cal
-     * @return
-     */
-    public Time getSqlTime(Calendar cal) {
-        cal.set(Calendar.YEAR, 1970);
-        cal.set(Calendar.MONTH, 1);
-        cal.set(Calendar.DATE, 1);
+	/**
+	 * Gets the SQL Date for now
+	 * 
+	 * @return
+	 */
+	public java.sql.Date getSqlDate() {
+		Calendar cal = this.getCalendar();
+		return this.getSqlDate(cal);
+	}
 
-        return new Time(cal.getTimeInMillis());
-    }
+	/**
+	 * Convert passed calender to a SQLDate
+	 * 
+	 * @param cal
+	 * @return
+	 */
+	public java.sql.Date getSqlDate(Calendar cal) {
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		return new Date(cal.getTime().getTime());
+	}
 
-    /**
-     * Gets the time now
-     * @return
-     */
-    public Time getSqlTime() {
-        return getSqlTime(this.getCalendar());
-    }
+	/**
+	 * Gets a SQL Time object for the passed calender
+	 * 
+	 * @param cal
+	 * @return
+	 */
+	public Time getSqlTime(Calendar cal) {
+		cal.set(Calendar.YEAR, 1970);
+		cal.set(Calendar.MONTH, 1);
+		cal.set(Calendar.DATE, 1);
 
-    /**
-     * Get the calender for midnight today
-     * @return
-     */
-    public Calendar getTodayMidnightDate() {
-        Calendar cal = this.getCalendar();
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
-                .get(Calendar.DATE), 0, 0, 0);
-        //set the milliseconds to zero
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal;
-    }
+		return new Time(cal.getTimeInMillis());
+	}
 
-    public Date getTodayMidnightSqlDate() {
-        Calendar cal = this.getTodayMidnightDate();
-        return new Date(cal.getTime().getTime());
-    }
+	/**
+	 * Gets the time now
+	 * 
+	 * @return
+	 */
+	public Time getSqlTime() {
+		return getSqlTime(this.getCalendar());
+	}
 
-    public Date getFutureSqlDate(Date startDate, int field, int amount) {
-        Calendar cal = this.getCalendar(startDate);
-        cal.add(field, amount);
-        return new Date(cal.getTime().getTime());
-    }
+	/**
+	 * Get the calender for midnight today
+	 * 
+	 * @return
+	 */
+	public Calendar getTodayMidnightDate() {
+		Calendar cal = this.getCalendar();
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
+				.get(Calendar.DATE), 0, 0, 0);
+		//set the milliseconds to zero
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal;
+	}
 
-    public Calendar getMidnightDate(Calendar date) {
-        Calendar cal = date;
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
-                .get(Calendar.DATE), 0, 0, 0);
-        //set the milliseconds to zero
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal;
-    }
+	public Date getTodayMidnightSqlDate() {
+		Calendar cal = this.getTodayMidnightDate();
+		return new Date(cal.getTime().getTime());
+	}
 
-    public Date getMidnightDate(Date date) {
-        Calendar cal = getCalendar(date);
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
-                .get(Calendar.DATE), 0, 0, 0);
-        //set the milliseconds to zero
-        cal.set(Calendar.MILLISECOND, 0);
-        return getSqlDate(cal);
-    }
+	public Date getFutureSqlDate(Date startDate, int field, int amount) {
+		Calendar cal = this.getCalendar(startDate);
+		cal.add(field, amount);
+		return new Date(cal.getTime().getTime());
+	}
 
-    /**
-     * @param periodStartDate2
-     * @param periodEndDate2
-     * @return
-     */
-    public int getAmountOfDays(Date start, Date end) {
+	public Calendar getMidnightDate(Calendar date) {
+		Calendar cal = date;
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
+				.get(Calendar.DATE), 0, 0, 0);
+		//set the milliseconds to zero
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal;
+	}
 
-        Date startDate = CalendarHelper.getInstance().getMidnightDate(start);
-        Date endDate = CalendarHelper.getInstance().getMidnightDate(end);
-        long diff = endDate.getTime() - startDate.getTime();
+	public Date getMidnightDate(Date date) {
+		Calendar cal = getCalendar(date);
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
+				.get(Calendar.DATE), 0, 0, 0);
+		//set the milliseconds to zero
+		cal.set(Calendar.MILLISECOND, 0);
+		return getSqlDate(cal);
+	}
+	
+	public java.util.Date getDateTimeNow(){
+	    Calendar cal = this.getCalendar();
+		return new java.util.Date(cal.getTime().getTime());
+	}
 
-        return (new Long(diff / DAY)).intValue() + 1;
-    }
+	/**
+	 * @param periodStartDate2
+	 * @param periodEndDate2
+	 * @return
+	 */
+	public int getAmountOfDays(Date start, Date end) {
 
-    public Calendar getCalendar(Date sqlDate) {
-        Calendar cal = this.getCalendar();
-        cal.setTime(sqlDate);
-        return cal;
-    }
+		Date startDate = CalendarHelper.getInstance().getMidnightDate(start);
+		Date endDate = CalendarHelper.getInstance().getMidnightDate(end);
+		long diff = endDate.getTime() - startDate.getTime();
 
-    public Calendar getCalendar(long timeInMillies) {
-        Calendar cal = this.getCalendar();
-        cal.setTimeInMillis(timeInMillies);
-        return cal;
-    }
+		return (new Long(diff / DAY)).intValue() + 1;
+	}
 
-    public Date addTime(Date date, int period, int amount) {
-        Calendar cal = getCalendar(date);
-        cal.add(period, amount);
-        return getSqlDate(cal);
-    }
+	public Calendar getCalendar(Date sqlDate) {
+		Calendar cal = this.getCalendar();
+		cal.setTime(sqlDate);
+		return cal;
+	}
 
-    public List getListOfDates(Date startDate, Date endDate) {
-        List dateList = new ArrayList();
-        Date dateToAdd = startDate;
+	public Calendar getCalendar(long timeInMillies) {
+		Calendar cal = this.getCalendar();
+		cal.setTimeInMillis(timeInMillies);
+		return cal;
+	}
 
-        while (true) {
-            dateList.add(dateToAdd);
+	public Date addTime(Date date, int period, int amount) {
+		Calendar cal = getCalendar(date);
+		cal.add(period, amount);
+		return getSqlDate(cal);
+	}
 
-            if (dateToAdd.compareTo(endDate) != 0) {
-                // add a day
-                dateToAdd = addTime(dateToAdd, Calendar.DAY_OF_YEAR, 1);
-            } else {
-                //stop the loop
-                break;
-            }
-        }
-        return dateList;
-    }
+	public List getListOfDates(Date startDate, Date endDate) {
+		List dateList = new ArrayList();
+		Date dateToAdd = startDate;
 
-    /**
-     * Gets a date formatted DD/MM/YYYY
-     * @param dateCreated
-     */
-    public String getFormattedDate(java.util.Date dateCreated) {
-        if (dateCreated == null) {
-            return "";
-        } else {
-            SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-            return sdf.format(dateCreated);
-        }
-    }
-    
-    /**
-     * @param dateCreated
-     */
-    public String getFormattedTime(java.util.Date time) {
-        if (time == null) {
-            return "";
-        } else {
-            SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
-            return sdf.format(time);
-        }
-    }
+		while (true) {
+			dateList.add(dateToAdd);
 
-    /**
-     * Returns a Date object from 1 String components: Date in DEFAULT DATE
-     * FORMAT
-     * 
-     * @param date date
-     * @return date object
-     */
-    public Date parseDate(String date) {
-        if (date == null) {
-            return null;
-        }
+			if (dateToAdd.compareTo(endDate) != 0) {
+				// add a day
+				dateToAdd = addTime(dateToAdd, Calendar.DAY_OF_YEAR, 1);
+			} else {
+				//stop the loop
+				break;
+			}
+		}
+		return dateList;
+	}
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-        try {
-            return new Date(dateFormat.parse(date).getTime());
-        } catch (ParseException e) {
-            log.debug("date parse error");
-            return null;
-        }
+	/**
+	 * Gets a date formatted DD/MM/YYYY
+	 * 
+	 * @param dateCreated
+	 */
+	public String getFormattedDate(java.util.Date dateCreated) {
+		if (dateCreated == null) {
+			return "";
+		} else {
+			SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+			return sdf.format(dateCreated);
+		}
+	}
 
-    }
+	/**
+	 * @param dateCreated
+	 */
+	public String getFormattedTime(java.util.Date time) {
+		if (time == null) {
+			return "";
+		} else {
+			SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
+			return sdf.format(time);
+		}
+	}
 
-   /** Converted passed string into a sql time object 
-    * returns null if not a time
-    * */    
-    public Time parseTime(String time){
-        if (time == null) {
-            return null;
-        }
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
-        try {
-            return new Time(dateFormat.parse(time).getTime());
-        } catch (ParseException e) {
-           return null;
-        }
-    }
+	/**
+	 * Returns a Date object from 1 String components: Date in DEFAULT DATE
+	 * FORMAT
+	 * 
+	 * @param date
+	 *            date
+	 * @return date object
+	 */
+	public Date parseDate(String date) {
+		if (date == null) {
+			return null;
+		}
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+		try {
+			return new Date(dateFormat.parse(date).getTime());
+		} catch (ParseException e) {
+			log.debug("date parse error");
+			return null;
+		}
+
+	}
+
+	/**
+	 * Converted passed string into a sql time object returns null if not a time
+	 */
+	public Time parseTime(String time) {
+		if (time == null) {
+			return null;
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
+		try {
+			return new Time(dateFormat.parse(time).getTime());
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+	
+	public java.util.Date parseDateTime(String dateTime){
+	    if (dateTime == null) {
+			return null;
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
+		try {
+			return new Date(dateFormat.parse(dateTime).getTime());
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * @param startDate
+	 * @return
+	 */
+	public String getFormattedDateTime(java.util.Date date) {
+		if (date == null) {
+			return "";
+		} else {
+			SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
+			return sdf.format(date);
+		}
+	}
 }

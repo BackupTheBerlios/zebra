@@ -33,6 +33,10 @@ public class AntelopePropertySetEntry implements Serializable {
     private String value=null;
     private Object object=null;
 
+    /** Version Flag for serialisation   */
+    static final long serialVersionUID = 1L;
+
+    
     public AntelopePropertySetEntry(){
     	
     }

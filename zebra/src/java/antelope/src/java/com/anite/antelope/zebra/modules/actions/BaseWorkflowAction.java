@@ -38,6 +38,7 @@ import com.anite.penguin.form.Field;
 import com.anite.penguin.modules.tools.FormTool;
 import com.anite.zebra.core.exceptions.TransitionException;
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
+import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.core.state.api.ITransaction;
 
 /**
@@ -151,7 +152,8 @@ public abstract class BaseWorkflowAction extends AbstractWorkflowRunTaskAction {
 		taskInstance.setActualCompletionDate(new Date(System
 				.currentTimeMillis()));
 		taskInstance.setDecisionMadeBy(UserLocator.getLoggedInUser());
-
+		taskInstance.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
+		
 		//Task is ready to move on
 		ZebraHelper.getInstance().getEngine().transitionTask(taskInstance);
 	}

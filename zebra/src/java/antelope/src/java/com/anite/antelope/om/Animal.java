@@ -23,7 +23,7 @@ package com.anite.antelope.om;
  * @hibernate.query name="ownedAnimals" query="from Animal a where a.ownerLoginName = :ownerName"
  * Created 13-May-2004
  */
-public abstract class Animal {
+public abstract class Animal extends Active {
 
     private Integer animalId;
 
