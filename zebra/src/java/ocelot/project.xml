@@ -4,7 +4,7 @@
 	<groupId>ocelot</groupId>
 	<artifactId>ocelot</artifactId>
 	<name>Ocelot</name>
-	<currentVersion>0.1</currentVersion>
+	<currentVersion>1.0-rc1</currentVersion>
 	<organization>
 		<name>Anite</name>
 		<url>http://www.aniteps.com</url>
