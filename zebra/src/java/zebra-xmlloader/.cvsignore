@@ -5,3 +5,5 @@ jcoverage.ser
 Model Folder
 target
 junit*.properties
+.classpath
+.project
