@@ -66,6 +66,12 @@ Private Function FriendlyValue(oProperty As Property) As String
     End Select
 End Function
 Public Function XMLProperties(oPropertyGroup As PropertyGroup, oRoot As IXMLDOMNode) As Boolean
+    If Not (oRoot.nodeType = NODE_ELEMENT) Then
+        '/ not an element node so we just skip out
+        XMLProperties = True
+        Exit Function
+    End If
+    
     If StrComp(oRoot.nodeName, "properties", vbTextCompare) <> 0 Then
         Exit Function
     End If
@@ -89,6 +95,14 @@ Public Function XMLProperties(oPropertyGroup As PropertyGroup, oRoot As IXMLDOMN
 End Function
 
 Private Function XMLProperty(oProperties As Properties, oRoot As IXMLDOMNode) As Boolean
+    
+    If Not (oRoot.nodeType = NODE_ELEMENT) Then
+        '/ not an element node so we just skip out
+        XMLProperty = True
+        Exit Function
+    End If
+    
+    
     If StrComp(oRoot.nodeName, "property", vbTextCompare) <> 0 Then
         Exit Function
     End If

@@ -1584,3 +1584,4 @@ Private Sub moPropList_PropChanged(oProperty As Property)
     End If
     Call Sanitize
 End Sub
+

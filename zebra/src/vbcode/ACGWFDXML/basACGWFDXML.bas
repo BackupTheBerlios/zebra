@@ -48,3 +48,15 @@ Err_Handler:
     Resume 0
 End Sub
 
+'/ iterates over xml nodes until we hit a node that is not of type NODE_COMMENT
+Public Function getRealNode(oRootNode As MSXML2.IXMLDOMNode) As MSXML2.IXMLDOMNode
+    Dim oNode As MSXML2.IXMLDOMNode
+    If oRootNode Is Nothing Then Exit Function
+    Set oNode = oRootNode
+    Do Until oNode.nodeType = NODE_ELEMENT
+        Set oNode = oNode.nextSibling
+        If oNode Is Nothing Then Exit Function
+    Loop
+    Set getRealNode = oNode
+End Function
+

@@ -46,7 +46,13 @@ Private Sub Class_Initialize()
     Set mRoutings = New Routings
     Set mRoutings.ParentContainer = mContainer
     Set mPropertyGroup = New PropertyGroup
-    mPropertyGroup.Add(cSysPropGroup).Add "Name", vbNullString, ptString, True
+    Dim oProps As Properties
+    Set oProps = mPropertyGroup.Add(cSysPropGroup)
+    With oProps
+        .Add "Name", vbNullString, ptString, True
+        .Add "Class Construct", vbNullString, ptString, False
+        .Add "Class Destruct", vbNullString, ptString, False
+    End With
 End Sub
 
 Private Sub mContainer_GetMe(oReturn As Object)

@@ -57,8 +57,9 @@ Private Function LoadTemplate(FileName As String, oProcessTemplate As ProcessTem
     Dim oRoot As MSXML2.IXMLDOMNode
     Set oDoc = New MSXML2.DOMDocument
     Set oProcessTemplate = New ProcessTemplate
+    
     oDoc.Load FileName
-    Set oRoot = oDoc.firstChild
+    Set oRoot = getRealNode(oDoc.firstChild)
     
     If StrComp(oRoot.nodeName, "ACGWFD.ProcessTemplate", vbTextCompare) <> 0 Then
         LoadTemplate = False
@@ -94,7 +95,7 @@ Private Function LoadAppSettings(oProcessTemplate As ProcessTemplate, oRoot As M
     
     LoadAppSettings = False
     For Each oNode In oRoot.childNodes
-        fLoadOK = False
+        fLoadOK = True
         Select Case UCase$(oNode.nodeName)
             Case "SETTING"
                 Select Case UCase$(oNode.Attributes.getNamedItem("name").nodeValue)

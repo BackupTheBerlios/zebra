@@ -62,7 +62,7 @@ Private Function LoadTemplateFile(FileName As String, oTemplates As TaskTemplate
     
     oDoc.Load FileName
     
-    Set oRoot = oDoc.firstChild
+    Set oRoot = getRealNode(oDoc.firstChild)
     
     If StrComp(oRoot.nodeName, "ACGWFD.TaskTemplate", vbTextCompare) <> 0 Then
         LoadTemplateFile = False

@@ -225,6 +225,8 @@ Private Sub MakeNewFlow()
     Dim oProcess As ProcessDef
     Set oProcess = New ProcessDef
     oProcess.ProcessTemplate = oProcessTemplate.Name
+    '/ initialise the process with the property group defaults
+    CopyPropGroup oProcessTemplate.ProcessProperties, oProcess.PropertyGroup, False, True
     
     dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
     dlg.FilterIndex = 1
