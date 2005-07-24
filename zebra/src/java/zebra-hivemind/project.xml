@@ -75,35 +75,90 @@
 		</developer>
 	</developers>
 	<dependencies>
+		<!-- Core Libraries -->
 		<dependency>
 			<id>commons-logging</id>
 			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<id>commons-lang</id>
+			<version>2.0</version>
 		</dependency>
 		<dependency>
 			<id>log4j</id>
 			<version>1.2.8</version>
 			<url>http://jakarta.apache.org/log4j/</url>
 		</dependency>
+		<!-- End of Core Librarys-->
+		<!-- Zebra -->
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-core</artifactId>
 			<version>0.3-dev</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
 		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-defs</artifactId>
 			<version>0.3-dev</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
 		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-xmlloader</artifactId>
 			<version>0.3-dev</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
 		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-state</artifactId>
 			<version>0.3-dev</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
 		</dependency>
+		<!-- End Zebra -->
+		<!-- Hivemind -->
+		<dependency>
+			<groupId>hivemind</groupId>
+			<artifactId>hivemind</artifactId>
+			<version>1.0</version>
+			<url>http://jakarta.apache.org/hivemind</url>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>1.1</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>oro</groupId>
+			<artifactId>oro</artifactId>
+			<version>2.0.6</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>2.5.1</version>
+			<properties>
+				<war.bundle>true</war.bundle>
+			</properties>
+		</dependency>
+		<!-- End Hivemind -->
 	</dependencies>
 	<build>
 		<nagEmailAddress>ben.gidley@anite.com</nagEmailAddress>
@@ -113,7 +168,7 @@
 			<includes>
 				<include>**/*Test*.java</include>
 			</includes>
-			<excludes></excludes>
+			<excludes/>
 			<resources> </resources>
 		</unitTest>
 		<resources>
@@ -130,7 +185,7 @@
 		<packageGroup>
 			<title>Zebra Hivemind</title>
 			<packages>com.anite.zebra.hivemind</packages>
-		</packageGroup>	
+		</packageGroup>
 	</packageGroups>
 	<reports>
 		<report>maven-changelog-plugin</report>
