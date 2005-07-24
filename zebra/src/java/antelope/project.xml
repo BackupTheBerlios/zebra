@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>	
+<project xmlns="http://maven.apache.org/POM/3.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
 	<pomVersion>3</pomVersion>
 	<name>Antelope</name>
-    <artifactId>antelope</artifactId>
+	<artifactId>antelope</artifactId>
 	<groupId>zebra</groupId>
 	<currentVersion>1.0-rc1</currentVersion>
 	<organization>
@@ -40,18 +42,14 @@
 		<mailingList>
 			<name>zebra-announce@lists.berlios.de</name>
 			<subscribe>zebra-announce-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>
-				zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>
-				https://lists.berlios.de/pipermail/zebra-announce/</archive>
+			<unsubscribe> zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive> https://lists.berlios.de/pipermail/zebra-announce/</archive>
 		</mailingList>
 		<mailingList>
 			<name>zebra-checkins@lists.berlios.de</name>
 			<subscribe>zebra-checkins-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>
-				zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>
-				https://lists.berlios.de/pipermail/zebra-checkins/</archive>
+			<unsubscribe> zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive> https://lists.berlios.de/pipermail/zebra-checkins/</archive>
 		</mailingList>
 	</mailingLists>
 	<developers>
@@ -60,7 +58,7 @@
 			<id>bgidley</id>
 			<email>ben@gidley.co.uk</email>
 			<roles>
-				<role>Developer</role>				
+				<role>Developer</role>
 			</roles>
 			<url>http://www.gidley.co.uk/</url>
 		</developer>
@@ -554,8 +552,7 @@
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-mimetype-api</artifactId>
 			<version>1.0-alpha-4</version>
-			<url> 
-				http://jakarta.apache.org/turbine/fulcrum/fulcrum-mimetype</url>
+			<url> http://jakarta.apache.org/turbine/fulcrum/fulcrum-mimetype</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -564,8 +561,7 @@
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-mimetype-impl</artifactId>
 			<version>1.0-alpha-4</version>
-			<url> 
-				http://jakarta.apache.org/turbine/fulcrum/fulcrum-mimetype</url>
+			<url> http://jakarta.apache.org/turbine/fulcrum/fulcrum-mimetype</url>
 			<properties>
 				<war.bundle>true</war.bundle>
 			</properties>
@@ -959,7 +955,7 @@
 			<artifactId>maven-findbugs-plugin</artifactId>
 			<version>0.8.4</version>
 			<type>plugin</type>
-			<properties />
+			<properties/>
 		</dependency>
 		<dependency>
 			<groupId>statcvs</groupId>
@@ -1087,7 +1083,7 @@
 			<groupId>xdoclet</groupId>
 			<artifactId>xjavadoc</artifactId>
 			<version>1.0.3</version>
-			<properties />
+			<properties/>
 		</dependency>
 		<!-- End Xdoclet -->
 	</dependencies>
@@ -1108,7 +1104,9 @@
 				<resource>
 					<directory>src/test</directory>
 					<targetPath>/</targetPath>
-					<includes>**/*.xml</includes>
+					<includes>
+						<include>**/*.xml</include>
+					</includes>
 				</resource>
 			</resources>
 		</unitTest>
@@ -1116,12 +1114,16 @@
 			<resource>
 				<directory>src/java</directory>
 				<targetPath>/</targetPath>
-				<includes>**/*.xml</includes>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
 			</resource>
 			<resource>
 				<directory>src/java</directory>
 				<targetPath>/</targetPath>
-				<includes>**/*.properties</includes>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
 			</resource>
 		</resources>
 	</build>
