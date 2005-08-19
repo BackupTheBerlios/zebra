@@ -1,8 +1,11 @@
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/3.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
     <pomVersion>3</pomVersion>
-    <name>Zebra XML Loader</name>
     <groupId>zebra</groupId>
     <artifactId>zebra-xmlloader</artifactId>
+    <name>Zebra XML Loader</name>
     <currentVersion>0.4-dev</currentVersion>
     <organization>
         <name>Anite</name>
@@ -10,48 +13,43 @@
         <logo>/images/APS_logo.gif</logo>
     </organization>
     <inceptionYear>2004</inceptionYear>
-    <package>com.anite.zebra.ext.xmlloader</package>
     <description>This project is the base XML loader for Zebra Process Definitions.</description>
     <shortDescription>Zebra XML Loader</shortDescription>
-     <url>http://zebra.berlios.de</url>
-	<issueTrackingUrl>http://developer.berlios.de/bugs/?group_id=2683</issueTrackingUrl>
-	<siteAddress>shell.berlios.de</siteAddress>
-	<siteDirectory>/home/groups/zebra/htdocs/cc/zebra-xmlloader</siteDirectory>
-	<distributionDirectory>/var/www/repo</distributionDirectory>
-	<repository>
-		<connection>scm:cvs:pserver:anonymous@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/zebra-xmlloader</connection>
-		<url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/zebra/zebra/src/java/zebra-xmlloader/</url>
-	</repository>
-	<mailingLists>
-		<mailingList>
-			<name>zebra-users@lists.berlios.de</name>
-			<subscribe>zebra-users-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>zebra-users-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>https://lists.berlios.de/pipermail/zebra-users/</archive>
-		</mailingList>
-		<mailingList>
-			<name>zebra-dev@lists.berlios.de</name>
-			<subscribe>zebra-dev-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>zebra-dev-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>https://lists.berlios.de/pipermail/zebra-dev/</archive>
-		</mailingList>
-		<mailingList>
-			<name>zebra-announce@lists.berlios.de</name>
-			<subscribe>zebra-announce-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>
-				zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>
-				https://lists.berlios.de/pipermail/zebra-announce/</archive>
-		</mailingList>
-		<mailingList>
-			<name>zebra-checkins@lists.berlios.de</name>
-			<subscribe>zebra-checkins-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>
-				zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>
-				https://lists.berlios.de/pipermail/zebra-checkins/</archive>
-		</mailingList>
-	</mailingLists>
+    <url>http://zebra.berlios.de</url>
+    <issueTrackingUrl>http://developer.berlios.de/bugs/?group_id=2683</issueTrackingUrl>
+    <siteAddress>shell.berlios.de</siteAddress>
+    <siteDirectory>/home/groups/zebra/htdocs/cc/zebra-xmlloader</siteDirectory>
+    <distributionDirectory>/var/www/repo</distributionDirectory>
+    <repository>
+        <connection>scm:cvs:pserver:anonymous@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/zebra-xmlloader</connection>
+        <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/zebra/zebra/src/java/zebra-xmlloader/</url>
+    </repository>
+    <mailingLists>
+        <mailingList>
+            <name>zebra-users@lists.berlios.de</name>
+            <subscribe>zebra-users-subscribe@lists.berlios.de</subscribe>
+            <unsubscribe>zebra-users-unsubscribe@lists.berlios.de</unsubscribe>
+            <archive>https://lists.berlios.de/pipermail/zebra-users/</archive>
+        </mailingList>
+        <mailingList>
+            <name>zebra-dev@lists.berlios.de</name>
+            <subscribe>zebra-dev-subscribe@lists.berlios.de</subscribe>
+            <unsubscribe>zebra-dev-unsubscribe@lists.berlios.de</unsubscribe>
+            <archive>https://lists.berlios.de/pipermail/zebra-dev/</archive>
+        </mailingList>
+        <mailingList>
+            <name>zebra-announce@lists.berlios.de</name>
+            <subscribe>zebra-announce-subscribe@lists.berlios.de</subscribe>
+            <unsubscribe> zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
+            <archive> https://lists.berlios.de/pipermail/zebra-announce/</archive>
+        </mailingList>
+        <mailingList>
+            <name>zebra-checkins@lists.berlios.de</name>
+            <subscribe>zebra-checkins-subscribe@lists.berlios.de</subscribe>
+            <unsubscribe> zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
+            <archive> https://lists.berlios.de/pipermail/zebra-checkins/</archive>
+        </mailingList>
+    </mailingLists>
     <developers>
         <developer>
             <name>Matt Norris</name>
@@ -61,33 +59,31 @@
                 <role>Senior Architect</role>
             </roles>
         </developer>
-		<developer>
-			<name>Eric Pugh</name>
-			<id>dep4b</id>
-			<email>epugh@opensourceconnections.com</email>
-			<organization>
-				<name>OpenSource Connections</name>
-				<url>http://www.opensourceconnections.com/</url>
-			</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
+        <developer>
+            <name>Eric Pugh</name>
+            <id>dep4b</id>
+            <email>epugh@opensourceconnections.com</email>
+            <organization> OpenSource Connections </organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <url>http://www.opensourceconnections.com/</url>
+        </developer>
+        <developer>
             <name>Ben Gidley</name>
             <id>bengidley</id>
             <email>ben.gidley@anite.com</email>
             <roles>
                 <role>Developer</role>
             </roles>
-        </developer>        
+        </developer>
     </developers>
-    <dependencies>  
-		<dependency>
-			<groupId>commons-convert</groupId>
-			<artifactId>commons-convert</artifactId>			
-			<version>20040714.191311</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>commons-convert</groupId>
+            <artifactId>commons-convert</artifactId>
+            <version>20040714.191311</version>
+        </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -108,13 +104,13 @@
             <version>1.4</version>
             <type>jar</type>
             <properties/>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>1.0.b2</version>
             <properties/>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
@@ -137,7 +133,6 @@
             <type>jar</type>
             <properties/>
         </dependency>
-        
     </dependencies>
     <build>
         <nagEmailAddress>matthew.norris@anite.com</nagEmailAddress>
@@ -164,6 +159,6 @@
         <report>maven-simian-plugin</report>
         <!--<report>maven-jcoverage-plugin</report>-->
         <report>maven-statcvs-plugin</report>
-        <report>maven-junit-report-plugin</report>         
+        <report>maven-junit-report-plugin</report>
     </reports>
 </project>

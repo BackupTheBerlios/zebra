@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns="http://maven.apache.org/POM/3.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
 	<pomVersion>3</pomVersion>
 	<groupId>zebra</groupId>
 	<id>zebra-avalon</id>
 	<name>Zebra Process Engine</name>
 	<currentVersion>0.3-dev</currentVersion>
 	<inceptionYear>2004</inceptionYear>
-	<package>com.anite.zebra</package>
 	<logo/>
 	<organization>
 		<name>Anite</name>
@@ -14,10 +15,8 @@
 		<logo>/images/APS_logo.gif</logo>
 	</organization>
 	<gumpRepositoryId/>
-	<description>
-		This project is a basic Avalon container for the Zebra Process Engine, 
-		States Factory, and Process Definitions Factory.
-	</description>
+	<description> This project is a basic Avalon container for the Zebra Process Engine, States
+		Factory, and Process Definitions Factory. </description>
 	<shortDescription>Zebra Avalon Layer</shortDescription>
 	<url>http://zebra.berlios.de</url>
 	<issueTrackingUrl>http://developer.berlios.de/bugs/?group_id=2683</issueTrackingUrl>
@@ -44,18 +43,14 @@
 		<mailingList>
 			<name>zebra-announce@lists.berlios.de</name>
 			<subscribe>zebra-announce-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>
-				zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>
-				https://lists.berlios.de/pipermail/zebra-announce/</archive>
+			<unsubscribe> zebra-announce-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive> https://lists.berlios.de/pipermail/zebra-announce/</archive>
 		</mailingList>
 		<mailingList>
 			<name>zebra-checkins@lists.berlios.de</name>
 			<subscribe>zebra-checkins-subscribe@lists.berlios.de</subscribe>
-			<unsubscribe>
-				zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
-			<archive>
-				https://lists.berlios.de/pipermail/zebra-checkins/</archive>
+			<unsubscribe> zebra-checkins-unsubscribe@lists.berlios.de</unsubscribe>
+			<archive> https://lists.berlios.de/pipermail/zebra-checkins/</archive>
 		</mailingList>
 	</mailingLists>
 	<developers>
@@ -72,14 +67,12 @@
 			<name>Eric Pugh</name>
 			<id>dep4b</id>
 			<email>epugh@opensourceconnections.com</email>
-			<organization>
-				<name>OpenSource Connections</name>
-				<url>http://www.opensourceconnections.com/</url>
-			</organization>
+			<organization>OpenSource Connections </organization>
+			<url>http://www.opensourceconnections.com/</url>
 			<roles>
 				<role>Developer</role>
 			</roles>
-		</developer>	
+		</developer>
 	</developers>
 	<dependencies>
 		<dependency>
@@ -141,64 +134,57 @@
 		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
-			<artifactId>zebra-core</artifactId>				
-			<version>0.3-dev</version>
-		</dependency>		
-		<dependency>
-			<groupId>zebra</groupId>
-			<artifactId>zebra-defs</artifactId>				
+			<artifactId>zebra-core</artifactId>
 			<version>0.3-dev</version>
 		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
-			<artifactId>zebra-xmlloader</artifactId>				
+			<artifactId>zebra-defs</artifactId>
 			<version>0.3-dev</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
-			<artifactId>zebra-state</artifactId>				
+			<artifactId>zebra-xmlloader</artifactId>
 			<version>0.3-dev</version>
-		</dependency>	
-		
-<!-- for testing -->
+		</dependency>
+		<dependency>
+			<groupId>zebra</groupId>
+			<artifactId>zebra-state</artifactId>
+			<version>0.3-dev</version>
+		</dependency>
+		<!-- for testing -->
 		<dependency>
 			<groupId>fulcrum</groupId>
 			<artifactId>fulcrum-testcontainer</artifactId>
 			<version>1.0.3</version>
 			<url>http://jakarta.apache.org/turbine/fulcrum/testcontainer</url>
-		</dependency>		
-		
-   <dependency>
-      <id>excalibur-component</id>
-      <version>1.1</version>
-      <url>http://avalon.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <id>excalibur-instrument</id>
-      <version>1.0</version>
-      <url>http://avalon.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <id>excalibur-logger</id>
-      <version>1.0.1</version>
-      <url>http://avalon.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <id>excalibur-pool</id>
-      <version>1.2</version>
-      <url>http://avalon.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <id>logkit</id>
-      <version>1.0.1</version>
-      <url>http://jakarta.apache.org/avalon/logkit/</url>
-    </dependency>									
+		</dependency>
+		<dependency>
+			<id>excalibur-component</id>
+			<version>1.1</version>
+			<url>http://avalon.apache.org/</url>
+		</dependency>
+		<dependency>
+			<id>excalibur-instrument</id>
+			<version>1.0</version>
+			<url>http://avalon.apache.org/</url>
+		</dependency>
+		<dependency>
+			<id>excalibur-logger</id>
+			<version>1.0.1</version>
+			<url>http://avalon.apache.org/</url>
+		</dependency>
+		<dependency>
+			<id>excalibur-pool</id>
+			<version>1.2</version>
+			<url>http://avalon.apache.org/</url>
+		</dependency>
+		<dependency>
+			<id>logkit</id>
+			<version>1.0.1</version>
+			<url>http://jakarta.apache.org/avalon/logkit/</url>
+		</dependency>
 	</dependencies>
-	
 	<build>
 		<nagEmailAddress>matthew.norris@anite.com</nagEmailAddress>
 		<sourceDirectory>src/java</sourceDirectory>
@@ -213,8 +199,7 @@
 				<exclude>**/*OFF*.java</exclude>
 				<exclude>**/HibernateTestCase.java</exclude>
 			</excludes>
-			<resources>
-			</resources>
+			<resources> </resources>
 		</unitTest>
 		<resources>
 			<resource>
@@ -226,7 +211,6 @@
 			</resource>
 		</resources>
 	</build>
-	
 	<reports>
 		<report>maven-changelog-plugin</report>
 		<report>maven-changes-plugin</report>
@@ -237,6 +221,6 @@
 		<report>maven-jxr-plugin</report>
 		<report>maven-tasklist-plugin</report>
 		<report>maven-developer-activity-plugin</report>
-		<report>maven-simian-plugin</report>				
+		<report>maven-simian-plugin</report>
 	</reports>
 </project>
