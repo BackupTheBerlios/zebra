@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/3.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
+<project>
     <pomVersion>3</pomVersion>
     <artifactId>zebra-state</artifactId>
     <name>Zebra State</name>
@@ -169,12 +167,11 @@
             <url>http://www.dom4j.org/</url>
             <properties/>
         </dependency>
-        <!-- Needed for XDoclet -->
         <dependency>
             <groupId>xdoclet</groupId>
-            <artifactId>maven-xdoclet-plugin</artifactId>
-            <version>1.2.3</version>
-            <type>plugin</type>
+            <artifactId>xdoclet-hibernate-module</artifactId>
+            <version>1.2.1</version>
+            <properties/>
         </dependency>
     </dependencies>
     <build>
