@@ -62,6 +62,15 @@
                 <role>Senior Architect</role>
             </roles>
         </developer>
+		<developer>
+			<name>Ben Gidley</name>
+			<id>bgidley</id>
+			<email>ben.gidley@anite.com</email>
+			<organization/>
+			<roles>
+				<role>Senior Architect</role>
+			</roles>
+		</developer>
         <developer>
             <name>Eric Pugh</name>
             <id>dep4b</id>
