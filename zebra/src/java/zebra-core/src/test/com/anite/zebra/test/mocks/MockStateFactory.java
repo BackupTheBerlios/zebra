@@ -15,10 +15,15 @@ package com.anite.zebra.test.mocks;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import junit.framework.Assert;
 
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
+import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.exceptions.LockException;
 import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.factory.exceptions.CreateObjectException;
@@ -28,6 +33,7 @@ import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.IStateObject;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.core.state.api.ITransaction;
+import com.anite.zebra.test.mocks.taskdefs.MockTaskDef;
 
 /**
  * @author Eric Pugh
@@ -37,7 +43,7 @@ import com.anite.zebra.core.state.api.ITransaction;
  */
 public class MockStateFactory implements IStateFactory {
 
-
+	private Set audit = new HashSet();
 
 	/* (non-Javadoc)
 	 * @see com.anite.zebra.core.factory.api.IStateFactory#beginTransaction()
@@ -57,11 +63,22 @@ public class MockStateFactory implements IStateFactory {
 	 * @see com.anite.zebra.core.factory.api.IStateFactory#deleteObject(com.anite.zebra.core.state.api.IStateObject)
 	 */
 	public void deleteObject(IStateObject so) throws StateFailureException {
-		if (so instanceof ITaskInstance){
-			ITaskInstance taskInstance = (ITaskInstance)so;
+		if (so instanceof MockTaskInstance){
+			Assert.assertTrue(audit.contains(so));
+			MockTaskInstance taskInstance = (MockTaskInstance)so;
+			Assert.assertTrue(taskInstance.getState()==ITaskInstance.STATE_COMPLETE);
 			Assert.assertTrue(taskInstance.getProcessInstance().getTaskInstances().contains(taskInstance));
 			taskInstance.getProcessInstance().getTaskInstances().remove(taskInstance);
 			Assert.assertFalse(taskInstance.getProcessInstance().getTaskInstances().contains(taskInstance));
+			taskInstance.setState(MockTaskInstance.STATE_DELETED);
+			
+		} else if (so instanceof MockProcessInstance) {
+			Assert.assertTrue(audit.contains(so));
+			MockProcessInstance pi = (MockProcessInstance) so;
+			pi.setState(MockProcessInstance.STATE_DELETED);
+			
+		} else {
+			Assert.fail("Unknown class " + so);
 		}
 		
 	}
@@ -71,7 +88,9 @@ public class MockStateFactory implements IStateFactory {
 	 */
 	public IProcessInstance createProcessInstance(IProcessDefinition processDef)
 			throws CreateObjectException {
-		return new MockProcessInstance(processDef);
+		MockProcessInstance pi = new MockProcessInstance(processDef); 
+		audit.add(pi);
+		return pi;
 	}
 
 	/* (non-Javadoc)
@@ -82,6 +101,7 @@ public class MockStateFactory implements IStateFactory {
 			throws CreateObjectException {
 		ITaskInstance taskInstance =  new MockTaskInstance(taskDef,processInstance,foe);
 		processInstance.getTaskInstances().add(taskInstance);
+		audit.add(taskInstance);
 		return taskInstance;
 	}
 
@@ -105,5 +125,67 @@ public class MockStateFactory implements IStateFactory {
      */
     public void releaseLock(IProcessInstance processInstance) throws LockException {
         
+    }
+    
+    public Set getAuditTrail() {
+    	return audit;
+    }
+    
+    public void resetAuditTrail() {
+    	this.audit = new HashSet();
+    }
+    
+    /**
+     * returns a count of the number of instances of a definition (process or task) exists
+     * in the audit trail
+     * 
+     * @author matt
+     * Created on 19-Aug-2005
+     *
+     * @param definitionToCount
+     * @return
+     * @throws DefinitionNotFoundException 
+     */
+    public int countInstances(MockProcessDef processDef) throws DefinitionNotFoundException {
+    	int x = 0;
+    	for (Iterator it = audit.iterator();it.hasNext();) {
+    		Object o = it.next();
+    		if (o instanceof MockProcessInstance) {
+    			MockProcessInstance pi = (MockProcessInstance) o;
+    			if (pi.getProcessDef().equals(processDef)) {
+    				x++;
+    			}
+    		}
+    	}
+		return x;
+    }
+    public int countInstances(MockTaskDef taskDef) throws DefinitionNotFoundException {
+    	int x = 0;
+    	for (Iterator it = audit.iterator();it.hasNext();) {
+    		Object o = it.next();
+    		if (o instanceof MockTaskInstance) {
+    			MockTaskInstance ti = (MockTaskInstance) o;
+    			if (ti.getTaskDefinition().equals(taskDef)) {
+    				x++;
+    			}
+    		}
+    	}
+		return x;
+    }
+    
+    public int countInstances(MockTaskDef taskDef, long expectedState) throws DefinitionNotFoundException {
+    	int x = 0;
+    	for (Iterator it = audit.iterator();it.hasNext();) {
+    		Object o = it.next();
+    		if (o instanceof MockTaskInstance) {
+    			MockTaskInstance ti = (MockTaskInstance) o;
+    			if (ti.getTaskDefinition().equals(taskDef)) {
+    				if(ti.getState()==expectedState) {
+    					x++;
+    				}
+    			}
+    		}
+    	}
+		return x;
     }
 }

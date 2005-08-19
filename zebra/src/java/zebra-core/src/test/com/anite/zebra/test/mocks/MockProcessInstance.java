@@ -16,11 +16,13 @@ package com.anite.zebra.test.mocks;
  * limitations under the License.
  */
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.state.api.IProcessInstance;
+import com.anite.zebra.test.mocks.taskdefs.MockTaskDef;
 
 /**
  * @author Eric Pugh
@@ -30,6 +32,7 @@ import com.anite.zebra.core.state.api.IProcessInstance;
  */
 public class MockProcessInstance implements IProcessInstance{
 	
+	public static final long STATE_DELETED = -100;
 	private static Long processInstanceCounter = new Long(1); 
 	private Long processInstanceId = null;
 	private IProcessDefinition processDef = null;
@@ -92,5 +95,41 @@ public class MockProcessInstance implements IProcessInstance{
 
 	}
 
+	public int countInstances(MockTaskDef taskDef, long expectedState) throws DefinitionNotFoundException {
+    	int x = 0;
+    	for (Iterator it = taskInstances.iterator();it.hasNext();) {
+    		Object o = it.next();
+    		if (o instanceof MockTaskInstance) {
+    			MockTaskInstance ti = (MockTaskInstance) o;
+    			if (ti.getTaskDefinition().equals(taskDef)) {
+    				if(ti.getState()==expectedState) {
+    					x++;
+    				}
+    			}
+    		}
+    	}
+		return x;
+    }
 
+	/**
+	 * @author matt
+	 * Created on 19-Aug-2005
+	 *
+	 * @param taskDef
+	 * @param expectedState
+	 * @return
+	 * @throws DefinitionNotFoundException 
+	 */
+	public MockTaskInstance findTask(MockTaskDef taskDef, long expectedState) throws DefinitionNotFoundException {
+		for (Iterator it = taskInstances.iterator();it.hasNext();) {
+    		MockTaskInstance ti = (MockTaskInstance) it.next();
+    		if (ti.getTaskDefinition().equals(taskDef)) {
+    			if(ti.getState()==expectedState) {
+    				return ti;
+    			}
+    		}
+    	}
+		return null;
+
+	}
 }

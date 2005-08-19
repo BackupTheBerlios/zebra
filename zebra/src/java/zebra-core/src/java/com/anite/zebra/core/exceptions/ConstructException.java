@@ -26,6 +26,11 @@ public class ConstructException extends BaseZebraException {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
 	public ConstructException() {
 		super();
 	}

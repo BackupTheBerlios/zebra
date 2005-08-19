@@ -25,6 +25,11 @@ public class StartProcessException extends BaseZebraException {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
 	public StartProcessException() {
 		super();
 	}

@@ -25,6 +25,11 @@ public class DestructException extends BaseZebraException {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
 	public DestructException() {
 		super();
 	}

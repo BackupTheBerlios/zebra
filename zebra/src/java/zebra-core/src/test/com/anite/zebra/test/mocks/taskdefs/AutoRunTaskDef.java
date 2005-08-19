@@ -1,3 +1,4 @@
+package com.anite.zebra.test.mocks.taskdefs;
 /*
  * Copyright 2004 Anite - Central Government Division
  *    http://www.anite.com/publicsector
@@ -14,46 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.anite.zebra.test.mocks.MockProcessDef;
 
-package com.anite.zebra.core.exceptions;
 
 /**
- * @author Matthew.Norris
+ * @author Eric Pugh
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
-public class RunRoutingException extends BaseZebraException {
+public class AutoRunTaskDef extends MockTaskDef {
 
 	/**
-	 * 
+	 * @author matt
+	 * Created on 19-Aug-2005
+	 *
+	 * @param pd
 	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 
-	 */
-	public RunRoutingException() {
-		super();
+	public AutoRunTaskDef(MockProcessDef pd, String taskName) {
+		super(pd,taskName);
+		this.setAuto(true);
 	}
-
-	/**
-	 * @param message
-	 */
-	public RunRoutingException(String message) {
-		super(message);
-	}
-
-	/**
-	 * @param message
-	 * @param nestedException
-	 */
-	public RunRoutingException(String message, Throwable nestedException) {
-		super(message, nestedException);
-	}
-
-	/**
-	 * @param nestedException
-	 */
-	public RunRoutingException(Throwable nestedException) {
-		super(nestedException);
-	}
-
+	
 }

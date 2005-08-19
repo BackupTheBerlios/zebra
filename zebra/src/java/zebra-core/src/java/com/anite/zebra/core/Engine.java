@@ -110,14 +110,14 @@ public class Engine implements IEngine {
 					if (!taskStack.contains(newTask)) {
 						if (log.isInfoEnabled()) {
 							log.info("Added task to TaskStack - "
-									+ newTask.getTaskInstanceId());
+									+ newTask);
 						}
 						taskStack.push(newTask);
 					} else {
 						if (log.isInfoEnabled()) {
 							log
 									.info("transitionTask - task already exists in stack "
-											+ newTask.getTaskInstanceId());
+											+ newTask);
 						}
 					}
 				}
@@ -156,7 +156,7 @@ public class Engine implements IEngine {
 			t.commit();
 		} catch (Exception e) {
 			String emsg = "Failed to complete process "
-					+ ipi.getProcessInstanceId();
+					+ ipi;
 			log.error(emsg, e);
 			throw new TransitionException(emsg, e);
 		}
@@ -171,20 +171,18 @@ public class Engine implements IEngine {
 			throws TransitionException, DefinitionNotFoundException {
 		if (log.isInfoEnabled()) {
 			log.info("transitionTask is initialising for TaskInstance "
-					+ currentTask.getTaskInstanceId());
+					+ currentTask);
 		}
-		long nextState;
 		if (currentTask.getState() == ITaskInstance.STATE_INITIALISING) {
 			// run the constructor
 			try {
 				doTaskConstruct(currentTask);
 			} catch (Exception e) {
 				String emsg = "Error during construction of Task "
-						+ currentTask.getTaskInstanceId();
+						+ currentTask;
 				log.error(emsg, e);
 				throw new TransitionException(emsg, e);
 			}
-			nextState = ITaskInstance.STATE_READY;
 		} else {
 			runTask(currentTask);
 		}
@@ -217,7 +215,7 @@ public class Engine implements IEngine {
 				throw new TransitionException(e);
 			}
 			throw new TransitionException("Routing exists for TaskInstance "
-					+ currentTask.getTaskInstanceId() + " but none ran!");
+					+ currentTask + " but none ran!");
 		}
 		/*
 		 * we now have a list of tasks to create. Before we start creating them,
@@ -280,8 +278,8 @@ public class Engine implements IEngine {
 				newTaskInstance = createTask(newTaskDef, processInstance, foe);
 			} catch (Exception e) {
 				// pokemon stylee... catch 'em all
-				String emsg = "Failed to create new task Instance "
-						+ newTaskDef.getId();
+				String emsg = "Failed to create new task Instance for task definition "
+						+ newTaskDef;
 				log.error(emsg, e);
 				throw new TransitionException(emsg, e);
 			}
@@ -314,9 +312,9 @@ public class Engine implements IEngine {
 					if (log.isInfoEnabled()) {
 						log
 								.info("adding SyncTask "
-										+ checkTask.getTaskInstanceId()
+										+ checkTask
 										+ " that may now be runnable due to completion of taskInstance "
-										+ currentTask.getTaskInstanceId());
+										+ currentTask);
 					}
 					createdTasks.put(checkTask.getTaskInstanceId(), checkTask);
 				}
@@ -441,7 +439,7 @@ public class Engine implements IEngine {
 		if (log.isInfoEnabled()) {
 			log
 					.info("Running TaskInstance "
-							+ taskInstance.getTaskInstanceId());
+							+ taskInstance);
 		}
 		if (taskInstance.getState() == ITaskInstance.STATE_AWAITINGCOMPLETE) {
 			if (log.isInfoEnabled()) {
@@ -456,14 +454,14 @@ public class Engine implements IEngine {
 			// check for blocks
 			if (taskSync.isTaskBlocked(taskInstance)) {
 				if (log.isInfoEnabled()) {
-					log.info("Task " + taskInstance.getTaskInstanceId()
+					log.info("Task " + taskInstance
 							+ " is blocked and will not be run");
 				}
 				return;
 			}
 			// task not locked, so set the state to "ready"
 			if (log.isInfoEnabled()) {
-				log.info("Task " + taskInstance.getTaskInstanceId()
+				log.info("Task " + taskInstance
 						+ " is NOT blocked and will be run");
 			}
 			taskInstance.setState(ITaskInstance.STATE_READY);
@@ -473,7 +471,7 @@ public class Engine implements IEngine {
 				doTaskConstruct(taskInstance);
 			} catch (Exception e) {
 				String emsg = "Failure to initialise Task "
-						+ taskInstance.getTaskInstanceId();
+						+ taskInstance;
 				log.error(emsg, e);
 				throw new TransitionException(emsg, e);
 			}
@@ -580,7 +578,7 @@ public class Engine implements IEngine {
 			t.commit();
 		} catch (Exception e) {
 			String emsg = "Failed to run class constructor for task "
-					+ iti.getTaskInstanceId();
+					+ iti;
 			log.error(emsg, e);
 			throw new Exception(emsg, e);
 		}
@@ -600,7 +598,7 @@ public class Engine implements IEngine {
 		} catch (Exception e) {
 			String emsg = "Failed to run class constructor \""
 					+ ipi.getProcessDef().getClassConstruct()
-					+ "\" for process " + ipi.getProcessInstanceId();
+					+ "\" for process " + ipi;
 			log.error(emsg, e);
 			throw new Exception(emsg, e);
 		}
@@ -625,7 +623,8 @@ public class Engine implements IEngine {
 		}
 		/*
 		 * TODO should probably add another check here to ensure that task def
-		 * comes from process instance's process def
+		 * comes from process instance's process def (i.e. protect against potential
+		 * workflow definition corruption)
 		 */
 		if (td.isSynchronised()) {
 			// task is a syncTask - we need to ensure that there is only
@@ -648,7 +647,7 @@ public class Engine implements IEngine {
 		 * the new one
 		 */
 		if (log.isInfoEnabled()) {
-			log.info("Creating new instance of TaskDef " + td.getId());
+			log.info("Creating new instance of TaskDef " + td);
 		}
 		ITaskInstance task = stateFactory.createTaskInstance(td, pi, foe);
 		// check to see if task has an initialiser - if not, ensure status is
@@ -676,7 +675,7 @@ public class Engine implements IEngine {
 			throws StartProcessException {
 		if (processInstance.getState() != IProcessInstance.STATE_CREATED) {
 			throw new StartProcessException("Process "
-					+ processInstance.getProcessInstanceId() + " State is not "
+					+ processInstance + " State is not "
 					+ IProcessInstance.STATE_CREATED
 					+ " and therefore the process cannot be started");
 		}
@@ -708,13 +707,13 @@ public class Engine implements IEngine {
 			if (td.isAuto()) {
 				if (log.isInfoEnabled()) {
 					log.info("createProcess transitioning first task "
-							+ task.getTaskInstanceId());
+							+ task);
 				}
 				transitionTask(task);
 			}
 		} catch (Exception e) {
 			String emsg = "startProcess failed to start the process "
-					+ processInstance.getProcessInstanceId();
+					+ processInstance;
 			log.error(emsg, e);
 			throw new StartProcessException(emsg, e);
 		}

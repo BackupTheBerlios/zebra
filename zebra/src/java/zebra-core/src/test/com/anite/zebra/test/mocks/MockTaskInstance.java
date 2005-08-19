@@ -29,20 +29,19 @@ import com.anite.zebra.core.state.api.ITaskInstance;
  */
 public class MockTaskInstance implements ITaskInstance {
 
-	private static Long taskInstanceCounter = new Long(1); 
+	public static final long STATE_DELETED = -100;
+	private static long taskInstanceCounter = 0; 
 	private Long taskInstanceId = null;
 	private IProcessInstance processInstance;
 	private IFOE foe;
 	private ITaskDefinition taskDef;
 	private long state;
+	private String conditionAction;
 	/**
 	 * 
 	 */
 	private MockTaskInstance() {
-		long temp = taskInstanceCounter.longValue();		
-		taskInstanceId = new Long(temp);
-		temp++;
-		taskInstanceCounter = new Long(temp);
+		taskInstanceId = new Long(taskInstanceCounter++);
 	}
 	
 	public MockTaskInstance(ITaskDefinition taskDef,
@@ -94,5 +93,23 @@ public class MockTaskInstance implements ITaskInstance {
 	public void setState(long state) {
 		this.state = state;
 
+	}
+
+	public String toString() {
+		return "MOCK-ID " + this.taskInstanceId + " ["  + this.taskDef + "]";
+	}
+
+	/**
+	 * @author matt
+	 * Created on 19-Aug-2005
+	 *
+	 * @return
+	 */
+	public String getConditionAction() {
+		return conditionAction;
+	}
+
+	public void setConditionAction(String conditionAction) {
+		this.conditionAction = conditionAction;
 	}
 }

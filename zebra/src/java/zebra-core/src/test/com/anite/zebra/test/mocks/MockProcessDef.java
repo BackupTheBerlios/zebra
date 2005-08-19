@@ -28,14 +28,21 @@ import com.anite.zebra.core.definitions.api.ITaskDefinitions;
  */
 public class MockProcessDef implements IProcessDefinition {
 
-	public MockProcessDef() {
-		super();
-	}
+	
+	
 	private Long id;
 	private String name;
+	private MockRoutingDefs routingDefs;
 
+	public MockProcessDef(String name) {
+		this.name = name;
+		routingDefs = new MockRoutingDefs(this);
+	}
 	public IRoutingDefinitions getRoutingDefs() {
-		return null;
+		return routingDefs;
+	}
+	public MockRoutingDefs getMockRoutingDefs() {
+		return routingDefs;
 	}
 	private ITaskDefinitions taskDefs = new MockTaskDefinitions(this);
 	private ITaskDefinition firstTask = null;

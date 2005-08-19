@@ -26,6 +26,11 @@ public class DefinitionNotFoundException extends BaseZebraException {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
 	public DefinitionNotFoundException() {
 		super();
 	}

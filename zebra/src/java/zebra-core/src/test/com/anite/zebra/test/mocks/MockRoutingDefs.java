@@ -23,7 +23,7 @@ import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.IRoutingDefinition;
 import com.anite.zebra.core.definitions.api.IRoutingDefinitions;
 
-class MockRoutingDefs
+public class MockRoutingDefs
 
 implements IRoutingDefinitions {
 
@@ -58,5 +58,26 @@ implements IRoutingDefinitions {
 	 */
 	public Iterator iterator() {
 		return routingDefs.values().iterator();
+	}
+
+	/**
+	 * @author matt
+	 * Created on 19-Aug-2005
+	 *
+	 * @return
+	 */
+	public int size() {
+		return routingDefs.size();
+	}
+
+	/**
+	 * @author matt
+	 * Created on 19-Aug-2005
+	 *
+	 * @param mr
+	 * @return
+	 */
+	public boolean contains(MockRouting mr) {
+		return routingDefs.containsValue(mr);
 	}
 }

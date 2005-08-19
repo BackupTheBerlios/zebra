@@ -26,6 +26,11 @@ public class TransitionException extends BaseZebraException {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
 	public TransitionException() {
 		super();
 	}

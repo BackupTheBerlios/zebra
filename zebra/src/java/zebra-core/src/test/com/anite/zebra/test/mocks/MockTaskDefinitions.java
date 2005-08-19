@@ -49,5 +49,7 @@ public class MockTaskDefinitions implements ITaskDefinitions {
 	public Iterator iterator(){
 	    return taskDefs.values().iterator();
 	}
-
+	public long size() {
+		return taskDefs.size();
+	}
 }

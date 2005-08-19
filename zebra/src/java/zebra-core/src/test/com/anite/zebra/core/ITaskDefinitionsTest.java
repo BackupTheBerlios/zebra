@@ -19,23 +19,30 @@ package com.anite.zebra.core;
 
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import junit.framework.TestCase;
 
-import com.anite.zebra.test.mocks.AutoRunTaskDef;
-import com.anite.zebra.test.mocks.ManualRunTaskDef;
 import com.anite.zebra.test.mocks.MockProcessDef;
+import com.anite.zebra.test.mocks.MockRouting;
 import com.anite.zebra.test.mocks.MockTaskDefinitions;
+import com.anite.zebra.test.mocks.taskdefs.AutoRunTaskDef;
+import com.anite.zebra.test.mocks.taskdefs.ManualRunTaskDef;
+import com.anite.zebra.test.mocks.taskdefs.MockTaskDef;
 
 /**
  * @author Eric.Pugh
  */
 public class ITaskDefinitionsTest extends TestCase {
-
+	private static Log log = LogFactory.getLog(ITaskDefinitionsTest.class);
+	
 	public void testIterator() throws Exception {
-
-	    MockTaskDefinitions td = new MockTaskDefinitions(new MockProcessDef());
-	    td.add(new AutoRunTaskDef());
-	    td.add(new ManualRunTaskDef());
+		// TODO: this all needs re-writing as it's not testing much
+		MockProcessDef pd = new MockProcessDef("");
+	    MockTaskDefinitions td = (MockTaskDefinitions) pd.getTaskDefs();
+	    td.add(new AutoRunTaskDef(pd,""));
+	    td.add(new ManualRunTaskDef(pd,""));
 	    Iterator i =td.iterator();
 	    assertNotNull(i);
 	    assertTrue(i.hasNext());
@@ -44,5 +51,46 @@ public class ITaskDefinitionsTest extends TestCase {
 	    i.next();
 	    assertFalse(i.hasNext());
 
+	}
+	
+	/**
+	 * 
+	 * tests to see if the ID generation is working in MOCK classes 
+	 * 
+	 * @throws Exception
+	 * 
+	 * @author matt
+	 * Created on 19-Aug-2005
+	 */
+	public void testIDGen() throws Exception {
+		
+		MockProcessDef pd = new MockProcessDef("");
+	    MockTaskDef td1 = new MockTaskDef(pd,"");
+	    MockTaskDef td2 = new MockTaskDef(pd,"");
+	    log.info("created taskdef with ID " + td1.getId());
+	    log.info("created taskdef with ID "  + td2.getId());
+	    assertNotSame(td1.getId(),td2.getId());
+	}
+	
+	/**
+	 * tests to see if the MOCK routing objects work 
+	 * 
+	 * @author matt
+	 * Created on 19-Aug-2005
+	 *
+	 * @throws Exception
+	 */
+	public void testRouting() throws Exception {
+		log.info("testRouting");
+		MockProcessDef pd = new MockProcessDef("testRouting");
+		MockTaskDef task1 = new MockTaskDef(pd,"1");
+		MockTaskDef task2 = new MockTaskDef(pd,"2");
+		MockRouting mr = task1.addRoutingOut(task2);
+		assertTrue(pd.getMockRoutingDefs().contains(mr));
+		assertTrue(task2.getRoutingIn().contains(mr));
+		assertTrue(task1.getRoutingOut().contains(mr));
+		assertFalse(task1.getRoutingIn().contains(mr));
+		
+		
 	}
 }

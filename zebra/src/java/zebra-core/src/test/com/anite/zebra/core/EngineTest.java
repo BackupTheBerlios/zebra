@@ -28,11 +28,10 @@ import com.anite.zebra.core.api.IEngine;
 import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.ITaskInstance;
-import com.anite.zebra.test.mocks.AutoRunTaskDef;
-import com.anite.zebra.test.mocks.ManualRunTaskDef;
 import com.anite.zebra.test.mocks.MockProcessDef;
 import com.anite.zebra.test.mocks.MockStateFactory;
-import com.anite.zebra.test.mocks.MockTaskDefinitions;
+import com.anite.zebra.test.mocks.taskdefs.AutoRunTaskDef;
+import com.anite.zebra.test.mocks.taskdefs.ManualRunTaskDef;
 
 /**
  * @author Matthew.Norris
@@ -41,17 +40,9 @@ public class EngineTest extends TestCase {
 
 	public void testWorkflowWithAutoSteps() throws Exception {
 
-		MockProcessDef processDef = new MockProcessDef();
-		processDef.setVersion(new Long(1));
-		processDef.setName("MockProcessDef");
+		MockProcessDef processDef = new MockProcessDef("");
 
-		MockTaskDefinitions taskDefs = (MockTaskDefinitions) processDef.getTaskDefs();
-		// TODO should be taskDefs?
-		AutoRunTaskDef taskDef = new AutoRunTaskDef();
-
-		taskDef.setParent(processDef);
-
-		taskDefs.add(taskDef);
+		AutoRunTaskDef taskDef = new AutoRunTaskDef(processDef, "");
 
 		processDef.setFirstTask(taskDef);
 
@@ -72,17 +63,9 @@ public class EngineTest extends TestCase {
 
 	public void testWorkflowWithManualSteps() throws Exception {
 
-		MockProcessDef processDef = new MockProcessDef();
-		processDef.setVersion(new Long(1));
-		processDef.setName("MockProcessDef");
-
-		MockTaskDefinitions taskDefs = (MockTaskDefinitions) processDef.getTaskDefs();
-		// TODO should be taskDefs?
-		ManualRunTaskDef taskDef = new ManualRunTaskDef();
-
-		taskDef.setParent(processDef);
-
-		taskDefs.add(taskDef);
+		MockProcessDef processDef = new MockProcessDef("");
+		
+		ManualRunTaskDef taskDef = new ManualRunTaskDef(processDef,"");
 
 		processDef.setFirstTask(taskDef);
 

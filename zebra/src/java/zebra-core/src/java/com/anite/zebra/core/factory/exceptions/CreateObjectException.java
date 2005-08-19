@@ -28,6 +28,11 @@ public class CreateObjectException extends BaseZebraException {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
 	public CreateObjectException() {
 		super();
 	}
