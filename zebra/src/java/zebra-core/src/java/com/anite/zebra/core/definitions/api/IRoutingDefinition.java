@@ -19,7 +19,7 @@ package com.anite.zebra.core.definitions.api;
 
 
 /**
- * @author matt
+ * @author Matthew Norris
  */
 public interface IRoutingDefinition {
 	/**

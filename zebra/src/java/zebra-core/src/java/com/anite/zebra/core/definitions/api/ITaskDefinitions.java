@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 
 /**
- * @author matt
+ * @author Matthew Norris
  */
 public interface ITaskDefinitions {
 		

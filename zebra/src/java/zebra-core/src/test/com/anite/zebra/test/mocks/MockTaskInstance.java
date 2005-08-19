@@ -100,7 +100,7 @@ public class MockTaskInstance implements ITaskInstance {
 	}
 
 	/**
-	 * @author matt
+	 * @author Matthew Norris
 	 * Created on 19-Aug-2005
 	 *
 	 * @return

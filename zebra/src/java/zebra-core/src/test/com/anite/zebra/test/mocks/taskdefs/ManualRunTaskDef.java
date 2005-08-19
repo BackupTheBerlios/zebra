@@ -27,7 +27,7 @@ import com.anite.zebra.test.mocks.MockProcessDef;
 public class ManualRunTaskDef extends MockTaskDef  {
 
 	/**
-	 * @author matt
+	 * @author Matthew Norris
 	 * Created on 19-Aug-2005
 	 *
 	 * @param pd

@@ -1,7 +1,5 @@
-package com.anite.zebra.test.mocks.taskdefs;
-
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2005 Anite - Central Government Division
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +14,7 @@ package com.anite.zebra.test.mocks.taskdefs;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package com.anite.zebra.test.mocks.taskdefs;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +24,7 @@ import com.anite.zebra.test.mocks.MockRouting;
 import com.anite.zebra.test.mocks.MockTaskDefinitions;
 
 /**
- * @author matthew norris
+ * @author Matthew Norrishew norris
  * Created on 19-Aug-2005
  */
 public class MockTaskDef implements ITaskDefinition {

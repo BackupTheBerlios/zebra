@@ -139,7 +139,7 @@ public class MockStateFactory implements IStateFactory {
      * returns a count of the number of instances of a definition (process or task) exists
      * in the audit trail
      * 
-     * @author matt
+     * @author Matthew Norris
      * Created on 19-Aug-2005
      *
      * @param definitionToCount

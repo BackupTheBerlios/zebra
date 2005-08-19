@@ -22,7 +22,7 @@ import com.anite.zebra.core.exceptions.RunRoutingException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
- * @author matt
+ * @author Matthew Norris
  */
 public interface IConditionAction {
 	

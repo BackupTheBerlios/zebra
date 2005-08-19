@@ -59,7 +59,7 @@ public class ITaskDefinitionsTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 * 
-	 * @author matt
+	 * @author Matthew Norris
 	 * Created on 19-Aug-2005
 	 */
 	public void testIDGen() throws Exception {
@@ -75,7 +75,7 @@ public class ITaskDefinitionsTest extends TestCase {
 	/**
 	 * tests to see if the MOCK routing objects work 
 	 * 
-	 * @author matt
+	 * @author Matthew Norris
 	 * Created on 19-Aug-2005
 	 *
 	 * @throws Exception

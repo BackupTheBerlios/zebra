@@ -21,7 +21,7 @@ import java.util.Set;
 
 
 /**
- * @author matt
+ * @author Matthew Norris
  */
 public interface ITaskDefinition {
 	/**
