@@ -34,6 +34,9 @@ public class MockRoutingCondition implements IConditionAction {
 	public boolean runCondition(IRoutingDefinition routingDef,
 			ITaskInstance taskInstance) throws RunRoutingException {
 		MockTaskInstance ti = (MockTaskInstance) taskInstance;
+		if (routingDef.getName()==null) {
+			return true;
+		}
 		return routingDef.getName().equals(ti.getConditionAction());
 	}
 

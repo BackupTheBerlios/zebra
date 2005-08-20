@@ -29,13 +29,14 @@ import com.anite.zebra.core.definitions.api.ITaskDefinitions;
 public class MockProcessDef implements IProcessDefinition {
 
 	
-	
+	private static long idCounter = 1;
 	private Long id;
 	private String name;
 	private MockRoutingDefs routingDefs;
 
 	public MockProcessDef(String name) {
 		this.name = name;
+		id = new Long(idCounter++);
 		routingDefs = new MockRoutingDefs(this);
 	}
 	public IRoutingDefinitions getRoutingDefs() {
@@ -93,10 +94,6 @@ public class MockProcessDef implements IProcessDefinition {
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public ITaskDefinitions getTaskDefs() {

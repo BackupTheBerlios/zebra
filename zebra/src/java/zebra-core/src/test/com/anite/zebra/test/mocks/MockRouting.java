@@ -45,6 +45,8 @@ public class MockRouting implements IRoutingDefinition {
 		dest.getRoutingIn().add(this);
 		this.destinationTaskDefinition = dest;
 		this.originatingTaskDefinition = source;
+		this.conditionClass = MockRoutingCondition.class.getName();
+		
 	}
 	
 	/* (non-Javadoc)

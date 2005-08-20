@@ -1,6 +1,5 @@
 package com.anite.zebra.core;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -10,12 +9,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.anite.zebra.core.api.IEngine;
 import com.anite.zebra.core.state.api.IProcessInstance;
-import com.anite.zebra.core.state.api.IStateObject;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.test.mocks.MockProcessDef;
-import com.anite.zebra.test.mocks.MockProcessInstance;
 import com.anite.zebra.test.mocks.MockStateFactory;
-import com.anite.zebra.test.mocks.MockTaskInstance;
 import com.anite.zebra.test.mocks.taskdefs.AutoRunTaskDef;
 import com.anite.zebra.test.mocks.taskdefs.JoinTaskDef;
 import com.anite.zebra.test.mocks.taskdefs.ManualRunTaskDef;
@@ -76,19 +72,12 @@ public class SplitJoinTest extends TestCase {
 		
 		assertEquals(6, msf.getAuditTrail().size());
 		// test to see all are marked as "completed" / "deleted" as appropriate
-		for (Iterator it = msf.getAuditTrail().iterator();it.hasNext();) {
-			IStateObject so = (IStateObject) it.next();
-			if (so instanceof MockProcessInstance) {
-				MockProcessInstance check = (MockProcessInstance) so;
-				assertTrue("State not COMPLETED",check.getState() == MockProcessInstance.STATE_COMPLETE);
-			} else if (so instanceof MockTaskInstance) {
-				MockTaskInstance check = (MockTaskInstance) so;
-				assertTrue("State not DELETED",check.getState() == MockTaskInstance.STATE_DELETED);
-			} else {
-				fail("Unexpected object " + so);
-			}
-
-		}
+		assertEquals(1,msf.countInstances(pd));
+		assertEquals(1,msf.countInstances(tdStart));
+		assertEquals(1,msf.countInstances(tdSplit));
+		assertEquals(1,msf.countInstances(tdParallel1));
+		assertEquals(1,msf.countInstances(tdParallel2));
+		assertEquals(1,msf.countInstances(tdJoin));
 		
 	}
 }

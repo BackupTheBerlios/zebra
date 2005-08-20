@@ -65,10 +65,10 @@ public class ITaskDefinitionsTest extends TestCase {
 	public void testIDGen() throws Exception {
 		
 		MockProcessDef pd = new MockProcessDef("");
-	    MockTaskDef td1 = new MockTaskDef(pd,"");
+		MockProcessDef pd2 = new MockProcessDef("");
+	    assertNotSame(pd.getId(),pd2.getId());
+		MockTaskDef td1 = new MockTaskDef(pd,"");
 	    MockTaskDef td2 = new MockTaskDef(pd,"");
-	    log.info("created taskdef with ID " + td1.getId());
-	    log.info("created taskdef with ID "  + td2.getId());
 	    assertNotSame(td1.getId(),td2.getId());
 	}
 	

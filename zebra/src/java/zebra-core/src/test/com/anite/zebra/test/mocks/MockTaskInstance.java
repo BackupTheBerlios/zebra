@@ -96,7 +96,7 @@ public class MockTaskInstance implements ITaskInstance {
 	}
 
 	public String toString() {
-		return "MOCK-ID " + this.taskInstanceId + " ["  + this.taskDef + "]";
+		return "MOCK-TI-ID " + this.taskInstanceId + " ["  + this.taskDef + "]";
 	}
 
 	/**
