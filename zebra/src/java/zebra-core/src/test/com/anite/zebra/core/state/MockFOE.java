@@ -1,3 +1,4 @@
+package com.anite.zebra.core.state;
 /*
  * Copyright 2004 Anite - Central Government Division
  *    http://www.anite.com/publicsector
@@ -14,28 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.anite.zebra.core.api;
-
-import com.anite.zebra.core.exceptions.DestructException;
+import com.anite.zebra.core.state.api.IFOE;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
 /**
- * Called by the Engine when a process has no more tasks.
- * The ProcessInstance state is STATE_COMPLETING.
- * Once the ProcessDestruct class has run, the ProcessInstance state becomes STATE_COMPLETE.
- * 
- * @author Matthew.Norris
+ * @author Eric Pugh
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
-public interface IProcessDestruct {
+public class MockFOE implements IFOE {
+
+	private IProcessInstance processInstance;
+	private MockFOE(){
+		
+	}
 	/**
-	 * Called by the Engine when the ProcessInstance is in a state of STATE_COMPLETING.
-	 * Place any ProcessInstance tidy-up code in the processDestruct routine.
-	 * @param processInstance
-	 * @throws DestructException
-	 *
-	 * @author Matthew.Norris
-	 * Created on Aug 21, 2005
+	 * 
 	 */
-	public void processDestruct(IProcessInstance processInstance) throws DestructException;
+	public MockFOE(IProcessInstance processInstance) {
+		this.processInstance = processInstance;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.state.api.IFOE#getProcessInstance()
+	 */
+	public IProcessInstance getProcessInstance() {
+		return processInstance;
+	}
+
 }

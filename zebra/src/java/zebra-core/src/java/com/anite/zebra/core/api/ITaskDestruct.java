@@ -17,27 +17,29 @@
 
 package com.anite.zebra.core.api;
 
-import com.anite.zebra.core.exceptions.ConstructException;
+import com.anite.zebra.core.exceptions.DestructException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
- * Optional class that is called by the Engine before a TaskInstance is started.
- * This call happens when the TaskInstance state is STATE_INITIALISING.
+ * Optional class that is called by the Engine after task completion.
+ * This call happens when the TaskInstance state is STATE_COMPLETING.
  * 
- * After a successful call to this class the TaskInstance state is STATE_READY.
+ * After a successful call to this class the TaskInstance state is STATE_COMPLETE.
+ * 
+ * @TODO: This functionality is currently NOT IMPLEMENTED and may be removed
  * 
  * @author Matthew.Norris
  */
-public interface ITaskConstruct {
+public interface ITaskDestruct {
 	/**
-	 * Called by the Engine before a TaskInstance is started.
+	 * Called by the Engine before a TaskInstance is completed.
 	 * 
 	 * @param taskInstance
-	 * @throws ConstructException
+	 * @throws DestructException
 	 *
 	 * @author Matthew.Norris
 	 * Created on Aug 21, 2005
 	 */
-	public void taskConstruct(ITaskInstance taskInstance) throws ConstructException;
+	public void taskDestruct(ITaskInstance taskInstance) throws DestructException;
 	
 }

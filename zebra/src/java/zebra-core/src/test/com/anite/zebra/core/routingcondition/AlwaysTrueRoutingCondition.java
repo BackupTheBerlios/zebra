@@ -1,3 +1,4 @@
+package com.anite.zebra.core.routingcondition;
 /*
  * Copyright 2004 Anite - Central Government Division
  *    http://www.anite.com/publicsector
@@ -14,30 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.anite.zebra.core.api;
-
-import com.anite.zebra.core.exceptions.ConstructException;
+import com.anite.zebra.core.api.IConditionAction;
+import com.anite.zebra.core.definitions.api.IRoutingDefinition;
+import com.anite.zebra.core.exceptions.RunRoutingException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
- * Optional class that is called by the Engine before a TaskInstance is started.
- * This call happens when the TaskInstance state is STATE_INITIALISING.
- * 
- * After a successful call to this class the TaskInstance state is STATE_READY.
- * 
- * @author Matthew.Norris
+ * @author Eric Pugh
+ *
+ * Test RoutingCondition that always returns True!
  */
-public interface ITaskConstruct {
-	/**
-	 * Called by the Engine before a TaskInstance is started.
-	 * 
-	 * @param taskInstance
-	 * @throws ConstructException
-	 *
-	 * @author Matthew.Norris
-	 * Created on Aug 21, 2005
-	 */
-	public void taskConstruct(ITaskInstance taskInstance) throws ConstructException;
-	
+public class AlwaysTrueRoutingCondition implements IConditionAction {
+
+	public boolean runCondition(IRoutingDefinition routingDef,
+			ITaskInstance taskInstance) throws RunRoutingException {
+		return true;
+	}
+
 }

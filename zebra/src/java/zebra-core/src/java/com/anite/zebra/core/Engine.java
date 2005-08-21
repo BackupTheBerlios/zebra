@@ -41,6 +41,7 @@ import com.anite.zebra.core.exceptions.LockException;
 import com.anite.zebra.core.exceptions.RunTaskException;
 import com.anite.zebra.core.exceptions.StartProcessException;
 import com.anite.zebra.core.exceptions.TransitionException;
+import com.anite.zebra.core.factory.api.IClassFactory;
 import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.factory.exceptions.CreateObjectException;
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
@@ -48,33 +49,49 @@ import com.anite.zebra.core.state.api.IFOE;
 import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.core.state.api.ITransaction;
+import com.anite.zebra.core.util.DefaultClassFactory;
 import com.anite.zebra.core.util.TaskSync;
 /**
- * @author Matthew.Norris
  * 
  * This is the main class that controls the execution of each process instance.
  * 
+ * @author Matthew.Norris
  */
 public class Engine implements IEngine {
 	private static Log log = LogFactory.getLog(Engine.class);
 	private IStateFactory stateFactory;
 	private TaskSync taskSync = new TaskSync();
+	private IClassFactory classFactory;
 	/**
 	 * In order for the engine to work it must be instanced with a valid states
-	 * factory
+	 * factory.
+	 * As no ClassFactory is supplied the DefaultClassFactory will be used.
 	 * 
 	 * @param statesFactory
 	 */
 	public Engine(IStateFactory stateFactory) {
 		this.stateFactory = stateFactory;
+		// no class factory, so use default implementation
+		this.classFactory = new DefaultClassFactory();
 	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.anite.zebra.api.IEngine#transitionTask(com.anite.zebra.api.states.ITaskInstance)
-	 */
+
 	/**
-	 * @inheritDoc
+	 * Alternate constructor that allows both a StateFactory and a ClassFactory 
+	 * to be specified.
+	 * 
+	 * @param stateFactory
+	 * @param classFactory
+	 *
+	 * @author Matthew.Norris
+	 * Created on Aug 21, 2005
+	 */
+	public Engine(IStateFactory stateFactory, IClassFactory classFactory) {
+		this.stateFactory = stateFactory;
+		this.classFactory = classFactory;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.api.IEngine#transitionTask(com.anite.zebra.core.state.api.ITaskInstance)
 	 */
 	public void transitionTask(ITaskInstance taskInstance)
 			throws TransitionException {
@@ -143,10 +160,7 @@ public class Engine implements IEngine {
 				ITransaction t = stateFactory.beginTransaction();
 				stateFactory.saveObject(ipi);
 				t.commit();
-				Class theClass = this.getClass().getClassLoader().loadClass(
-						ipi.getProcessDef().getClassDestruct());
-				IProcessDestruct ipd = (IProcessDestruct) theClass
-						.newInstance();
+				IProcessDestruct ipd = classFactory.getProcessDestruct(ipi.getProcessDef().getClassDestruct());
 				ipd.processDestruct(ipi);
 			}
 			// and mark as complete
@@ -341,12 +355,13 @@ public class Engine implements IEngine {
         }
 		return createdTasks;
 	}
+
 	/**
 	 * 
 	 * Calls down to the States engine to request a new FOE object
 	 * 
 	 * @param processInstance
-	 * @return
+	 * @return new FOE object
 	 */
 	private IFOE createFOE(IProcessInstance processInstance)
 			throws CreateObjectException {
@@ -393,18 +408,7 @@ public class Engine implements IEngine {
 					IConditionAction ica;
 					try {
 						// instance the condition class
-						ica = (IConditionAction) this.getClass()
-								.getClassLoader().loadClass(className)
-								.newInstance();
-					} catch (Exception e) {
-						// like Pokemon, we catch 'em all...
-						// fail this transistion if we cant instantiate the
-						// condition action
-						log.error("Failed to instantiate Condition Action "
-								+ className, e);
-						throw new TransitionException(e);
-					}
-					try {
+						ica = classFactory.getConditionAction(className);
 						addTask = ica.runCondition(rd, taskInstance);
 					} catch (Exception e) {
 						throw new TransitionException(
@@ -494,8 +498,7 @@ public class Engine implements IEngine {
 				taskInstance.setState(ITaskInstance.STATE_RUNNING);
 				stateFactory.saveObject(taskInstance);
 				t.commit();
-				taskClass = (ITaskAction) this.getClass().getClassLoader()
-						.loadClass(runClass).newInstance();
+				taskClass = classFactory.getTaskAction(runClass);
 			} catch (Exception e) {
 				// fail this transistion if we cant instantiate the task action
 				log.error("Failed to instantiate Task Action " + runClass, e);
@@ -524,13 +527,8 @@ public class Engine implements IEngine {
 			}
 		}
 	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.anite.zebra.api.IEngine#createProcess(com.anite.zebra.api.definitions.IProcessDefinition)
-	 */
-	/**
-	 * @inheritDoc
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.api.IEngine#createProcess(com.anite.zebra.core.definitions.api.IProcessDefinition)
 	 */
 	public IProcessInstance createProcess(IProcessDefinition processDef)
 			throws CreateProcessException {
@@ -568,9 +566,7 @@ public class Engine implements IEngine {
 			iti.setState(ITaskInstance.STATE_INITIALISING);
 			stateFactory.saveObject(iti);
 			t.commit();
-			Class theClass = this.getClass().getClassLoader().loadClass(
-					iti.getTaskDefinition().getClassConstruct());
-			ITaskConstruct itc = (ITaskConstruct) theClass.newInstance();
+			ITaskConstruct itc = classFactory.getTaskConstruct(iti.getTaskDefinition().getClassConstruct());
 			itc.taskConstruct(iti);
 			t = stateFactory.beginTransaction();
 			iti.setState(ITaskInstance.STATE_READY);
@@ -591,9 +587,8 @@ public class Engine implements IEngine {
 	 */
 	private void doProcessConstruct(IProcessInstance ipi) throws Exception {
 		try {
-			Class theClass = this.getClass().getClassLoader().loadClass(
+			IProcessConstruct ipc = classFactory.getProcessConstruct(
 					ipi.getProcessDef().getClassConstruct());
-			IProcessConstruct ipc = (IProcessConstruct) theClass.newInstance();
 			ipc.processConstruct(ipi);
 		} catch (Exception e) {
 			String emsg = "Failed to run class constructor \""
@@ -619,7 +614,7 @@ public class Engine implements IEngine {
 		
 		if (foe == null || pi == null || td == null) {
 			throw new CreateObjectException(
-					"Missing required parameters to create the Task Instance");
+					"Missing required parameters to create a Task Instance - TD: " + td + ", PI: " + pi + ", FOE:" + foe);
 		}
 		/*
 		 * TODO should probably add another check here to ensure that task def
@@ -663,13 +658,8 @@ public class Engine implements IEngine {
 		return task;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.anite.zebra.api.IEngine#startProcess(com.anite.zebra.api.states.IProcessInstance)
-	 */
-	/**
-	 * @inheritDoc
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.api.IEngine#startProcess(com.anite.zebra.core.state.api.IProcessInstance)
 	 */
 	public void startProcess(IProcessInstance processInstance)
 			throws StartProcessException {

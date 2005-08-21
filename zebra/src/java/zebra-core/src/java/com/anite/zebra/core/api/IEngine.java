@@ -28,6 +28,7 @@ import com.anite.zebra.core.state.api.ITaskInstance;
  * @author Matthew.Norris
  */
 public interface IEngine {
+	
 	/**
 	 * transitions the specified task
 	 * @param taskInstance
@@ -35,19 +36,24 @@ public interface IEngine {
 	 */
 	public void transitionTask(ITaskInstance taskInstance) throws TransitionException;
 	/**
-	 * creates the a ProcessInstance of the specified process definition.  This ProcessInstance
-	 * does actually do anything.  To start the process, call startProcess.  
-	 * <p/><b>This functions the 
-	 * same as createProcessPaused in CTMS did.</b>
+	 * Creates the a ProcessInstance of the specified process definition.
+	 * To start the process, call startProcess.  
 	 * @param processDef
-	 * @return
+	 * @return the created ProcessInstance
 	 * @throws CreateProcessException
 	 */
 	public IProcessInstance createProcess(IProcessDefinition processDef) throws CreateProcessException;
 	
 	/**
-	 * starts a paused process Instance
+	 * Starts a process (creates the first task and 
+	 * starts transitioning the workflow) 
+	 * that was created using createProcess. 
+	 * 
 	 * @param processInstance
+	 * @throws StartProcessException
+	 *
+	 * @author Matthew.Norris
+	 * Created on Aug 21, 2005
 	 */
 	public void startProcess(IProcessInstance processInstance) throws StartProcessException;
 		

@@ -27,11 +27,10 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
- * @author Matthew.Norris
- * 
  * This helper class contains the task synchronisation code. It's only called by
  * the Engine.
- *  
+ * 
+ * @author Matthew.Norris
  */
 public class TaskSync {
     /**

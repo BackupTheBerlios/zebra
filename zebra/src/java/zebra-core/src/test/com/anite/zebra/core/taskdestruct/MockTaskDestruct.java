@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2005 Anite - Central Government Division
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,29 +15,32 @@
  * limitations under the License.
  */
 
-package com.anite.zebra.core.api;
+package com.anite.zebra.core.taskdestruct;
 
-import com.anite.zebra.core.exceptions.ConstructException;
+import com.anite.zebra.core.api.ITaskDestruct;
+import com.anite.zebra.core.exceptions.DestructException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
- * Optional class that is called by the Engine before a TaskInstance is started.
- * This call happens when the TaskInstance state is STATE_INITIALISING.
- * 
- * After a successful call to this class the TaskInstance state is STATE_READY.
- * 
  * @author Matthew.Norris
+ * Created on Aug 21, 2005
  */
-public interface ITaskConstruct {
+public class MockTaskDestruct implements ITaskDestruct {
+	private int runCount = 0;
 	/**
-	 * Called by the Engine before a TaskInstance is started.
-	 * 
-	 * @param taskInstance
-	 * @throws ConstructException
+	 * @return
 	 *
 	 * @author Matthew.Norris
 	 * Created on Aug 21, 2005
 	 */
-	public void taskConstruct(ITaskInstance taskInstance) throws ConstructException;
-	
+	public int getRunCount() {
+		return runCount;
+	}
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.api.ITaskDestruct#taskDestruct(com.anite.zebra.core.state.api.ITaskInstance)
+	 */
+	public void taskDestruct(ITaskInstance taskInstance) throws DestructException {
+		runCount++;
+	}
+
 }

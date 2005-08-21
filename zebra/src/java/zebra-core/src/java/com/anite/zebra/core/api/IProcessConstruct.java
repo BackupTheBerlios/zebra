@@ -21,10 +21,26 @@ import com.anite.zebra.core.exceptions.ConstructException;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
 /**
+ * Process Construct Interface
+ * Implement this interface to create a class the Engine will call
+ * before a process instance starts running 
+ *  - ProcessInstance change in state from STATE_CREATED to STATE_INITIALISING
+ *  After the ProcessConstruct class has run, the ProcessInstance state will be STATE_RUNNING
+ * 
  * @author Matthew.Norris
  */
 public interface IProcessConstruct {
 
+	/**
+	 * Called by the Engine when startProcess is invoked.
+	 * Put any ProcessInstance initialisation code here.
+	 * 
+	 * @param ipi
+	 * @throws ConstructException
+	 *
+	 * @author Matthew.Norris
+	 * Created on Aug 21, 2005
+	 */
 	public void processConstruct(IProcessInstance ipi) throws ConstructException;
 	
 }

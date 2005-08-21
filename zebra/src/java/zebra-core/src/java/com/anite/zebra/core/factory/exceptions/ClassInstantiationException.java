@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2005 Anite - Central Government Division
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,29 +15,32 @@
  * limitations under the License.
  */
 
-package com.anite.zebra.core.api;
+package com.anite.zebra.core.factory.exceptions;
 
-import com.anite.zebra.core.exceptions.ConstructException;
-import com.anite.zebra.core.state.api.ITaskInstance;
+import com.anite.zebra.core.exceptions.BaseZebraException;
 
 /**
- * Optional class that is called by the Engine before a TaskInstance is started.
- * This call happens when the TaskInstance state is STATE_INITIALISING.
- * 
- * After a successful call to this class the TaskInstance state is STATE_READY.
- * 
  * @author Matthew.Norris
+ * Created on Aug 21, 2005
  */
-public interface ITaskConstruct {
+public class ClassInstantiationException extends BaseZebraException {
+
 	/**
-	 * Called by the Engine before a TaskInstance is started.
 	 * 
-	 * @param taskInstance
-	 * @throws ConstructException
+	 * @author Matthew.Norris
+	 * Created on Aug 21, 2005
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @param message
+	 * @param nestedException
 	 *
 	 * @author Matthew.Norris
 	 * Created on Aug 21, 2005
 	 */
-	public void taskConstruct(ITaskInstance taskInstance) throws ConstructException;
-	
+	public ClassInstantiationException(String message, Throwable nestedException) {
+		super(message, nestedException);
+	}
+
 }

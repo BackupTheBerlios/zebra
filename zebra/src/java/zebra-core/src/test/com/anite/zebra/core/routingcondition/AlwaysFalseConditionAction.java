@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2005 Anite - Central Government Division
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,32 +15,27 @@
  * limitations under the License.
  */
 
-package com.anite.zebra.core.api;
+package com.anite.zebra.core.routingcondition;
 
+import com.anite.zebra.core.api.IConditionAction;
 import com.anite.zebra.core.definitions.api.IRoutingDefinition;
 import com.anite.zebra.core.exceptions.RunRoutingException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
+ * Test routing condition action that always returns FALSE
  * 
- * Interface for a Condition Action
- * Implement this interface to provide a Condition Action class for Routing Definitions
- * 
- * @author Matthew Norris
+ * @author Matthew.Norris
+ * Created on Aug 21, 2005
  */
-public interface IConditionAction {
-	
-	/**
-	 * Called by the Engine to determine whether a Routing should be run or not.
-	 * 
-	 * @param routingDef
-	 * @param taskInstance
-	 * @return TRUE if the routing should run
-	 * @throws RunRoutingException
-	 *
-	 * @author Matthew.Norris
-	 * Created on Aug 21, 2005
+public class AlwaysFalseConditionAction implements IConditionAction {
+
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.api.IConditionAction#runCondition(com.anite.zebra.core.definitions.api.IRoutingDefinition, com.anite.zebra.core.state.api.ITaskInstance)
 	 */
-	public boolean runCondition(IRoutingDefinition routingDef, ITaskInstance taskInstance) throws RunRoutingException;
-	
+	public boolean runCondition(IRoutingDefinition routingDef,
+			ITaskInstance taskInstance) throws RunRoutingException {
+		return false;
+	}
+
 }

@@ -23,28 +23,30 @@ package com.anite.zebra.core.definitions.api;
  */
 public interface IRoutingDefinition {
 	/**
-	 * @return Returns the guid.
+	 * @return the ID of this RoutingDefinition
 	 */
 	public Long getId();
 	/**
-	 * @return Returns the name.
+	 * @return the Name of the Routing. Can be NULL
 	 */
 	public String getName();
 	/**
-	 * @return Returns the parallel.
+	 * @return TRUE if the routing runs Parallel (i.e. split)
 	 */
 	public boolean getParallel();
 	/**
-	 * @return Returns the conditionClass.
+	 * @return the name of the IConditionAction class the Engine 
+	 * should call to determine whether this routing has run 
+	 * or not. Can be NULL.
 	 */
 	public String getConditionClass();
 	/**
-	 * @return Returns the Originating TaskDef
+	 * @return the Originating TaskDef
 	 */
 	public ITaskDefinition getOriginatingTaskDefinition();
 	
 	/**
-	 * @return Returns the Desintation TaskDef
+	 * @return the Desintation TaskDef
 	 */
 	
 	public ITaskDefinition getDestinationTaskDefinition();
