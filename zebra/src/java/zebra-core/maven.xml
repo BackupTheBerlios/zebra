@@ -1,4 +1,7 @@
 <project default="site:deploy" xmlns:j="jelly:core" xmlns:deploy="deploy" 
 	xmlns:ant="jelly:ant">
-
+	<goal name='zebra-core:setup'>
+		<attainGoal name="java:compile"/>
+	    <attainGoal name="test:compile"/>
+	</goal>
 </project>
