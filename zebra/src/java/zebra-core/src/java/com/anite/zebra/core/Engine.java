@@ -242,7 +242,7 @@ public class Engine implements IEngine {
 		Map createdTasks = new HashMap();
 		IProcessInstance processInstance = currentTask.getProcessInstance();
 		try {
-            stateFactory.acquireLock(processInstance);
+            stateFactory.acquireLock(processInstance,this);
         } catch (LockException e) {
             String emsg = "Failed to aquire an exclusive lock on the Process Instance";
             log.error(emsg,e);
@@ -347,7 +347,7 @@ public class Engine implements IEngine {
 		}
 		try {
             // unlock processInstance
-            stateFactory.releaseLock(processInstance);
+            stateFactory.releaseLock(processInstance, this);
         } catch (LockException e) {
             String emsg = "Failed to release the exclusive lock on the Process Instance";
 			log.error(emsg, e);

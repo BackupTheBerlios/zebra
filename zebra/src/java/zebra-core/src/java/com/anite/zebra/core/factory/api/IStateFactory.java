@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2004/2005 Anite - Enforcement & Security
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 
 package com.anite.zebra.core.factory.api;
 
+import com.anite.zebra.core.api.IEngine;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.exceptions.LockException;
@@ -119,16 +120,22 @@ public interface IStateFactory {
      * If the ProcessInstance is locked by another engine process, acquireLock 
      * should wait for the lock to be released.
      * 
+     * Therefore it's important to know which Engine instance is making this call
+     *  to any given state factory.
+     * 
      * @return
      * @param processInstance
+     * @param engine
      * @throws LockException
      */
-    public void acquireLock(IProcessInstance processInstance) throws LockException;
+    public void acquireLock(IProcessInstance processInstance, IEngine engine) throws LockException;
 
     /**
-     * Releases the exclusive lock on this ProcessInstance.
+     * Releases the exclusive lock on a ProcessInstance.
+     * Again it's important to know which Engine instance is making this call.
      * @param processInstance
+     * @param engine
      * @throws LockException
      */
-    public void releaseLock(IProcessInstance processInstance) throws LockException;
+    public void releaseLock(IProcessInstance processInstance, IEngine engine) throws LockException;
 }

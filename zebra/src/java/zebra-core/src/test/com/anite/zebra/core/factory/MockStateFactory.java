@@ -21,6 +21,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import com.anite.zebra.core.api.IEngine;
 import com.anite.zebra.core.definitions.MockProcessDef;
 import com.anite.zebra.core.definitions.MockTransaction;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
@@ -119,14 +120,14 @@ public class MockStateFactory implements IStateFactory {
     /* 
      * Does nothing!
      */
-    public void acquireLock(IProcessInstance processInstance) throws LockException {
+    public void acquireLock(IProcessInstance processInstance, IEngine engine) throws LockException {
         
     }
 
     /* 
      * Does nothing
      */
-    public void releaseLock(IProcessInstance processInstance) throws LockException {
+    public void releaseLock(IProcessInstance processInstance, IEngine engine) throws LockException {
         
     }
     
