@@ -5,7 +5,7 @@
     <artifactId>zebra-state</artifactId>
     <name>Zebra State</name>
     <groupId>zebra</groupId>
-    <currentVersion>0.42-dev</currentVersion>
+    <currentVersion>0.5-dev</currentVersion>
     <organization>
         <name>Anite</name>
         <url>http://www.aniteps.com</url>
@@ -103,13 +103,13 @@
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-core</artifactId>
-            <version>0.4-dev</version>
+            <version>0.5-dev</version>
             <properties/>
         </dependency>
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-defs</artifactId>
-            <version>0.3-dev</version>
+            <version>0.5-dev</version>
             <properties/>
         </dependency>
         <dependency>
