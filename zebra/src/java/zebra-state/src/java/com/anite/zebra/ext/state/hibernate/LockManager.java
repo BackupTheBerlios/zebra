@@ -10,6 +10,7 @@ import net.sf.hibernate.Transaction;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.anite.zebra.core.api.IEngine;
 import com.anite.zebra.core.exceptions.LockException;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
@@ -23,11 +24,14 @@ public class LockManager {
     private final static Log log = LogFactory.getLog(LockManager.class);
 
     /**
+     * TODO: this implementation does nothing with the "engine" parameter (which is bad)
+     * 
      * @param processInstance
+     * @param engine 
      * @throws LockException
      */
     public void aquireLockImpl(IProcessInstance processInstance,
-            Session session, Class lockClass) throws LockException {
+            Session session, Class lockClass, IEngine engine) throws LockException {
         boolean isLocked = false;
         while (!isLocked) {
             HibernateLock lock;
@@ -87,11 +91,13 @@ public class LockManager {
     }
 
     /**
+     * TODO: this implementation does nothing with the "engine" parameter (which is bad)
      * @param processInstance
+     * @param engine 
      * @throws LockException
      */
     public void releaseLockImpl(IProcessInstance processInstance,
-            Session session, Class lockClass) throws LockException {
+            Session session, Class lockClass, IEngine engine) throws LockException {
 
         try {
             HibernateLock lock = (HibernateLock) session.load(lockClass,

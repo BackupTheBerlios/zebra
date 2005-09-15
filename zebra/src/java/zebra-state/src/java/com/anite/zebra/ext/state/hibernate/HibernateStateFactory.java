@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2004/2005 Anite - Enforcement & Security
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ import net.sf.hibernate.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.anite.zebra.core.api.IEngine;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.exceptions.LockException;
@@ -46,6 +47,9 @@ public abstract class HibernateStateFactory implements IStateFactory {
 
     public abstract Session getSession() throws StateFailureException;
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#beginTransaction()
+     */
     public ITransaction beginTransaction() throws StateFailureException {
         try {
             return new HibernateTransaction(getSession());
@@ -55,11 +59,17 @@ public abstract class HibernateStateFactory implements IStateFactory {
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#createFOE(com.anite.zebra.core.state.api.IProcessInstance)
+     */
     public IFOE createFOE(IProcessInstance processInstance)
             throws CreateObjectException {
         return new HibernateFOE(processInstance);
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#createProcessInstance(com.anite.zebra.core.definitions.api.IProcessDefinition)
+     */
     public IProcessInstance createProcessInstance(IProcessDefinition processDef)
             throws CreateObjectException {
         HibernateProcessInstance hpi = new HibernateProcessInstance();
@@ -67,6 +77,9 @@ public abstract class HibernateStateFactory implements IStateFactory {
         return hpi;
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#createTaskInstance(com.anite.zebra.core.definitions.api.ITaskDefinition, com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.state.api.IFOE)
+     */
     public ITaskInstance createTaskInstance(ITaskDefinition taskDef,
             IProcessInstance processInstance, IFOE foe)
             throws CreateObjectException {
@@ -78,6 +91,9 @@ public abstract class HibernateStateFactory implements IStateFactory {
         return hti;
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#deleteObject(com.anite.zebra.core.state.api.IStateObject)
+     */
     public void deleteObject(IStateObject so) throws StateFailureException {
         if (so instanceof HibernateTaskInstance) {
             IProcessInstance processInstance = ((HibernateTaskInstance) so)
@@ -95,6 +111,9 @@ public abstract class HibernateStateFactory implements IStateFactory {
 
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#saveObject(com.anite.zebra.core.state.api.IStateObject)
+     */
     public void saveObject(IStateObject so) throws StateFailureException {
         try {
             getSession().save(so);
@@ -105,11 +124,14 @@ public abstract class HibernateStateFactory implements IStateFactory {
 
     }
 
-    public void acquireLock(IProcessInstance processInstance)
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#acquireLock(com.anite.zebra.core.state.api.IProcessInstance)
+     */
+    public void acquireLock(IProcessInstance processInstance, IEngine engine)
             throws LockException {
         try {
             getLockManager().aquireLockImpl(processInstance, getSession(),
-                    getLockClass());
+                    getLockClass(), engine);
 
         } catch (StateFailureException e) {
             log.error("Unable to save", e);
@@ -120,11 +142,14 @@ public abstract class HibernateStateFactory implements IStateFactory {
     /**
      * Release the lock using the lock class
      */
-    public void releaseLock(IProcessInstance processInstance)
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#releaseLock(com.anite.zebra.core.state.api.IProcessInstance)
+     */
+    public void releaseLock(IProcessInstance processInstance, IEngine engine)
             throws LockException {
         try {
             getLockManager().releaseLockImpl(processInstance, getSession(),
-                    getLockClass());
+                    getLockClass(),engine);
         } catch (StateFailureException e) {
             log.error("Releasing Lock should never fail ", e);
             throw new LockException(e);

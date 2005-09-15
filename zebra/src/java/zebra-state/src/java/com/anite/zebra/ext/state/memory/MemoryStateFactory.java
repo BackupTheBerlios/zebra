@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2004/2005 Anite - Enforcement & Security
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +19,7 @@ package com.anite.zebra.ext.state.memory;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import com.anite.zebra.core.api.IEngine;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.exceptions.LockException;
@@ -55,8 +53,6 @@ public class MemoryStateFactory implements IStateFactory {
 	private static Map taskInstances = new HashMap();
 	private static Map allProcessInstances = new HashMap();
 	private static Map allTaskInstances = new HashMap();
-	private static Log log  = LogFactory.getLog(MemoryStateFactory.class);
-
 	public ITransaction beginTransaction() throws StateFailureException {
 		return new MemoryTransaction();
 	}
@@ -142,5 +138,19 @@ public class MemoryStateFactory implements IStateFactory {
      */
     public void releaseLock(IProcessInstance processInstance) throws LockException {
 
-    }    
+    }
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.factory.api.IStateFactory#acquireLock(com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.api.IEngine)
+	 */
+	public void acquireLock(IProcessInstance arg0, IEngine arg1) throws LockException {
+		// TODO Auto-generated method stub
+		
+	}
+	/* (non-Javadoc)
+	 * @see com.anite.zebra.core.factory.api.IStateFactory#releaseLock(com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.api.IEngine)
+	 */
+	public void releaseLock(IProcessInstance arg0, IEngine arg1) throws LockException {
+		// TODO Auto-generated method stub
+		
+	}    
 }

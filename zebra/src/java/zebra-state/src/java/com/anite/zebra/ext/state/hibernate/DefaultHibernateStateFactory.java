@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2004/2005 Anite - Enforcement & Security
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,9 +22,6 @@ import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
 import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
 
 /**
@@ -35,9 +32,6 @@ import com.anite.zebra.core.factory.exceptions.StateFailureException;
  * use.
  */
 public class DefaultHibernateStateFactory extends HibernateStateFactory {
-
-    private static Log log = LogFactory
-            .getLog(DefaultHibernateStateFactory.class);
 
     private Session session;
 
