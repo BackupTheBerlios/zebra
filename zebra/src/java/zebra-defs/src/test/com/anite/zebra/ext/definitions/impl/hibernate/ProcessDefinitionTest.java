@@ -25,7 +25,6 @@ import com.anite.zebra.ext.definitions.impl.PropertyElement;
 import com.anite.zebra.ext.definitions.impl.PropertyGroups;
 import com.anite.zebra.ext.definitions.impl.RoutingDefinition;
 import com.anite.zebra.ext.definitions.impl.TaskDefinition;
-import com.anite.zebra.ext.definitions.impl.TaskDefinitions;
 
 public class ProcessDefinitionTest extends BaseTestCase {
 
@@ -100,7 +99,6 @@ public class ProcessDefinitionTest extends BaseTestCase {
         assertNotNull(processDef2.getTaskDefs().getTaskDef(firstTask.getId()));
 
         TaskDefinition td2 = new TaskDefinition();
-        TaskDefinitions tds = (TaskDefinitions) processDef2.getTaskDefs();
         processDef2.getTaskDefinitions().add(td2);
         assertNull(td2.getId());
         session.saveOrUpdate(td2);
