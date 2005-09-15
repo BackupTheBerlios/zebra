@@ -1,6 +1,6 @@
 package com.anite.zebra.core.state;
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2004/2005 Anite - Enforcement & Security
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
