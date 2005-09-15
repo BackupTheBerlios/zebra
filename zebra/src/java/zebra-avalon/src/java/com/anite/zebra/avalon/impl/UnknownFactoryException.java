@@ -25,6 +25,13 @@ import com.anite.zebra.core.exceptions.BaseZebraException;
 public class UnknownFactoryException extends BaseZebraException {
 
     /**
+	 * 
+	 * @author Matthew.Norris
+	 * Created on 15-Sep-2005
+	 */
+	private static final long serialVersionUID = -1805130329932189921L;
+
+	/**
      *  
      */
     public UnknownFactoryException() {

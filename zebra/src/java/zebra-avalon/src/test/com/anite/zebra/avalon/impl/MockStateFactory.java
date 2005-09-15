@@ -6,6 +6,7 @@ package com.anite.zebra.avalon.impl;
 
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
+import com.anite.zebra.core.exceptions.LockException;
 import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.factory.exceptions.CreateObjectException;
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
@@ -70,5 +71,15 @@ public class MockStateFactory implements IStateFactory {
     public IFOE createFOE(IProcessInstance arg0) throws CreateObjectException {
         return null;
     }
+
+	public void acquireLock(IProcessInstance arg0) throws LockException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void releaseLock(IProcessInstance arg0) throws LockException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

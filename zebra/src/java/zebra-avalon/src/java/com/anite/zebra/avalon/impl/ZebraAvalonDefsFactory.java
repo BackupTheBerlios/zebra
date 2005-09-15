@@ -103,7 +103,10 @@ public class ZebraAvalonDefsFactory implements IAvalonDefsFactory,
 
     public void initialize() throws Exception {
         lff = new LoadFromFile();
-        //lff.loadProcessDefs(appRootPath + filePath);
+        lff.setProcessDefinitionClass(ClassLoader.getSystemClassLoader().loadClass(processDefClassName));
+        lff.setTaskDefinitionClass(ClassLoader.getSystemClassLoader().loadClass(taskDefClassName));
+        lff.loadProcessDefs(appRootPath + filePath);
+        
     }
 
 

@@ -30,7 +30,9 @@ public class StartingZebraComponentsTest extends BaseUnitTest {
     public void testStartingServices() throws Exception
     {
         IStateFactory service = (IStateFactory)lookup(IStateFactory.class.getName());
+        assertNotNull(service);
         IEngine engine = (IEngine)lookup(IEngine.class.getName());
+        assertNotNull(engine);
         IAvalonDefsFactory defsFactory = (IAvalonDefsFactory)lookup(IAvalonDefsFactory.class.getName());
         
         this.release(defsFactory);

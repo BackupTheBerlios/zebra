@@ -31,7 +31,7 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
  * @author matt Note: need to extend Component to work in Avalon and ThreadSafe
  *         so we are a shared object
  */
-public interface IAvalonDefsFactory extends /*IProcessDefFactory,*/ Component,
+public interface IAvalonDefsFactory extends Component,
         ThreadSafe {
 
     /** Avalon role - used to id the component within the manager */
