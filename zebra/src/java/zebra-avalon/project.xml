@@ -118,11 +118,12 @@
 			<id>jdbc2_0</id>
 			<version>stdext</version>
 		</dependency-->
-		<dependency>
+<!--		<dependency>
 			<id>jta</id>
 			<version>unknown</version>
 			<jar>jta.jar</jar>
 		</dependency>
+	-->
 		<dependency>
 			<id>log4j</id>
 			<version>1.2.8</version>

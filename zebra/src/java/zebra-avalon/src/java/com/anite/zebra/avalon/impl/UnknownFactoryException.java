@@ -31,13 +31,6 @@ public class UnknownFactoryException extends BaseZebraException {
 	 */
 	private static final long serialVersionUID = -1805130329932189921L;
 
-	/**
-     *  
-     */
-    public UnknownFactoryException() {
-        super();
-    }
-
     /**
      * @param message
      */
