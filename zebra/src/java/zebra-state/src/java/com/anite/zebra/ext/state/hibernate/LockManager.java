@@ -18,13 +18,14 @@ import com.anite.zebra.core.state.api.IProcessInstance;
  * Locking code extracted from StateFactory into a Helper for profiling
  * 
  * @author Ben.Gidley
+ * @author Matthew.Norris
  */
 public class LockManager {
 
     private final static Log log = LogFactory.getLog(LockManager.class);
 
     /**
-     * TODO: this implementation does nothing with the "engine" parameter (which is bad)
+     * TODO: this implementation does nothing with the "engine" parameter 
      * 
      * @param processInstance
      * @param engine 
@@ -61,21 +62,22 @@ public class LockManager {
                     // It is vaguely possible someone beat us to it 
                     try {
                         lock = null;
-                        Thread.sleep(10);
+                        // TODO the wait period should be configurable
+                        Thread.sleep(100);
                     } catch (InterruptedException e1) {
+                        String emsg = "Interupted while trying to lock - this should not occur";
                         log
-                                .error(
-                                        "Interupted while trying to lock - this should not occur",
+                                .error(emsg,
                                         e1);
-                        throw new LockException(e1);
+                        throw new LockException(emsg,e1);
                     }
                 } catch (InstantiationException e) {
-                    log.error("Unable to create lock class", e);
-                    throw new LockException();
-                } catch (IllegalAccessException e) {
-                    log.error("Unable to create lock class", e);
-                    throw new LockException();
-                }
+                    String emsg = "Unable to create lock class";
+                	throw new LockException(emsg,e);
+				} catch (IllegalAccessException e) {
+                    String emsg = "Unable to create lock class";
+                	throw new LockException(emsg,e);
+				}
             } else {
                 try {
                     Thread.sleep(10);
@@ -91,7 +93,7 @@ public class LockManager {
     }
 
     /**
-     * TODO: this implementation does nothing with the "engine" parameter (which is bad)
+     * TODO: this implementation does nothing with the "engine" parameter 
      * @param processInstance
      * @param engine 
      * @throws LockException

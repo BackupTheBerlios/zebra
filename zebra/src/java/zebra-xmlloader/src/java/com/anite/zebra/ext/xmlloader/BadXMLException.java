@@ -24,13 +24,13 @@ import com.anite.zebra.core.exceptions.BaseZebraException;
  * @author Matthew.Norris
  */
 public class BadXMLException extends BaseZebraException {
-	
+
+
 	/**
-	 * 
+	 * @author matt
+	 * Created on 16-Sep-2005
 	 */
-	public BadXMLException() {
-		super();
-	}
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param message
