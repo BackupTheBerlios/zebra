@@ -1,3 +1,9 @@
+/**
+ * @author matt
+ * Created on 16-Sep-2005
+ */
+package com.anite.zebra.core.exceptions;
+
 /*
  * Copyright 2004/2005 Anite - Enforcement & Security
  *    http://www.anite.com/publicsector
@@ -14,49 +20,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.anite.zebra.core.exceptions;
-
-
 /**
- * @author Matthew.Norris
+ * @author matthew.norris
+ * Created on 16-Sep-2005
  */
-public class ConstructException extends BaseZebraException {
+public class ProcessDestructException extends BaseZebraException {
 
 	/**
-	 * 
+	 * @author matt
+	 * Created on 16-Sep-2005
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
-	 */
-	public ConstructException() {
-		super();
-	}
-
-	/**
+	 * @author matt
+	 * Created on 16-Sep-2005
+	 *
 	 * @param message
 	 */
-	public ConstructException(String message) {
+	public ProcessDestructException(String message) {
 		super(message);
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
+	 * @author matt
+	 * Created on 16-Sep-2005
+	 *
 	 * @param message
 	 * @param nestedException
 	 */
-	public ConstructException(
-		String message,
-		Throwable nestedException) {
+	public ProcessDestructException(String message, Throwable nestedException) {
 		super(message, nestedException);
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
+	 * @author matt
+	 * Created on 16-Sep-2005
+	 *
 	 * @param nestedException
 	 */
-	public ConstructException(Throwable nestedException) {
+	public ProcessDestructException(Throwable nestedException) {
 		super(nestedException);
+		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -17,7 +17,7 @@
 
 package com.anite.zebra.core.api;
 
-import com.anite.zebra.core.exceptions.ConstructException;
+import com.anite.zebra.core.exceptions.ProcessConstructException;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
 /**
@@ -36,11 +36,11 @@ public interface IProcessConstruct {
 	 * Put any ProcessInstance initialisation code here.
 	 * 
 	 * @param ipi
-	 * @throws ConstructException
+	 * @throws ProcessConstructException
 	 *
 	 * @author Matthew.Norris
 	 * Created on Aug 21, 2005
 	 */
-	public void processConstruct(IProcessInstance ipi) throws ConstructException;
+	public void processConstruct(IProcessInstance ipi) throws ProcessConstructException;
 	
 }

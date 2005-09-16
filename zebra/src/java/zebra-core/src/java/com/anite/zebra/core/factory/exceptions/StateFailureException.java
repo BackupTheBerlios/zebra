@@ -30,13 +30,6 @@ public class StateFailureException extends BaseZebraException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
-	 */
-	public StateFailureException() {
-		super();
-	}
-
-	/**
 	 * @param message
 	 */
 	public StateFailureException(String message) {

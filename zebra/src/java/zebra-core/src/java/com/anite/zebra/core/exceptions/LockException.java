@@ -26,12 +26,6 @@ public class LockException extends BaseZebraException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/**
-     * 
-     */
-    public LockException() {
-        super();
-    }
     /**
      * @param message
      */

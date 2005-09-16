@@ -43,4 +43,14 @@ public class ClassInstantiationException extends BaseZebraException {
 		super(message, nestedException);
 	}
 
+	/**
+	 * @author matt
+	 * Created on 16-Sep-2005
+	 *
+	 * @param e
+	 */
+	public ClassInstantiationException(Exception e) {
+		super(e);
+	}
+
 }

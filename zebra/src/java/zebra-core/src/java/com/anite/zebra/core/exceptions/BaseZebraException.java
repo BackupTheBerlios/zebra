@@ -30,13 +30,6 @@ public class BaseZebraException extends NestableException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
-	 */
-	public BaseZebraException() {
-		super();
-	}
-
-	/**
 	 * @param message
 	 */
 	public BaseZebraException(String message) {

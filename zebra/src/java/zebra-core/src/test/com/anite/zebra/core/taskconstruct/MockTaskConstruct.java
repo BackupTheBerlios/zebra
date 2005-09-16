@@ -20,7 +20,7 @@ package com.anite.zebra.core.taskconstruct;
 import com.anite.zebra.core.api.ITaskConstruct;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.processdef.ClassExceptionProcess;
-import com.anite.zebra.core.exceptions.ConstructException;
+import com.anite.zebra.core.exceptions.TaskConstructException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
@@ -33,18 +33,18 @@ public class MockTaskConstruct implements ITaskConstruct {
 	 * @see com.anite.zebra.core.api.ITaskConstruct#taskConstruct(com.anite.zebra.core.state.api.ITaskInstance)
 	 */
 	public void taskConstruct(ITaskInstance taskInstance)
-			throws ConstructException {
+			throws TaskConstructException {
 		runCount++;
 		IProcessDefinition pd;
 		try {
 			pd = taskInstance.getProcessInstance().getProcessDef();
 		} catch (Exception e) {
-			throw new ConstructException(e);
+			throw new TaskConstructException(e);
 		}
 		if (pd instanceof ClassExceptionProcess) {
 			ClassExceptionProcess cep = (ClassExceptionProcess) pd;
 			if (cep.failTaskConstruct) {
-				throw new ConstructException("Instructed to FAIL");
+				throw new TaskConstructException("Instructed to FAIL");
 			}
 		}
 	}

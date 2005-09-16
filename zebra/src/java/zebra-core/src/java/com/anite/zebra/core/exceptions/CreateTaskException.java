@@ -29,13 +29,6 @@ public class CreateTaskException extends BaseZebraException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
-	 */
-	public CreateTaskException() {
-		super();
-	}
-
-	/**
 	 * @param message
 	 */
 	public CreateTaskException(String message) {

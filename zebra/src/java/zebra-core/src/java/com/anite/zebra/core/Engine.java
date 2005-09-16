@@ -38,11 +38,16 @@ import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.exceptions.CreateProcessException;
 import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.exceptions.LockException;
+import com.anite.zebra.core.exceptions.ProcessConstructException;
+import com.anite.zebra.core.exceptions.ProcessDestructException;
+import com.anite.zebra.core.exceptions.RunRoutingException;
 import com.anite.zebra.core.exceptions.RunTaskException;
 import com.anite.zebra.core.exceptions.StartProcessException;
+import com.anite.zebra.core.exceptions.TaskConstructException;
 import com.anite.zebra.core.exceptions.TransitionException;
 import com.anite.zebra.core.factory.api.IClassFactory;
 import com.anite.zebra.core.factory.api.IStateFactory;
+import com.anite.zebra.core.factory.exceptions.ClassInstantiationException;
 import com.anite.zebra.core.factory.exceptions.CreateObjectException;
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
 import com.anite.zebra.core.state.api.IFOE;
@@ -95,15 +100,28 @@ public class Engine implements IEngine {
 	 */
 	public void transitionTask(ITaskInstance taskInstance)
 			throws TransitionException {
+		/*
+		 * we need to LOCK the ProcessInstance from changes by other Engine
+		 * instances 
+		 */
+		
+		IProcessInstance currentProcess = taskInstance.getProcessInstance();
+		try {
+            stateFactory.acquireLock(currentProcess,this);
+        } catch (LockException e) {
+            String emsg = "Failed to aquire an exclusive lock on the Process Instance (" + currentProcess + "). Transitioning aborted.";
+            log.error(emsg,e);
+            throw new TransitionException(emsg,e);
+        }
+        
 		Stack taskStack = new Stack();
 		taskStack.push(taskInstance);
-		IProcessInstance currentProcess = taskInstance.getProcessInstance();
 		while (!taskStack.empty()) {
 			// get the task from the Stack
 			ITaskInstance currentTask = (ITaskInstance) taskStack.pop();
 			Map createdTasks;
 			try {
-				createdTasks = transitionTaskFromStack(currentTask);
+				createdTasks = transitionTaskFromStack(currentTask, currentProcess);
 			} catch (Exception e) {
 				String emsg = "Problem encountered transitioning task from Stack";
 				log.error(emsg, e);
@@ -115,8 +133,9 @@ public class Engine implements IEngine {
 				try {
 					td = newTask.getTaskDefinition();
 				} catch (DefinitionNotFoundException e) {
-					String emsg = "Failed to access the Task Definition";
+					String emsg = "FATAL: Failed to access the Task Definition";
 					log.error(emsg, e);
+					// throwing an exception here will leave the process "locked", but that is a valid situation
 					throw new TransitionException(emsg, e);
 				}
 				if (td.isAuto()) {
@@ -140,10 +159,20 @@ public class Engine implements IEngine {
 				}
 			}
 		}
-		if (currentProcess.getTaskInstances().size() == 0) {
-			// mark process complete
-			doProcessDestruct(currentProcess);
-		}
+		try {
+			if (currentProcess.getTaskInstances().size() == 0) {
+				// mark process complete
+				doProcessDestruct(currentProcess);
+			}
+			/*
+			 * release lock on process instance
+			 */
+			stateFactory.releaseLock(currentProcess,this);
+		} catch (Exception e) {
+			String emsg = "FATAL: Couldnt release lock on Process Instance (" + currentProcess + ") after transitioning. Process will be left in an usuable state";
+			log.fatal(emsg,e);
+			throw new TransitionException(emsg,e); 
+		}		
 	}
 	/**
 	 * called when there are no more tasks on a process (ie it is completed)
@@ -152,7 +181,7 @@ public class Engine implements IEngine {
 	 * @throws TransitionException
 	 */
 	private void doProcessDestruct(IProcessInstance ipi)
-			throws TransitionException {
+			throws ProcessDestructException {
 		try {
 			// call destructor class on process
 			if (ipi.getProcessDef().getClassDestruct() != null) {
@@ -172,17 +201,23 @@ public class Engine implements IEngine {
 			String emsg = "Failed to complete process "
 					+ ipi;
 			log.error(emsg, e);
-			throw new TransitionException(emsg, e);
+			throw new ProcessDestructException(emsg, e);
 		}
 	}
 	/**
 	 * @param currentTask
 	 * @return a map containing new TaskInstances created as part of this
 	 *         transition
+	 * @throws TaskConstructException 
+	 * @throws StateFailureException 
+	 * @throws RunTaskException 
+	 * @throws ClassInstantiationException 
+	 * @throws RunRoutingException 
+	 * @throws  
 	 * @throws TransitionException
 	 */
-	private Map transitionTaskFromStack(ITaskInstance currentTask)
-			throws TransitionException, DefinitionNotFoundException {
+	private Map transitionTaskFromStack(ITaskInstance currentTask, IProcessInstance currentProcess)
+			throws DefinitionNotFoundException, TaskConstructException, ClassInstantiationException, RunTaskException, StateFailureException, RunRoutingException {
 		if (log.isInfoEnabled()) {
 			log.info("transitionTask is initialising for TaskInstance "
 					+ currentTask);
@@ -195,7 +230,7 @@ public class Engine implements IEngine {
 				String emsg = "Error during construction of Task "
 						+ currentTask;
 				log.error(emsg, e);
-				throw new TransitionException(emsg, e);
+				throw new TaskConstructException(emsg, e);
 			}
 		} else {
 			runTask(currentTask);
@@ -216,7 +251,9 @@ public class Engine implements IEngine {
 		// make a note of any TaskDef that is SyncLocked by this TaskDef -
 		// SyncLocked tasks can be run once this task has completed
 		ITaskDefinition taskDef = currentTask.getTaskDefinition();
+		
 		List createList = runRouting(taskDef, currentTask);
+		
 		if (createList.size() == 0 && taskDef.getRoutingOut().size() > 0) {
 			// routing exists, but none ran.
 			try {
@@ -226,35 +263,21 @@ public class Engine implements IEngine {
 				t.commit();
 			} catch (Exception e) {
 				log.error(e);
-				throw new TransitionException(e);
+				throw new RunRoutingException(e);
 			}
-			throw new TransitionException("Routing exists for TaskInstance "
+			throw new RunRoutingException("Routing exists for TaskInstance "
 					+ currentTask + " but none ran!");
 		}
-		/*
-		 * we now have a list of tasks to create. Before we start creating them,
-		 * we need to LOCK the ProcessInstance from changes by other Engine
-		 * instances. As this can be a little costly (especially when plugged
-		 * into a DB states provider) there should probably be a config option
-		 * to specify whether multiple engines are in use to either
-		 * enable/disable this behaviour.
-		 */
 		Map createdTasks = new HashMap();
-		IProcessInstance processInstance = currentTask.getProcessInstance();
-		try {
-            stateFactory.acquireLock(processInstance,this);
-        } catch (LockException e) {
-            String emsg = "Failed to aquire an exclusive lock on the Process Instance";
-            log.error(emsg,e);
-            throw new TransitionException(emsg,e);
-        }
+		
 		ITransaction t;
 		try {
 			t = stateFactory.beginTransaction();
 		} catch (Exception e) {
 			String emsg = "Failure to create states transaction before creating new tasks";
 			log.error(emsg, e);
-			throw new TransitionException(emsg, e);
+			// wrap it up in another statefailureexception
+			throw new StateFailureException(emsg, e);
 		}
 		IFOE foeSerial = null;
 		for (Iterator it = createList.iterator(); it.hasNext();) {
@@ -267,7 +290,7 @@ public class Engine implements IEngine {
 					/*
 					 * a parallel routing always creates a new FOE
 					 */
-					foe = createFOE(processInstance);
+					foe = createFOE(currentProcess);
 				} else {
 					/*
 					 * Serial routing always re-uses an existing FOE
@@ -279,7 +302,7 @@ public class Engine implements IEngine {
 							 * combining, so therefore we need to create a new
 							 * FOE for execution to continue down.
 							 */
-							foeSerial = createFOE(processInstance);
+							foeSerial = createFOE(currentProcess);
 						} else {
 							/*
 							 * use the FOE of the current task...
@@ -289,13 +312,12 @@ public class Engine implements IEngine {
 					}
 					foe = foeSerial;
 				}
-				newTaskInstance = createTask(newTaskDef, processInstance, foe);
+				newTaskInstance = createTask(newTaskDef, currentProcess, foe);
 			} catch (Exception e) {
-				// pokemon stylee... catch 'em all
 				String emsg = "Failed to create new task Instance for task definition "
 						+ newTaskDef;
 				log.error(emsg, e);
-				throw new TransitionException(emsg, e);
+				throw new StateFailureException(emsg, e);
 			}
 			/*
 			 * createTask may return an existing task instance in the case of a
@@ -317,7 +339,7 @@ public class Engine implements IEngine {
 		Map syncList = taskSync.getPotentialTaskLocks(taskDef);
 		// iterate over the processInstance's list of tasks, looking for a Sync
 		// Task that is blocked by the current task
-		for (Iterator it = currentTask.getProcessInstance().getTaskInstances()
+		for (Iterator it = currentProcess.getTaskInstances()
 				.iterator(); it.hasNext();) {
 			ITaskInstance checkTask = (ITaskInstance) it.next();
 			if (syncList.containsKey(checkTask.getTaskDefinition().getId())) {
@@ -343,16 +365,8 @@ public class Engine implements IEngine {
 		} catch (Exception e) {
 			String emsg = "Failed to commit new tasks and finalise task completion";
 			log.error(emsg, e);
-			throw new TransitionException(emsg, e);
+			throw new StateFailureException(emsg, e);
 		}
-		try {
-            // unlock processInstance
-            stateFactory.releaseLock(processInstance, this);
-        } catch (LockException e) {
-            String emsg = "Failed to release the exclusive lock on the Process Instance";
-			log.error(emsg, e);
-			throw new TransitionException(emsg, e);
-        }
 		return createdTasks;
 	}
 
@@ -376,7 +390,7 @@ public class Engine implements IEngine {
 	 * @throws TransitionException
 	 */
 	private List runRouting(ITaskDefinition taskDef, ITaskInstance taskInstance)
-			throws TransitionException {
+			throws RunRoutingException {
 		Set routingDefs = taskDef.getRoutingOut();
 		boolean doneSerialRouting = false;
 		List createList = new ArrayList();
@@ -411,8 +425,8 @@ public class Engine implements IEngine {
 						ica = classFactory.getConditionAction(className);
 						addTask = ica.runCondition(rd, taskInstance);
 					} catch (Exception e) {
-						throw new TransitionException(
-								"Failed to run RoutingDef " + rd.getId(), e);
+						throw new RunRoutingException(
+								"Failed to run RoutingDef " + rd, e);
 					}
 				} else {
 					// class not specified, so we assume "true"
@@ -436,10 +450,14 @@ public class Engine implements IEngine {
 	 * runs the specified taskInstance
 	 * 
 	 * @param taskInstance
+	 * @throws TaskConstructException 
+	 * @throws ClassInstantiationException 
+	 * @throws RunTaskException 
+	 * @throws StateFailureException 
 	 * @throws TransitionException
 	 */
 	private void runTask(ITaskInstance taskInstance)
-			throws TransitionException, DefinitionNotFoundException {
+			throws DefinitionNotFoundException, TaskConstructException, ClassInstantiationException, RunTaskException, StateFailureException {
 		if (log.isInfoEnabled()) {
 			log
 					.info("Running TaskInstance "
@@ -477,13 +495,13 @@ public class Engine implements IEngine {
 				String emsg = "Failure to initialise Task "
 						+ taskInstance;
 				log.error(emsg, e);
-				throw new TransitionException(emsg, e);
+				throw new TaskConstructException(emsg, e);
 			}
 		}
 		if (taskInstance.getState() != ITaskInstance.STATE_READY) {
-			throw new TransitionException("Task State is not set to '"
+			throw new TaskConstructException("Task State is not set to '"
 					+ ITaskInstance.STATE_READY
-					+ "' and cannot be transitioned");
+					+ "' after TaskConstructor called and cannot be transitioned further");
 		}
 		String runClass = taskDef.getClassName();
 		// check to see if task has a class associated with it
@@ -502,7 +520,7 @@ public class Engine implements IEngine {
 			} catch (Exception e) {
 				// fail this transistion if we cant instantiate the task action
 				log.error("Failed to instantiate Task Action " + runClass, e);
-				throw new TransitionException(e);
+				throw new ClassInstantiationException(e);
 			}
 			try {
 				// fail this transistion if the task action generates an
@@ -510,7 +528,7 @@ public class Engine implements IEngine {
 				taskClass.runTask(taskInstance);
 			} catch (RunTaskException e) {
 				log.error("Problem running task " + runClass, e);
-				throw new TransitionException("Problem running Task Action "
+				throw new RunTaskException("Problem running Task Action "
 						+ runClass, e);
 			}
 		} else {
@@ -523,7 +541,7 @@ public class Engine implements IEngine {
 			} catch (StateFailureException e) {
 				String emsg = "Failed to set task completion";
 				log.error(emsg, e);
-				throw new TransitionException(emsg, e);
+				throw new StateFailureException(emsg, e);
 			}
 		}
 	}
@@ -551,9 +569,10 @@ public class Engine implements IEngine {
 	/**
 	 * runs the constructor on a Task Instance
 	 * @param iti Task Instance to run constructor class for 
+	 * @throws DefinitionNotFoundException 
 	 * @throws Exception
 	 */
-	private void doTaskConstruct(ITaskInstance iti) throws Exception {
+	private void doTaskConstruct(ITaskInstance iti) throws TaskConstructException, DefinitionNotFoundException {
 	    ITaskDefinition taskDef = iti.getTaskDefinition();
 		if (taskDef.getClassConstruct() == null) {
 			return;
@@ -576,16 +595,17 @@ public class Engine implements IEngine {
 			String emsg = "Failed to run class constructor for task "
 					+ iti;
 			log.error(emsg, e);
-			throw new Exception(emsg, e);
+			throw new TaskConstructException(emsg, e);
 		}
 	}
 	/**
 	 * run constructor for specified process instance
 	 * 
 	 * @param ipi
+	 * @throws DefinitionNotFoundException 
 	 * @throws Exception
 	 */
-	private void doProcessConstruct(IProcessInstance ipi) throws Exception {
+	private void doProcessConstruct(IProcessInstance ipi) throws ProcessConstructException, DefinitionNotFoundException {
 		try {
 			IProcessConstruct ipc = classFactory.getProcessConstruct(
 					ipi.getProcessDef().getClassConstruct());
@@ -595,7 +615,7 @@ public class Engine implements IEngine {
 					+ ipi.getProcessDef().getClassConstruct()
 					+ "\" for process " + ipi;
 			log.error(emsg, e);
-			throw new Exception(emsg, e);
+			throw new ProcessConstructException(emsg, e);
 		}
 	}
 	/**

@@ -17,11 +17,11 @@
 
 package com.anite.zebra.core.exceptions;
 
+
 /**
  * @author Matthew.Norris
  */
-public class TransitionException extends BaseZebraException {
-	
+public class TaskConstructException extends BaseZebraException {
 
 	/**
 	 * 
@@ -31,7 +31,7 @@ public class TransitionException extends BaseZebraException {
 	/**
 	 * @param message
 	 */
-	public TransitionException(String message) {
+	public TaskConstructException(String message) {
 		super(message);
 	}
 
@@ -39,15 +39,17 @@ public class TransitionException extends BaseZebraException {
 	 * @param message
 	 * @param nestedException
 	 */
-	public TransitionException(String message, Throwable nestedException) {
+	public TaskConstructException(
+		String message,
+		Throwable nestedException) {
 		super(message, nestedException);
 	}
 
 	/**
 	 * @param nestedException
 	 */
-	public TransitionException(Throwable nestedException) {
+	public TaskConstructException(Throwable nestedException) {
 		super(nestedException);
 	}
-	
+
 }

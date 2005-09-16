@@ -113,28 +113,32 @@ public interface IStateFactory {
     /**
      * Acquires a lock on the ProcessInstance. A ProcessInstance is locked by an
      * instance of the Zebra Engine during processing of Task Synchronisation.
+     * 
+     * A Process Instance is "locked" immediately when transitioning starts, and
+     * is unlocked at the end of a transition sequence.
+     * 
+     * When an implementing class encounters a Process Instance that is 
+     * already locked it should either:
+     *    a) go into a "wait" loop
+     *    b) throw a LockException
+     * 
      * Whilst a ProcessInstance is locked, no modifications should be made to
      * either it's properties, or any of it's TaskInstances (including adding
      * any new TaskInstances).
      * 
-     * If the ProcessInstance is locked by another engine process, acquireLock 
-     * should wait for the lock to be released.
-     * 
-     * Therefore it's important to know which Engine instance is making this call
+     * Therefore it's useful to know which Engine instance is making this call
      *  to any given state factory.
      * 
      * @return
      * @param processInstance
-     * @param engine
      * @throws LockException
      */
     public void acquireLock(IProcessInstance processInstance, IEngine engine) throws LockException;
 
     /**
      * Releases the exclusive lock on a ProcessInstance.
-     * Again it's important to know which Engine instance is making this call.
+     * Again it's useful to know which Engine instance is making this call.
      * @param processInstance
-     * @param engine
      * @throws LockException
      */
     public void releaseLock(IProcessInstance processInstance, IEngine engine) throws LockException;

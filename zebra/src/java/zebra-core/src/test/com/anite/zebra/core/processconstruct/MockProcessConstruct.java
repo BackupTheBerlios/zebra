@@ -20,7 +20,7 @@ package com.anite.zebra.core.processconstruct;
 import com.anite.zebra.core.api.IProcessConstruct;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.processdef.ClassExceptionProcess;
-import com.anite.zebra.core.exceptions.ConstructException;
+import com.anite.zebra.core.exceptions.ProcessConstructException;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
 /**
@@ -34,18 +34,18 @@ public class MockProcessConstruct implements IProcessConstruct {
 	 * @see com.anite.zebra.core.api.IProcessConstruct#processConstruct(com.anite.zebra.core.state.api.IProcessInstance)
 	 */
 	public void processConstruct(IProcessInstance ipi)
-			throws ConstructException {
+			throws ProcessConstructException {
 		runCount++;
 		IProcessDefinition pd;
 		try {
 			pd = ipi.getProcessDef();
 		} catch (Exception e) {
-			throw new ConstructException(e);
+			throw new ProcessConstructException(e);
 		}
 		if (pd instanceof ClassExceptionProcess) {
 			ClassExceptionProcess cep = (ClassExceptionProcess) pd;
 			if (cep.failProcessConstruct) {
-				throw new ConstructException("Instructed to FAIL");
+				throw new ProcessConstructException("Instructed to FAIL");
 			}
 		}
 

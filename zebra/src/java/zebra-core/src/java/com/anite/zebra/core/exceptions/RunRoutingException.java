@@ -28,13 +28,6 @@ public class RunRoutingException extends BaseZebraException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
-	 */
-	public RunRoutingException() {
-		super();
-	}
-
-	/**
 	 * @param message
 	 */
 	public RunRoutingException(String message) {

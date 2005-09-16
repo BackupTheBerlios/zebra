@@ -17,7 +17,7 @@
 
 package com.anite.zebra.core.api;
 
-import com.anite.zebra.core.exceptions.ConstructException;
+import com.anite.zebra.core.exceptions.TaskConstructException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
@@ -33,11 +33,10 @@ public interface ITaskConstruct {
 	 * Called by the Engine before a TaskInstance is started.
 	 * 
 	 * @param taskInstance
-	 * @throws ConstructException
-	 *
 	 * @author Matthew.Norris
 	 * Created on Aug 21, 2005
+	 * @throws TaskConstructException
 	 */
-	public void taskConstruct(ITaskInstance taskInstance) throws ConstructException;
+	public void taskConstruct(ITaskInstance taskInstance) throws TaskConstructException;
 	
 }

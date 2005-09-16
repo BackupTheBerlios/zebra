@@ -29,13 +29,6 @@ public class CreateProcessException extends BaseZebraException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
-	 */
-	public CreateProcessException() {
-		super();
-	}
-
-	/**
 	 * @param message
 	 */
 	public CreateProcessException(String message) {
