@@ -103,13 +103,13 @@
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-core</artifactId>
-            <version>0.5-dev</version>
+            <version>0.5.1-dev</version>
             <properties/>
         </dependency>
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-defs</artifactId>
-            <version>0.5-dev</version>
+            <version>0.5.1-dev</version>
             <properties/>
         </dependency>
         <dependency>
