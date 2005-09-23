@@ -5,7 +5,7 @@
     <artifactId>zebra-state</artifactId>
     <name>Zebra State</name>
     <groupId>zebra</groupId>
-    <currentVersion>0.5-dev</currentVersion>
+    <currentVersion>0.5.1-dev</currentVersion>
     <organization>
         <name>Anite</name>
         <url>http://www.aniteps.com</url>

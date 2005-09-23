@@ -6,7 +6,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-xmlloader</artifactId>
     <name>Zebra XML Loader</name>
-    <currentVersion>0.5-dev</currentVersion>
+    <currentVersion>0.5.1-dev</currentVersion>
     <organization>
         <name>Anite</name>
         <url>http://www.aniteps.com</url>
