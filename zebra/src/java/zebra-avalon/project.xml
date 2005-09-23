@@ -6,7 +6,7 @@
 	<groupId>zebra</groupId>
 	<id>zebra-avalon</id>
 	<name>Zebra Process Engine</name>
-	<currentVersion>0.5-dev</currentVersion>
+	<currentVersion>0.5.1-dev</currentVersion>
 	<inceptionYear>2004</inceptionYear>
 	<logo/>
 	<organization>
@@ -145,22 +145,17 @@
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-core</artifactId>
-			<version>0.5-dev</version>
+			<version>0.5.1-dev</version>
 		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-defs</artifactId>
-			<version>0.5-dev</version>
+			<version>0.5.1-dev</version>
 		</dependency>
 		<dependency>
 			<groupId>zebra</groupId>
 			<artifactId>zebra-xmlloader</artifactId>
-			<version>0.5-dev</version>
-		</dependency>
-		<dependency>
-			<groupId>zebra</groupId>
-			<artifactId>zebra-state</artifactId>
-			<version>0.5-dev</version>
+			<version>0.5.1-dev</version>
 		</dependency>
 		<!-- for testing -->
 		<dependency>
