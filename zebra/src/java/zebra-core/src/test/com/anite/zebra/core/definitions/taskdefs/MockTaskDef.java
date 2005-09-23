@@ -30,16 +30,16 @@ import com.anite.zebra.core.definitions.api.ITaskDefinition;
 public class MockTaskDef implements ITaskDefinition {
 
 	private static long idCounter = 1;
-	private Long id;
-	private boolean auto;
-	private String className;
-	private boolean synchronised;
+	private Long id = null;
+	private boolean auto = false;
+	private String className = null;
+	private boolean synchronised = false;
 	private Set routingOut = new HashSet();
 	private Set routingIn = new HashSet();
-	private String classConstruct;
-	private String classDestruct;
-	private String name;
-	private MockProcessDef processDef;
+	private String classConstruct = null;
+	private String classDestruct = null;
+	private String name = null;
+	private MockProcessDef processDef = null;
 	
 	public MockTaskDef(MockProcessDef pd, String taskName) {
 		this.processDef = pd;

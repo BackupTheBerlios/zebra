@@ -25,6 +25,28 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
  * @author Matthew.Norris
  */
 public interface ITaskInstance extends IStateObject {
+	/**
+	 * ORD  WHEN				STATE
+	 *  1	AFTER CREATION		STATE_AWAITINGSYNC
+	 *	2	AFTER CREATION		STATE_AWAITINGINITIALISATION
+	 *	3	DURING INIT			STATE_INITIALISING
+	 *	4	AFTER INIT			STATE_READY
+	 *	5	DURING TASKACTION	STATE_RUNNING
+	 *	6	AFTER TASKACTION	STATE_ERRORROUTING
+	 *	7	AFTER TASKACTION	STATE_AWAITINGCOMPLETE
+	 *	8	DURING DESTRUCT		STATE_COMPLETING
+	 *	9	AFTER DESTRUCT		STATE_COMPLETE
+	 *
+	 *	STATE_AWAITINGSYNC occurs when a SYNC Task is
+	 *	 first created. When the SYNC task can be run
+	 *   (i.e. nothing is blocking it) it moves to 
+	 *   STATE_AWAITINGINITALISATION (or STATE_READY 
+	 *   if there is no CONSTRUCTOR specified).
+	 *   
+	 *  STATE_ERR_ROUTING only occurs if the engine 
+	 *   catches an Exception after the task has been 
+	 *   transitioned, when routing is being run.
+	 */
 	public static final long STATE_RUNNING = 1;
 	public static final long STATE_COMPLETE = 2;
 	public static final long STATE_READY = 3;
@@ -34,6 +56,8 @@ public interface ITaskInstance extends IStateObject {
 	public static final long STATE_AWAITINGINITIALISATION = 7;
 	public static final long STATE_AWAITINGCOMPLETE = 8;
 	public static final long STATE_AWAITINGSYNC = 9;
+	
+	
 	
 	/**
 	 * ProcessInstance this TaskInstance belongs to

@@ -15,6 +15,8 @@ package com.anite.zebra.core.state;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.Map;
+
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.state.api.IFOE;
@@ -32,11 +34,12 @@ public class MockTaskInstance implements ITaskInstance {
 	public static final long STATE_DELETED = -100;
 	private static long taskInstanceCounter = 0; 
 	private Long taskInstanceId = null;
-	private IProcessInstance processInstance;
+	private MockProcessInstance processInstance;
 	private IFOE foe;
 	private ITaskDefinition taskDef;
 	private long state;
 	private String conditionAction;
+	
 	/**
 	 * 
 	 */
@@ -45,7 +48,7 @@ public class MockTaskInstance implements ITaskInstance {
 	}
 	
 	public MockTaskInstance(ITaskDefinition taskDef,
-			IProcessInstance processInstance, IFOE foe){		
+			MockProcessInstance processInstance, IFOE foe){		
 		this();
 		this.taskDef = taskDef;
 		this.processInstance = processInstance;
@@ -112,4 +115,18 @@ public class MockTaskInstance implements ITaskInstance {
 	public void setConditionAction(String conditionAction) {
 		this.conditionAction = conditionAction;
 	}
+
+	/**
+	 * 
+	 * General junkpile for any running data for this TASK DEF within the PROCESS INSTANCE.
+	 * 
+	 * @return Returns the properties.
+	 *
+	 * @author Matthew.Norris
+	 * Created on 22-Sep-2005
+	 */
+	public Map getPropertySet() {
+		return processInstance.getPropertySet(this);
+	}
+
 }

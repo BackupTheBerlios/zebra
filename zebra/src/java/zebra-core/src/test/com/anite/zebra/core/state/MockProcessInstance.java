@@ -15,8 +15,10 @@ package com.anite.zebra.core.state;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
@@ -38,6 +40,8 @@ public class MockProcessInstance implements IProcessInstance{
 	private IProcessDefinition processDef = null;
 	private Set taskInstances = new HashSet();	
 	private long state;
+	private boolean locked = false;
+	private Map propertySets = new HashMap();
 	
 	private MockProcessInstance(){
 		long temp = processInstanceCounter.longValue();		
@@ -138,5 +142,41 @@ public class MockProcessInstance implements IProcessInstance{
 	 */
 	public String toString() {
 		return "MOCK-PI-ID "+ this.processInstanceId + " [" + this.processDef + "]";
+	}
+
+	/**
+	 * @return Returns the locked.
+	 *
+	 * @author Matthew.Norris
+	 * Created on 22-Sep-2005
+	 */
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * @param locked The locked to set.
+	 *
+	 * @author Matthew.Norris
+	 * Created on 22-Sep-2005
+	 */
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	/**
+	 * @param instance
+	 * @return
+	 *
+	 * @author Matthew.Norris
+	 * Created on 22-Sep-2005
+	 */
+	public Map getPropertySet(MockTaskInstance instance) {
+		if (this.propertySets.containsKey(instance)) {
+			return (Map) this.propertySets.get(instance);
+		}		
+		Map propertySet = new HashMap();
+		this.propertySets.put(instance,propertySet);
+		return propertySet;
 	}
 }

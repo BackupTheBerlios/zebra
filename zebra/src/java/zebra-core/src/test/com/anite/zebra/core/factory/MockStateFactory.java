@@ -103,7 +103,7 @@ public class MockStateFactory implements IStateFactory {
 	public ITaskInstance createTaskInstance(ITaskDefinition taskDef,
 			IProcessInstance processInstance, IFOE foe)
 			throws CreateObjectException {
-		ITaskInstance taskInstance =  new MockTaskInstance(taskDef,processInstance,foe);
+		ITaskInstance taskInstance =  new MockTaskInstance(taskDef,(MockProcessInstance) processInstance,foe);
 		processInstance.getTaskInstances().add(taskInstance);
 		audit.add(taskInstance);
 		return taskInstance;
@@ -117,18 +117,31 @@ public class MockStateFactory implements IStateFactory {
 		return new MockFOE(processInstance);
 	}
 
-    /* 
-     * Does nothing!
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#acquireLock(com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.api.IEngine)
      */
     public void acquireLock(IProcessInstance processInstance, IEngine engine) throws LockException {
-        
+    	// quick and dirty locking mechanism
+    	MockProcessInstance pi = (MockProcessInstance) processInstance;
+    	while (pi.isLocked()) {
+    		try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				throw new LockException("Thread sleep whilst waiting for lock interrupted!");
+			}
+    	}
+    	pi.setLocked(true);
     }
 
-    /* 
-     * Does nothing
+    /* (non-Javadoc)
+     * @see com.anite.zebra.core.factory.api.IStateFactory#releaseLock(com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.api.IEngine)
      */
     public void releaseLock(IProcessInstance processInstance, IEngine engine) throws LockException {
-        
+    	MockProcessInstance pi = (MockProcessInstance) processInstance;
+    	if (!pi.isLocked()) {
+    		throw new LockException("Process isn't marked as Locked!");
+    	}
+    	pi.setLocked(false);
     }
     
     public Set getAuditTrail() {
@@ -139,6 +152,24 @@ public class MockStateFactory implements IStateFactory {
     	this.audit = new HashSet();
     }
     
+    /**
+     * 
+     * allows you to specific a Set for the audittrail to use. 
+     * useful if you have multiple instances of the factory pointing at 
+     * a single data store (simulates multiple state factories pointing at 
+     * the same database) 
+     * 
+     * @param auditTrail
+     *
+     * @author Matthew.Norris
+     * Created on 22-Sep-2005
+     */
+    public void setAuditTrail(Set auditTrail) {
+    	if (auditTrail==null) {
+    		throw new RuntimeException("Cannot set audit trail to NULL");
+    	}
+    	this.audit = auditTrail;
+    }
     /**
      * returns a count of the number of instances of a definition (process or task) exists
      * in the audit trail

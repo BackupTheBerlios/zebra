@@ -138,9 +138,11 @@ public class Engine implements IEngine {
 					// throwing an exception here will leave the process "locked", but that is a valid situation
 					throw new TransitionException(emsg, e);
 				}
-				if (td.isAuto()) {
+				if (td.isAuto()||td.isSynchronised()) {
 					/*
-					 * is an Auto task, so add to the stack for processing check
+					 * is an Auto task, so add to the stack for processing.
+					 * Also treat 
+					 * check,
 					 * to see if task is present in stack before adding it
 					 */
 					if (!taskStack.contains(newTask)) {
@@ -222,28 +224,29 @@ public class Engine implements IEngine {
 			log.info("transitionTask is initialising for TaskInstance "
 					+ currentTask);
 		}
-		if (currentTask.getState() == ITaskInstance.STATE_INITIALISING) {
-			// run the constructor
-			try {
-				doTaskConstruct(currentTask);
-			} catch (Exception e) {
-				String emsg = "Error during construction of Task "
-						+ currentTask;
-				log.error(emsg, e);
-				throw new TaskConstructException(emsg, e);
-			}
-		} else {
-			runTask(currentTask);
-		}
+//		// check to see if task has been initialised yet
+//		if (currentTask.getState() == ITaskInstance.STATE_AWAITINGINITIALISATION) {
+//			// run the constructor
+//			try {
+//				doTaskConstruct(currentTask);
+//			} catch (Exception e) {
+//				String emsg = "Error during construction of Task "
+//						+ currentTask;
+//				log.error(emsg, e);
+//				throw new TaskConstructException(emsg, e);
+//			}
+//		}
+		
+		runTask(currentTask);
+		
 		// check the state of the task now it has been run
 		if (currentTask.getState() != ITaskInstance.STATE_AWAITINGCOMPLETE) {
 			// task has some state other than "completed" so exit
 			if (log.isInfoEnabled()) {
 				log
 						.info("transitionTask - task will not be transitioned as it has a state of "
-								+ currentTask.getState()
-								+ " - GUID "
-								+ currentTask.getTaskInstanceId());
+								+ friendlyState(currentTask)
+								+ " / " + currentTask);
 			}
 			return new HashMap();
 		}
@@ -465,14 +468,14 @@ public class Engine implements IEngine {
 		}
 		if (taskInstance.getState() == ITaskInstance.STATE_AWAITINGCOMPLETE) {
 			if (log.isInfoEnabled()) {
-				log.info("Task is marked as \""
-						+ ITaskInstance.STATE_AWAITINGCOMPLETE
+				log.info("Task is marked as "
+						+ friendlyState(taskInstance)
 						+ "\" so no further transitions needed");
 			}
 			return;
 		}
 		ITaskDefinition taskDef = taskInstance.getTaskDefinition();
-		if (taskDef.isSynchronised()) {
+		if (taskDef.isSynchronised() && taskInstance.getState()==ITaskInstance.STATE_AWAITINGSYNC) {
 			// check for blocks
 			if (taskSync.isTaskBlocked(taskInstance)) {
 				if (log.isInfoEnabled()) {
@@ -481,12 +484,53 @@ public class Engine implements IEngine {
 				}
 				return;
 			}
-			// task not locked, so set the state to "ready"
-			if (log.isInfoEnabled()) {
-				log.info("Task " + taskInstance
-						+ " is NOT blocked and will be run");
+			// task not locked, so set the state to "ready" or "awaiting initialisation
+			// set this optimally - no point setting the state to awaiting init if we never call it
+			long newState;
+			if (taskDef.getClassConstruct() != null) {
+				if (log.isInfoEnabled()) {
+					log.info("SYNC unblocked: running starting constructor on " + taskInstance);
+				}
+				newState = ITaskInstance.STATE_AWAITINGINITIALISATION;
+			} else {
+				if (log.isInfoEnabled()) {
+					log.info("SYNC unblocked: Shortcutting to STATE_READY as task has no Constructor: " + taskInstance);
+				}
+				newState = ITaskInstance.STATE_READY;
 			}
-			taskInstance.setState(ITaskInstance.STATE_READY);
+			try {
+				ITransaction t = stateFactory.beginTransaction();
+				taskInstance.setState(newState);
+				stateFactory.saveObject(taskInstance);
+				t.commit();
+			} catch (Exception e) {
+				// fail this transistion if we cant set the status
+				String emsg = "Failed to prepare the Sync task to be run: " + taskInstance;
+				log.error(emsg, e);
+				throw new StateFailureException(emsg,e);
+			}
+			
+			
+			if (taskInstance.getState() == ITaskInstance.STATE_AWAITINGINITIALISATION) {
+				try {
+					doTaskConstruct(taskInstance);
+				} catch (Exception e) {
+					String emsg = "Failure to initialise Task "
+							+ taskInstance;
+					log.error(emsg, e);
+					throw new TaskConstructException(emsg, e);
+				}
+			}
+			/*
+			 * check to see if the task is an MANUAL task.
+			 * If it is, drop out at this stage - we've done all we can
+			 */
+			if (!taskDef.isAuto()) {
+				if (log.isInfoEnabled()) {
+					log.info("SYNC unblocked: is a MANUAL task, doing nothing more " + taskInstance);
+				}
+				return;
+			}
 		}
 		if (taskInstance.getState() == ITaskInstance.STATE_AWAITINGINITIALISATION) {
 			try {
@@ -519,17 +563,19 @@ public class Engine implements IEngine {
 				taskClass = classFactory.getTaskAction(runClass);
 			} catch (Exception e) {
 				// fail this transistion if we cant instantiate the task action
-				log.error("Failed to instantiate Task Action " + runClass, e);
-				throw new ClassInstantiationException(e);
+				String emsg = "Failed to instantiate Task Action " + runClass;
+				log.error(emsg, e);
+				throw new ClassInstantiationException(emsg,e);
 			}
 			try {
 				// fail this transistion if the task action generates an
 				// exception
 				taskClass.runTask(taskInstance);
 			} catch (RunTaskException e) {
-				log.error("Problem running task " + runClass, e);
-				throw new RunTaskException("Problem running Task Action "
-						+ runClass, e);
+				String emsg = "Problem running Task Action "
+					+ runClass;
+				log.error(emsg, e);
+				throw new RunTaskException(emsg, e);
 			}
 		} else {
 			// arbitrarily set the status of the task to "complete"
@@ -574,10 +620,19 @@ public class Engine implements IEngine {
 	 */
 	private void doTaskConstruct(ITaskInstance iti) throws TaskConstructException, DefinitionNotFoundException {
 	    ITaskDefinition taskDef = iti.getTaskDefinition();
-		if (taskDef.getClassConstruct() == null) {
+		if (log.isInfoEnabled()) {
+			log.info("Attempting to run Task Constructor for task " + iti);
+		}
+	    if (taskDef.getClassConstruct() == null) {
+			if (log.isInfoEnabled()) {
+				log.info("No constructor found for Task " + iti);
+			}
 			return;
 		}
 		if (iti.getState() != ITaskInstance.STATE_AWAITINGINITIALISATION) {
+			if (log.isInfoEnabled()) {
+				log.info("Skipping initialisation as Task status is " + friendlyState(iti)+ " for Task " + iti);
+			}
 			return;
 		}
 		try {
@@ -596,6 +651,9 @@ public class Engine implements IEngine {
 					+ iti;
 			log.error(emsg, e);
 			throw new TaskConstructException(emsg, e);
+		}
+		if (log.isInfoEnabled()) {
+			log.info("Task Constructor completed for task " + iti);
 		}
 	}
 	/**
@@ -666,12 +724,21 @@ public class Engine implements IEngine {
 		}
 		ITaskInstance task = stateFactory.createTaskInstance(td, pi, foe);
 		// check to see if task has an initialiser - if not, ensure status is
-		// set optimally
+		// set optimally to not waste processor clicks
 		if (td.isSynchronised()) {
+			if (log.isInfoEnabled()) {
+				log.info("Sync Task Detected: " + task);
+			}
 			task.setState(ITaskInstance.STATE_AWAITINGSYNC);
 		} else if (td.getClassConstruct() != null) {
+			if (log.isInfoEnabled()) {
+				log.info("Task Constructor Detected: " + task);
+			}
 			task.setState(ITaskInstance.STATE_AWAITINGINITIALISATION);
 		} else {
+			if (log.isInfoEnabled()) {
+				log.info("Shortcutting to READY as Task without SYNC or CONSTRUCTOR detected: " + task);
+			}
 			task.setState(ITaskInstance.STATE_READY);
 		}
 		stateFactory.saveObject(task);
@@ -728,5 +795,40 @@ public class Engine implements IEngine {
 			throw new StartProcessException(emsg, e);
 		}
 	}
+	
+	/**
+	 * 
+	 * routine only used when logging is enabled to provide a "friendly" 
+	 * description for the engine states
+	 * @param ti
+	 * @return
+	 *
+	 * @author Matthew.Norris
+	 * Created on Sep 22, 2005
+	 */
+	private Object friendlyState(ITaskInstance ti) {
+		long state = ti.getState();
+		if (state==ITaskInstance.STATE_AWAITINGCOMPLETE) {
+			return "Awaiting Complete";
+		} else if (state==ITaskInstance.STATE_AWAITINGINITIALISATION) {
+			return "Awaiting Initialisation";
+		} else if (state==ITaskInstance.STATE_AWAITINGSYNC) {
+			return "Awaiting Sync";
+		} else if (state==ITaskInstance.STATE_COMPLETE) {
+			return "Complete";
+		} else if (state==ITaskInstance.STATE_COMPLETING) {
+			return "Completing";
+		} else if (state==ITaskInstance.STATE_ERRORROUTING) {
+			return "Error Routing";
+		} else if (state==ITaskInstance.STATE_INITIALISING) {
+			return "Initialising";
+		} else if (state==ITaskInstance.STATE_READY) {
+			return "Ready";
+		} else if (state==ITaskInstance.STATE_RUNNING) {
+			return "Running";
+		} else {
+			return new Long(state);
+		}
+}
 
 }
