@@ -19,21 +19,26 @@ import com.anite.zebra.core.state.api.IFOE;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
 /**
+ * Mock FOE class
+ * 
+ * @author Matthew Norris
  * @author Eric Pugh
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class MockFOE implements IFOE {
-
+	private static long counter = 0;
+	private Long foeID = null;
 	private IProcessInstance processInstance;
-	private MockFOE(){
-		
-	}
 	/**
+	 * default constructor; must supply a valid process instance
 	 * 
+	 * @param processInstance
+	 *
+	 * @author Matthew.Norris
+	 * Created on Sep 25, 2005
 	 */
 	public MockFOE(IProcessInstance processInstance) {
+		this.foeID = new Long(counter++);
 		this.processInstance = processInstance;
 	}
 
@@ -42,6 +47,33 @@ public class MockFOE implements IFOE {
 	 */
 	public IProcessInstance getProcessInstance() {
 		return processInstance;
+	}
+
+	/**
+	 * @return Returns the foeID.
+	 *
+	 * @author Matthew.Norris
+	 * Created on Sep 25, 2005
+	 */
+	public Long getFoeID() {
+		return foeID;
+	}
+
+	/**
+	 * @return Returns a counter representing the total 
+	 * 		   number of these objects constructed.
+	 * @author Matthew.Norris
+	 * Created on Sep 25, 2005
+	 */
+	public static long getCounter() {
+		return counter;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return "MOCKFOE - " + foeID;
 	}
 
 }

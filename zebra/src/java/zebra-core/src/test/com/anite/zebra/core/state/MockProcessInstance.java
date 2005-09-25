@@ -27,31 +27,35 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
 /**
- * @author Eric Pugh
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author Matthew Norris
  */
 public class MockProcessInstance implements IProcessInstance{
 	
+	
+	/**
+	 * constant used by the MOCKSTATEFACTORY
+	 * to indicate this process instance has been DELETED
+	 */
 	public static final long STATE_DELETED = -100;
-	private static Long processInstanceCounter = new Long(1); 
+	/**
+	 * used to generate a unique ID for each MockProcessInstance
+	 * class created. See constructor.
+	 */
+	private static long counter=1;
 	private Long processInstanceId = null;
 	private IProcessDefinition processDef = null;
+	
+	/**
+	 * set of task instances associated with this process instance
+	 */
 	private Set taskInstances = new HashSet();	
 	private long state;
 	private boolean locked = false;
-	private Map propertySets = new HashMap();
+	private Map taskPropertySets = new HashMap();
 	
-	private MockProcessInstance(){
-		long temp = processInstanceCounter.longValue();		
-		processInstanceId = new Long(temp);
-		temp++;
-		processInstanceCounter = new Long(temp);
-	}
 	
 	public MockProcessInstance(IProcessDefinition processDef){
-		this();
+		this.processInstanceId = new Long(counter++);
 		this.processDef = processDef;		
 	}	
 	/**
@@ -99,6 +103,19 @@ public class MockProcessInstance implements IProcessInstance{
 
 	}
 
+	/**
+	 * returns a count of the task instances in this process
+	 * instance that match the task definition and task instance state
+	 * specified
+	 * 
+	 * @param taskDef
+	 * @param expectedState
+	 * @return
+	 * @throws DefinitionNotFoundException
+	 *
+	 * @author Matthew.Norris
+	 * Created on Sep 25, 2005
+	 */
 	public int countInstances(MockTaskDef taskDef, long expectedState) throws DefinitionNotFoundException {
     	int x = 0;
     	for (Iterator it = taskInstances.iterator();it.hasNext();) {
@@ -116,6 +133,11 @@ public class MockProcessInstance implements IProcessInstance{
     }
 
 	/**
+	 * returns a task instance on this process
+	 * that is of the give task definition.
+	 * 
+	 * If more than one exists, the first found is returned
+	 * 
 	 * @author Matthew Norris
 	 * Created on 19-Aug-2005
 	 *
@@ -145,7 +167,7 @@ public class MockProcessInstance implements IProcessInstance{
 	}
 
 	/**
-	 * @return Returns the locked.
+	 * @return Returns the locked status of this process instance.
 	 *
 	 * @author Matthew.Norris
 	 * Created on 22-Sep-2005
@@ -155,7 +177,7 @@ public class MockProcessInstance implements IProcessInstance{
 	}
 
 	/**
-	 * @param locked The locked to set.
+	 * @param locked TRUE to lock this process instance
 	 *
 	 * @author Matthew.Norris
 	 * Created on 22-Sep-2005
@@ -171,12 +193,12 @@ public class MockProcessInstance implements IProcessInstance{
 	 * @author Matthew.Norris
 	 * Created on 22-Sep-2005
 	 */
-	public Map getPropertySet(MockTaskInstance instance) {
-		if (this.propertySets.containsKey(instance)) {
-			return (Map) this.propertySets.get(instance);
+	public Map getTaskPropertySet(MockTaskInstance instance) {
+		if (this.taskPropertySets.containsKey(instance)) {
+			return (Map) this.taskPropertySets.get(instance);
 		}		
 		Map propertySet = new HashMap();
-		this.propertySets.put(instance,propertySet);
+		this.taskPropertySets.put(instance,propertySet);
 		return propertySet;
 	}
 }

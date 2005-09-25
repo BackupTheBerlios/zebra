@@ -33,6 +33,7 @@ import com.anite.zebra.core.factory.MockStateFactory;
 import com.anite.zebra.core.state.MockProcessInstance;
 import com.anite.zebra.core.state.MockTaskInstance;
 import com.anite.zebra.core.state.api.IProcessInstance;
+import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
  *
@@ -45,6 +46,18 @@ import com.anite.zebra.core.state.api.IProcessInstance;
 public class ComplexSplitJoinTest extends TestCase {
 
 	private static Log log = LogFactory.getLog(ComplexSplitJoinTest.class);
+	
+	/*
+	 * the following fields are needed to allow the various tests
+	 * to check the FOE of tasks that have been run#
+	 * 
+	 * they are populated from doPart1
+	 */
+	private MockTaskInstance tiStart;
+	private MockTaskInstance tiSplit;
+	private MockTaskInstance tiParallel_1;
+	private MockTaskInstance tiParallel_2;
+	private MockTaskInstance tiJoin;
 	
 	public void testAlternateEnding() throws Exception {
 		
@@ -61,11 +74,10 @@ public class ComplexSplitJoinTest extends TestCase {
 		/*
 		 * now transition the workflow toward the alternate ending
 		 */
-		MockTaskInstance ti = processInstance.findTask(pd.tdParallel_2,MockTaskInstance.STATE_READY);
-		assertNotNull("Failed to find the task to run",ti);
+		tiParallel_2.setConditionAction(ComplexProcessDef.GOTO + pd.tdAlternateEnding.getName());
+		engine.transitionTask(tiParallel_2);
 		
-		ti.setConditionAction(ComplexProcessDef.GOTO + pd.tdAlternateEnding.getName());
-		engine.transitionTask(ti);
+		engine.transitionTask(tiJoin);
 		
 		/*
 		 * check to see if we have the expected number of object in the audit trail
@@ -77,8 +89,20 @@ public class ComplexSplitJoinTest extends TestCase {
 		 * 1 x tdParallel-2 (complete)
 		 * 1 x tdAlternateEnding (ready)
 		 * 1 x tdEnd (ready)
+		 * 4 x FOE
+		 *  - 1 x up to Split
+		 *  - 1 x tdParallel-1
+		 *  - 1 x tdParallel-2, tdAlernateEnding
+		 *  - 1 x tdJoin,tdEnd
 		 */
-		assertEquals(8,msf.getAuditTrail().size());
+		assertEquals(1,msf.getFOEs(processInstance,pd.tdStart).size());
+		assertEquals(1,msf.getFOEs(processInstance,pd.tdParallel_1).size());
+		assertEquals(1,msf.getFOEs(processInstance,pd.tdParallel_2).size());
+		assertEquals(1,msf.getFOEs(processInstance,pd.tdAlternateEnding).size());
+		assertEquals(1,msf.getFOEs(processInstance,pd.tdJoin).size());
+		assertEquals(1,msf.getFOEs(processInstance,pd.tdEnd).size());
+		assertEquals(4,msf.countFOE(processInstance));
+		
 		assertEquals(1,msf.countInstances(pd));
 		assertEquals(1,msf.countInstances(pd.tdStart, MockTaskInstance.STATE_DELETED));
 		assertEquals(1,msf.countInstances(pd.tdSplit, MockTaskInstance.STATE_DELETED));
@@ -102,12 +126,16 @@ public class ComplexSplitJoinTest extends TestCase {
 		// first transition test - runs the workflow up to the point where it hits the JOIN
 		doPart1(pd, engine, processInstance);		
 		
-		MockTaskInstance ti = processInstance.findTask(pd.tdParallel_2,MockTaskInstance.STATE_READY);
-		assertNotNull("Failed to find the task to run",ti);
+		tiParallel_2.setConditionAction(ComplexProcessDef.GOTO + pd.tdSplit.getName());
+		engine.transitionTask(tiParallel_2);
 		
-		ti.setConditionAction(ComplexProcessDef.GOTO + pd.tdSplit.getName());
-		engine.transitionTask(ti);
-		
+		ITaskInstance tiSplit_b = processInstance.findTask(pd.tdSplit,MockTaskInstance.STATE_READY);
+		assertNotNull("Failed to find the task to run",tiSplit_b);
+		engine.transitionTask(tiSplit_b);
+
+		ITaskInstance tiParallel_1b = processInstance.findTask(pd.tdParallel_1,MockTaskInstance.STATE_READY);
+		assertNotNull("Failed to find the task to run",tiParallel_1b);
+		engine.transitionTask(tiParallel_1b);
 		/*
 		 * check to see if we have the expected number of object in the audit trail
 		 * 1 x process
@@ -116,8 +144,13 @@ public class ComplexSplitJoinTest extends TestCase {
 		 * 1 x tdJoin (awaiting sync)
 		 * 2 x tdParallel-1 (complete)
 		 * 2 x tdParallel-2 (1 x complete, 1 x ready)
+		 * 
+		 * 5 x FOE
+		 *  - 1 x start
+		 *  - 1 x split
+		 *  - 1 x split
 		 */
-		assertEquals(9,msf.getAuditTrail().size());
+		
 		assertEquals(1,msf.countInstances(pd));
 		assertEquals(1,msf.countInstances(pd.tdStart, MockTaskInstance.STATE_DELETED));
 		assertEquals(2,msf.countInstances(pd.tdSplit, MockTaskInstance.STATE_DELETED));
@@ -125,6 +158,22 @@ public class ComplexSplitJoinTest extends TestCase {
 		assertEquals(2,msf.countInstances(pd.tdParallel_1, MockTaskInstance.STATE_DELETED));
 		assertEquals(1,msf.countInstances(pd.tdParallel_2, MockTaskInstance.STATE_DELETED));
 		assertEquals(1,msf.countInstances(pd.tdParallel_2, MockTaskInstance.STATE_READY));
+		
+		MockTaskInstance tiParallel_2b = processInstance.findTask(pd.tdParallel_2,ITaskInstance.STATE_READY);
+		
+		assertNotSame(tiParallel_1b.getFOE(),tiSplit.getFOE());
+		
+		assertNotSame(tiParallel_2b.getFOE(),tiSplit.getFOE());
+		assertNotSame(tiParallel_2b.getFOE(),tiSplit_b.getFOE());
+		
+		assertNotSame(tiParallel_1.getFOE(),tiParallel_2b.getFOE());
+		assertNotSame(tiParallel_2.getFOE(),tiParallel_2b.getFOE());
+		
+		assertNotSame(tiJoin.getFOE(),tiSplit_b.getFOE());
+		
+		assertNotSame(tiJoin.getFOE(),tiParallel_1b.getFOE());
+		assertNotSame(tiJoin.getFOE(),tiParallel_2b.getFOE());
+		
 		
 		/*
 		 * check that we've got what we expect in the process instance
@@ -138,10 +187,10 @@ public class ComplexSplitJoinTest extends TestCase {
 		/*
 		 * now transition again, but go to the JOIN
 		 */
-		ti = processInstance.findTask(pd.tdParallel_2,MockTaskInstance.STATE_READY);
-		assertNotNull("Failed to find the task to run",ti);
-		ti.setConditionAction(ComplexProcessDef.GOTO + pd.tdJoin.getName());
-		engine.transitionTask(ti);
+		tiParallel_2b.setConditionAction(ComplexProcessDef.GOTO + pd.tdJoin.getName());
+		engine.transitionTask(tiParallel_2b);
+	
+		engine.transitionTask(tiJoin);
 		
 		/*
 		 * check that we've got what we expect in the processinstance
@@ -158,9 +207,9 @@ public class ComplexSplitJoinTest extends TestCase {
 		/*
 		 * now transition again to complete
 		 */
-		ti = processInstance.findTask(pd.tdEnd,MockTaskInstance.STATE_READY);
-		assertNotNull("Failed to find the task to run",ti);
-		engine.transitionTask(ti);
+		MockTaskInstance tiEnd = processInstance.findTask(pd.tdEnd,MockTaskInstance.STATE_READY);
+		assertNotNull("Failed to find the task to run",tiEnd);
+		engine.transitionTask(tiEnd);
 		
 		/*
 		 * check there are no outstanding tasks & the process is complete 
@@ -179,7 +228,6 @@ public class ComplexSplitJoinTest extends TestCase {
 		 * 1 x tdEnd (complete)
 		 * 0 x tdAlternateEnding
 		 */
-		assertEquals(10,msf.getAuditTrail().size());
 		assertEquals(1,msf.countInstances(pd));
 		assertEquals(1,msf.countInstances(pd.tdStart, MockTaskInstance.STATE_DELETED));
 		assertEquals(2,msf.countInstances(pd.tdSplit, MockTaskInstance.STATE_DELETED));
@@ -188,7 +236,8 @@ public class ComplexSplitJoinTest extends TestCase {
 		assertEquals(2,msf.countInstances(pd.tdParallel_2, MockTaskInstance.STATE_DELETED));
 		assertEquals(1,msf.countInstances(pd.tdEnd, MockTaskInstance.STATE_DELETED));
 		assertEquals(0,msf.countInstances(pd.tdAlternateEnding));
-		
+
+		assertSame(tiJoin.getFOE(),tiEnd.getFOE());
 	}
 
 	/**
@@ -217,17 +266,52 @@ public class ComplexSplitJoinTest extends TestCase {
 		// test to see if we have the expected number of tasks - ONE
 		assertEquals(1, taskInstances.size());
 		
-		MockTaskInstance ti = (MockTaskInstance) taskInstances.iterator().next();
-		assertEquals(pd.tdStart, ti.getTaskDefinition());
-		log.info("Transitioning Task " + ti.getTaskInstanceId());
-		engine.transitionTask(ti);
+		tiStart = (MockTaskInstance) taskInstances.iterator().next();
+		assertEquals(pd.tdStart, tiStart.getTaskDefinition());
+		engine.transitionTask(tiStart);
 		
+		tiSplit = (MockTaskInstance) taskInstances.iterator().next();
+		assertEquals(pd.tdSplit, tiSplit.getTaskDefinition());
+
+		// check FOE's match
+		assertEquals(tiStart.getFOE(),tiSplit.getFOE());
+		
+		// transition
+		engine.transitionTask(tiSplit);
+		
+		
+		/* ensure the tasks are the ones we expect
+		 * 1 x tdParallel1
+		 * 1 x tdParallel2
+		 */
+		assertEquals(2,processInstance.getTaskInstances().size());
+		assertEquals(1,processInstance.countInstances(pd.tdParallel_1,MockTaskInstance.STATE_READY));
+		assertEquals(1,processInstance.countInstances(pd.tdParallel_2,MockTaskInstance.STATE_READY));
+		
+		tiParallel_1 = (MockTaskInstance) processInstance.findTask(pd.tdParallel_1,MockTaskInstance.STATE_READY);
+		// check FOE is new
+		assertNotSame(tiSplit.getFOE(),tiParallel_1.getFOE());
+		
+		// transition
+		engine.transitionTask(tiParallel_1);
+
 		/* ensure the tasks are the ones we expect
 		 * 1 x tdJoin
 		 * 1 x tdParallel2
 		 */
 		assertEquals(2,processInstance.getTaskInstances().size());
-		assertEquals(1,processInstance.countInstances(pd.tdParallel_2,MockTaskInstance.STATE_READY));
 		assertEquals(1,processInstance.countInstances(pd.tdJoin,MockTaskInstance.STATE_AWAITINGSYNC));
+		assertEquals(1,processInstance.countInstances(pd.tdParallel_2,MockTaskInstance.STATE_READY));
+		
+		// check FOE's
+		
+		tiParallel_2 = processInstance.findTask(pd.tdParallel_2,MockTaskInstance.STATE_READY);
+		assertNotSame(tiParallel_2.getFOE(),tiParallel_1.getFOE());
+
+		tiJoin = processInstance.findTask(pd.tdJoin,MockTaskInstance.STATE_AWAITINGSYNC);
+		assertNotSame(tiJoin.getFOE(),tiSplit.getFOE());
+		assertNotSame(tiJoin.getFOE(),tiParallel_1.getFOE());
+		assertNotSame(tiParallel_2.getFOE(),tiJoin.getFOE());
+		
 	}
 }

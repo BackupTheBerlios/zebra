@@ -27,9 +27,10 @@ public class SplitJoinTest extends TestCase {
 		ManualRunTaskDef tdStart = new ManualRunTaskDef(pd,"Start");
 		pd.setFirstTask(tdStart);
 		SplitTaskDef tdSplit = new SplitTaskDef(pd,"Split");
+		tdSplit.setAuto(true);
 		tdStart.addRoutingOut(tdSplit);
 		JoinTaskDef tdJoin = new JoinTaskDef(pd,"Join");
-		
+		tdJoin.setAuto(true);
 		AutoRunTaskDef tdParallel1 = new AutoRunTaskDef (pd,"Parallel-1");
 		tdSplit.addRoutingOut(tdParallel1);
 		tdParallel1.addRoutingOut(tdJoin);
@@ -69,9 +70,16 @@ public class SplitJoinTest extends TestCase {
 		 * 2 parallel tasks
 		 * 1 join task
 		 *  = 6 objects
+		 * + 4 FOE
+		 * 1 x start to split
+		 * 1 x parallel 1
+		 * 1 x parallel 2
+		 * 1 x join onwards
+		 *  = 10
 		 */ 
 		
-		assertEquals(6, msf.getAuditTrail().size());
+		assertEquals(10, msf.getAuditTrail().size());
+		assertEquals(4,msf.countFOE(processInstance));
 		// test to see all are marked as "completed" / "deleted" as appropriate
 		assertEquals(1,msf.countInstances(pd));
 		assertEquals(1,msf.countInstances(tdStart));

@@ -6,7 +6,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-core</artifactId>
     <name>Zebra Core Process Engine</name>
-    <currentVersion>0.5.1-dev</currentVersion>
+    <currentVersion>0.5.2-dev</currentVersion>
     <inceptionYear>2004</inceptionYear>
     <logo/>
     <organization>

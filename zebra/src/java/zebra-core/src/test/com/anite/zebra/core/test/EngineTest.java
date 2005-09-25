@@ -70,8 +70,8 @@ public class EngineTest extends TestCase {
 		assertEquals(0, processInstance.getTaskInstances().size());
 		assertEquals(IProcessInstance.STATE_COMPLETE, processInstance
 				.getState());
-		
-		assertEquals(2,msf.getAuditTrail().size());
+		assertEquals(1,msf.countFOE(processInstance));
+		assertEquals(3,msf.getAuditTrail().size());
 		assertEquals(1,msf.countInstances(processDef));
 		assertEquals(1,msf.countInstances(taskDef,MockTaskInstance.STATE_DELETED));
 	}
@@ -105,8 +105,9 @@ public class EngineTest extends TestCase {
 		
 		assertEquals(IProcessInstance.STATE_COMPLETE, processInstance.getState());
 		assertEquals(0, processInstance.getTaskInstances().size());
-
-		assertEquals(2,msf.getAuditTrail().size());
+		
+		assertEquals(1,msf.countFOE(processInstance));
+		assertEquals(3,msf.getAuditTrail().size());
 		assertEquals(1,msf.countInstances(processDef));
 		assertEquals(1,msf.countInstances(taskDef,MockTaskInstance.STATE_DELETED));
 		

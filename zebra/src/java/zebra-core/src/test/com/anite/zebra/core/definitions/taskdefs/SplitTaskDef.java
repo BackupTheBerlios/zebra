@@ -24,7 +24,7 @@ import com.anite.zebra.core.definitions.MockRouting;
  * Created on 19-Aug-2005
  *
  */
-public class SplitTaskDef extends AutoRunTaskDef {
+public class SplitTaskDef extends ManualRunTaskDef {
 
 	/**
 	 * @author Matthew Norris

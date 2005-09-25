@@ -24,13 +24,14 @@ import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.ITaskInstance;
 
 /**
- * @author Eric Pugh
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author Matthew Norris
  */
 public class MockTaskInstance implements ITaskInstance {
 
+	/**
+	 * Constant used by the MOCKSTATEFACTORY
+	 * to indicate this task instance has been DELETED 
+	 */
 	public static final long STATE_DELETED = -100;
 	private static long taskInstanceCounter = 0; 
 	private Long taskInstanceId = null;
@@ -126,7 +127,7 @@ public class MockTaskInstance implements ITaskInstance {
 	 * Created on 22-Sep-2005
 	 */
 	public Map getPropertySet() {
-		return processInstance.getPropertySet(this);
+		return processInstance.getTaskPropertySet(this);
 	}
 
 }

@@ -114,7 +114,9 @@ public class MockStateFactory implements IStateFactory {
 	 */
 	public IFOE createFOE(IProcessInstance processInstance)
 			throws CreateObjectException {
-		return new MockFOE(processInstance);
+		MockFOE foe = new MockFOE(processInstance);
+		this.audit.add(foe);
+		return foe;
 	}
 
     /* (non-Javadoc)
@@ -194,6 +196,17 @@ public class MockStateFactory implements IStateFactory {
     	}
 		return x;
     }
+    /**
+     * returns a count of the task instances 
+	 * that match the task definition 
+	 * specified
+	 * @param taskDef
+     * @return
+     * @throws DefinitionNotFoundException
+     *
+     * @author Matthew.Norris
+     * Created on Sep 25, 2005
+     */
     public int countInstances(MockTaskDef taskDef) throws DefinitionNotFoundException {
     	int x = 0;
     	for (Iterator it = audit.iterator();it.hasNext();) {
@@ -208,6 +221,18 @@ public class MockStateFactory implements IStateFactory {
 		return x;
     }
     
+    /**
+     * returns a count of the task instances 
+     * that match the task definition and task instance state
+	 * specified
+	 * @param taskDef
+     * @param expectedState
+     * @return
+     * @throws DefinitionNotFoundException
+     *
+     * @author Matthew.Norris
+     * Created on Sep 25, 2005
+     */
     public int countInstances(MockTaskDef taskDef, long expectedState) throws DefinitionNotFoundException {
     	int x = 0;
     	for (Iterator it = audit.iterator();it.hasNext();) {
@@ -222,5 +247,126 @@ public class MockStateFactory implements IStateFactory {
     		}
     	}
 		return x;
+    }
+    
+    /**
+     * returns a count of FOE objects for the specified process instance
+     * 
+     * @param pi
+     * @return
+     *
+     * @author Matthew.Norris
+     * Created on Sep 25, 2005
+     */
+    public int countFOE(IProcessInstance pi) {
+    	int x = 0;
+    	for (Iterator it = getFOEs(pi).iterator();it.hasNext();) {
+    		Object o = it.next();
+    		if (o instanceof MockFOE) {
+				x++;
+    		}
+    	}    	
+    	return x;
+    }
+    
+    /**
+     * returns a count of the number of task instances
+     * associated with this FOE
+     * 
+     * @param foe
+     * @return
+     *
+     * @author Matthew.Norris
+     * Created on Sep 25, 2005
+     */
+    public int countFOETasks(MockFOE foe) {
+    	int x = 0;
+    	for (Iterator it = audit.iterator();it.hasNext();) {
+    		Object o = it.next();
+    		if (o instanceof MockTaskInstance) {
+    			MockTaskInstance ti = (MockTaskInstance) o;
+    			if(ti.getFOE().equals(foe)) {
+    				x++;
+    			}
+    		}
+    	}    	
+    	return x;
+    	
+    }
+    
+    /**
+     * 
+     * returns the FOE objects associated with a 
+     * processinstance that ran a given task definition
+     * @param pi
+     * @param td
+     * @return
+     *
+     * @author Matthew.Norris
+     * Created on Sep 25, 2005
+     * @throws DefinitionNotFoundException 
+     */
+    public Set getFOEs(IProcessInstance pi, ITaskDefinition td) throws DefinitionNotFoundException {
+    	Set foes = new HashSet();
+    	for (Iterator it = this.audit.iterator();it.hasNext();) {
+    		IStateObject o = (IStateObject) it.next();
+    		if (o instanceof MockTaskInstance) {
+    			MockTaskInstance ti = (MockTaskInstance) o;
+    			if (ti.getTaskDefinition().equals(td) &&  ti.getProcessInstance().equals(pi) && !foes.contains(ti.getFOE())) {
+    				foes.add(ti.getFOE());
+    			}
+    		}
+    	}
+    	return foes;
+    }
+    /**
+     * returns the FOEs associated with the processinstance
+     * @param pi
+     * @return
+     *
+     * @author Matthew.Norris
+     * Created on Sep 25, 2005
+     */
+    public Set getFOEs(IProcessInstance pi) {
+    	Set foes = new HashSet();
+    	for (Iterator it = this.audit.iterator();it.hasNext();) {
+    		IStateObject o = (IStateObject) it.next();
+    		if (o instanceof MockFOE) {
+    			MockFOE foe = (MockFOE) o;
+    			if (foe.getProcessInstance().equals(pi) && !foes.contains(foe)) {
+    				foes.add(foe);
+    			}
+    		}
+    	}
+    	return foes;
+    }
+    
+    /**
+     * 
+     * the task instances that belong to the specified
+     * process instance that are of the specified 
+     * task definition
+     * @param pi
+     * @param td
+     * @return
+     * @throws DefinitionNotFoundException
+     *
+     * @author Matthew.Norris
+     * Created on Sep 25, 2005
+     */
+    public Set getTaskInstances(IProcessInstance pi, ITaskDefinition td) throws DefinitionNotFoundException {
+    	Set tasks =  new HashSet();
+    	for (Iterator it = audit.iterator();it.hasNext();) {
+    		IStateObject o = (IStateObject) it.next();
+    		if ( o instanceof ITaskInstance) {
+				ITaskInstance ti = (ITaskInstance) o;
+				if (ti.getProcessInstance().equals(pi)) {
+					if (ti.getTaskDefinition().equals(td)) {
+						tasks.add(ti);
+					}
+				}
+			}
+    	}
+    	return tasks;
     }
 }

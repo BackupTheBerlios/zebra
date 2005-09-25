@@ -18,7 +18,6 @@ package com.anite.zebra.core.definitions.processdef;
 
 import com.anite.zebra.core.definitions.MockProcessDef;
 import com.anite.zebra.core.definitions.MockRouting;
-import com.anite.zebra.core.definitions.taskdefs.AutoRunTaskDef;
 import com.anite.zebra.core.definitions.taskdefs.JoinTaskDef;
 import com.anite.zebra.core.definitions.taskdefs.ManualRunTaskDef;
 import com.anite.zebra.core.definitions.taskdefs.MockTaskDef;
@@ -58,17 +57,19 @@ public class ComplexProcessDef extends MockProcessDef {
 		tdStart.addRoutingOut(tdSplit);
 		
 		
-		tdJoin = new JoinTaskDef(this,"Join");
-		tdParallel_1 = new AutoRunTaskDef (this,"Parallel-1");
+		tdParallel_1 = new ManualRunTaskDef (this,"Parallel-1");
 		tdSplit.addRoutingOut(tdParallel_1);
-		tdParallel_1.addRoutingOut(tdJoin);
-		
 		
 		tdParallel_2 = new ManualRunTaskDef (this,"Parallel-2");
 		tdSplit.addRoutingOut(tdParallel_2);		
+		
+		tdJoin = new JoinTaskDef(this,"Join");
+		tdParallel_1.addRoutingOut(tdJoin);
+
 		MockRouting mr1 = tdParallel_2.addRoutingOut(tdJoin);
 		mr1.setName(GOTO + tdJoin.getName());
 		mr1.setConditionClass(MockRoutingCondition.class.getName());
+		
 		MockRouting mr2 = tdParallel_2.addRoutingOut(tdSplit);
 		mr2.setName(GOTO + tdSplit.getName());
 		mr2.setConditionClass(MockRoutingCondition.class.getName());

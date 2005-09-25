@@ -294,25 +294,14 @@ public class Engine implements IEngine {
 					 * a parallel routing always creates a new FOE
 					 */
 					foe = createFOE(currentProcess);
+				} else if (foeSerial==null) {
+						// no current serial FOE to continue down
+						foe = currentTask.getFOE();
+						foeSerial = foe;
 				} else {
 					/*
-					 * Serial routing always re-uses an existing FOE
-					 */
-					if (foeSerial == null) {
-						if (taskDef.isSynchronised()) {
-							/*
-							 * As we sync'd, there may be multiple FOEs that are
-							 * combining, so therefore we need to create a new
-							 * FOE for execution to continue down.
-							 */
-							foeSerial = createFOE(currentProcess);
-						} else {
-							/*
-							 * use the FOE of the current task...
-							 */
-							foeSerial = currentTask.getFOE();
-						}
-					}
+					* Serial routing re-uses an existing FOE
+					*/
 					foe = foeSerial;
 				}
 				newTaskInstance = createTask(newTaskDef, currentProcess, foe);
@@ -700,8 +689,9 @@ public class Engine implements IEngine {
 		 * workflow definition corruption)
 		 */
 		if (td.isSynchronised()) {
-			// task is a syncTask - we need to ensure that there is only
-			// TaskInstance for this definition
+			/* task is a syncTask - we need to ensure that there is only
+			 * one Task Instance for this task definition
+			 */
 			for (Iterator it = pi.getTaskInstances().iterator(); it.hasNext();) {
 				ITaskInstance checkTask = (ITaskInstance) it.next();
 				if (checkTask.getTaskDefinition().getId().longValue() == td
@@ -714,6 +704,8 @@ public class Engine implements IEngine {
 					return checkTask;
 				}
 			}
+			// new sync task needs new FOE
+			foe = stateFactory.createFOE(pi);
 		}
 		/*
 		 * instance of sync task not found or was not a sync task, so we create

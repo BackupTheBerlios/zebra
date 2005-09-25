@@ -23,7 +23,7 @@ import com.anite.zebra.core.definitions.MockProcessDef;
  * Created on 19-Aug-2005
  *
  */
-public class JoinTaskDef extends AutoRunTaskDef {
+public class JoinTaskDef extends ManualRunTaskDef {
 
 	/**
 	 * @author Matthew Norris

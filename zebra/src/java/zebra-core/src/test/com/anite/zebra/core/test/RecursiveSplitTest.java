@@ -41,11 +41,11 @@ public class RecursiveSplitTest extends TestCase {
 		MockProcessDef pd = new MockProcessDef("testDirectRecursiveSplit");
 		MockTaskDef tdSplit = new SplitTaskDef(pd,"Split");
 		pd.setFirstTask(tdSplit);
-		tdSplit.setAuto(false);
 		
 		tdSplit.addRoutingOut(tdSplit).setName("Goto Split");
 		
 		MockTaskDef tdJoin = new JoinTaskDef(pd,"Join");
+		tdJoin.setAuto(true);
 		tdSplit.addRoutingOut(tdJoin).setName("Goto Join");
 		
 		
@@ -90,6 +90,7 @@ public class RecursiveSplitTest extends TestCase {
 		mrLimbo.setParallel(false);
 		
 		MockTaskDef tdJoin = new JoinTaskDef(pd,"Join");
+		tdJoin.setAuto(true);
 		tdSplit.addRoutingOut(tdJoin).setName("Goto Join");
 		
 		
@@ -117,8 +118,13 @@ public class RecursiveSplitTest extends TestCase {
 		 * 2xSplit (completed)
 		 * 1xJoin (completed)
 		 * 2xLimbo (completed)
+		 * 4x FOE
+		 *  - 1 x to split
+		 *  - 2 x split to limbo 
+		 *  - 1 x join onwards
 		 */
-		assertEquals(6,msf.getAuditTrail().size());
+		assertEquals(10,msf.getAuditTrail().size());
+		assertEquals(4,msf.getFOEs(pi).size());
 		assertEquals(2,pi.getTaskInstances().size());
 		assertEquals(2,msf.countInstances(tdSplit,MockTaskInstance.STATE_DELETED));
 		assertEquals(1,msf.countInstances(tdJoin,MockTaskInstance.STATE_DELETED));
