@@ -1,0 +1,42 @@
+package com.anite.borris.services.security.manager.impl;
+/*
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import com.anite.borris.services.security.entity.api.SecurityEntity;
+import com.anite.borris.services.security.entity.utils.DataBackendException;
+
+
+/**
+ * @author Eric Pugh
+ *
+ * To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Generation - Code and Comments
+ */
+public interface PersistenceHelper
+{
+	public static final String ROLE = PersistenceHelper.class.getName();
+	public void removeEntity(SecurityEntity entity)throws DataBackendException;
+
+	public void updateEntity(SecurityEntity entity) throws DataBackendException;
+
+	public void addEntity(SecurityEntity entity) throws DataBackendException;
+
+	public Session retrieveSession() throws HibernateException;
+
+
+}
