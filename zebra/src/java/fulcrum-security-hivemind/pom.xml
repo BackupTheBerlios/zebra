@@ -49,13 +49,13 @@
         <artifactId>maven-eclipse-plugin</artifactId>
         <executions>
           <execution>
-          <phase>compile</phase>            
+            <phase>compile</phase>
             <goals>
               <goal>eclipse</goal>
             </goals>
           </execution>
         </executions>
-      </plugin>      
+      </plugin>
     </plugins>
   </build>
   <repositories>
@@ -88,5 +88,11 @@
       <version>1.0.7</version>
     </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>zebra-berlios</id>
+      <url>scp://shell.berlios.de/home/groups/zebra/htdocs/maven2</url>
+    </repository>
+  </distributionManagement>
   <reporting/>
 </project>
