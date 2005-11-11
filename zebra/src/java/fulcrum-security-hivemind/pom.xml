@@ -42,7 +42,29 @@
     <connection>scm:cvs:pserver:anonymous@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/fulcrum-security-hivemind</connection>
     <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/zebra</url>
   </scm>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <executions>
+          <execution>
+          <phase>compile</phase>            
+            <goals>
+              <goal>eclipse</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
+    </plugins>
+  </build>
   <repositories>
+    <repository>
+      <id>Zebra</id>
+      <name>Zebra at Berlios</name>
+      <layout>default</layout>
+      <url>http://zebra.berlios.de/maven2/</url>
+    </repository>
     <repository>
       <id>Anite</id>
       <name>Anite Mirror</name>
