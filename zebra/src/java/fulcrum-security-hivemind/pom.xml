@@ -5,9 +5,54 @@
   <groupId>org.apache.fulcrum.security</groupId>
   <artifactId>fulcrumHivemindSecurity</artifactId>
   <packaging>jar</packaging>
+  <name>Fulcrum Security for Hivemind</name>
   <version>1.0-SNAPSHOT</version>
-  <name>Fulcrum Security API and Hibernate Implementation ported to Hivemind</name>
-  <url>http://maven.apache.org</url>
+  <description>A port of Fulcrum Security to run inside Hivemind.</description>
+  <url>http://zebra.berlios.de</url>
+  <issueManagement>
+    <system>Berlios</system>
+    <url>http://developer.berlios.de/bugs/?group_id=2683</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Luntbuild</system>
+    <url>http://clank:8080/luntbuild/</url>
+  </ciManagement>
+  <inceptionYear>2005</inceptionYear>
+  <developers>
+    <developer>
+      <id>bgidley</id>
+      <name>Ben Gidley</name>
+      <email>ben.gidley@anite.com</email>
+      <url>http://www.gidley.co.uk</url>
+      <organization>Anite</organization>
+      <organizationUrl>http://www.anite.com/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:cvs:pserver:anonymous@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/fulcrum-security-hivemind</connection>
+    <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/zebra</url>
+  </scm>
+  <repositories>
+    <repository>
+      <id>Anite</id>
+      <name>Anite Mirror</name>
+      <layout>default</layout>
+      <url>http://gnasher.aniteps.com/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -16,37 +61,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate</artifactId>
-      <version>3.0.5</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>hivemind</groupId>
-      <artifactId>hivemind</artifactId>
-      <version>1.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.9</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.0.4</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-util</groupId>
-      <artifactId>commons-util</artifactId>
-      <version>final</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.1</version>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-security-api</artifactId>
+      <version>1.0.7</version>
     </dependency>
   </dependencies>
+  <reporting/>
 </project>
