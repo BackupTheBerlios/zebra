@@ -63,7 +63,8 @@
         <role>Developer</role>
       </roles>
     </developer>
-  </developers>s <dependencies>
+  </developers>
+  <dependencies>
     <dependency>
       <id>commons-logging</id>
       <version>1.0.4</version>
