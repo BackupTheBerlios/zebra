@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<module id="dennery" version="1.0.0">
+    <!-- hibernate session stuff -->
+    <service-point id="HibernateSession" interface="net.sf.hibernate.Session"/>
+    <service-point id="HibernateSessionFactory"
+        interface="org.apache.hivemind.ServiceImplementationFactory"/>
+    <service-point id="SessionManager"
+        interface="com.anite.dennery.services.hibernate.api.ISessionManager"/>
+    <implementation>
+        <invoke-factory model="threaded">
+            <construct class="com.anite.dennery.services.hibernate.impl.HivemindSessionManager"/>
+        </invoke-factory>
+        <interceptor service-id="hivemind.LoggingInterceptor"/>
+    </implementation>
+    <implementation service-id="HibernateSessionFactory">
+        <invoke-factory model="singleton">
+            <construct class="com.anite.dennery.services.hibernate.factory.HibernateSessionFactory"
+                initialize-method="init"/>
+        </invoke-factory>
+        <interceptor service-id="hivemind.LoggingInterceptor"/>
+    </implementation>
+    <implementation service-id="HibernateSession">
+        <invoke-factory service-id="hibernateSessionFactory" model="threaded">
+            <construct class="Not needed as created in fatory"/>
+        </invoke-factory>
+        <interceptor service-id="hivemind.LoggingInterceptor"/>
+    </implementation>
+</module>
