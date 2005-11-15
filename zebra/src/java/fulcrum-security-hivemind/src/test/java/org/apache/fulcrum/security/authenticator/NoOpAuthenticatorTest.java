@@ -15,6 +15,7 @@ package org.apache.fulcrum.security.authenticator;
  *  limitations under the License.
  */
 
+import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 
@@ -23,7 +24,7 @@ import junit.framework.TestCase;
 /**
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: NoOpAuthenticatorTest.java,v 1.1 2005/11/14 18:20:49 bgidley Exp $
+ * @version $Id: NoOpAuthenticatorTest.java,v 1.2 2005/11/15 13:17:58 bgidley Exp $
  */
 public class NoOpAuthenticatorTest extends TestCase
 {
@@ -32,7 +33,7 @@ public class NoOpAuthenticatorTest extends TestCase
     	User user = new DynamicUser();
     	user.setName("Bob");
     	user.setPassword("myPassword");
-    	Authenticator authenticator = new NoOpAuthenticator();
+    	Authenticator authenticator = (Authenticator) RegistryManager.getInstance().getRegistry().getService("fulcrum.security.authenticatorNoop", Authenticator.class);
 		assertTrue(authenticator.authenticate(user,"myPassword"));
 		assertTrue(authenticator.authenticate(user,"mypassword"));
 		assertTrue(authenticator.authenticate(null,null));

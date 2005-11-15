@@ -11,13 +11,13 @@
   <service-point id="authenticatorNoop"
     interface="org.apache.fulcrum.security.authenticator.Authenticator">
     <invoke-factory>
-      <construct class="org.apache.fulcrum.security.authenticator.NoOpAuthentiator"/> 
+      <construct class="org.apache.fulcrum.security.authenticator.NoOpAuthenticator"/> 
     </invoke-factory>
   </service-point>
   <service-point id="authenticatorTextMatch"
     interface="org.apache.fulcrum.security.authenticator.Authenticator">
     <invoke-factory>
-      <construct class="org.apache.fulcrum.security.authenticator.TextMatchAuthentiator"/>
+      <construct class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator"/>
     </invoke-factory>
   </service-point>
   <service-point id="aclFactoryBasic" interface="org.apache.fulcrum.security.model.ACLFactory">
