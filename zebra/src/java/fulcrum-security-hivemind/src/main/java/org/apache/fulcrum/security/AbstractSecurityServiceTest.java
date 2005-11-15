@@ -2,6 +2,8 @@ package org.apache.fulcrum.security;
 
 import junit.framework.TestCase;
 
+import org.apache.fulcrum.hivemind.RegistryManager;
+
 public class AbstractSecurityServiceTest extends TestCase {
 
     private SecurityService securityService;

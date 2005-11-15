@@ -30,13 +30,11 @@ import org.apache.fulcrum.security.entity.User;
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
- * @version $Id: ACLFactory.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: ACLFactory.java,v 1.2 2005/11/15 09:30:27 bgidley Exp $
  */
 public interface ACLFactory
  
 {
-    public static final String ROLE = ACLFactory.class.getName();
-
     public AccessControlList getAccessControlList(User user);
    
 }

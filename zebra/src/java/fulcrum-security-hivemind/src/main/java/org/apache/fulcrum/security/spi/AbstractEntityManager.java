@@ -14,11 +14,6 @@ package org.apache.fulcrum.security.spi;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -26,25 +21,14 @@ import org.apache.commons.logging.LogFactory;
  * a manager will need.
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractEntityManager.java,v 1.1 2005/11/14 18:20:48 bgidley Exp $
+ * @version $Id: AbstractEntityManager.java,v 1.2 2005/11/15 09:30:28 bgidley Exp $
  */
 public abstract class AbstractEntityManager
     extends AbstractManager
-    implements Configurable
+    
 {
     private String className;
-    private static final String CLASS_NAME_KEY = "className";
-    
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractEntityManager.class);
-
-        /**
-     * Avalon Service lifecycle method
-     */
-    public void configure(Configuration conf) throws ConfigurationException
-    {
-        className = conf.getChild(CLASS_NAME_KEY).getValue();
-    }
+     
     /**
      * @return Returns the className.
      */

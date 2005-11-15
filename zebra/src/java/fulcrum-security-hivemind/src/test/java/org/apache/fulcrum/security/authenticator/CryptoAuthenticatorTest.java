@@ -17,15 +17,14 @@ package org.apache.fulcrum.security.authenticator;
 
 import junit.framework.TestCase;
 
-import org.apache.fulcrum.crypto.CryptoService;
-import org.apache.fulcrum.security.RegistryManager;
+import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 
 /**
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: CryptoAuthenticatorTest.java,v 1.1 2005/11/14 18:20:49 bgidley Exp $
+ * @version $Id: CryptoAuthenticatorTest.java,v 1.2 2005/11/15 09:30:28 bgidley Exp $
  */
 public class CryptoAuthenticatorTest extends TestCase
 {

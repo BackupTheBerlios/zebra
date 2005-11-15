@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -15,6 +16,9 @@ package org.apache.fulcrum.security.model;
  *  limitations under the License.
  */
 
+import junit.framework.TestCase;
+
+import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
@@ -24,28 +28,18 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: ACLFactoryTest.java,v 1.1 2005/11/14 18:20:52 bgidley Exp $
+ * @version $Id: ACLFactoryTest.java,v 1.2 2005/11/15 09:30:30 bgidley Exp $
  */
-public class ACLFactoryTest extends BaseUnitTest
-{
+public class ACLFactoryTest extends TestCase {
 
-    public ACLFactoryTest(String arg0)
-    {
-        super(arg0);
-    }
+    public void testCreatingDynamicACL() throws Exception {
 
-
-    public void testCreatingDynamicACL() throws Exception
-    {
-        this.setRoleFileName("src/test/DynamicACLRoleConfig.xml");
-        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
-
-        ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
+        ACLFactory factory = (ACLFactory) RegistryManager.getInstance().getRegistry().getService(
+                "fulcrum.security.aclFactoryDynamic", ACLFactory.class);
         DynamicUser user = new DynamicUser();
         user.setName("bob");
         user.setId(new Integer(1));
@@ -68,12 +62,9 @@ public class ACLFactoryTest extends BaseUnitTest
 
     }
 
-    public void testCreatingBasicACL() throws Exception
-    {
-        this.setRoleFileName("src/test/BasicACLRoleConfig.xml");
-        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
-
-        ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
+    public void testCreatingBasicACL() throws Exception {
+        ACLFactory factory = (ACLFactory) RegistryManager.getInstance().getRegistry().getService(
+                "fulcrum.security.aclFactoryBasic", ACLFactory.class);
         BasicUser user = new BasicUser();
         user.setName("bob");
         user.setId(new Integer(1));
@@ -83,7 +74,7 @@ public class ACLFactoryTest extends BaseUnitTest
         user.addGroup(group);
         AccessControlList acl = factory.getAccessControlList(user);
         assertTrue(acl instanceof BasicAccessControlList);
-		BasicAccessControlList bacl = (BasicAccessControlList) acl;
+        BasicAccessControlList bacl = (BasicAccessControlList) acl;
         assertTrue(bacl.hasGroup(group));
 
     }

@@ -31,9 +31,11 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * This implementation keeps all objects in memory.  This is mostly meant to help
  * with testing and prototyping of ideas.
  *
+ * Implementing classes must inject an ACLFractory and Authenticator
+ *
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractUserManager.java,v 1.1 2005/11/14 18:20:48 bgidley Exp $
+ * @version $Id: AbstractUserManager.java,v 1.2 2005/11/15 09:30:28 bgidley Exp $
  */
 public abstract class AbstractUserManager
     extends AbstractEntityManager
@@ -43,11 +45,11 @@ public abstract class AbstractUserManager
     protected abstract User persistNewUser(User user)
         throws DataBackendException;
 
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractUserManager.class);
-   
-
 	private ACLFactory aclFactory;
+    
+    /**
+     * Authenticator will be dependency injected
+     */
 	private Authenticator authenticator;
 
     public AccessControlList getACL(User user) throws UnknownEntityException
@@ -145,11 +147,6 @@ public abstract class AbstractUserManager
     public void authenticate(User user, String password)
         throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
-        if (authenticator == null)
-        {
-            authenticator = (Authenticator) resolve(Authenticator.ROLE);
-
-        }
         if (!authenticator.authenticate(user, password))
         {
             throw new PasswordMismatchException("Can not authenticate user.");
@@ -307,12 +304,24 @@ public abstract class AbstractUserManager
 	 * @return Returns the ACLFactory.
 	 */
     public ACLFactory getACLFactory()
-    {
-        if (aclFactory == null)
-        {
-            aclFactory = (ACLFactory) resolve(ACLFactory.ROLE);
-        }
+    {        
         return aclFactory;
+    }
+
+    public Authenticator getAuthenticator() {
+        return authenticator;
+    }
+
+    public void setAuthenticator(Authenticator authenticator) {
+        this.authenticator = authenticator;
+    }
+
+    public ACLFactory getAclFactory() {
+        return aclFactory;
+    }
+
+    public void setAclFactory(ACLFactory aclFactory) {
+        this.aclFactory = aclFactory;
     }
 
 }
