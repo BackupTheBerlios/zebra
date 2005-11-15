@@ -58,26 +58,20 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
 
     private static final String USERNAME_BORRIS = "borris1";
 
-    protected Role role;
-    private DynamicModelManager modelManager;
-
-   
-    private SecurityService securityService;
+    private DynamicModelManager dynamicModelManager;
 
     public void setUp() throws Exception {
         super.setUp();
-      
-        modelManager = (DynamicModelManager) securityService.getModelManager();
+        this.dynamicModelManager = (DynamicModelManager) getModelManager();
     }
-
 
     public void testGrantRolePermission() throws Exception {
         Permission permission = getPermissionManager().getPermissionInstance();
         permission.setName("ANSWER_PHONE");
         getPermissionManager().addPermission(permission);
-        role = getRoleManager().getRoleInstance("RECEPTIONIST");
+        Role role = getRoleManager().getRoleInstance("RECEPTIONIST");
         getRoleManager().addRole(role);
-        modelManager.grant(role, permission);
+        getDynamicModelManager().grant(role, permission);
         role = getRoleManager().getRoleById(role.getId());
         PermissionSet permissions = ((DynamicRole) role).getPermissions();
         assertEquals(1, permissions.size());
@@ -88,13 +82,13 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         Permission permission = getPermissionManager().getPermissionInstance();
         permission.setName("ANSWER_FAX");
         getPermissionManager().addPermission(permission);
-        role = getRoleManager().getRoleInstance("SECRETARY");
+        Role role = getRoleManager().getRoleInstance("SECRETARY");
         getRoleManager().addRole(role);
-        modelManager.grant(role, permission);
+        getDynamicModelManager().grant(role, permission);
         role = getRoleManager().getRoleById(role.getId());
         PermissionSet permissions = ((DynamicRole) role).getPermissions();
         assertEquals(1, permissions.size());
-        modelManager.revoke(role, permission);
+        getDynamicModelManager().revoke(role, permission);
         role = getRoleManager().getRoleById(role.getId());
         permissions = ((DynamicRole) role).getPermissions();
         assertEquals(0, permissions.size());
@@ -108,14 +102,14 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         permission2.setName("ANSWER_EMAIL");
         getPermissionManager().addPermission(permission);
         getPermissionManager().addPermission(permission2);
-        role = getRoleManager().getRoleInstance("HELPER");
+        Role role = getRoleManager().getRoleInstance("HELPER");
         getRoleManager().addRole(role);
-        modelManager.grant(role, permission);
-        modelManager.grant(role, permission2);
+        getDynamicModelManager().grant(role, permission);
+        getDynamicModelManager().grant(role, permission2);
         role = getRoleManager().getRoleById(role.getId());
         PermissionSet permissions = ((DynamicRole) role).getPermissions();
         assertEquals(2, permissions.size());
-        modelManager.revokeAll(role);
+        getDynamicModelManager().revokeAll(role);
         role = getRoleManager().getRoleById(role.getId());
         permissions = ((DynamicRole) role).getPermissions();
         assertEquals(0, permissions.size());
@@ -128,14 +122,14 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         permission2.setName("ANSWER_EMAIL2");
         getPermissionManager().addPermission(permission);
         getPermissionManager().addPermission(permission2);
-        role = getRoleManager().getRoleInstance("HELPER2");
+        Role role = getRoleManager().getRoleInstance("HELPER2");
         getRoleManager().addRole(role);
-        modelManager.grant(role, permission);
-        modelManager.grant(role, permission2);
+        getDynamicModelManager().grant(role, permission);
+        getDynamicModelManager().grant(role, permission2);
         role = getRoleManager().getRoleById(role.getId());
         PermissionSet permissions = ((DynamicRole) role).getPermissions();
         assertEquals(2, permissions.size());
-        modelManager.revokeAll(role);
+        getDynamicModelManager().revokeAll(role);
         role = getRoleManager().getRoleById(role.getId());
         permissions = ((DynamicRole) role).getPermissions();
         assertEquals(0, permissions.size());
@@ -150,15 +144,15 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getRoleManager().addRole(role);
         User user = getUserManager().getUserInstance("calvin");
         getUserManager().addUser(user, "calvin");
-        modelManager.grant(user, group);
-        modelManager.grant(group, role);
+        getDynamicModelManager().grant(user, group);
+        getDynamicModelManager().grant(group, role);
         group = getGroupManager().getGroupById(group.getId());
         RoleSet roles = ((DynamicGroup) group).getRoles();
         assertEquals(1, roles.size());
         UserSet users = ((DynamicGroup) group).getUsers();
         assertEquals(1, users.size());
 
-        modelManager.revokeAll(group);
+        getDynamicModelManager().revokeAll(group);
         assertEquals(0, ((DynamicGroup) group).getUsers().size());
         role = getRoleManager().getRoleByName("TEST_REVOKEALLUSER_ROLE");
 
@@ -175,12 +169,12 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getRoleManager().addRole(role2);
         Permission permission = getPermissionManager().getPermissionInstance("HELPER");
         getPermissionManager().addPermission(permission);
-        modelManager.grant(role, permission);
-        modelManager.grant(role2, permission);
+        getDynamicModelManager().grant(role, permission);
+        getDynamicModelManager().grant(role2, permission);
         permission = getPermissionManager().getPermissionById(permission.getId());
         RoleSet roles = ((DynamicPermission) permission).getRoles();
         assertEquals(2, roles.size());
-        modelManager.revokeAll(permission);
+        getDynamicModelManager().revokeAll(permission);
         permission = getPermissionManager().getPermissionById(permission.getId());
         roles = ((DynamicPermission) permission).getRoles();
         assertEquals(0, roles.size());
@@ -192,7 +186,7 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getGroupManager().addGroup(group);
         User user = getUserManager().getUserInstance("Clint");
         getUserManager().addUser(user, "clint");
-        modelManager.grant(user, group);
+        getDynamicModelManager().grant(user, group);
         assertTrue(((DynamicUser) user).getGroups().contains(group));
         assertTrue(((DynamicGroup) group).getUsers().contains(user));
     }
@@ -203,7 +197,7 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getGroupManager().addGroup(group);
         User user = getUserManager().getUserInstance("Lima");
         getUserManager().addUser(user, "pet");
-        modelManager.revoke(user, group);
+        getDynamicModelManager().revoke(user, group);
         assertFalse(((DynamicUser) user).getGroups().contains(group));
         assertFalse(((DynamicGroup) group).getUsers().contains(user));
         user = getUserManager().getUser("Lima");
@@ -216,7 +210,7 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getRoleManager().addRole(role);
         Group group = getGroupManager().getGroupInstance("TEST_GROUP2");
         getGroupManager().addGroup(group);
-        modelManager.grant(group, role);
+        getDynamicModelManager().grant(group, role);
         group = getGroupManager().getGroupByName("TEST_GROUP2");
         assertTrue(((DynamicGroup) group).getRoles().contains(role));
         assertTrue(((DynamicRole) role).getGroups().contains(group));
@@ -229,8 +223,8 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getRoleManager().addRole(role);
         Group group = getGroupManager().getGroupInstance("Lima2");
         getGroupManager().addGroup(group);
-        modelManager.grant(group, role);
-        modelManager.revoke(group, role);
+        getDynamicModelManager().grant(group, role);
+        getDynamicModelManager().revoke(group, role);
         group = getGroupManager().getGroupByName("Lima2");
         assertFalse(((DynamicGroup) group).getRoles().contains(role));
         assertFalse(((DynamicRole) role).getGroups().contains(group));
@@ -241,7 +235,7 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getUserManager().addUser(user, "mc");
         String GROUP_NAME = "oddbug2";
         Group group = null;
-        
+
         try {
             group = getGroupManager().getGroupByName("");
         } catch (UnknownEntityException uue) {
@@ -250,9 +244,9 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         }
         assertNotNull(group);
         user = null;
-        
+
         user = getUserManager().getUser("joe3");
-        ((DynamicModelManager) securityService.getModelManager()).grant(user, group);
+        getDynamicModelManager().grant(user, group);
         assertTrue(((DynamicGroup) group).getUsers().contains(user));
         group = getGroupManager().getGroupByName(GROUP_NAME);
         Set users = ((DynamicGroup) group).getUsers();
@@ -278,7 +272,7 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         getUserManager().addUser(borris, "mc");
         DynamicUser sam = (DynamicUser) getUserManager().getUserInstance(USERNAME_SAM);
         getUserManager().addUser(sam, "mc");
-        modelManager.addDelegate(borris, sam);
+        getDynamicModelManager().addDelegate(borris, sam);
         assertTrue(borris.getDelegatees().contains(sam));
         assertTrue(sam.getDelegators().contains(borris));
 
@@ -298,21 +292,21 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         permission.setName(ONLY_BORRIS_PERMISSION);
         getPermissionManager().addPermission(permission);
 
-        modelManager.grant(role, permission);
-        modelManager.grant(group, role);
-        modelManager.grant(borris, group);
+        getDynamicModelManager().grant(role, permission);
+        getDynamicModelManager().grant(group, role);
+        getDynamicModelManager().grant(borris, group);
 
         DynamicAccessControlList acl = (DynamicAccessControlList) getUserManager().getACL(sam);
         assertTrue(acl.hasPermission(permission));
         assertTrue(acl.hasRole(role));
 
         // Now just to be silly make it recursive and check permissions work
-        modelManager.addDelegate(sam, borris);
+        getDynamicModelManager().addDelegate(sam, borris);
         acl = (DynamicAccessControlList) getUserManager().getACL(sam);
         assertTrue(acl.hasPermission(permission));
         assertTrue(acl.hasRole(role));
 
-        modelManager.removeDelegate(borris, sam);
+        getDynamicModelManager().removeDelegate(borris, sam);
         assertFalse(borris.getDelegatees().contains(sam));
         assertFalse(sam.getDelegators().contains(borris));
 
@@ -323,7 +317,7 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
 
         boolean thrown = false;
         try {
-            modelManager.removeDelegate(borris, sam);
+            getDynamicModelManager().removeDelegate(borris, sam);
         } catch (DataBackendException e) {
             throw e;
         } catch (UnknownEntityException e) {
@@ -332,11 +326,8 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         assertTrue(thrown);
     }
 
-    public SecurityService getSecurityService() {
-        return securityService;
+    public DynamicModelManager getDynamicModelManager() {
+        return dynamicModelManager;
     }
 
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
 }

@@ -33,9 +33,9 @@ import org.apache.fulcrum.security.util.UserSet;
 public abstract class AbstractUserManagerTest extends AbstractSecurityServiceTest {
 
     public void testCheckExists() throws Exception {
-        User user = getUserManager().getUserInstance("Philip");
+        User user = getUserManager().getUserInstance("Philipa");
         getUserManager().addUser(user, "bobo");
-        assertTrue(getUserManager().checkExists("philip"));
+        assertTrue(getUserManager().checkExists("philipa"));
         assertTrue(getUserManager().checkExists(user));
         assertFalse(getUserManager().checkExists("ImaginaryFriend"));
         user = getUserManager().getUserInstance("ImaginaryFriend");

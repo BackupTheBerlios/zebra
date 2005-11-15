@@ -35,7 +35,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  *
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractUserManager.java,v 1.2 2005/11/15 09:30:28 bgidley Exp $
+ * @version $Id: AbstractUserManager.java,v 1.3 2005/11/15 17:56:26 bgidley Exp $
  */
 public abstract class AbstractUserManager
     extends AbstractEntityManager
@@ -54,7 +54,7 @@ public abstract class AbstractUserManager
 
     public AccessControlList getACL(User user) throws UnknownEntityException
     {
-        return getACLFactory().getAccessControlList(user);
+        return getAclFactory().getAccessControlList(user);
 
     }
 
@@ -300,14 +300,7 @@ public abstract class AbstractUserManager
         }
     }
 
-    /**
-	 * @return Returns the ACLFactory.
-	 */
-    public ACLFactory getACLFactory()
-    {        
-        return aclFactory;
-    }
-
+   
     public Authenticator getAuthenticator() {
         return authenticator;
     }
