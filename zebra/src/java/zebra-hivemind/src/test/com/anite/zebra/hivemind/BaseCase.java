@@ -7,9 +7,8 @@ import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.hivemind.Registry;
-
-import com.anite.hivemind.RegistryManager;
 
 /**
  * @author chris

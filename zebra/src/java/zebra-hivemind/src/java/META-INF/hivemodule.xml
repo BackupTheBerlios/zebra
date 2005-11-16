@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <module id="zebra" version="1.0.0">  
-    <service-point id="Zebra" interface="com.anite.zebra.hivemind.api.Zebra">
+    <service-point id="zebra" interface="com.anite.zebra.hivemind.api.Zebra">
+        <invoke-factory service-id="zebraServiceFactory"/>
+    </service-point>    
+    <service-point id="zebraServiceFactory" interface="com.anite.zebra.hivemind.impl.ZebraServiceFactory">
         <invoke-factory>
-            <construct class="com.anite.zebra.hivemind.impl.DefaultZebraImpl"/>
-        </invoke-factory>
+            <construct class="com.anite.zebra.hivemind.impl.ZebraServiceFactory"/>          
+        </invoke-factory>    
     </service-point>
+    
 </module>
