@@ -19,13 +19,22 @@ package org.apache.fulcrum.security;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.hivemind.RegistryManager;
+import org.apache.hivemind.Resource;
+import org.apache.hivemind.impl.DefaultClassResolver;
+import org.apache.hivemind.util.ClasspathResource;
 
 /**
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
- * @version $Id: StartingSecurityServicesTest.java,v 1.1 2005/11/15 17:58:10 bgidley Exp $
+ * @version $Id: StartingSecurityServicesTest.java,v 1.2 2005/11/21 13:31:48 bgidley Exp $
  */
 
 public class StartingSecurityServicesTest extends TestCase {
+    public void setUp() throws Exception {
+        // Force Registry to have test configuration
+        Resource resource = new ClasspathResource(new DefaultClassResolver(), "META-INF/hivemodule_test.xml");
+        RegistryManager.getInstance().getResources().add(resource);
+        super.setUp();
+    }
 
     public void testStartingHibernateSecurity() throws Exception {
         SecurityService securityService = (SecurityService) RegistryManager.getInstance().getRegistry().getService(

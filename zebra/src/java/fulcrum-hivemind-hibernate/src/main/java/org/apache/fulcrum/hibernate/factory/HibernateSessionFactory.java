@@ -7,6 +7,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
+import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
@@ -32,6 +33,7 @@ public class HibernateSessionFactory implements ServiceImplementationFactory, Re
     private ThreadEventNotifier threadEventNotifier;
 
     private boolean updateSchema = false;
+    private boolean createSchema = false;
 
     /**
      * Called by factory when creating service
@@ -42,7 +44,12 @@ public class HibernateSessionFactory implements ServiceImplementationFactory, Re
             Configuration config = new Configuration();
             config.configure();
 
-            if (updateSchema) {
+            if (createSchema){ 
+                SchemaExport export = new SchemaExport(config);
+                export.drop(true, true);
+                export.create(true, true);
+            }
+            else if (updateSchema) {
                 new SchemaUpdate(config).execute(true, true);
             }
             sessionFactory = config.buildSessionFactory();
@@ -102,6 +109,14 @@ public class HibernateSessionFactory implements ServiceImplementationFactory, Re
             }
             threadEventNotifier.removeThreadCleanupListener(this);
         }
+    }
+
+    public boolean isCreateSchema() {
+        return createSchema;
+    }
+
+    public void setCreateSchema(boolean createSchema) {
+        this.createSchema = createSchema;
     }
 
 }

@@ -15,14 +15,23 @@ package org.apache.fulcrum.security.hibernate.dynamic;
  *  limitations under the License.
  */
 
+import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
+import org.apache.hivemind.Resource;
+import org.apache.hivemind.impl.DefaultClassResolver;
+import org.apache.hivemind.util.ClasspathResource;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: HibernateDynamicModelManagerTest.java,v 1.1 2005/11/15 17:58:12 bgidley Exp $
+ * @version $Id: HibernateDynamicModelManagerTest.java,v 1.2 2005/11/21 13:31:49 bgidley Exp $
  */
 public class HibernateDynamicModelManagerTest
     extends AbstractDynamicModelManagerTest
 {
-    
+    public void setUp() throws Exception {
+        // Force Registry to have test configuration
+        Resource resource = new ClasspathResource(new DefaultClassResolver(), "META-INF/hivemodule_test.xml");
+        RegistryManager.getInstance().getResources().add(resource);
+        super.setUp();
+    }
 }

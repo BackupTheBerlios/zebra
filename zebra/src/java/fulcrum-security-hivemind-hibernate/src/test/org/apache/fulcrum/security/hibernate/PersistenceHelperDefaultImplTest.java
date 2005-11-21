@@ -19,19 +19,27 @@ package org.apache.fulcrum.security.hibernate;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.hivemind.RegistryManager;
-import org.apache.fulcrum.security.SecurityService;
+import org.apache.hivemind.Resource;
+import org.apache.hivemind.impl.DefaultClassResolver;
+import org.apache.hivemind.util.ClasspathResource;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: PersistenceHelperDefaultImplTest.java,v 1.1 2005/11/15 17:58:11 bgidley Exp $
+ * @version $Id: PersistenceHelperDefaultImplTest.java,v 1.2 2005/11/21 13:31:48 bgidley Exp $
  */
 public class PersistenceHelperDefaultImplTest extends TestCase {
+    public void setUp() throws Exception {
+        // Force Registry to have test configuration
+        Resource resource = new ClasspathResource(new DefaultClassResolver(), "META-INF/hivemodule_test.xml");
+        RegistryManager.getInstance().getResources().add(resource);
+        super.setUp();
+    }
 
     public void testGettingPersistenceHelper() throws Exception {
 
-        PersistenceHelper persistenceHelper= (PersistenceHelper) RegistryManager.getInstance().getRegistry().getService(
-                PersistenceHelper.class);
-        
+        PersistenceHelper persistenceHelper = (PersistenceHelper) RegistryManager.getInstance().getRegistry()
+                .getService(PersistenceHelper.class);
+
         assertNotNull(persistenceHelper);
         assertNotNull(persistenceHelper.retrieveSession());
 

@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -15,29 +16,21 @@ package org.apache.fulcrum.security.hibernate;
  *  limitations under the License.
  */
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
-
+import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
+import org.apache.hivemind.Resource;
+import org.apache.hivemind.impl.DefaultClassResolver;
+import org.apache.hivemind.util.ClasspathResource;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: HibernateGroupManagerTest.java,v 1.1 2005/11/15 17:58:11 bgidley Exp $
+ * @version $Id: HibernateGroupManagerTest.java,v 1.2 2005/11/21 13:31:48 bgidley Exp $
  */
-public class HibernateGroupManagerTest extends AbstractGroupManagerTest
-{
-//    private SessionFactory sessionFactory;
-//    
-//    public void setUp() throws Exception{
-////      Initialise Database prior to tests
-//        try {
-//            Configuration conf = new Configuration().configure();
-//            new SchemaExport(conf).create(true, true);
-//            sessionFactory = conf.buildSessionFactory();
-//        } catch (HibernateException e) {
-//            throw new RuntimeException(e);
-//        }
-//        super.setUp();
-//    }
+public class HibernateGroupManagerTest extends AbstractGroupManagerTest {
+    public void setUp() throws Exception {
+        // Force Registry to have test configuration
+        Resource resource = new ClasspathResource(new DefaultClassResolver(), "META-INF/hivemodule_test.xml");
+        RegistryManager.getInstance().getResources().add(resource);
+        super.setUp();
+    }
 }

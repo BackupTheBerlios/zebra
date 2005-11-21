@@ -89,7 +89,7 @@
     <dependency>
       <groupId>fulcrum-hivemind</groupId>
       <artifactId>fulcrum-hivemind</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>fulcrum-hivemind</groupId>
@@ -99,6 +99,11 @@
     <dependency>
       <groupId>fulcrum-hivemind</groupId>
       <artifactId>fulcrum-crypto</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>fulcrum-hivemind</groupId>
+      <artifactId>fulcrum-hibernate</artifactId>
       <version>1.1</version>
     </dependency>
     <dependency>
@@ -143,14 +148,12 @@
       <artifactId>mckoi</artifactId>
       <version>1.0.2</version>
     </dependency>
-    
     <!-- Needed for the Hibernate SPI -->
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
       <version>1.6.1</version>
     </dependency>
-   
     <dependency>
       <groupId>hibernate</groupId>
       <artifactId>hibernate</artifactId>
@@ -194,7 +197,6 @@
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     <unitTest>
       <includes>
-        
         <include>**/*Test*.java</include>
       </includes>
       <excludes/>

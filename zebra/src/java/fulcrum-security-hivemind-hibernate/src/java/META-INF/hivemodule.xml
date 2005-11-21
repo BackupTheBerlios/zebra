@@ -2,13 +2,14 @@
 <module id="fulcrum.security.hivemind" version="1.0.0">
   <service-point id="peristenceHelper"
     interface="org.apache.fulcrum.security.hibernate.PersistenceHelper">
-    <invoke-factory>
-      <construct class="org.apache.fulcrum.security.hibernate.PersistenceHelperDefaultImpl"
-      > 
-      <set property="createDB" value="true"/></construct>
+    <invoke-factory model="threaded">
+      <construct class="org.apache.fulcrum.security.hibernate.PersistenceHelperHivemindImplementation">
+        <set-service property="session" service-id="fulcrum.hibernate.Session"/>
+      </construct>
     </invoke-factory>
   </service-point>
-  <service-point id="modelManagerDynamic" interface="org.apache.fulcrum.security.model.dynamic.DynamicModelManager">
+  <service-point id="modelManagerDynamic"
+    interface="org.apache.fulcrum.security.model.dynamic.DynamicModelManager">
     <invoke-factory>
       <construct class="org.apache.fulcrum.security.hibernate.dynamic.HibernateModelManagerImpl"
       > </construct>
@@ -19,9 +20,8 @@
       <construct class="org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl">
         <set property="className"
           value="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser"/>
-        <set-service property="authenticator" service-id="fulcrum.security.authenticatorTextMatch"></set-service>
-        <set-service property="aclFactory" service-id="fulcrum.security.aclFactoryDynamic"></set-service>
-        
+        <set-service property="authenticator" service-id="fulcrum.security.authenticatorTextMatch"/>
+        <set-service property="aclFactory" service-id="fulcrum.security.aclFactoryDynamic"/>
       </construct>
     </invoke-factory>
   </service-point>
