@@ -1,10 +1,12 @@
 package com.anite.zebra.hivemind.impl;
 
-import com.anite.zebra.hivemind.BaseCase;
+import junit.framework.TestCase;
 
-public class DefaultZebraImplTest extends BaseCase {
+import org.apache.fulcrum.hivemind.RegistryManager;
+
+public class DefaultZebraImplTest extends TestCase {
 	public void testInitialiseHiveMind() {
-		Zebra zebra = (Zebra) registry.getService("zebra.Zebra",Zebra.class);
+		Zebra zebra = (Zebra) RegistryManager.getInstance().getRegistry().getService("zebra.Zebra",Zebra.class);
 
 		assertNotNull(zebra);
 
