@@ -2,9 +2,9 @@ package org.apache.fulcrum.hibernate;
 
 
 import junit.framework.TestCase;
-import net.sf.hibernate.Session;
 
 import org.apache.fulcrum.hivemind.RegistryManager;
+import org.hibernate.Session;
 
 public class SessionTest extends TestCase{
     

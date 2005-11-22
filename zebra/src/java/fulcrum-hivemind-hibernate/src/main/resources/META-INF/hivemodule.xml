@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <module id="fulcrum.hibernate" version="1.0.0">
     <!-- hibernate session stuff -->
-    <service-point id="Session" interface="net.sf.hibernate.Session">
+    <service-point id="Session" interface="org.hibernate.Session">
         <invoke-factory service-id="HibernateSessionFactory" model="threaded"/>
         <interceptor service-id="hivemind.LoggingInterceptor"/>
     </service-point>

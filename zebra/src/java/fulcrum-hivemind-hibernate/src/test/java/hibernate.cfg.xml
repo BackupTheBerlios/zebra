@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <!-- Generated file - Do not edit! -->
 <hibernate-configuration>
@@ -12,8 +12,8 @@
     <property name="connection.driver_class">com.mckoi.JDBCDriver</property>
     <property name="connection.username">test</property>
     <property name="connection.password">test</property>
-    <property name="connection.url">jdbc:mckoi:local://./src/test/mcKoi.conf?create_or_boot=true</property>
-    <property name="dialect">net.sf.hibernate.dialect.MckoiDialect</property>
+    <property name="connection.url">jdbc:mckoi:local://./src/test/java/mcKoi.conf?create_or_boot=true</property>
+    <property name="dialect">org.hibernate.dialect.MckoiDialect</property>
     <mapping resource="Sample.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

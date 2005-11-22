@@ -3,19 +3,18 @@
  */
 package org.apache.fulcrum.hibernate.factory;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
-import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
-
 import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.apache.hivemind.ServiceImplementationFactory;
 import org.apache.hivemind.ServiceImplementationFactoryParameters;
 import org.apache.hivemind.events.RegistryShutdownListener;
 import org.apache.hivemind.service.ThreadCleanupListener;
 import org.apache.hivemind.service.ThreadEventNotifier;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
 /**
  * Creates the Hibernate Session and manages the lifecycle.
