@@ -5,7 +5,7 @@
     <groupId>fulcrum-hivemind</groupId>
     <artifactId>fulcrum-hibernate</artifactId>
     <packaging>jar</packaging>
-    <version>1.4</version>
+    <version>1.5</version>
     <name>fulcrum-hivemind-hibernate - Hibernate Session manager for Hivemind</name>
     <url>http://gnasher.aniteps.com/docs/</url>
     <build>
@@ -129,11 +129,11 @@
             - EHCache cache
             - runtime, optional (required if no other cache provider is set)
         -->
-        <dependency>
+      <!--  <dependency>
             <groupId>ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <version>1.1</version>
-        </dependency>
+        </dependency>-->
         <!--
             versioncheck.jar (1.0)
             - version checker
@@ -157,21 +157,21 @@
             - Standard JTA API
             - runtime, required for standalone operation (outside application server)
         -->
-        <dependency>
+     <!--   <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
             <version>1.0.1B</version>
-        </dependency>
+        </dependency>-->
         <!--	
             xml-apis.jar (unknown)
             - Standard JAXP API
             - runtime, some SAX parser is required
         -->
-        <dependency>
+       <!-- <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>1.0.b2</version>
-        </dependency>
+        </dependency>-->
         <!--
             commons-logging-1.0.4.jar (1.0.4)
             - Commons Logging
@@ -185,11 +185,11 @@
             - C3P0 JDBC connection pool
             - runtime, optional
         -->
-        <dependency>
+        <!--<dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.0</version>
-        </dependency>
+        </dependency>-->
         <!--
             connector.jar (unknown)
             - Standard JCA API
@@ -204,11 +204,11 @@
             - ASM bytecode library
             - runtime, required
         -->
-        <dependency>
+       <!-- <dependency>
             <groupId>asm</groupId>
             <artifactId>asm-attrs</artifactId>
             <version>1.5.3</version>
-        </dependency>
+        </dependency>-->
         <!--
             jacc-1_0-fr.jar (1.0-fr)
             - JACC Library
@@ -231,31 +231,31 @@
             - runtime, required
             
         -->
-        <dependency>
+        <!--<dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
-        </dependency>
+        </dependency>-->
         <!--
             antlr-2.7.5H3.jar (2.7.5H3)
             - ANother Tool for Language Recognition (patched with proper context classloading)
             - runtime, required
         -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>antlr</artifactId>
             <version>2.7.5H3</version>
-        </dependency>
+        </dependency>-->
         <!--
             cglib-2.1.2.jar (2.1.2)
             - CGLIB bytecode generator
             - runtime, required
         -->
-        <dependency>
+      <!--  <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.1_2</version>
-        </dependency>
+        </dependency>-->
         <!--
             jboss-common.jar (unknown)
             - unknown name
@@ -270,11 +270,11 @@
             - ASM bytecode library
             - runtime, required
         -->
-        <dependency>
+        <!--<dependency>
             <groupId>asm</groupId>
             <artifactId>asm</artifactId>
             <version>1.5.3</version>
-        </dependency>
+        </dependency>-->
         <!--
             ant-launcher-1.6.5.jar (1.6.5)
             - Ant launcher
@@ -308,11 +308,12 @@
             - Jaxen - universal java xpath engine
             - runtime, required if you want to deserialize a Configuration to improve startup performance
         -->
-        <dependency>
+      <!--  <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
             <version>1.1-beta-7</version>
-        </dependency>
+            
+        </dependency>-->
         <!--
             
             ant-junit-1.6.5.jar (1.6.5)
