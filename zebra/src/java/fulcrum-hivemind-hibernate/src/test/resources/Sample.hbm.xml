@@ -5,7 +5,7 @@
 <hibernate-mapping >
     <class name="org.apache.fulcrum.hibernate.Sample"
         table="Sample">
-        <id name="id" type="long" column="ID" unsaved-value="0">
+        <id name="id" type="integer" column="ID" unsaved-value="0">
             <generator class="native"/>
         </id>
         <property name="value" column="Value" type="string"/>
