@@ -23,7 +23,7 @@ package org.apache.fulcrum.crypto;
  * handed out by the Crypto Service.
  *
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: CryptoAlgorithm.java,v 1.1 2005/11/14 16:18:30 bgidley Exp $
+ * @version $Id: CryptoAlgorithm.java,v 1.1 2005/11/24 16:56:02 bgidley Exp $
  */
 
 public interface CryptoAlgorithm

@@ -29,7 +29,7 @@ import java.util.Map;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley</a>
- * @version $Id: DefaultCryptoService.java,v 1.2 2005/11/15 09:21:30 bgidley Exp $
+ * @version $Id: DefaultCryptoService.java,v 1.1 2005/11/24 16:56:02 bgidley Exp $
  *
  * @avalon.component name="crypto" lifestyle="singleton"
  * @avalon.service type="org.apache.fulcrum.crypto.CryptoService"

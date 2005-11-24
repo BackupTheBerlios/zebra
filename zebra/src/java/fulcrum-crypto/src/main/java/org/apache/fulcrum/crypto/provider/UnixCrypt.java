@@ -24,7 +24,7 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  * Implements Standard Unix crypt(3) for use with the Crypto Service.
  *
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: UnixCrypt.java,v 1.1 2005/11/14 16:18:30 bgidley Exp $
+ * @version $Id: UnixCrypt.java,v 1.1 2005/11/24 16:56:01 bgidley Exp $
  */
 
 public class UnixCrypt

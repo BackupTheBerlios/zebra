@@ -27,7 +27,7 @@ import org.apache.fulcrum.hivemind.RegistryManager;
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
- * @version $Id: CryptoServiceTest.java,v 1.2 2005/11/15 09:21:29 bgidley Exp $
+ * @version $Id: CryptoServiceTest.java,v 1.1 2005/11/24 16:56:00 bgidley Exp $
  */
 public class CryptoServiceTest extends TestCase
 {

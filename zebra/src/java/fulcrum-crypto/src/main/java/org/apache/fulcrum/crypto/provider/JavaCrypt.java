@@ -39,7 +39,7 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  * This provider can be used as the default crypto algorithm provider.
  *
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: JavaCrypt.java,v 1.1 2005/11/14 16:18:30 bgidley Exp $
+ * @version $Id: JavaCrypt.java,v 1.1 2005/11/24 16:56:01 bgidley Exp $
  */
 
 public class JavaCrypt 
