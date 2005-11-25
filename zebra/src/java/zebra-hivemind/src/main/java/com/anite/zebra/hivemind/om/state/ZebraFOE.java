@@ -17,60 +17,63 @@
 
 package com.anite.zebra.hivemind.om.state;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratorType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import com.anite.zebra.core.state.api.IFOE;
 import com.anite.zebra.core.state.api.IProcessInstance;
 
 /**
- * @hibernate.class
- * @hibernate.cache usage="transactional"
  * @author Ben.Gidley
  */
+@Entity
 public class ZebraFOE implements IFOE {
 
-    private ZebraProcessInstance processInstance;
-    private Integer antelopeFoeID;
-    
- 
-    /**
-     * @param processInstance
-     */
-    public ZebraFOE(IProcessInstance processInstance) {
-        this.processInstance = (ZebraProcessInstance) processInstance;
-        this.processInstance.getFOEs().add(this);
-    }
+	private ZebraProcessInstance processInstance;
 
-    /**
-     * @hibernate.many-to-one column="processInstanceId" not-null="true"
-     *                        class="com.anite.antelope.zebra.om.AntelopeProcessInstance"
-     *                        cascade="all"
-     */
-    public IProcessInstance getProcessInstance() {
-        return processInstance;
-    }
+	private Integer antelopeFoeID;
 
-    
+	public ZebraFOE() {
+		// noop
+	}
 
-    /**
-     * @param processInstance The processInstance to set.
-     */
-    public void setProcessInstance(IProcessInstance processInstance) {
-        this.processInstance = (ZebraProcessInstance) processInstance;
-    }
-    /**
-     * @hibernate.id generator-class="native"
-     * @return Returns the antelopeFoeID.
-     */
-    public Integer getAntelopeFoeID() {
-        return antelopeFoeID;
-    }
+	/**
+	 * @param processInstance
+	 */
+	public ZebraFOE(IProcessInstance processInstance) {
+		this.processInstance = (ZebraProcessInstance) processInstance;
+		this.processInstance.getFOEs().add(this);
+	}
 
-    /**
-     * @param antelopeFoeID The antelopeFoeID to set.
-     */
-    public void setAntelopeFoeID(Integer antelopeFoeID) {
-        this.antelopeFoeID = antelopeFoeID;
-    }
+	@ManyToOne
+	public IProcessInstance getProcessInstance() {
+		return processInstance;
+	}
 
-    
+	/**
+	 * @param processInstance
+	 *            The processInstance to set.
+	 */
+	public void setProcessInstance(IProcessInstance processInstance) {
+		this.processInstance = (ZebraProcessInstance) processInstance;
+	}
+
+	/**
+	 * @return Returns the antelopeFoeID.
+	 */
+	@Id(generate = GeneratorType.AUTO)
+	public Integer getAntelopeFoeID() {
+		return antelopeFoeID;
+	}
+
+	/**
+	 * @param antelopeFoeID
+	 *            The antelopeFoeID to set.
+	 */
+	public void setAntelopeFoeID(Integer antelopeFoeID) {
+		this.antelopeFoeID = antelopeFoeID;
+	}
 
 }

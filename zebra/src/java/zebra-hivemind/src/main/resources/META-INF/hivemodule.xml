@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <module id="zebra" version="1.0.0">
     <service-point id="zebra" interface="com.anite.zebra.hivemind.api.Zebra">
-        <invoke-factory service-id="zebraServiceFactory"/>
-    </service-point>
-    <service-point id="zebraServiceFactory"
-        interface="com.anite.zebra.hivemind.impl.ZebraServiceFactory">
         <invoke-factory>
-            <construct class="com.anite.zebra.hivemind.impl.ZebraServiceFactory"/>
+            <construct class="com.anite.zebra.hivemind.impl.Zebra"/>
         </invoke-factory>
     </service-point>
     <service-point id="zebraDefinitionFactory"
@@ -21,7 +17,8 @@
     <service-point id="zebraSecurity" interface="com.anite.zebra.hivemind.impl.ZebraSecurity">
         <invoke-factory>
             <construct class="com.anite.zebra.hivemind.impl.ZebraSecurity">
-                <set-service property="permissionManager" service-id="fulrum.security.permissionManagerDynamic"/>
+                <set-service property="permissionManager"
+                    service-id="fulrum.security.permissionManagerDynamic"/>
             </construct>
         </invoke-factory>
     </service-point>

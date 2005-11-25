@@ -9,53 +9,60 @@ import org.apache.commons.lang.exception.NestableException;
 import org.apache.fulcrum.security.entity.User;
 import org.hibernate.HibernateException;
 
-import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.exceptions.StartProcessException;
 import com.anite.zebra.core.exceptions.TransitionException;
+import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
+import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
+import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
-public class Zebra<PD, TD, PI, TI>{
-
-	public Map getAllProcessDefinitions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public PD getProcessDefinitions() throws DefinitionNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public PI createProcessPaused(String processName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<TI> getTaskList(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<TI> getOnlyOwnedTaskList(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<TI> getOnlyDelegatedTaskList(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void startProcess(PI processInstance)
-			throws StartProcessException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void transitionTask(TI taskInstance) throws TransitionException {
-		// TODO Auto-generated method stub
-
-	}
+public class Zebra {
 	
+	private ZebraDefinitionFactory zebraDefinitionFactory;
+
+	public Map<String, ZebraProcessDefinition> getAllProcessDefinitions() {		
+		return this.zebraDefinitionFactory.getAllProcessDefinitionsByName();
+	}
+
+	/**
+	 * Start a process in a paused state by name
+	 * @param processName
+	 * @return
+	 */
+	public ZebraProcessInstance createProcessPaused(String processName) {
+		return createProcessPaused(this.getAllProcessDefinitions().get(processName));
+		
+	}
+
+	public ZebraProcessInstance createProcessPaused(ZebraProcessDefinition process) {
+		// TODO
+		return null;
+	}
+
+	public List<ZebraTaskInstance> getTaskList(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<ZebraTaskInstance> getOnlyOwnedTaskList(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<ZebraTaskInstance> getOnlyDelegatedTaskList(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void startProcess(ZebraProcessInstance processInstance) throws StartProcessException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void transitionTask(ZebraTaskInstance taskInstance) throws TransitionException {
+		// TODO Auto-generated method stub
+
+	}
+
 	/**
 	 * Kill this process and all tasks within it. This does NOT kill the parent
 	 * process but will kill child processes
@@ -65,7 +72,7 @@ public class Zebra<PD, TD, PI, TI>{
 	 * 
 	 * If this is a child process the subflow step will be marked complete
 	 * 
-	 * TODO talk to Matt about moving this into the core API of the engine TODO
+	 * TODO talk to Matt about moving this into the core AZebraProcessInstance of the engine TODO
 	 * write a unit test for this
 	 * 
 	 * @throws NestableException
@@ -74,46 +81,60 @@ public class Zebra<PD, TD, PI, TI>{
 	 * @throws ComponentException
 	 * 
 	 */
-	public void killProcess(PI processInstance) throws HibernateException,
+	public void killProcess(ZebraProcessInstance processInstance) throws HibernateException,
 			NestableException {
-//		IStateFactory stateFactory = ZebraHelper.getInstance()
-//				.getStateFactory();
-//
-//		List processesToKill = this.getRunningChildProcesses();
-//		processesToKill.add(this);
-//
-//		ITransaction t = stateFactory.beginTransaction();
-//
-//		for (Iterator iter = processesToKill.iterator(); iter.hasNext();) {
-//			ZebraProcessInstance process = (ZebraProcessInstance) iter.next();
-//
-//			Set tasks = process.getTaskInstances();
-//			for (Iterator iterator = tasks.iterator(); iterator.hasNext();) {
-//				AntelopeTaskInstance task = (AntelopeTaskInstance) iterator
-//						.next();
-//
-//				task.setState(AntelopeTaskInstance.KILLED);
-//				task.setTaskOwner(UserLocator.getLoggedInUser());
-//				stateFactory.saveObject(task);
-//
-//				// This will create history automatically and will remove itself
-//				// from the set
-//				stateFactory.deleteObject(task);
-//				process.setState(AntelopeTaskInstance.KILLED);
-//				stateFactory.saveObject(process);
-//			}
-//
-//		}
-//		t.commit();
-//
-//		// Only destroy this process if there is a parent to force a subflow
-//		// return
-//		// - no need to do the child tree - as they are all killed
-//		if (this.getParentProcessInstance() != null) {
-//			ProcessDestruct destructor = new ProcessDestruct();
-//			destructor.processDestruct(this);
-//		}
+		// IStateFactory stateFactory = ZebraHelper.getInstance()
+		// .getStateFactory();
+		//
+		// List processesToKill = this.getRunningChildProcesses();
+		// processesToKill.add(this);
+		//
+		// ITransaction t = stateFactory.beginTransaction();
+		//
+		// for (Iterator iter = processesToKill.iterator(); iter.hasNext();) {
+		// ZebraProcessInstance process = (ZebraProcessInstance) iter.next();
+		//
+		// Set tasks = process.getTaskInstances();
+		// for (Iterator iterator = tasks.iterator(); iterator.hasNext();) {
+		// AntelopeTaskInstance task = (AntelopeTaskInstance) iterator
+		// .next();
+		//
+		// task.setState(AntelopeTaskInstance.KILLED);
+		// task.setTaskOwner(UserLocator.getLoggedInUser());
+		// stateFactory.saveObject(task);
+		//
+		// // This will create history automatically and will remove itself
+		// // from the set
+		// stateFactory.deleteObject(task);
+		// process.setState(AntelopeTaskInstance.KILLED);
+		// stateFactory.saveObject(process);
+		// }
+		//
+		// }
+		// t.commit();
+		//
+		// // Only destroy this process if there is a parent to force a subflow
+		// // return
+		// // - no need to do the child tree - as they are all killed
+		// if (this.getParentProcessInstance() != null) {
+		// ProcessDestruct destructor = new ProcessDestruct();
+		// destructor.processDestruct(this);
+		// }
 	}
-	
+
+	/**
+	 * Gets the Zebra Definition Factory.
+	 * 
+	 * Most of the key mehthods used in a normal application are availabe on this facade.
+	 * @return
+	 */
+	public ZebraDefinitionFactory getZebraDefinitionFactory() {
+		return zebraDefinitionFactory;
+	}
+
+	private void setZebraDefinitionFactory(
+			ZebraDefinitionFactory zebraDefinitionFactory) {
+		this.zebraDefinitionFactory = zebraDefinitionFactory;
+	}
 
 }

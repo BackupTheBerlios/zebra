@@ -26,7 +26,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratorType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PersistenceException;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.exception.NestableException;
 import org.apache.commons.logging.Log;
@@ -34,7 +47,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -52,13 +65,19 @@ import com.anite.zebra.hivemind.impl.ZebraSecurity;
 import com.anite.zebra.hivemind.util.RegistryHelper;
 
 /**
- * Extends Process Instance to set XDoclet tags and custom properties
+ * A Zebra Process Instance reflect an instance of a Process Definition. This
+ * class implements the core interface and add additional properties as commonly
+ * required by the applications This class can be extended, but this should not
+ * be necessary.
+ * 
+ * This implementation supports subflows and dynamic workflow security.
+ * 
+ * See ZebraSecuity for more details
  * 
  * @author Matthew.Norris
  * @author Ben Gidley
- * @hibernate.class lazy="true"
- * @hibernate.cache usage="transactional"
  */
+@Entity
 public class ZebraProcessInstance implements IProcessInstance {
 
 	private static final String ZEBRA_PERMISSION_PREFIX = "ZEBRA";
@@ -72,7 +91,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 
 	private long state;
 
-	private Set taskInstances = new HashSet();
+	private Set<ZebraTaskInstance> taskInstances = new HashSet<ZebraTaskInstance>();
 
 	/* Custom behavioural properties */
 	/** Parent Process used for subflows */
@@ -86,18 +105,18 @@ public class ZebraProcessInstance implements IProcessInstance {
 	private String processName;
 
 	/** The user that activated this process */
-	private User activatedBy;
+	private DynamicUser activatedBy;
 
 	/** The property set catch all for anything at all */
-	private Map propertySet = new HashMap();
+	private Map<String, ZebraPropertySetEntry> propertySet = new HashMap<String, ZebraPropertySetEntry>();
 
-	/** Set of historical process information */
+	/** Set of historical task instance information */
 	private Set historyInstances = new HashSet();
 
 	/**
 	 * Maps dynamic permission names to fulcrum security permission names
 	 */
-	private Map dynamicPermissionMap = new HashMap();
+	private Map<String, String> dynamicPermissionMap = new HashMap<String, String>();
 
 	/**
 	 * If this is linked to an data entity its class goes here
@@ -112,7 +131,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	/**
 	 * Set of FOE's need to make sure they are deleted with process
 	 */
-	private Set fOES = new HashSet();
+	private Set<ZebraFOE> fOES = new HashSet<ZebraFOE>();
 
 	/**
 	 * Default constructor for normal construction
@@ -131,7 +150,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 			throws NestableException {
 		if (processInstance == null) {
 			throw new NestableException(
-					"Cannot instantiate AntelopeProcessInstance class without a valid AntelopeProcessInstance object");
+					"Cannot instantiate ProcessInstance class without a valid ProcessInstance object");
 		}
 	}
 
@@ -139,8 +158,10 @@ public class ZebraProcessInstance implements IProcessInstance {
 
 	/**
 	 * Interface method for get the Process definition Note this should never
-	 * actually throw definition not found exception
+	 * actually throw definition not found exception as that would imply this
+	 * instance can't exist. Which it does!
 	 */
+	@Transient
 	public IProcessDefinition getProcessDef()
 			throws DefinitionNotFoundException {
 
@@ -154,9 +175,12 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
+	 * This the unique ID of the process in the database
+	 * 
 	 * @return Returns the processInstanceId.
-	 * @hibernate.id generator-class="native"
+	 * 
 	 */
+	@Id(generate = GeneratorType.AUTO)
 	public Long getProcessInstanceId() {
 		return this.processInstanceId;
 	}
@@ -170,8 +194,9 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @hibernate.property
+	 * This is the state constant defined in Zebra
 	 */
+	@Basic
 	public long getState() {
 		return this.state;
 	}
@@ -181,26 +206,24 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @hibernate.set cascade="all" lazy="true" inverse="true"
-	 * @hibernate.collection-key column="processInstanceId"
-	 * @hibernate.collection-one-to-many class="com.anite.antelope.zebra.om.AntelopeTaskInstance"
-	 * @hibernate.collection-cache usage="transactional"
 	 * @return
 	 */
-	public Set getTaskInstances() {
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "processInstanceId")
+	public Set<ZebraTaskInstance> getTaskInstances() {
 		return this.taskInstances;
 	}
 
-	public void setTaskInstances(Set taskInstances) {
+	public void setTaskInstances(Set<ZebraTaskInstance> taskInstances) {
 		this.taskInstances = taskInstances;
 	}
 
 	/* Implementation Methods */
 
 	/**
-	 * @hibernate.many-to-one cascade="none" not-null="false"
 	 * @return Returns the parentProcessInstance.
 	 */
+	@ManyToOne
 	public ZebraProcessInstance getParentProcessInstance() {
 		return this.parentProcessInstance;
 	}
@@ -215,25 +238,37 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @hibernate.map cascade="all" lazy="true"
-	 * @hibernate.collection-index column="propertyKey" type="string"
-	 * @hibernate.collection-key column="processInstanceId"
-	 * @hibernate.collection-one-to-many class="com.anite.antelope.zebra.om.AntelopePropertySetEntry"
-	 * @hibernate.collection-cache usage="transactional"
+	 * The process property set.
+	 * 
+	 * This is a set of ZebraProperty Set Entry objects. These in turn can hold
+	 * almost anythings
+	 * 
+	 * You can easily introduce performance issues by putting too much in here!
+	 * Real data should reside in a related table. This should ONLY hold items
+	 * needed to process the flow.
+	 * 
+	 * Items in here are effectively disposed of when the flow ends.
+	 * 
+	 * Items are only passed back and forth from subflows if explictly marked to
+	 * do so in the designer. For those used to earlier versions of zebra push
+	 * outputs has been removed.
+	 * 
 	 * @return
 	 */
-	public Map getPropertySet() {
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Map<String, ZebraPropertySetEntry> getPropertySet() {
 		return this.propertySet;
 	}
 
-	public void setPropertySet(Map propertySetEntries) {
+	public void setPropertySet(
+			Map<String, ZebraPropertySetEntry> propertySetEntries) {
 		this.propertySet = propertySetEntries;
 	}
 
 	/**
-	 * @hibernate.property not-null="true"
 	 * @return Returns the processName.
 	 */
+	@Basic
 	public String getProcessName() {
 		return this.processName;
 	}
@@ -247,17 +282,19 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @bug Check me
-	 * @hibernate.many-to-one cascade="save-update" not-null="false"
-	 *                        class="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser"
+	 * The user that actived this step.
+	 * 
+	 * This is usually the owner except in a case of delegation. IN that case it
+	 * is the delegatee
 	 * 
 	 * @return
 	 */
-	public User getActivatedBy() {
+	@ManyToOne
+	public DynamicUser getActivatedBy() {
 		return this.activatedBy;
 	}
 
-	public void setActivatedBy(User activatedBy) {
+	public void setActivatedBy(DynamicUser activatedBy) {
 		this.activatedBy = activatedBy;
 	}
 
@@ -268,18 +305,14 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @hibernate.collection-cache usage="transactional"
 	 * @return
 	 */
+	@OneToMany(fetch = FetchType.LAZY)
 	public Set getHistoryInstances() {
 		return this.historyInstances;
 	}
 
-	/**
-	 * @hibernate.many-to-one cascade="none" not-null="false"
-	 *                        class="com.anite.antelope.zebra.om.AntelopeTaskInstance"
-	 * @return Returns the parentTaskInstance. (Null if this is not a
-	 *         subprocess)
-	 */
+	@ManyToOne
 	public ITaskInstance getParentTaskInstance() {
-		return parentTaskInstance;
+		return this.parentTaskInstance;
 	}
 
 	public void setHistoryInstances(Set historyInstances) {
@@ -295,12 +328,13 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @throws HibernateException
 	 *             hibernate exception
 	 */
-	public List getRunningChildProcesses() throws HibernateException,
-			NestableException {
+	@SuppressWarnings("unchecked")
+	@Transient
+	public List getRunningChildProcesses() {
 
 		List results = new ArrayList();
 
-		String querySQL = "select api from AntelopeProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
+		String querySQL = "select api from ZebraProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
 		querySQL += " and api.state=:state";
 
 		Session s = RegistryHelper.getInstance().getSession();
@@ -313,11 +347,12 @@ public class ZebraProcessInstance implements IProcessInstance {
 		return results;
 	}
 
-	public List getRunningRelatedProcesses() throws HibernateException {
+	@Transient
+	public List getRunningRelatedProcesses() {
 
 		if (this.getRelatedKey() != null) {
 
-			String querySQL = "select api from AntelopeProcessInstance api where api.relatedClass =:relatedClass";
+			String querySQL = "select api from ZebraProcessInstance api where api.relatedClass =:relatedClass";
 			querySQL += " and api.relatedKey = :relatedKey";
 			querySQL += " and api.state=:state";
 
@@ -342,12 +377,12 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @throws HibernateException
 	 *             hibernate exception
 	 */
-	public List getCompleteRelatedProcesses() throws HibernateException,
-			NestableException {
+	@Transient
+	public List getCompleteRelatedProcesses() {
 
 		if (this.getRelatedKey() != null) {
 
-			String querySQL = "select api from AntelopeProcessInstance api where api.relatedClass =:relatedClass";
+			String querySQL = "select api from ZebraProcessInstance api where api.relatedClass =:relatedClass";
 			querySQL += " and api.relatedKey = :relatedKey";
 			querySQL += " and api.state=:state";
 
@@ -370,10 +405,12 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @throws PersistenceException
 	 * @throws HibernateException
 	 */
+	@SuppressWarnings("unchecked")
+	@Transient
 	public List getNotRunningChildProcesses() throws HibernateException {
 		List results = new ArrayList();
 
-		String querySQL = "select api from AntelopeProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
+		String querySQL = "select api from ZebraProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
 		querySQL += " and api.state!=:state";
 
 		Session s = RegistryHelper.getInstance().getSession();
@@ -391,6 +428,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @param q
 	 * @throws HibernateException
 	 */
+	@Transient
 	private void recursivelyQueryChildProcesses(
 			List<ZebraProcessInstance> results, Query q)
 			throws HibernateException {
@@ -417,8 +455,9 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @throws PersistenceException
 	 * @throws HibernateException
 	 */
+	@Transient
 	public List<ZebraProcessInstance> getAllChildProcesses()
-			throws HibernateException {
+			{
 		List<ZebraProcessInstance> results = new ArrayList<ZebraProcessInstance>();
 
 		String querySQL = "select api from ZebraProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
@@ -447,8 +486,9 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @return list of all available tasks for the current user on this process
 	 * @throws HibernateException
 	 */
-	public List<ZebraTaskInstance> getUsersTasks() throws NestableException,
-			HibernateException {
+	@SuppressWarnings("unchecked")
+	@Transient
+	public List<ZebraTaskInstance> getUsersTasks(){
 
 		Session session = RegistryHelper.getInstance().getSession();
 		;
@@ -459,14 +499,13 @@ public class ZebraProcessInstance implements IProcessInstance {
 		return tasks.list();
 	}
 
-	/* Helper functions to help with finding tasks */
-
 	/**
 	 * Looks for the first list of tasks that come from the child(ren) of this
 	 * processinstance This is used for finding the next screen. We don't do
 	 * this exaustively as it could be very large. The first is good enough for
 	 * determining the next screen
 	 */
+	@Transient
 	public List<ZebraTaskInstance> getFirstTasksFromAChildProcess()
 			throws NestableException {
 
@@ -491,7 +530,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 				throw new NestableException(emsg, e);
 			}
 		}
-		return new ArrayList();
+		return new ArrayList<ZebraTaskInstance>();
 	}
 
 	/**
@@ -499,6 +538,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * 
 	 * @return
 	 */
+	@Transient
 	public List getFirstTasksFromAParentProcess() throws NestableException {
 		ZebraProcessInstance parentInstance = null;
 		try {
@@ -531,6 +571,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @return
 	 * @throws NestableException
 	 */
+	@Transient
 	public PermissionSet getDynamicPermissions(String permissionNames)
 			throws NestableException {
 		if (permissionNames != null) {
@@ -546,6 +587,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 		return new PermissionSet();
 	}
 
+	@Transient
 	private ZebraSecurity getZebraSecurity() {
 		return (ZebraSecurity) RegistryManager.getInstance().getRegistry()
 				.getService("zebra.ZebraSecurity", ZebraSecurity.class);
@@ -565,6 +607,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @return
 	 * @throws NestableException
 	 */
+	@Transient
 	public String getDynamicPermission(String permissionName)
 			throws NestableException {
 		if (permissionName != null) {
@@ -584,7 +627,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 
 			}
 			// first look in the map
-			return (String) this.getDynamicPermissionMap().get(permissionName);
+			return this.getDynamicPermissionMap().get(permissionName);
 		}
 		return null;
 	}
@@ -602,6 +645,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @param dyanmicPermissionName
 	 * @param permission
 	 */
+	@Transient
 	public void registerDynamicPermission(String dynamicPermissionName,
 			Permission permission) {
 		this.getDynamicPermissionMap().put(dynamicPermissionName,
@@ -615,6 +659,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @param name
 	 * @throws RunTaskException
 	 */
+	@Transient
 	public void registerDynamicPermission(String dynamicPermissionName,
 			String userName) throws RunTaskException {
 		try {
@@ -639,6 +684,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * 
 	 * @return
 	 */
+	@Transient
 	private String getSuffix() {
 		if (this.getRelatedKey() != null && this.getRelatedClass() != null) {
 			return this.getRelatedClass().getName()
@@ -649,11 +695,11 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @hibernate.property
 	 * @return Returns the processDefinitionId.
 	 */
+	@Basic
 	public Long getProcessDefinitionId() {
-		return processDefinitionId;
+		return this.processDefinitionId;
 	}
 
 	/**
@@ -665,30 +711,27 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @hibernate.set cascade="all-delete-orphan" lazy="true" inverse="true"
-	 * @hibernate.collection-key column="processInstanceId"
-	 * @hibernate.collection-one-to-many class="com.anite.antelope.zebra.om.AntelopeFOE"
-	 * @hibernate.collection-cache usage="transactional"
 	 * @return Returns the fOEs.
 	 */
-	public Set getFOEs() {
-		return fOES;
+	@OneToMany(cascade={CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
+	public Set<ZebraFOE> getFOEs() {
+		return this.fOES;
 	}
 
 	/**
 	 * @param es
 	 *            The fOEs to set.
 	 */
-	public void setFOEs(Set es) {
-		fOES = es;
+	public void setFOEs(Set<ZebraFOE> es) {
+		this.fOES = es;
 	}
 
 	/**
-	 * @hibernate.property
 	 * @return Returns the relatedClass.
 	 */
+	@Basic
 	public Class getRelatedClass() {
-		return relatedClass;
+		return this.relatedClass;
 	}
 
 	/**
@@ -700,11 +743,11 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @hibernate.property
 	 * @return Returns the relatedKey.
 	 */
+	@Basic
 	public Long getRelatedKey() {
-		return relatedKey;
+		return this.relatedKey;
 	}
 
 	/**
@@ -723,7 +766,10 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @hibernate.collection-cache usage="transactional"
 	 * @return Returns the dynamicPermissionMap.
 	 */
-	private Map getDynamicPermissionMap() {
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinTable(table=@Table(name="ProcessInstanceDynamicPermissions"), joinColumns= @JoinColumn(name="dynamicPermissionName"))
+	@Column(name="realPermissionName")
+	public Map<String, String> getDynamicPermissionMap() {
 		return this.dynamicPermissionMap;
 	}
 
@@ -731,7 +777,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @param dynamicPermissionMap
 	 *            The dynamicPermissionMap to set.
 	 */
-	private void setDynamicPermissionMap(Map dynamicPermissionMap) {
+	private void setDynamicPermissionMap(Map<String, String> dynamicPermissionMap) {
 		this.dynamicPermissionMap = dynamicPermissionMap;
 	}
 

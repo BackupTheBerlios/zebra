@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Anite - Central Government Division
+ * Copyright 2004 2005 Anite - Central Government Division
  *    http://www.anite.com/publicsector
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,14 +19,19 @@ package com.anite.zebra.hivemind.om.state;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratorType;
+import javax.persistence.Id;
+
 /**
  * @author Matthew.Norris
  * @author Ben Gidley
  * @author John Rae
- * @hibernate.class lazy="true" table="PropertySet"
- * @hibernate.cache usage="transactional"
  */
-public class ZebraPropertySetEntry implements Serializable {
+@Entity
+public class ZebraPropertySetEntry {
 
     private Integer propertySetId;
 
@@ -37,6 +42,10 @@ public class ZebraPropertySetEntry implements Serializable {
     static final long serialVersionUID = 1L;
 
    
+    public ZebraPropertySetEntry(){
+    	//noop
+    }
+    
     /**
 	 * Constructor taking String
 	 * @param value
@@ -54,8 +63,9 @@ public class ZebraPropertySetEntry implements Serializable {
 	}
     
     /**
-     * @hibernate.id generator-class="native"
+     * 
      */
+	@Id(generate=GeneratorType.AUTO)
     public Integer getId() {
         return this.propertySetId;
     }
@@ -70,8 +80,10 @@ public class ZebraPropertySetEntry implements Serializable {
      * @return Returns the value.
      * 
      */
+    @Basic
+    @Column(length=4000)
     public String getValue() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -94,6 +106,7 @@ public class ZebraPropertySetEntry implements Serializable {
      * @hibernate.property type="serializable" length="1000000"
      * @return Returns the object.
      */
+    @Basic
     public Object getObject() {
         return this.object;
     }

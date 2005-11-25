@@ -199,11 +199,11 @@ public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinitio
 		return getGeneralProperties().getBoolean(PROP_SHOWINHISTORY);
 	}
 	@Transient
-	protected String getStaticPermissionsString() {
+	public String getStaticPermissionsString() {
 		return getGeneralProperties().getString(PROP_STATIC_PERMISSIONS);
 	}
 	@Transient
-	protected String getDynamicPermissions() {
+	public String getDynamicPermissions() {
 		return getGeneralProperties().getString(PROP_DYNAMIC_PERMISSIONS);
 	}
 
