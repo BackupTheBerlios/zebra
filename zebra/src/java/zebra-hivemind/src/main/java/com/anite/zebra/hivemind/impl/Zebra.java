@@ -33,10 +33,11 @@ import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
 public class Zebra {
 	
-	private ZebraDefinitionFactory zebraDefinitionFactory;
+	private ZebraDefinitionFactory definitionFactory;
+	private ZebraStateFactory stateFactory;
 
 	public Map<String, ZebraProcessDefinition> getAllProcessDefinitions() {		
-		return this.zebraDefinitionFactory.getAllProcessDefinitionsByName();
+		return this.definitionFactory.getAllProcessDefinitionsByName();
 	}
 
 	/**
@@ -143,13 +144,20 @@ public class Zebra {
 	 * Most of the key mehthods used in a normal application are availabe on this facade.
 	 * @return
 	 */
-	public ZebraDefinitionFactory getZebraDefinitionFactory() {
-		return this.zebraDefinitionFactory;
+	public ZebraDefinitionFactory getDefinitionFactory() {
+		return this.definitionFactory;
 	}
 
-	public void setZebraDefinitionFactory(
-			ZebraDefinitionFactory zebraDefinitionFactory) {
-		this.zebraDefinitionFactory = zebraDefinitionFactory;
+	public void setDefinitionFactory(ZebraDefinitionFactory definitionFactory) {
+		this.definitionFactory = definitionFactory;
+	}
+
+	public ZebraStateFactory getStateFactory() {
+		return this.stateFactory;
+	}
+
+	public void setStateFactory(ZebraStateFactory stateFactory) {
+		this.stateFactory = stateFactory;
 	}
 
 }

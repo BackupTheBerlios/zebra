@@ -713,7 +713,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	/**
 	 * @return Returns the fOEs.
 	 */
-	@OneToMany(cascade={CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	public Set<ZebraFOE> getFOEs() {
 		return this.fOES;
 	}

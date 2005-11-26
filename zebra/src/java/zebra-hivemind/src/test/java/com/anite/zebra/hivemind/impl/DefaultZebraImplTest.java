@@ -9,7 +9,7 @@ public class DefaultZebraImplTest extends TestCase {
 		Zebra zebra = (Zebra) RegistryManager.getInstance().getRegistry().getService("zebra.Zebra",Zebra.class);
 
 		assertNotNull(zebra);
-		assertNotNull(zebra.getZebraDefinitionFactory());
+		assertNotNull(zebra.getDefinitionFactory());
 
 	}
 }

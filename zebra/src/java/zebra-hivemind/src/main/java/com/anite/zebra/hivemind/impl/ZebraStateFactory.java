@@ -69,7 +69,7 @@ public class ZebraStateFactory implements IStateFactory {
 	private Log log;
 
 	/**
-	 * Create a new FOE and save it
+	 * Create a new FOE
 	 */
 	public IFOE createFOE(IProcessInstance processInstance)
 			throws CreateObjectException {

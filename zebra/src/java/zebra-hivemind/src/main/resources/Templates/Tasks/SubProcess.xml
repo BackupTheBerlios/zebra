@@ -5,7 +5,7 @@
 		<property name="synchronise" type="boolean" value="false" locked="yes"/>
 		<property name="auto" type="boolean" value="yes" locked="yes"/>
 		<property name="class name" type="string" 
-			value="com.anite.antelope.zebra.taskAction.SubProcess" 
+			value="com.anite.zebra.hivemind.taskAction.SubProcess" 
 			locked="yes"/>
 	</properties>
 	<properties name="SubProcess">
