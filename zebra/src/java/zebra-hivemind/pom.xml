@@ -84,11 +84,11 @@
             <artifactId>zebra-defs</artifactId>
             <version>0.5.1-dev</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-state</artifactId>
             <version>0.5.1-dev</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-xmlloader</artifactId>

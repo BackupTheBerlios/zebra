@@ -36,6 +36,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceException;
 import javax.persistence.Table;
@@ -111,7 +112,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	private Map<String, ZebraPropertySetEntry> propertySet = new HashMap<String, ZebraPropertySetEntry>();
 
 	/** Set of historical task instance information */
-	private Set historyInstances = new HashSet();
+	private Set<ZebraTaskInstanceHistory> historyInstances = new HashSet<ZebraTaskInstanceHistory>();
 
 	/**
 	 * Maps dynamic permission names to fulcrum security permission names
@@ -256,6 +257,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @return
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@MapKey
 	public Map<String, ZebraPropertySetEntry> getPropertySet() {
 		return this.propertySet;
 	}
@@ -299,25 +301,23 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	/**
-	 * @hibernate.set cascade="all" lazy="true" inverse="true"
-	 * @hibernate.collection-key column="processInstanceId"
-	 * @hibernate.collection-one-to-many class="com.anite.antelope.zebra.om.AntelopeTaskInstanceHistory"
-	 * @hibernate.collection-cache usage="transactional"
 	 * @return
 	 */
 	@OneToMany(fetch = FetchType.LAZY)
-	public Set getHistoryInstances() {
+	public Set<ZebraTaskInstanceHistory> getHistoryInstances() {
 		return this.historyInstances;
 	}
 
-	@ManyToOne
+
+	public void setHistoryInstances(Set<ZebraTaskInstanceHistory> historyInstances) {
+		this.historyInstances = historyInstances;
+	}
+	
+	@ManyToOne(targetEntity=ZebraTaskInstance.class)
 	public ITaskInstance getParentTaskInstance() {
 		return this.parentTaskInstance;
 	}
 
-	public void setHistoryInstances(Set historyInstances) {
-		this.historyInstances = historyInstances;
-	}
 
 	/**
 	 * returns a recursive list of processes that are children of this process
@@ -766,9 +766,11 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @hibernate.collection-cache usage="transactional"
 	 * @return Returns the dynamicPermissionMap.
 	 */
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinTable(table=@Table(name="ProcessInstanceDynamicPermissions"), joinColumns= @JoinColumn(name="dynamicPermissionName"))
-	@Column(name="realPermissionName")
+	@Transient
+//	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//	@MapKey
+//	@JoinTable(table=@Table(name="ProcessInstanceDynamicPermissions"), joinColumns= @JoinColumn(name="dynamicPermissionName"))
+//	@Column(name="realPermissionName")
 	public Map<String, String> getDynamicPermissionMap() {
 		return this.dynamicPermissionMap;
 	}
@@ -777,7 +779,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @param dynamicPermissionMap
 	 *            The dynamicPermissionMap to set.
 	 */
-	private void setDynamicPermissionMap(Map<String, String> dynamicPermissionMap) {
+	public void setDynamicPermissionMap(Map<String, String> dynamicPermissionMap) {
 		this.dynamicPermissionMap = dynamicPermissionMap;
 	}
 

@@ -36,7 +36,7 @@ public class ZebraPropertySetEntry {
     private Integer propertySetId;
 
     private String value=null;
-    private Object object=null;
+    private Serializable object=null;
 
     /** Version Flag for serialisation   */
     static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public class ZebraPropertySetEntry {
 	 * Constructor taking Object
 	 * @param object
 	 */
-	public ZebraPropertySetEntry(Object object) {
+	public ZebraPropertySetEntry(Serializable object) {
 		setObject(object);
 	}
     
@@ -107,14 +107,14 @@ public class ZebraPropertySetEntry {
      * @return Returns the object.
      */
     @Basic
-    public Object getObject() {
+    public Serializable getObject() {
         return this.object;
     }
 
     /**
      * @param object The object to set.
      */
-    public void setObject(Object object) {
+    public void setObject(Serializable object) {
         this.object = object;
     }
 }

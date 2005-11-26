@@ -47,9 +47,9 @@ public class ZebraFOE implements IFOE {
 		this.processInstance.getFOEs().add(this);
 	}
 
-	@ManyToOne
+	@ManyToOne(targetEntity=ZebraProcessInstance.class)
 	public IProcessInstance getProcessInstance() {
-		return processInstance;
+		return this.processInstance;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class ZebraFOE implements IFOE {
 	 */
 	@Id(generate = GeneratorType.AUTO)
 	public Integer getAntelopeFoeID() {
-		return antelopeFoeID;
+		return this.antelopeFoeID;
 	}
 
 	/**

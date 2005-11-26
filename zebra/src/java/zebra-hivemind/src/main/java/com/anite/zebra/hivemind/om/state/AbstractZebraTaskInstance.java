@@ -105,6 +105,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	public static final String COMPLETED = "Completed";
 
 	public AbstractZebraTaskInstance() {
+		//noop
 	}
 
 	/**
@@ -178,7 +179,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 
 	@Basic
 	public long getState() {
-		return state;
+		return this.state;
 	}
 
 	public void setState(long newState) {
@@ -230,8 +231,8 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 
 	@Basic
 	public String getCaption() {
-		if (caption == null && this.getTaskDefinition() != null) {
-			caption = ((ZebraTaskDefinition) this.getTaskDefinition())
+		if (this.caption == null && this.getTaskDefinition() != null) {
+			this.caption = ((ZebraTaskDefinition) this.getTaskDefinition())
 					.getName();
 		}
 		return this.caption;
@@ -251,7 +252,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	 */
 	@Basic
 	public Date getDateCreated() {
-		return dateCreated;
+		return this.dateCreated;
 	}
 
 	/**
@@ -268,7 +269,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	 */
 	@Basic
 	public Date getDateDue() {
-		return dateDue;
+		return this.dateDue;
 	}
 
 	/**

@@ -22,4 +22,19 @@
             </construct>
         </invoke-factory>
     </service-point>
+    <service-point id="priorityManager" interface="com.anite.zebra.hivemind.impl.PriorityManager">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.impl.PriorityManager"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="clusterSafeLock" interface="com.anite.zebra.hivemind.api.LockManager">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.impl.ClusterSafeLockManager"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="zebraState" interface="com.anite.zebra.core.factory.api.IStateFactory">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.impl.ZebraStateFactory"> </construct>
+        </invoke-factory>
+    </service-point>
 </module>

@@ -28,8 +28,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-
 import com.anite.zebra.ext.definitions.impl.PropertyGroups;
 
 /**

@@ -30,9 +30,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.apache.commons.lang.exception.NestableException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.util.PermissionSet;
 
 import com.anite.zebra.ext.definitions.api.IProperties;
@@ -47,8 +44,6 @@ import com.anite.zebra.ext.definitions.impl.TaskDefinition;
  */
 @Entity
 public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinition {
-	private final static Log log = LogFactory
-			.getLog(ZebraTaskDefinition.class);
 
 	/* General Property's */
 	private static final String PROPGROUP_GENERAL = "(General Task Properties)";
@@ -87,7 +82,7 @@ public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinitio
 	 * /** @return Returns the xmlId. @hibernate.property
 	 */
 	public Long getXmlId() {
-		return xmlId;
+		return this.xmlId;
 	}
 
 	/**
@@ -240,7 +235,7 @@ public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinitio
 		return getScreenProperties().getBoolean(PROP_AUTO_SHOW);
 	}
 	@Transient
-	public PermissionSet getStaticPermissions() throws NestableException {
+	public PermissionSet getStaticPermissions() {
 		//@TODO return ZebraHelper.getInstance().getPermissionSet(				this.getStaticPermissionsString());
 		return null;
 	}

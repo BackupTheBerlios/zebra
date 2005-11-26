@@ -23,8 +23,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 
-import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
-
 /**
  * A object representing a completed task. This is created once the task has 
  * been completed 
@@ -69,7 +67,7 @@ public class ZebraTaskInstanceHistory extends AbstractZebraTaskInstance {
 	 */
 	@Basic
 	public Date getDateCompleted() {
-		return dateCompleted;
+		return this.dateCompleted;
 	}
 
 	/**
@@ -87,7 +85,7 @@ public class ZebraTaskInstanceHistory extends AbstractZebraTaskInstance {
 	 */
 	@Basic
 	public Boolean getShowInHistory() {
-		return showInHistory;
+		return this.showInHistory;
 	}
 
 	/**

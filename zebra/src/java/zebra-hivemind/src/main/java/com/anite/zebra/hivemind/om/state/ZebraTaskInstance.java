@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 
 import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
@@ -73,7 +74,8 @@ public class ZebraTaskInstance extends AbstractZebraTaskInstance {
 	 * @return
 	 */
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	public Map getPropertySet() {
+	@MapKey
+	public Map<String, ZebraPropertySetEntry> getPropertySet() {
 		return this.propertySet;
 	}
 

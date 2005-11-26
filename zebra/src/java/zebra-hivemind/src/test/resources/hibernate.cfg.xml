@@ -23,5 +23,14 @@
 		<mapping class="com.anite.zebra.hivemind.om.defs.ZebraRoutingDefinition"/>
 		<mapping class="com.anite.zebra.hivemind.om.defs.ZebraTaskDefinition"/>
 		
+		<mapping class="com.anite.zebra.hivemind.om.state.Priority"/>
+		<mapping class="com.anite.zebra.hivemind.om.state.DatabaseLock"/>
+		<mapping class="com.anite.zebra.hivemind.om.state.ZebraFOE"/>
+		<mapping class="com.anite.zebra.hivemind.om.state.ZebraProcessInstance"/>
+		<mapping class="com.anite.zebra.hivemind.om.state.ZebraPropertySetEntry"/>
+		<mapping class="com.anite.zebra.hivemind.om.state.ZebraTaskInstance"/>
+		<mapping class="com.anite.zebra.hivemind.om.state.ZebraTaskInstanceHistory"/>
+		
+		<mapping resource="DynamicHibernate.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

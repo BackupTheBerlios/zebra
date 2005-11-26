@@ -48,7 +48,7 @@ public class Priority {
 	 * @return Returns the sortKey.
 	 */
 	public Integer getSortKey() {
-		return sortKey;
+		return this.sortKey;
 	}
 
 	/**

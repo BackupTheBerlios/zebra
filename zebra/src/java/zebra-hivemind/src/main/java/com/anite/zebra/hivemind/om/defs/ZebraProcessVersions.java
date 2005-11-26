@@ -29,7 +29,6 @@ import javax.persistence.Table;
 
 import com.anite.zebra.ext.definitions.api.IProcessVersion;
 import com.anite.zebra.ext.definitions.impl.ProcessVersions;
-import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
 
 /**
  * Extends Process Versions to make XDoclet read tags
