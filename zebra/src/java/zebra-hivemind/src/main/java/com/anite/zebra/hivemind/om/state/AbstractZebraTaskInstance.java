@@ -325,7 +325,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	 * @throws NestableException
 	 */
 	@Transient
-	public PermissionSet getPermissions() throws NestableException {
+	public PermissionSet getPermissions() {
 		// Static
 		PermissionSet permissions = new PermissionSet();
 		ZebraTaskDefinition antelopeTaskDefinition = (ZebraTaskDefinition) this

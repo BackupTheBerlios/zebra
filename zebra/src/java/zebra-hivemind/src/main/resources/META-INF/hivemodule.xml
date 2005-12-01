@@ -18,7 +18,9 @@
         <invoke-factory>
             <construct class="com.anite.zebra.hivemind.impl.ZebraSecurity">
                 <set-service property="permissionManager"
-                    service-id="fulrum.security.permissionManagerDynamic"/>
+                    service-id="fulcrum.security.hivemind.permissionManagerDynamic"/>
+                <set-service property="userManager"
+                    service-id="fulcrum.security.hivemind.userManagerDynamic"/>
             </construct>
         </invoke-factory>
     </service-point>
@@ -35,6 +37,11 @@
     <service-point id="zebraState" interface="com.anite.zebra.core.factory.api.IStateFactory">
         <invoke-factory>
             <construct class="com.anite.zebra.hivemind.impl.ZebraStateFactory"> </construct>
+        </invoke-factory>
+    </service-point>
+    <service-point id="engine" interface="com.anite.zebra.core.api.IEngine">
+        <invoke-factory>
+            <construct class="com.anite.zebra.core.Engine"></construct>
         </invoke-factory>
     </service-point>
 </module>

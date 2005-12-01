@@ -327,12 +327,11 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 *             persistence exception
 	 * @throws HibernateException
 	 *             hibernate exception
-	 */
-	@SuppressWarnings("unchecked")
+	 */	
 	@Transient
-	public List getRunningChildProcesses() {
+	public List<ZebraProcessInstance> getRunningChildProcesses() {
 
-		List results = new ArrayList();
+		List<ZebraProcessInstance> results = new ArrayList<ZebraProcessInstance>();
 
 		String querySQL = "select api from ZebraProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
 		querySQL += " and api.state=:state";
@@ -348,7 +347,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	}
 
 	@Transient
-	public List getRunningRelatedProcesses() {
+	public List<ZebraProcessInstance> getRunningRelatedProcesses() {
 
 		if (this.getRelatedKey() != null) {
 
@@ -364,7 +363,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 			q.setLong("state", IProcessInstance.STATE_RUNNING);
 			return q.list();
 		}
-		List results = new ArrayList();
+		List<ZebraProcessInstance> results = new ArrayList<ZebraProcessInstance>();
 		return results;
 	}
 
@@ -378,7 +377,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 *             hibernate exception
 	 */
 	@Transient
-	public List getCompleteRelatedProcesses() {
+	public List<ZebraProcessInstance> getCompleteRelatedProcesses() {
 
 		if (this.getRelatedKey() != null) {
 
@@ -395,7 +394,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 
 			return q.list();
 		}
-		return new ArrayList();
+		return new ArrayList<ZebraProcessInstance>();
 	}
 
 	/**
@@ -405,9 +404,8 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 * @throws PersistenceException
 	 * @throws HibernateException
 	 */
-	@SuppressWarnings("unchecked")
 	@Transient
-	public List getNotRunningChildProcesses() throws HibernateException {
+	public List<ZebraProcessInstance> getNotRunningChildProcesses() throws HibernateException {
 		List results = new ArrayList();
 
 		String querySQL = "select api from ZebraProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
@@ -573,7 +571,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 */
 	@Transient
 	public PermissionSet getDynamicPermissions(String permissionNames)
-			throws NestableException {
+			{
 		if (permissionNames != null) {
 
 			String[] actualPermissionNames = permissionNames.split(";");
@@ -609,7 +607,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 	 */
 	@Transient
 	public String getDynamicPermission(String permissionName)
-			throws NestableException {
+			{
 		if (permissionName != null) {
 
 			if (!this.getDynamicPermissionMap().containsKey(permissionName)) {
