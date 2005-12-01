@@ -53,7 +53,7 @@ public class DatabaseLock {
     /**
      * @return Returns the processInstanceId.
      */
-    @Id(generate=GeneratorType.AUTO)
+    @Id(generate=GeneratorType.NONE)
     public Long getProcessInstanceId() {
         return this.processInstanceId;
     }

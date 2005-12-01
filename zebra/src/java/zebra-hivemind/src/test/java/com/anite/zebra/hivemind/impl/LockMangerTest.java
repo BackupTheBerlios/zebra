@@ -31,6 +31,7 @@ import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.exceptions.LockException;
 import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.state.api.IProcessInstance;
+import com.anite.zebra.core.state.api.ITransaction;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 
 public class LockMangerTest extends TestCase {
@@ -76,7 +77,9 @@ public class LockMangerTest extends TestCase {
 
 		IProcessInstance processInstance = this.stateFactory
 				.createProcessInstance(processDefinition);
-		this.stateFactory.saveObject(processInstance);
+		ITransaction transaction = this.stateFactory.beginTransaction();
+        this.stateFactory.saveObject(processInstance);
+        transaction.commit();
 
 		Date before = Calendar.getInstance().getTime();
 		this.stateFactory.acquireLock(processInstance, null);

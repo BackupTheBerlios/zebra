@@ -6,7 +6,7 @@ import org.apache.fulcrum.hivemind.RegistryManager;
 
 public class DefaultZebraImplTest extends TestCase {
 	public void testInitialiseHiveMind() {
-		Zebra zebra = (Zebra) RegistryManager.getInstance().getRegistry().getService("zebra.Zebra",Zebra.class);
+		Zebra zebra = (Zebra) RegistryManager.getInstance().getRegistry().getService("zebra.zebra",Zebra.class);
 
 		assertNotNull(zebra);
 		assertNotNull(zebra.getDefinitionFactory());
