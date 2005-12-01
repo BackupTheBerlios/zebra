@@ -298,7 +298,7 @@ public class XMLLoadProcess {
         // now add outbound routings to each taskdef
         if (log.isDebugEnabled()) {
             ProcessDefinition baseDef = (ProcessDefinition) pd;
-            log.debug("createRoutingLinks " + baseDef.getName());
+            log.debug("createRoutingLinks " + baseDef.getId());
         }
 
         for (Iterator it = pd.getRoutingDefs().iterator(); it.hasNext();) {
