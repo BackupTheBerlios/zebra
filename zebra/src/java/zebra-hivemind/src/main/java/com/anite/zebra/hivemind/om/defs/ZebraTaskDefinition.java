@@ -240,4 +240,9 @@ public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinitio
 		return null;
 	}
 
+    @Override
+    public String toString() {
+        return this.getId().toString();
+    }
+
 }

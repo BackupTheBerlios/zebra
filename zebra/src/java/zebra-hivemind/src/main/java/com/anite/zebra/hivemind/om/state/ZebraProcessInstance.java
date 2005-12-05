@@ -753,4 +753,8 @@ public class ZebraProcessInstance implements IProcessInstance {
         }
     }
 
+    @Override
+    public String toString() {
+        return this.getProcessInstanceId().toString();
+    }
 }

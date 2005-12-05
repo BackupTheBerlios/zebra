@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.anite.zebra.hivemind.om.taskAction;
+package com.anite.zebra.hivemind.taskAction;
 
 import java.util.Iterator;
 

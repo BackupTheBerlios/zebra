@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.anite.zebra.hivemind.om.taskAction;
+package com.anite.zebra.hivemind.taskAction;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

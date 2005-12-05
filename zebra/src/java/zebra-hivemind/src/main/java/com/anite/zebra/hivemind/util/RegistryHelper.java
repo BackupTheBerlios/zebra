@@ -33,6 +33,6 @@ public class RegistryHelper {
     }
     
     public Zebra getZebra(){
-    	return (Zebra) RegistryManager.getInstance().getRegistry().getService("zebra.Zebra", Zebra.class);
+    	return (Zebra) RegistryManager.getInstance().getRegistry().getService("zebra.zebra", Zebra.class);
     }
 }

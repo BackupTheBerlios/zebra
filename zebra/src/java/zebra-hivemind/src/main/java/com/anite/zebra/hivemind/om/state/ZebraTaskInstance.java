@@ -87,4 +87,14 @@ public class ZebraTaskInstance extends AbstractZebraTaskInstance {
 			Map<String, ZebraPropertySetEntry> propertySetEntries) {
 		this.propertySet = propertySetEntries;
 	}
+    
+    @Override
+    public String toString() {
+        if (this.getTaskInstanceId()!=null){
+        return this.getTaskInstanceId().toString();
+        }
+        else {
+            return "New instance of TD:" + this.getTaskDefinition().getId();
+        }
+    }
 }
