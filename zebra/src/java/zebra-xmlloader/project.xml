@@ -6,7 +6,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-xmlloader</artifactId>
     <name>Zebra XML Loader</name>
-    <currentVersion>0.5.1-dev</currentVersion>
+    <currentVersion>0.5.3-dev</currentVersion>
     <organization>
         <name>Anite</name>
         <url>http://www.aniteps.com</url>
@@ -138,7 +138,7 @@
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-defs</artifactId>
-            <version>0.5.1-dev</version>
+            <version>0.5.2-dev</version>
             <type>jar</type>
             <properties/>
         </dependency>

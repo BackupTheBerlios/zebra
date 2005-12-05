@@ -69,12 +69,13 @@ public class SimpleTest extends TestCase {
         lf.loadProcessDef(new File("src/test/test-resources/testLoadingObjectsLoadedFromXML.acgwfd.xml")
                 .getAbsoluteFile());
 
-        assertEquals("Loaded " + lf.getAllProcessVersions().size() + " process versions", 1, lf.getAllProcessVersions().size());
+        assertEquals("Loaded " + lf.getAllProcessVersions().size() + " process versions", 1, lf.getAllProcessVersions()
+                .size());
 
         assertEquals(1, lf.getAllProcessVersions().size());
         Iterator it = lf.getAllProcessVersions().iterator();
-        ProcessVersions pv = (ProcessVersions)it.next();
-        ProcessDefinition apd = (ProcessDefinition)pv.getLatestProcessVersion();
+        ProcessVersions pv = (ProcessVersions) it.next();
+        ProcessDefinition apd = (ProcessDefinition) pv.getLatestProcessVersion();
         assertEquals(1, apd.getVersion().longValue());
         assertEquals("New Test1 Process", apd.getName());
         assertNull(apd.getClassConstruct());

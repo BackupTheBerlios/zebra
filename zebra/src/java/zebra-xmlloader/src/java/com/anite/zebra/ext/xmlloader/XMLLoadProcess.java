@@ -39,11 +39,10 @@ import org.w3c.dom.Node;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.IRoutingDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
+import com.anite.zebra.ext.definitions.api.AbstractProcessDefinition;
 import com.anite.zebra.ext.definitions.api.IProcessVersion;
 import com.anite.zebra.ext.definitions.api.IProcessVersions;
 import com.anite.zebra.ext.definitions.api.IPropertyGroupsAware;
-import com.anite.zebra.ext.definitions.impl.ProcessDefinition;
-import com.anite.zebra.ext.definitions.impl.ProcessVersions;
 import com.anite.zebra.ext.definitions.impl.PropertyElement;
 import com.anite.zebra.ext.definitions.impl.PropertyGroups;
 import com.anite.zebra.ext.definitions.impl.RoutingDefinition;
@@ -201,7 +200,7 @@ public class XMLLoadProcess {
     }
 
     private IProcessVersions processHeader(Node root) throws Exception {
-        ProcessVersions processVersions = (ProcessVersions) processVersionsClass.newInstance();
+        IProcessVersions processVersions = (IProcessVersions) processVersionsClass.newInstance();
         log.debug("processHeader " + root);
         if (root.getNodeName().compareTo(XMLNODE_TYPE) != 0) {
             throw new BadXMLException("Not a Process Def");
@@ -220,7 +219,7 @@ public class XMLLoadProcess {
         return processVersions;
     }
 
-    private void loadProcessVersion(Node root, ProcessVersions processVersions) throws Exception {
+    private void loadProcessVersion(Node root, IProcessVersions processVersions) throws Exception {
         for (int i = 0; i < root.getChildNodes().getLength(); i++) {
             Node node = root.getChildNodes().item(i);
             if (node.getNodeName().compareTo(XMLNODE_PROVER) == 0) {
@@ -248,7 +247,7 @@ public class XMLLoadProcess {
         }
     }
 
-    public IProcessVersion iterateProcessNodes(Node root, Long version, ProcessVersions processVersions)
+    public IProcessVersion iterateProcessNodes(Node root, Long version, IProcessVersions processVersions)
             throws Exception {
 
         log.debug("iterateProcessNodes " + root);
@@ -256,7 +255,7 @@ public class XMLLoadProcess {
             throw new BadXMLException("Expected node " + XMLNODE_PROCESSDEF);
         }
 
-        ProcessDefinition pd = (ProcessDefinition) processDefinitionClass.newInstance();
+        AbstractProcessDefinition pd = (AbstractProcessDefinition) processDefinitionClass.newInstance();
 
         pd.setVersion(version);
         for (int i = 0; i < root.getChildNodes().getLength(); i++) {
@@ -297,8 +296,7 @@ public class XMLLoadProcess {
     private void createRoutingLinks(IProcessDefinition pd) {
         // now add outbound routings to each taskdef
         if (log.isDebugEnabled()) {
-            ProcessDefinition baseDef = (ProcessDefinition) pd;
-            log.debug("createRoutingLinks " + baseDef.getId());
+            log.debug("createRoutingLinks ");
         }
 
         for (Iterator it = pd.getRoutingDefs().iterator(); it.hasNext();) {
@@ -310,7 +308,7 @@ public class XMLLoadProcess {
         }
     }
 
-    private void processRoutingDefs(Node root, ProcessDefinition pd) throws Exception {
+    private void processRoutingDefs(Node root, AbstractProcessDefinition pd) throws Exception {
         log.debug("processRoutingDefs");
 
         for (int i = 0; i < root.getChildNodes().getLength(); i++) {
@@ -323,7 +321,7 @@ public class XMLLoadProcess {
         }
     }
 
-    private IRoutingDefinition iterateRoutingDefNodes(Node root, ProcessDefinition pdd) throws Exception {
+    private IRoutingDefinition iterateRoutingDefNodes(Node root, AbstractProcessDefinition pdd) throws Exception {
         RoutingDefinition rd = (RoutingDefinition) routingDefinitionClass.newInstance();
         rd.setId(makeLongGuid(getAttr(root, XMLATTR_GUID)));
         Long origTDId = makeLongGuid(getAttr(root, XMLATTR_TASKORGGUID));
@@ -389,7 +387,7 @@ public class XMLLoadProcess {
         }
     }
 
-    private void processTaskDefs(Node root, ProcessDefinition pd) throws Exception {
+    private void processTaskDefs(Node root, AbstractProcessDefinition pd) throws Exception {
         log.debug("processTaskDefs ");
 
         for (int i = 0; i < root.getChildNodes().getLength(); i++) {
@@ -450,7 +448,8 @@ public class XMLLoadProcess {
         }
     }
 
-    private void processPDPropGroup(Node root, ProcessDefinition pd, ProcessVersions processVersions) throws Exception {
+    private void processPDPropGroup(Node root, AbstractProcessDefinition pd, IProcessVersions processVersions)
+            throws Exception {
         log.debug("processPDPropGroup" + root);
         if (compareNodeAttr(root, XMLATTR_NAME, PROP_SYS)) {
             // system property
@@ -470,7 +469,8 @@ public class XMLLoadProcess {
 
     }
 
-    private void processPDSysProps(Node root, ProcessDefinition pd, ProcessVersions processVersions) throws Exception {
+    private void processPDSysProps(Node root, AbstractProcessDefinition pd, IProcessVersions processVersions)
+            throws Exception {
         log.debug("processPDSysProps" + root);
         for (int i = 0; i < root.getChildNodes().getLength(); i++) {
             Node node = root.getChildNodes().item(i);
