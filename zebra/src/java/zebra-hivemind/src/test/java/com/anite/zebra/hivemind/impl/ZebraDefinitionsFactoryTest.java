@@ -170,7 +170,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 		// only one destination
 		task = (TaskDefinition) route.getDestinationTaskDefinition();
 		// check the name is the same
-		assertEquals("Are they a pensioner?", task.getName());
+		assertEquals("Are they a pensioner", task.getName());
 		// next is one of three
 		boolean foundBored = false;
 		boolean foundPension = false;
