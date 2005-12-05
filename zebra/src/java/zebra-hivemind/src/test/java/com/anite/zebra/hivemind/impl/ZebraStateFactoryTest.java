@@ -44,121 +44,115 @@ import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
  */
 public class ZebraStateFactoryTest extends TestCase {
 
-	private IStateFactory stateFactory;
+    private IStateFactory stateFactory;
 
-	private ZebraDefinitionFactory definitionsFactory;
+    private ZebraDefinitionFactory definitionsFactory;
 
-	protected void setUp() throws Exception {
+    protected void setUp() throws Exception {
 
-		Resource resource = new ClasspathResource(new DefaultClassResolver(),
-				"META-INF/hivemodule_zebradefinitions.xml");
-		RegistryManager.getInstance().getResources().add(resource);
+        Resource resource = new ClasspathResource(new DefaultClassResolver(),
+                "META-INF/hivemodule_zebradefinitions.xml");
+        RegistryManager.getInstance().getResources().add(resource);
 
-		this.stateFactory = (IStateFactory) RegistryManager.getInstance()
-				.getRegistry().getService("zebra.zebraState",
-						IStateFactory.class);
-		this.definitionsFactory = (ZebraDefinitionFactory) RegistryManager
-				.getInstance().getRegistry().getService(
-						"zebra.zebraDefinitionFactory",
-						ZebraDefinitionFactory.class);
-	}
+        this.stateFactory = (IStateFactory) RegistryManager.getInstance().getRegistry().getService("zebra.zebraState",
+                IStateFactory.class);
+        this.definitionsFactory = (ZebraDefinitionFactory) RegistryManager.getInstance().getRegistry().getService(
+                "zebra.zebraDefinitionFactory", ZebraDefinitionFactory.class);
+    }
 
-	public void testCreatingTransaction() throws StateFailureException {
-		ITransaction transaction = this.stateFactory.beginTransaction();
-		assertNotNull(transaction);
+    public void testCreatingTransaction() throws StateFailureException {
+        ITransaction transaction = this.stateFactory.beginTransaction();
+        assertNotNull(transaction);
 
-		transaction.commit();
+        transaction.commit();
 
-	}
+    }
 
-	public void testLoadSaveObjects() throws Exception {
+    public void testLoadSaveObjects() throws Exception {
 
-		IProcessDefinition processDefinition = getProcessDefinition();
+        IProcessDefinition processDefinition = getProcessDefinition();
 
-		ITransaction t = this.stateFactory.beginTransaction();
-		IProcessInstance processInstance = this.stateFactory
-				.createProcessInstance(processDefinition);
+        ITransaction t = this.stateFactory.beginTransaction();
+        IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
 
-		this.stateFactory.saveObject(processInstance);
-		t.commit();
+        this.stateFactory.saveObject(processInstance);
+        t.commit();
 
-		ITaskDefinition taskDefinition = processDefinition.getFirstTask();
+        ITaskDefinition taskDefinition = processDefinition.getFirstTask();
 
-		IFOE foe = this.stateFactory.createFOE(processInstance);
-		t = this.stateFactory.beginTransaction();
-		ITaskInstance taskInstance = this.stateFactory.createTaskInstance(
-				taskDefinition, processInstance, foe);
-		this.stateFactory.saveObject(processInstance);
-		this.stateFactory.saveObject(taskInstance);
-		t.commit();
+        IFOE foe = this.stateFactory.createFOE(processInstance);
+        t = this.stateFactory.beginTransaction();
+        ITaskInstance taskInstance = this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
+        this.stateFactory.saveObject(processInstance);
+        this.stateFactory.saveObject(taskInstance);
+        t.commit();
 
-		t = this.stateFactory.beginTransaction();
-		this.stateFactory.deleteObject(taskInstance);
-		t.commit();
+        t = this.stateFactory.beginTransaction();
+        this.stateFactory.deleteObject(taskInstance);
+        t.commit();
 
-		assertFalse(processInstance.getTaskInstances().contains(taskInstance));
+        assertFalse(processInstance.getTaskInstances().contains(taskInstance));
 
-		t = this.stateFactory.beginTransaction();
-		this.stateFactory.deleteObject(processInstance);
-		t.commit();
+        t = this.stateFactory.beginTransaction();
+        this.stateFactory.deleteObject(processInstance);
+        try {
+            t.commit();
+        } catch (StateFailureException te) {
+            fail();
+        }
 
-	}
+    }
 
-	/**
-	 * @return
-	 */
-	private ZebraProcessDefinition getProcessDefinition() {
-		// Load the first process definition it has (e.g. we don't care which
-		// process)
-		Iterator processDefinitions = this.definitionsFactory
-				.getAllProcessDefinitionsById().keySet().iterator();
-		ZebraProcessDefinition processDefinition = this.definitionsFactory
-				.getAllProcessDefinitionsById().get(processDefinitions.next());
-		return processDefinition;
-	}
+    /**
+     * @return
+     */
+    private ZebraProcessDefinition getProcessDefinition() {
+        // Load the first process definition it has (e.g. we don't care which
+        // process)
+        Iterator processDefinitions = this.definitionsFactory.getAllProcessDefinitionsById().keySet().iterator();
+        ZebraProcessDefinition processDefinition = this.definitionsFactory.getAllProcessDefinitionsById().get(
+                processDefinitions.next());
+        return processDefinition;
+    }
 
-	public void testCreatingFOE() throws Exception {
-		IFOE foe = this.stateFactory.createFOE(new ZebraProcessInstance());
-		assertNotNull(foe);
+    public void testCreatingFOE() throws Exception {
+        IFOE foe = this.stateFactory.createFOE(new ZebraProcessInstance());
+        assertNotNull(foe);
 
-	}
+    }
 
-	public void testCreateProcessInstance() throws CreateObjectException,
-			DefinitionNotFoundException {
-		ZebraProcessDefinition processDefinition = getProcessDefinition();
-		ZebraProcessInstance processInstance = (ZebraProcessInstance) this.stateFactory
-				.createProcessInstance(processDefinition);
+    public void testCreateProcessInstance() throws CreateObjectException, DefinitionNotFoundException {
+        ZebraProcessDefinition processDefinition = getProcessDefinition();
+        ZebraProcessInstance processInstance = (ZebraProcessInstance) this.stateFactory
+                .createProcessInstance(processDefinition);
 
-		assertEquals(processInstance.getProcessDef(), processDefinition);
-		assertEquals(processInstance.getProcessName(), processDefinition
-				.getName());
-	}
+        assertEquals(processInstance.getProcessDef(), processDefinition);
+        assertEquals(processInstance.getProcessName(), processDefinition.getName());
+    }
 
-	public void testCreatingTaskInstance() throws Exception {
+    public void testCreatingTaskInstance() throws Exception {
 
-		IProcessDefinition processDefinition = getProcessDefinition();
+        IProcessDefinition processDefinition = getProcessDefinition();
 
-		IProcessInstance processInstance = this.stateFactory
-				.createProcessInstance(processDefinition);
+        IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
 
-		ITransaction t = this.stateFactory.beginTransaction();
-		this.stateFactory.saveObject(processInstance);
-		t.commit();
+        ITransaction t = this.stateFactory.beginTransaction();
+        this.stateFactory.saveObject(processInstance);
+        t.commit();
 
-		ITaskDefinition taskDefinition = processDefinition.getFirstTask();
+        ITaskDefinition taskDefinition = processDefinition.getFirstTask();
 
-		IFOE foe = this.stateFactory.createFOE(processInstance);
-		ITaskInstance taskInstance = this.stateFactory.createTaskInstance(
-				taskDefinition, processInstance, foe);
-		assertNotNull(taskInstance);
-		assertEquals(processInstance, taskInstance.getProcessInstance());
-		assertEquals(foe, taskInstance.getFOE());
+        IFOE foe = this.stateFactory.createFOE(processInstance);
+        ITaskInstance taskInstance = this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
+        assertNotNull(taskInstance);
+        assertEquals(processInstance, taskInstance.getProcessInstance());
+        assertEquals(foe, taskInstance.getFOE());
 
-		t = this.stateFactory.beginTransaction();
-		this.stateFactory.saveObject(taskInstance);
-		t.commit();
+        t = this.stateFactory.beginTransaction();
+        this.stateFactory.saveObject(taskInstance);
+        t.commit();
 
-		assertTrue(taskInstance.getTaskInstanceId().longValue() > 0);
-	}
+        assertTrue(taskInstance.getTaskInstanceId().longValue() > 0);
+    }
 
 }

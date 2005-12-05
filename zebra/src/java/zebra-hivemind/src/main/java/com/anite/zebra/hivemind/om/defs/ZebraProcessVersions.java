@@ -16,6 +16,8 @@
  */
 package com.anite.zebra.hivemind.om.defs;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -26,39 +28,87 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.anite.zebra.ext.definitions.api.IProcessVersion;
-import com.anite.zebra.ext.definitions.impl.ProcessVersions;
+import com.anite.zebra.ext.definitions.api.IProcessVersions;
 
 /**
  * Extends Process Versions to make XDoclet read tags
  * 
  * @author Eric Pugh
  * @author Ben Gidley
+ * @author michael jones
  */
 @Entity
-public class ZebraProcessVersions extends ProcessVersions {
+public class ZebraProcessVersions implements IProcessVersions {
 
-	public String getName() {
-		return super.getName();
-	}
+    private Long id;
 
-	@Id(generate = GeneratorType.AUTO)
-	public Long getId() {
-		return super.getId();
-	}
+    private String name;
 
-	@OneToMany(targetEntity = ZebraProcessDefinition.class, cascade=CascadeType.ALL)
-	@JoinTable(table = @Table(name = "processVersionProcesses"), joinColumns = { @JoinColumn(name = "processVersionId") }, inverseJoinColumns = @JoinColumn(name = "processDefinitionId"))
-	public Set getProcessVersions() {
-		return super.getProcessVersions();
-	}
+    private Set<IProcessVersion> processVersions = new HashSet();
 
-	public void addProcessVersion(IProcessVersion processVersion) {
-		super.addProcessVersion(processVersion);
-		if (processVersion instanceof ZebraProcessDefinition) {
-			((ZebraProcessDefinition) processVersion).setVersions(this);
-		}
-	}
+    /**
+     * @return Returns the id. 
+     */
+    @Id(generate = GeneratorType.AUTO)
+    public Long getId() {
+        return id;
+    }
 
+    /**
+     * @param id
+     *            The id to set.
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return Returns the name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name The name to set.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @param processVersions
+     *            The processVersions to set.
+     */
+    public void setProcessVersions(Set<IProcessVersion> processVersions) {
+        this.processVersions = processVersions;
+    }
+
+    @OneToMany(targetEntity = ZebraProcessDefinition.class, cascade = CascadeType.ALL)
+    @JoinTable(table = @Table(name = "processVersionProcesses"), joinColumns = { @JoinColumn(name = "processVersionId") }, inverseJoinColumns = @JoinColumn(name = "processDefinitionId"))
+    public Set<IProcessVersion> getProcessVersions() {
+        return processVersions;
+    }
+
+    public void addProcessVersion(IProcessVersion processVersion) {
+        processVersion.setProcessVersions(this);
+        processVersions.add(processVersion);
+    }
+
+    @Transient
+    public IProcessVersion getLatestProcessVersion() {
+        IProcessVersion bestVersion = null;
+        for (Iterator it = processVersions.iterator(); it.hasNext();) {
+            IProcessVersion processVersion = (IProcessVersion) it.next();
+            if (bestVersion == null) {
+                bestVersion = processVersion;
+            } else if (processVersion.getVersion().longValue() > bestVersion.getVersion().longValue()) {
+                bestVersion = processVersion;
+            }
+        }
+        return bestVersion;
+    }
 }

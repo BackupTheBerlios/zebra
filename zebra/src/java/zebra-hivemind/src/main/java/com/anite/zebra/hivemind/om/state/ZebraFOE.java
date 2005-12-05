@@ -31,49 +31,49 @@ import com.anite.zebra.core.state.api.IProcessInstance;
 @Entity
 public class ZebraFOE implements IFOE {
 
-	private ZebraProcessInstance processInstance;
+    private ZebraProcessInstance processInstance;
 
-	private Integer antelopeFoeID;
+    private Integer id;
 
-	public ZebraFOE() {
-		// noop
-	}
+    public ZebraFOE() {
+        // noop
+    }
 
-	/**
-	 * @param processInstance
-	 */
-	public ZebraFOE(IProcessInstance processInstance) {
-		this.processInstance = (ZebraProcessInstance) processInstance;
-		this.processInstance.getFOEs().add(this);
-	}
+    /**
+     * @param processInstance
+     */
+    public ZebraFOE(IProcessInstance processInstance) {
+        this.processInstance = (ZebraProcessInstance) processInstance;
+        this.processInstance.getFOEs().add(this);
+    }
 
-	@ManyToOne(targetEntity=ZebraProcessInstance.class)
-	public IProcessInstance getProcessInstance() {
-		return this.processInstance;
-	}
+    @ManyToOne(targetEntity = ZebraProcessInstance.class)
+    public IProcessInstance getProcessInstance() {
+        return this.processInstance;
+    }
 
-	/**
-	 * @param processInstance
-	 *            The processInstance to set.
-	 */
-	public void setProcessInstance(IProcessInstance processInstance) {
-		this.processInstance = (ZebraProcessInstance) processInstance;
-	}
+    /**
+     * @param processInstance
+     *            The processInstance to set.
+     */
+    public void setProcessInstance(IProcessInstance processInstance) {
+        this.processInstance = (ZebraProcessInstance) processInstance;
+    }
 
-	/**
-	 * @return Returns the antelopeFoeID.
-	 */
-	@Id(generate = GeneratorType.AUTO)
-	public Integer getAntelopeFoeID() {
-		return this.antelopeFoeID;
-	}
+    /**
+     * @return Returns the antelopeFoeID.
+     */
+    @Id(generate = GeneratorType.AUTO)
+    public Integer getId() {
+        return this.id;
+    }
 
-	/**
-	 * @param antelopeFoeID
-	 *            The antelopeFoeID to set.
-	 */
-	public void setAntelopeFoeID(Integer antelopeFoeID) {
-		this.antelopeFoeID = antelopeFoeID;
-	}
+    /**
+     * @param antelopeFoeID
+     *            The antelopeFoeID to set.
+     */
+    public void setId(Integer antelopeFoeID) {
+        this.id = antelopeFoeID;
+    }
 
 }

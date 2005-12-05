@@ -47,7 +47,6 @@ import com.anite.zebra.hivemind.om.defs.ZebraTaskDefinition;
  * 
  * @author Matthew.Norris
  * @author Ben Gidley
- * @hibernate.cache usage="transactional"
  */
 @EmbeddableSuperclass
 public abstract class AbstractZebraTaskInstance implements ITaskInstance {

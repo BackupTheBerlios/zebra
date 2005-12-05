@@ -82,7 +82,7 @@
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-defs</artifactId>
-            <version>0.5.1-dev</version>
+            <version>0.5.2-dev</version>
         </dependency>
         <!--<dependency>
             <groupId>zebra</groupId>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-xmlloader</artifactId>
-            <version>0.5.2-dev</version>
+            <version>0.5.3-dev</version>
         </dependency>
         <!-- End Zebra -->
         <dependency>

@@ -35,37 +35,37 @@ public class ZebraPropertySetEntry {
 
     private Integer propertySetId;
 
-    private String value=null;
-    private Serializable object=null;
+    private String value = null;
+
+    private Serializable object = null;
 
     /** Version Flag for serialisation   */
     static final long serialVersionUID = 1L;
 
-   
-    public ZebraPropertySetEntry(){
-    	//noop
+    public ZebraPropertySetEntry() {
+        //noop
     }
-    
-    /**
-	 * Constructor taking String
-	 * @param value
-	 */
-	public ZebraPropertySetEntry(String value) {
-		setValue(value);
-	}
 
-	/**
-	 * Constructor taking Object
-	 * @param object
-	 */
-	public ZebraPropertySetEntry(Serializable object) {
-		setObject(object);
-	}
-    
+    /**
+     * Constructor taking String
+     * @param value
+     */
+    public ZebraPropertySetEntry(String value) {
+        setValue(value);
+    }
+
+    /**
+     * Constructor taking Object
+     * @param object
+     */
+    public ZebraPropertySetEntry(Serializable object) {
+        setObject(object);
+    }
+
     /**
      * 
      */
-	@Id(generate=GeneratorType.AUTO)
+    @Id(generate = GeneratorType.AUTO)
     public Integer getId() {
         return this.propertySetId;
     }
@@ -81,7 +81,7 @@ public class ZebraPropertySetEntry {
      * 
      */
     @Basic
-    @Column(length=4000)
+    @Column(length = 4000)
     public String getValue() {
         return this.value;
     }

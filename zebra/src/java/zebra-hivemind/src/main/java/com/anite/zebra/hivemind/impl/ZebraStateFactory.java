@@ -113,7 +113,8 @@ public class ZebraStateFactory implements IStateFactory {
 						antelopeTaskInstanceHistory);
 				antelopeTaskInstanceHistory.setProcessInstance(processInstance);
 
-				s.save(processInstance);
+                s.save(processInstance);
+                
 			}
 			s.delete(stateObject);
 		} catch (Exception e) {

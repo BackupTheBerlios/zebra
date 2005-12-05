@@ -85,7 +85,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 	 * 
 	 */
 	public void testSimpleWorkflow() {
-		ProcessDefinition processDefinition = this.zebraDefinitionFactory
+		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
 				.getAllProcessDefinitionsByName().get(SIMPLEWORKFLOW);
 		assertNotNull(processDefinition);
 		assertEquals(SIMPLEWORKFLOW, processDefinition.getName());
@@ -153,7 +153,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 	 * 
 	 */
 	public void testSplitWorkflow(){
-		ProcessDefinition processDefinition = this.zebraDefinitionFactory
+		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
 				.getAllProcessDefinitionsByName().get(SPLIT);
 		assertNotNull(processDefinition);
 		assertEquals(SPLIT, processDefinition.getName());
@@ -244,7 +244,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 	 */
 	public void testGetProcessDefinitionByName()
 			{
-		ProcessDefinition processDefinition = this.zebraDefinitionFactory
+		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
 				.getAllProcessDefinitionsByName().get(SIMPLEWORKFLOW);
 		assertNotNull(processDefinition);
 		assertEquals(SIMPLEWORKFLOW, processDefinition.getName());

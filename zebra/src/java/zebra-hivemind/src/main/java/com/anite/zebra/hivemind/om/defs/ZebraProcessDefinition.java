@@ -17,6 +17,7 @@
 
 package com.anite.zebra.hivemind.om.defs;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,158 +35,227 @@ import org.apache.commons.lang.exception.NestableException;
 import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.util.PermissionSet;
 
+import com.anite.zebra.core.definitions.api.IRoutingDefinitions;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
+import com.anite.zebra.core.definitions.api.ITaskDefinitions;
+import com.anite.zebra.ext.definitions.api.AbstractProcessDefinition;
 import com.anite.zebra.ext.definitions.api.IProcessVersions;
 import com.anite.zebra.ext.definitions.api.IProperties;
 import com.anite.zebra.ext.definitions.api.IPropertyGroups;
-import com.anite.zebra.ext.definitions.impl.ProcessDefinition;
+import com.anite.zebra.ext.definitions.impl.RoutingDefinitions;
+import com.anite.zebra.ext.definitions.impl.TaskDefinitions;
 import com.anite.zebra.hivemind.impl.ZebraSecurity;
 
 /**
- * This class is used to provide a concrete ProcessDefinition for Hibernate and
+ * This class is used to provide a concrete ProcessDefinition for Hibernate 3.1 and
  * to store constants/convience functions to access properties and property
  * groups.
  * 
  * @author Eric Pugh
  * @author Ben Gidley
- * 
+ * @author michael.jones 
  */
 @Entity
-public class ZebraProcessDefinition extends ProcessDefinition {
+public class ZebraProcessDefinition extends AbstractProcessDefinition {
 
-	/* #com.anite.antelope.zebra.om.AntelopePropertyGroups Dependency_Link */
-	/* Constants for Property Groups */
-	private static final String PROPGROUP_VISIBILITY = "Visibility";
+    /* #com.anite.antelope.zebra.om.AntelopePropertyGroups Dependency_Link */
+    /* Constants for Property Groups */
+    private static final String PROPGROUP_VISIBILITY = "Visibility";
 
-	private static final String PROPGROUP_INPUTS = "(Inputs)";
+    private static final String PROPGROUP_INPUTS = "(Inputs)";
 
-	private static final String PROPGROUP_OUTPUTS = "(Outputs)";
+    private static final String PROPGROUP_OUTPUTS = "(Outputs)";
 
-	/* Constants for visibility properties */
-	private static final String PROP_DISPLAYNAME = "Display Name";
+    /* Constants for visibility properties */
+    private static final String PROP_DISPLAYNAME = "Display Name";
 
-	private static final String PROP_DEBUG_FLOW = "DeubgFlow";
+    private static final String PROP_DEBUG_FLOW = "DeubgFlow";
 
-	/* Constants for security properties */
-	private static final String PROPGROUP_SECURITY = "Security";
+    /* Constants for security properties */
+    private static final String PROPGROUP_SECURITY = "Security";
 
-	private static final String PROP_START_PERMISSIONS = "Process Start Permissions";
+    private static final String PROP_START_PERMISSIONS = "Process Start Permissions";
 
-	private static final String PROP_DYNAMIC_PERMISSIONS = "Dynamic Permissions";
+    private static final String PROP_DYNAMIC_PERMISSIONS = "Dynamic Permissions";
 
-	/* Overidden functions to force XDoclet to read Hibernate tags */
+    private Long id;
 
-	public String getClassConstruct() {
-		return super.getClassConstruct();
-	}
+    private Set taskDefinitions = new HashSet();
 
-	public String getClassDestruct() {
-		return super.getClassDestruct();
-	}
+    private Set routingDefinitions = new HashSet();
 
-	@ManyToOne(cascade = { CascadeType.ALL }, targetEntity = ZebraTaskDefinition.class)
-	@JoinColumn(name = "firstTaskDefId")
-	public ITaskDefinition getFirstTask() {
-		return super.getFirstTask();
-	}
+    private ITaskDefinition firstTask = null;
 
-	@Id(generate = GeneratorType.AUTO)
-	public Long getId() {
-		return super.getId();
-	}
+    private IPropertyGroups propertyGroups = null;
 
-	@ManyToOne(cascade = { CascadeType.ALL }, targetEntity = ZebraPropertyGroups.class)
-	@JoinColumn(name = "propertyGroupsId")
-	public IPropertyGroups getPropertyGroups() {
-		return super.getPropertyGroups();
-	}
+    private String classConstruct = null;
 
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = ZebraProcessVersions.class)
-	@JoinColumn(name = "versionId")
-	public IProcessVersions getProcessVersions() {
-		return super.getProcessVersions();
-	}
+    private String classDestruct = null;
 
-	/**
-	 * @param versions
-	 *            The versions to set.
-	 */
-	public void setVersions(IProcessVersions versions) {
-		super.setProcessVersions(versions);
-	}
+    private Long version;
 
-	@OneToMany(targetEntity = ZebraRoutingDefinition.class, cascade=CascadeType.ALL)
-	@JoinTable(table = @Table(name = "processDefinitionRoutings"), joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
-	public Set getRoutingDefinitions() {
-		return super.getRoutingDefinitions();
-	}
+    private IProcessVersions processVersions;
 
-	@OneToMany(targetEntity = ZebraTaskDefinition.class, cascade=CascadeType.ALL)
-	@JoinTable(table = @Table(name = "processTaskDefinitions"), joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "taskDefinitionId"))
-	public Set getTaskDefinitions() {
-		return super.getTaskDefinitions();
-	}
+    @Id(generate = GeneratorType.AUTO)
+    public Long getId() {
+        return this.id;
+    }
 
-	public Long getVersion() {
-		return super.getVersion();
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@Transient
-	/* Custom Helper method to get property groups */
-	private IProperties getVisibilityProperties() {
-		return getPropertyGroups().getProperties(PROPGROUP_VISIBILITY);
-	}
+    @OneToMany(targetEntity = ZebraTaskDefinition.class, cascade = CascadeType.ALL)
+    @JoinTable(table = @Table(name = "processTaskDefinitions"), joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "taskDefinitionId"))
+    public Set getTaskDefinitions() {
+        return this.taskDefinitions;
+    }
 
-	@Transient
-	public IProperties getInputs() {
-		return getPropertyGroups().getProperties(PROPGROUP_INPUTS);
-	}
+    /**
+     * @param taskDefinitions The taskDefinitions to set.
+     */
+    public void setTaskDefinitions(Set taskDefinitions) {
+        this.taskDefinitions = taskDefinitions;
+    }
 
-	@Transient
-	public IProperties getOutputs() {
-		return getPropertyGroups().getProperties(PROPGROUP_OUTPUTS);
-	}
+    public void setFirstTask(ITaskDefinition taskDef) {
+        firstTask = taskDef;
+        taskDefinitions.add(taskDef);
+    }
 
-	@Transient
-	public IProperties getSecurityProperties() {
-		return getPropertyGroups().getProperties(PROPGROUP_SECURITY);
-	}
+    public String getClassConstruct() {
+        return this.classConstruct;
+    }
 
-	/* Custom Helper methods to quickly get visibility properties */
-	@Transient
-	public String getDisplayName() {
-		String displayName = getVisibilityProperties().getString(
-				PROP_DISPLAYNAME);
-		if (displayName == null) {
-			displayName = getName();
-		}
-		return displayName;
+    public String getClassDestruct() {
+        return this.classDestruct;
+    }
 
-	}
+    @ManyToOne(cascade = { CascadeType.ALL }, targetEntity = ZebraTaskDefinition.class)
+    @JoinColumn(name = "firstTaskDefId")
+    public ITaskDefinition getFirstTask() {
+        return this.firstTask;
+    }
 
-	@Transient
-	public boolean getDebugFlow() {
-		return getVisibilityProperties().getBoolean(PROP_DEBUG_FLOW);
-	}
+    public void setClassConstruct(String classConstruct) {
+        this.classConstruct = classConstruct;
+    }
 
-	/* Helpers to get security properties */
-	@Transient
-	public String getDynamicPermissions() {
-		return this.getSecurityProperties().getString(PROP_DYNAMIC_PERMISSIONS);
-	}
+    public void setClassDestruct(String classDestruct) {
+        this.classDestruct = classDestruct;
+    }
 
-	@Transient
-	private String getStartPermissionsText() {
-		return this.getSecurityProperties().getString(PROP_START_PERMISSIONS);
-	}
+    @ManyToOne(cascade = { CascadeType.ALL }, targetEntity = ZebraPropertyGroups.class)
+    @JoinColumn(name = "propertyGroupsId")
+    public IPropertyGroups getPropertyGroups() {
+        return this.propertyGroups;
+    }
 
-	@Transient
-	public PermissionSet getStartPermissions() throws NestableException {
-		ZebraSecurity security = (ZebraSecurity) RegistryManager.getInstance()
-				.getRegistry().getService("zebra.ZebraSecurity",
-						ZebraSecurity.class);
-		return security.getPermissionSet(this.getStartPermissionsText());
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, targetEntity = ZebraProcessVersions.class)
+    @JoinColumn(name = "versionId")
+    public IProcessVersions getProcessVersions() {
+        return this.processVersions;
+    }
 
-	}
+    public void setProcessVersions(IProcessVersions processVersions) {
+        this.processVersions = processVersions;
+    }
+
+    @OneToMany(targetEntity = ZebraRoutingDefinition.class, cascade = CascadeType.ALL)
+    @JoinTable(table = @Table(name = "processDefinitionRoutings"), joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
+    public Set getRoutingDefinitions() {
+        return this.routingDefinitions;
+    }
+
+    /**
+     * @param routingDefinitions The routingDefinitions to set.
+     */
+    public void setRoutingDefinitions(Set routingDefinitions) {
+        this.routingDefinitions = routingDefinitions;
+    }
+
+    public Long getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    @Transient
+    /* Custom Helper method to get property groups */
+    private IProperties getVisibilityProperties() {
+        return getPropertyGroups().getProperties(PROPGROUP_VISIBILITY);
+    }
+
+    @Transient
+    public IProperties getInputs() {
+        return getPropertyGroups().getProperties(PROPGROUP_INPUTS);
+    }
+
+    @Transient
+    public IProperties getOutputs() {
+        return getPropertyGroups().getProperties(PROPGROUP_OUTPUTS);
+    }
+
+    @Transient
+    public IProperties getSecurityProperties() {
+        return getPropertyGroups().getProperties(PROPGROUP_SECURITY);
+    }
+
+    /* Custom Helper methods to quickly get visibility properties */
+    @Transient
+    public String getDisplayName() {
+        String displayName = getVisibilityProperties().getString(PROP_DISPLAYNAME);
+        if (displayName == null) {
+            displayName = getName();
+        }
+        return displayName;
+
+    }
+
+    @Transient
+    public String getName() {
+        return getProcessVersions().getName();
+    }
+
+    @Transient
+    public boolean getDebugFlow() {
+        return getVisibilityProperties().getBoolean(PROP_DEBUG_FLOW);
+    }
+
+    /* Helpers to get security properties */
+    @Transient
+    public String getDynamicPermissions() {
+        return this.getSecurityProperties().getString(PROP_DYNAMIC_PERMISSIONS);
+    }
+
+    @Transient
+    private String getStartPermissionsText() {
+        return this.getSecurityProperties().getString(PROP_START_PERMISSIONS);
+    }
+
+    @Transient
+    public PermissionSet getStartPermissions() throws NestableException {
+        ZebraSecurity security = (ZebraSecurity) RegistryManager.getInstance().getRegistry().getService(
+                "zebra.ZebraSecurity", ZebraSecurity.class);
+        return security.getPermissionSet(this.getStartPermissionsText());
+
+    }
+
+    @Transient
+    public ITaskDefinitions getTaskDefs() {
+        return new TaskDefinitions(taskDefinitions);
+    }
+
+    @Transient
+    public IRoutingDefinitions getRoutingDefs() {
+        return new RoutingDefinitions(routingDefinitions);
+    }
+
+    @Transient
+    public void setPropertyGroups(IPropertyGroups propertyGroups) {
+        this.propertyGroups = propertyGroups;
+    }
 
 }

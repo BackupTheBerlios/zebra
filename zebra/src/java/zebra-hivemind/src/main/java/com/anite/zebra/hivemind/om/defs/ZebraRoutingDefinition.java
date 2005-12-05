@@ -35,68 +35,66 @@ import com.anite.zebra.ext.definitions.impl.RoutingDefinition;
  * @author Ben GIdley
  */
 @Entity
-public class ZebraRoutingDefinition extends RoutingDefinition implements
-		IXmlDefinition {
+public class ZebraRoutingDefinition extends RoutingDefinition implements IXmlDefinition {
 
-	private Long xmlId;
+    private Long xmlId;
 
-	/**
-	 * @return Returns the xmlId.
-	 * @hibernate.property
-	 */
-	public Long getXmlId() {
-		return this.xmlId;
-	}
+    /**
+     * @return Returns the xmlId.
+     * @hibernate.property
+     */
+    public Long getXmlId() {
+        return this.xmlId;
+    }
 
-	/**
-	 * @param xmlId
-	 *            The xmlId to set.
-	 */
-	public void setXmlId(Long xmlId) {
-		this.xmlId = xmlId;
-	}
+    /**
+     * @param xmlId
+     *            The xmlId to set.
+     */
+    public void setXmlId(Long xmlId) {
+        this.xmlId = xmlId;
+    }
 
-	@Id(generate = GeneratorType.AUTO)
-	public Long getId() {
-		return super.getId();
-	}
+    @Id(generate = GeneratorType.AUTO)
+    public Long getId() {
+        return super.getId();
+    }
 
-	public String getName() {
-		return super.getName();
-	}
+    public String getName() {
+        return super.getName();
+    }
 
-	@ManyToOne(targetEntity = ZebraTaskDefinition.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "originatingTaskDefinitionId")
-	public ITaskDefinition getOriginatingTaskDefinition() {
-		return super.getOriginatingTaskDefinition();
-	}
+    @ManyToOne(targetEntity = ZebraTaskDefinition.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "originatingTaskDefinitionId")
+    public ITaskDefinition getOriginatingTaskDefinition() {
+        return super.getOriginatingTaskDefinition();
+    }
 
-	/**
-	 * @hibernate.property
-	 */
-	public boolean getParallel() {
-		return super.getParallel();
-	}
+    /**
+     * @hibernate.property
+     */
+    public boolean getParallel() {
+        return super.getParallel();
+    }
 
-	/**
-	 * @return Returns the propertyGroups.
-	 */
-	@ManyToOne(targetEntity = ZebraPropertyGroups.class, cascade = CascadeType.ALL)
-	public IPropertyGroups getPropertyGroups() {
-		return super.getPropertyGroups();
-	}
+    /**
+     * @return Returns the propertyGroups.
+     */
+    @ManyToOne(targetEntity = ZebraPropertyGroups.class, cascade = CascadeType.ALL)
+    public IPropertyGroups getPropertyGroups() {
+        return super.getPropertyGroups();
+    }
 
-	/**
-	 * @hibernate.property
-	 */
-	public String getConditionClass() {
-		return super.getConditionClass();
-	}
+    /**
+     * @hibernate.property
+     */
+    public String getConditionClass() {
+        return super.getConditionClass();
+    }
 
-	@ManyToOne(targetEntity = ZebraTaskDefinition.class, cascade = {
-			CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "desitationTaskDefinitionId")
-	public ITaskDefinition getDestinationTaskDefinition() {
-		return super.getDestinationTaskDefinition();
-	}
+    @ManyToOne(targetEntity = ZebraTaskDefinition.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "desitationTaskDefinitionId")
+    public ITaskDefinition getDestinationTaskDefinition() {
+        return super.getDestinationTaskDefinition();
+    }
 }
