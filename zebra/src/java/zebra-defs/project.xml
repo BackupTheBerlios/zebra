@@ -6,7 +6,7 @@
 	<groupId>zebra</groupId>
 	<id>zebra-defs</id>
 	<name>Zebra Process Definitions</name>
-	<currentVersion>0.5.1-dev</currentVersion>
+	<currentVersion>0.5.2-dev</currentVersion>
 	<inceptionYear>2004</inceptionYear>
 	<logo/>
 	<organization>

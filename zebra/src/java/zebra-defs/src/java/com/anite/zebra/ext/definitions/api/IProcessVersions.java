@@ -23,14 +23,32 @@ import java.util.Set;
  * @author Eric.Pugh
  */
 public interface IProcessVersions {
-	
-	/**
-	 * Returns a set of all the process definitions we have.
-	 * @return A collection of IProcessDef objects.
-	 */
-	public Set getProcessVersions();
-	
-	public IProcessVersion getLatestProcessVersion();
-	
-	public String getName();
+
+    /**
+     * Returns a set of all the process definitions we have.
+     * @return A collection of IProcessDef objects.
+     */
+    public Set getProcessVersions();
+
+    /**
+     * add a process version, the implementation of this method shoudl maintain both ends of the
+     * relationship
+     * @param processVersion
+     */
+    public void addProcessVersion(IProcessVersion processVersion);
+
+    public IProcessVersion getLatestProcessVersion();
+
+    /**
+     * get the name
+     * @return
+     */
+    public String getName();
+
+    /**
+     * set the name
+     * @param name
+     */
+    public void setName(String name);
+
 }

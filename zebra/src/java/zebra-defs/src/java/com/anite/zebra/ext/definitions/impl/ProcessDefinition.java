@@ -19,14 +19,12 @@ package com.anite.zebra.ext.definitions.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.IRoutingDefinitions;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinitions;
-import com.anite.zebra.ext.definitions.api.IProcessVersion;
+import com.anite.zebra.ext.definitions.api.AbstractProcessDefinition;
 import com.anite.zebra.ext.definitions.api.IProcessVersions;
 import com.anite.zebra.ext.definitions.api.IPropertyGroups;
-import com.anite.zebra.ext.definitions.api.IPropertyGroupsAware;
 
 
 /**
@@ -36,7 +34,7 @@ import com.anite.zebra.ext.definitions.api.IPropertyGroupsAware;
  * something the core engine can use
  * @hibernate.class 
  */
-public class ProcessDefinition implements IProcessVersion, IProcessDefinition, IPropertyGroupsAware {
+public class ProcessDefinition extends AbstractProcessDefinition {
     private Long id;
 
 

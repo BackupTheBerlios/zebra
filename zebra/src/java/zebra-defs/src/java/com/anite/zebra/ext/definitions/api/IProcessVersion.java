@@ -17,7 +17,9 @@
 package com.anite.zebra.ext.definitions.api;
 
 /**
- * @author Matthew.Norris Simple versioning implementation.
+ * Simple process versioning api.
+ * @author Matthew.Norris
+ * @author michael.jones 
  */
 public interface IProcessVersion {
 
@@ -27,9 +29,23 @@ public interface IProcessVersion {
      * @return
      */
     public Long getVersion();
-    
+
+    /**
+     * 
+     * @param version
+     */
+    public void setVersion(Long version);
+
+    /**
+     * 
+     * @return
+     */
     public IProcessVersions getProcessVersions();
-    
+
+    /**
+     * 
+     * @param iProcessVersions
+     */
     public void setProcessVersions(IProcessVersions iProcessVersions);
 
 }
