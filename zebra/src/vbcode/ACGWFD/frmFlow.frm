@@ -767,7 +767,10 @@ Private Function IContextMenu_CommandClick(ByVal Command As InnovaDSXP.Command) 
             Call ExportImage
         Case "TLSAVE"
             IContextMenu_CommandClick = True
-            Call SaveFlow
+            Call SaveFlow(False)
+        Case "TLSAVEAS"
+            IContextMenu_CommandClick = True
+            Call SaveFlow(True)
         Case "TLPRINT"
             IContextMenu_CommandClick = True
             Call PrintFlow
@@ -1292,7 +1295,7 @@ Private Function TouchesStep(oTaskDef As TaskDef, oPT As afLinkPoint) As Boolean
     TouchesStep = (oPT.X = oTaskDef.Left Or oPT.X = oTaskDef.Width + oTaskDef.Left Or oPT.Y = oTaskDef.Top Or oPT.Y = oTaskDef.Top + oTaskDef.Height)
 End Function
 
-Private Sub SaveFlow()
+Private Sub SaveFlow(saveAs As Boolean)
     Const cstrFunc = "SaveFlow"
     Dim strErrFunc As String
     strErrFunc = "Initialisation"
@@ -1339,11 +1342,33 @@ Private Sub SaveFlow()
     Set oVersions = New Versions
     
     Set oExport = New XMLProcessVersion
-    
-    oExport.FileLoadXML mstrFileName, oVersions, moTaskTemplates, moProcessTemplates
-    
-    oExport.FileSaveXML mstrFileName, oVersions, mProcessDef
-    
+    If saveAs Then
+        Dim dlg As MSComDlg.CommonDialog
+        
+        Set dlg = Parent.dlg
+        dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
+        dlg.FilterIndex = 1
+        dlg.DialogTitle = "New Process"
+        dlg.FileName = "Copy of " & mProcessDef.Name & " Process"
+        dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
+        On Error Resume Next
+        dlg.ShowSave
+        If Err.Number <> 0 Then Exit Sub
+        On Error GoTo Err_Handler
+        strErrFunc = "Deleting existing file"
+        If Len(Dir$(dlg.FileName)) > 0 Then
+            Kill dlg.FileName
+        End If
+        
+        strErrFunc = "Exporting new file"
+        mProcessDef.Name = Left$(dlg.FileTitle, Len(dlg.FileTitle) - Len(".acgwfd.xml"))
+        oExport.FileSaveXML dlg.FileName, oVersions, mProcessDef
+        Caption = mProcessDef.Name
+        Parent.ds.ActiveDocumentWindow.Caption = mProcessDef.Name
+    Else
+        oExport.FileLoadXML mstrFileName, oVersions, moTaskTemplates, moProcessTemplates
+        oExport.FileSaveXML mstrFileName, oVersions, mProcessDef
+    End If
     FlowGUI.SetChangedFlag False
     
     Exit Sub
@@ -1444,7 +1469,7 @@ Private Sub IContextMenu_QueryUnload(Cancel As Boolean)
             Case vbCancel
                 Cancel = True
             Case vbYes
-                Call SaveFlow
+                Call SaveFlow(False)
         End Select
     End If
 End Sub
