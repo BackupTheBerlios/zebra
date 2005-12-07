@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BA5F9142-B708-4B5E-93B0-3948F8003F86}#1.0#0"; "PROPER~1.OCX"
+Object = "{BA5F9142-B708-4B5E-93B0-3948F8003F86}#1.0#0"; "PropertyGridControl.ocx"
 Begin VB.Form frmPropList 
    Caption         =   "Form1"
    ClientHeight    =   3195
@@ -79,13 +79,16 @@ Public Property Set PropBag(v As PropertyGroup)
     'pg.Clear
     Set pg.PropertyGroup = mPropBag
     If mPropBag Is Nothing Then Exit Property
-    
 '    With pg
 '        For Each oProp In mPropBag
 '            .AddItem oProp.Name, oProp.Value
 '        Next
 '    End With
 End Property
+
+Private Sub pg_ContextClick(oProperty As ACGProperties.Property, x As Single, y As Single)
+    MDI.showPropGroupsPopup oProperty
+End Sub
 
 Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, FileName As String, Cancel As Boolean)
     Const cstrFunc = "pg_FileBrowse"

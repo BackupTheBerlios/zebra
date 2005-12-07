@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{C0A63B80-4B21-11D3-BD95-D426EF2C7949}#1.0#0"; "Vsflex7L.ocx"
+Object = "{C0A63B80-4B21-11D3-BD95-D426EF2C7949}#1.0#0"; "vsflex7l.ocx"
 Begin VB.UserControl PropertyGrid 
    ClientHeight    =   5580
    ClientLeft      =   0
@@ -143,9 +143,12 @@ Private mPropertyGroup As PropertyGroup
 Event PropChanged(ByRef oProperty As Property)
 Event PropRemoved(ByRef oProperty As Property)
 Event FileBrowse(ByRef oProperty As Property, ByRef FileName As String, ByRef Cancel As Boolean)
+Event ContextClick(ByRef oProperty As Property, X As Single, Y As Single)
 Private mfDontRefresh As Boolean
 Private mfRefreshRequest As Boolean
-    
+Private mButton As Integer
+Private mX As Single
+Private mY As Single
 Private mfRefreshing As Boolean
 Private mfShowLocked As Boolean
 
@@ -157,6 +160,7 @@ Public Property Let ShowLocked(v As Boolean)
     mfShowLocked = v
     Refresh
 End Property
+
 Private Sub fg_CellChanged(ByVal Row As Long, ByVal Col As Long)
     If mfRefreshing Then Exit Sub
     If mPropertyGroup Is Nothing Then Exit Sub
@@ -173,6 +177,27 @@ Private Sub fg_CellChanged(ByVal Row As Long, ByVal Col As Long)
     oProp.Value = strValue
     RaiseEvent PropChanged(oProp)
     If mfRefreshRequest Then Refresh
+End Sub
+
+
+Private Sub fg_Click()
+    If mButton = vbRightButton And fg.IsSubtotal(fg.Row) = False Then
+        If fg.MouseCol > 0 And fg.MouseRow > 0 Then
+        If Not fg.IsSubtotal(fg.MouseRow) Then
+            Debug.Print fg.MouseCol, fg.MouseRow
+            fg.Select fg.MouseRow, fg.MouseCol
+            RaiseEvent ContextClick(fg.RowData(fg.Row), mX, mY)
+        End If
+        End If
+    End If
+
+End Sub
+
+
+Private Sub fg_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    mButton = Button
+    mX = X
+    mY = Y
 End Sub
 
 Private Sub UserControl_Initialize()
@@ -263,6 +288,15 @@ End Property
 Public Property Get PropertyGroup() As PropertyGroup
     Set PropertyGroup = mPropertyGroup
 End Property
+
+Public Property Get Selected() As Property
+    If fg.IsSubtotal(fg.Row) Then
+        Set Selected = Nothing
+    Else
+        Set Selected = fg.RowData(fg.Row)
+    End If
+End Property
+
 
 '##############################################################################
 '# COPIED CODE

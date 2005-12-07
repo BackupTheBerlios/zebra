@@ -97,6 +97,7 @@ Private Sub ds_CommandClick(ByVal Command As InnovaDSXP.Command)
     If Not (moContextMenu Is Nothing) Then
         fHandled = moContextMenu.CommandClick(Command)
     End If
+    
     If Not fHandled Then
         If Not (Command.Category Is Nothing) Then
             Select Case UCase$(Command.Category.Name)
@@ -649,7 +650,6 @@ Private Sub LoadProcessTemplates()
     If Not oXMLProcessTemplate.LoadTemplates(strTemplatePath & "processes", moProcessTemplates) Then
         MsgBox "Failed to load process templates", vbCritical
     End If
-        
 End Sub
 
 Public Function getTemplatePath() As String
@@ -803,3 +803,16 @@ Err_Handler:
             Exit Function
     End Select
 End Function
+
+Public Sub showPropGroupsPopup(oProperty As ACGProperties.Property)
+    If oProperty Is Nothing Then Exit Sub
+    Dim ofrmFlow As frmFlow
+    Set ofrmFlow = moContextMenu
+    Dim btn As CommandToolButton
+    Set btn = ds.Commands.Item("tlPropertyRemove")
+    With btn
+        .Caption = "Remove " & oProperty.Name
+        .Enabled = ofrmFlow.canRemoveProp(oProperty)
+    End With
+    ds.Commands.GetPopupMenu("mnuPropGroupsPopup").ShowPopup
+End Sub

@@ -86,9 +86,9 @@ Public Function AddProp(oPropWin As frmPropList)
     On Error GoTo Err_Handler
     Set moPropWin = oPropWin
     For Each oProps In oPropWin.pg.PropertyGroup
-        If oProps.Name <> "(General)" Then
+        'If oProps.Name <> "(General)" Then
             cboPropGroup.AddItem oProps.Name
-        End If
+        'End If
     Next
     cboPropGroup.ListIndex = 0
     Me.Show vbModal
@@ -125,3 +125,4 @@ Private Sub cmdOK_Click()
         Me.Hide
     End If
 End Sub
+

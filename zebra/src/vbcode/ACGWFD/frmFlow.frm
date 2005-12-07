@@ -265,7 +265,7 @@ Private Sub NodeMoved(oNode As afNode)
         Set oLink = oNode.InLinks(oRouting.Guid)
         For Each oPT In oLink.ExtraPoints
             If Not IgnorePoint(oLink, oPT) Then
-                oRouting.AddPoint oPT.X, oPT.Y
+                oRouting.AddPoint oPT.x, oPT.y
             End If
         Next
     Next
@@ -275,7 +275,7 @@ Private Sub NodeMoved(oNode As afNode)
         Set oLink = oNode.OutLinks(oRouting.Guid)
         For Each oPT In oLink.ExtraPoints
             If Not IgnorePoint(oLink, oPT) Then
-                oRouting.AddPoint oPT.X, oPT.Y
+                oRouting.AddPoint oPT.x, oPT.y
             End If
         Next
     Next
@@ -297,18 +297,18 @@ Private Sub AlignClosestEdge(oLink As afLink)
     Dim sglL As Single, sglT As Single
     Dim sglR As Single, sglB As Single
     
-    sglL = oPT.X - oNode.Left
-    sglR = (oNode.Left + oNode.Width) - oPT.X
-    sglT = oPT.Y - oNode.Top
-    sglB = (oNode.Top + oNode.Height) - oPT.Y
+    sglL = oPT.x - oNode.Left
+    sglR = (oNode.Left + oNode.Width) - oPT.x
+    sglT = oPT.y - oNode.Top
+    sglB = (oNode.Top + oNode.Height) - oPT.y
     If sglL < sglR And sglL < sglT And sglL < sglB Then
-        oPT.X = oPT.X - sglL
+        oPT.x = oPT.x - sglL
     ElseIf sglR < sglL And sglR < sglT And sglR < sglB Then
-        oPT.X = oPT.X + sglR
+        oPT.x = oPT.x + sglR
     ElseIf sglB < sglL And sglB < sglR And sglB < sglT Then
-        oPT.Y = oPT.Y + sglB
+        oPT.y = oPT.y + sglB
     Else
-        oPT.Y = oPT.Y - sglT
+        oPT.y = oPT.y - sglT
     End If
     Set oLink.ExtraPoints.Item(oLink.ExtraPoints.Count - 1) = oPT
     
@@ -334,7 +334,7 @@ Private Sub FlowGUI_AfterStretch()
     Set oTaskDefDest = mProcessDef.Tasks(oLink.Dst.key)
     Set oRouting = mProcessDef.Routings(oLink.key)
     '# check to see if the final point intersects a part of the destination task
-    If Not IntersectNodeLine(oTaskDefDest, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).X, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).Y, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).X, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).Y, sglX, sglY) Then
+    If Not IntersectNodeLine(oTaskDefDest, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).x, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).y, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).x, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).y, sglX, sglY) Then
         fCancel = True
     ElseIf oRouting.TaskDest.Guid <> oTaskDefDest.Guid Then
         '# change destination
@@ -362,7 +362,7 @@ Private Sub FlowGUI_AfterStretch()
     
     For Each oPT In oLink.ExtraPoints
         If Not IgnorePoint(oLink, oPT) Then
-            oRouting.AddPoint oPT.X, oPT.Y
+            oRouting.AddPoint oPT.x, oPT.y
         End If
     Next
     oLink.ZOrderIndex = 0
@@ -423,7 +423,7 @@ Private Function NodeCaption(oTaskDef As TaskDef) As String
     NodeCaption = strRtn
 End Function
 
-Private Sub FlowGUI_DragDrop(Source As Control, X As Single, Y As Single)
+Private Sub FlowGUI_DragDrop(Source As Control, x As Single, y As Single)
     Const cstrFunc = "flow_DragDrop"
     On Error GoTo Err_Handler
     Dim oNode As AddFlow4Lib.afNode
@@ -437,7 +437,7 @@ Private Sub FlowGUI_DragDrop(Source As Control, X As Single, Y As Single)
     
     DoTaskProps oTaskDef, oTaskTemplate
     
-    Set oNode = FlowGUI.Nodes.Add(X + FlowGUI.xScroll, Y + FlowGUI.yScroll, Source.Width, Source.Height * 2)
+    Set oNode = FlowGUI.Nodes.Add(x + FlowGUI.xScroll, y + FlowGUI.yScroll, Source.Width, Source.Height * 2)
     
     Set oNode.Picture = Source.Picture
     
@@ -493,7 +493,7 @@ Err_Handler:
 
 End Sub
 
-Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim oNode As afNode
     Dim oLink As afLink
     Dim oNodeCheck As afNode
@@ -502,9 +502,9 @@ Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, X As Single, 
     Dim fNoChange As Boolean
     
     If Button = vbRightButton Then
-        Set oNode = FlowGUI.GetNodeAtPoint(FlowGUI.xScroll + X, FlowGUI.yScroll + Y)
+        Set oNode = FlowGUI.GetNodeAtPoint(FlowGUI.xScroll + x, FlowGUI.yScroll + y)
         If oNode Is Nothing Then
-            Set oLink = FlowGUI.GetLinkAtPoint(FlowGUI.xScroll + X, FlowGUI.yScroll + Y)
+            Set oLink = FlowGUI.GetLinkAtPoint(FlowGUI.xScroll + x, FlowGUI.yScroll + y)
             If oLink Is Nothing Then Exit Sub
             For Each oLinkCheck In FlowGUI.SelLinks
                 If oLinkCheck.key = oLink.key Then
@@ -529,7 +529,7 @@ Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, X As Single, 
     End If
 End Sub
 
-Private Sub FlowGUI_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub FlowGUI_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim ods As DockStudio
     Set ods = Parent.ds
     If Button = vbRightButton Then
@@ -544,8 +544,8 @@ Private Sub FlowGUI_MouseUp(Button As Integer, Shift As Integer, X As Single, Y 
             ods.Commands.GetPopupMenu("mnuFlow").ShowPopup
         End If
     End If
-    msglLastX = X
-    msglLastY = Y
+    msglLastX = x
+    msglLastY = y
 End Sub
 
 
@@ -790,11 +790,88 @@ Private Function IContextMenu_CommandClick(ByVal Command As InnovaDSXP.Command) 
             IContextMenu_CommandClick = True
             Call ResetToTemplate
             ShowPropWin
+        Case "TLPROPERTYREMOVE"
+            IContextMenu_CommandClick = True
+            If removeProp() Then
+                FlowGUI.SetChangedFlag True
+                ShowPropWin
+            End If
     End Select
     Exit Function
 Err_Raise:
     Call ErrRaise(Err, mcstrModule, "IContextMenu_CommandClick")
     
+End Function
+Public Property Get canRemoveProp(oProp As Property) As Boolean
+    canRemoveProp = False
+    
+    If oProp Is Nothing Then
+        Exit Function
+    End If
+    
+    '/ see which template we need to look at - process/task/routing
+    Dim oProcessTemplate As ProcessTemplate
+    Set oProcessTemplate = moProcessTemplates(mProcessDef.ProcessTemplate)
+    
+    If FlowGUI.SelectedNode Is Nothing And FlowGUI.SelectedLink Is Nothing Then
+        '/ process
+        canRemoveProp = Not propExists(oProp, oProcessTemplate.ProcessProperties)
+            If canRemoveProp Then
+                If oProp.Properties.Name = "(General)" Then
+                    Select Case LCase$(oProp.Name)
+                        Case "name"
+                            canRemoveProp = False
+                    End Select
+                End If
+            End If
+        ElseIf FlowGUI.SelectedLink Is Nothing Then
+        '/ task
+        canRemoveProp = Not propExists(oProp, oProcessTemplate.CommonTaskProperties)
+        If canRemoveProp Then
+            canRemoveProp = Not propExists(oProp, moTaskTemplates.Item(mProcessDef.Tasks(FlowGUI.SelectedNode.key).TaskTemplate).PropertyGroup)
+        End If
+        If canRemoveProp Then
+            If oProp.Properties.Name = "(General)" Then
+                Select Case LCase$(oProp.Name)
+                    Case "class name", "synchronise", "name", "auto", "newthread"
+                        canRemoveProp = False
+                End Select
+            End If
+        End If
+    Else
+        '/ routing
+        canRemoveProp = Not propExists(oProp, oProcessTemplate.CommonRoutingProperties)
+        If canRemoveProp Then
+            If oProp.Properties.Name = "(General)" Then
+                Select Case LCase$(oProp.Name)
+                    Case "condition class", "parallel", "name"
+                        canRemoveProp = False
+                End Select
+            End If
+        End If
+    End If
+    
+End Property
+Private Function propExists(oProp As ACGProperties.Property, oPropGroup As PropertyGroup) As Boolean
+    '/ check to see prop group exists
+    propExists = False
+    If Not oPropGroup.Exists(oProp.Properties.Name) Then
+        Exit Function
+    End If
+    '/ check to see if the property is in properties list
+    propExists = oPropGroup.Item(oProp.Properties.Name).Exists(oProp.Name)
+End Function
+Private Function removeProp() As Boolean
+    Dim oProp As Property
+    Set oProp = moPropList.pg.Selected
+    
+    If MsgBox("Are you sure you want to remove property """ + oProp.Name + """?", vbYesNo + vbQuestion) = vbNo Then
+        Exit Function
+    End If
+    
+    '/ remove it
+    oProp.Properties.Remove oProp.Name
+    removeProp = True
 End Function
 '/ resets the currently select item (flow, task or routing) back to the template specified default
 Private Sub ResetToTemplate()
@@ -954,9 +1031,9 @@ Private Function CopySelected() As Boolean
                 oNewRouting.ClearPoints
                 For Each oPT In oLink.ExtraPoints
                     If Not IgnorePoint(oLink, oPT) Then
-                        If oPT.X < sglOffsetX Then sglOffsetX = oPT.X
-                        If oPT.Y < sglOffsetY Then sglOffsetY = oPT.Y
-                        oNewRouting.AddPoint oPT.X, oPT.Y
+                        If oPT.x < sglOffsetX Then sglOffsetX = oPT.x
+                        If oPT.y < sglOffsetY Then sglOffsetY = oPT.y
+                        oNewRouting.AddPoint oPT.x, oPT.y
                     End If
                 Next
                 CopyPropGroup oRoutingDef.PropertyGroup, oNewRouting.PropertyGroup, False, True
@@ -1281,7 +1358,7 @@ End Sub
 Private Function IgnorePoint(oLink As afLink, oPT As afLinkPoint) As Boolean
     '# ignore 1st point
     
-    IgnorePoint = oPT.X = oLink.ExtraPoints(0).X And oPT.Y = oLink.ExtraPoints(0).Y
+    IgnorePoint = oPT.x = oLink.ExtraPoints(0).x And oPT.y = oLink.ExtraPoints(0).y
     Exit Function
     Dim oSrc As TaskDef
     Dim oDst As TaskDef
@@ -1292,7 +1369,7 @@ Private Function IgnorePoint(oLink As afLink, oPT As afLinkPoint) As Boolean
 End Function
 
 Private Function TouchesStep(oTaskDef As TaskDef, oPT As afLinkPoint) As Boolean
-    TouchesStep = (oPT.X = oTaskDef.Left Or oPT.X = oTaskDef.Width + oTaskDef.Left Or oPT.Y = oTaskDef.Top Or oPT.Y = oTaskDef.Top + oTaskDef.Height)
+    TouchesStep = (oPT.x = oTaskDef.Left Or oPT.x = oTaskDef.Width + oTaskDef.Left Or oPT.y = oTaskDef.Top Or oPT.y = oTaskDef.Top + oTaskDef.Height)
 End Function
 
 Private Sub SaveFlow(saveAs As Boolean)
@@ -1330,7 +1407,7 @@ Private Sub SaveFlow(saveAs As Boolean)
             oRouting.ClearPoints
             For Each oPT In oLink.ExtraPoints
                 If Not IgnorePoint(oLink, oPT) Then
-                    oRouting.AddPoint oPT.X, oPT.Y
+                    oRouting.AddPoint oPT.x, oPT.y
                 End If
             Next
         Next
@@ -1430,7 +1507,7 @@ Private Function AddGUIRouting(oRouting As RoutingDef, Optional OffsetX As Singl
     If oRouting.PointCount = 0 Then
         For Each oPT In oLink.ExtraPoints
             If Not IgnorePoint(oLink, oPT) Then
-                oRouting.AddPoint oPT.X, oPT.Y
+                oRouting.AddPoint oPT.x, oPT.y
             End If
         Next
     Else
@@ -1451,8 +1528,8 @@ Private Function AddGUIRouting(oRouting As RoutingDef, Optional OffsetX As Singl
             oRouting.Point sglX, sglY, lngPointCount
             'Debug.Print "Moving Point", sglX, sglY
             Set oPT = oLink.ExtraPoints(lngPointCount)
-            oPT.X = sglX - OffsetX
-            oPT.Y = sglY - OffsetY
+            oPT.x = sglX - OffsetX
+            oPT.y = sglY - OffsetY
             Set oLink.ExtraPoints.Item(lngPointCount) = oPT
         Next
     End If
