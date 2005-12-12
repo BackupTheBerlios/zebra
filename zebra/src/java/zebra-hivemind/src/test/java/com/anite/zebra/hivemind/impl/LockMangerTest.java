@@ -36,137 +36,129 @@ import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 
 public class LockMangerTest extends TestCase {
 
-	public void setUp() {
+    public void setUp() {
 
-		Resource resource = new ClasspathResource(new DefaultClassResolver(),
-				"META-INF/hivemodule_zebradefinitions.xml");
-		RegistryManager.getInstance().getResources().add(resource);
+        Resource resource = new ClasspathResource(new DefaultClassResolver(),
+                "META-INF/hivemodule_zebradefinitions.xml");
+        RegistryManager.getInstance().getResources().add(resource);
 
-		this.stateFactory = (IStateFactory) RegistryManager.getInstance()
-				.getRegistry().getService("zebra.zebraState",
-						IStateFactory.class);
-		this.definitionsFactory = (ZebraDefinitionFactory) RegistryManager
-				.getInstance().getRegistry().getService(
-						"zebra.zebraDefinitionFactory",
-						ZebraDefinitionFactory.class);
-	}
+        this.stateFactory = (IStateFactory) RegistryManager.getInstance().getRegistry().getService("zebra.zebraState",
+                IStateFactory.class);
+        this.definitionsFactory = (ZebraDefinitionFactory) RegistryManager.getInstance().getRegistry().getService(
+                "zebra.zebraDefinitionFactory", ZebraDefinitionFactory.class);
+    }
 
-	private IStateFactory stateFactory;
+    private IStateFactory stateFactory;
 
-	private ZebraDefinitionFactory definitionsFactory;
+    private ZebraDefinitionFactory definitionsFactory;
 
-	/**
-	 * @return
-	 */
-	private ZebraProcessDefinition getProcessDefinition() {
-		// Load the first process definition it has (e.g. we don't care which
-		// process)
-		Iterator processDefinitions = this.definitionsFactory
-				.getAllProcessDefinitionsById().keySet().iterator();
-		ZebraProcessDefinition processDefinition = this.definitionsFactory
-				.getAllProcessDefinitionsById().get(processDefinitions.next());
-		return processDefinition;
-	}
+    /**
+     * @return
+     */
+    private ZebraProcessDefinition getProcessDefinition() {
+        // Load the first process definition it has (e.g. we don't care which
+        // process)
+        Iterator processDefinitions = this.definitionsFactory.getAllProcessDefinitionsById().keySet().iterator();
+        ZebraProcessDefinition processDefinition = this.definitionsFactory.getAllProcessDefinitionsById().get(
+                processDefinitions.next());
+        return processDefinition;
+    }
 
-	/**
-	 * Test the locking
-	 */
-	public void testSimpleLock() throws Exception {
+    /**
+     * Test the locking
+     */
+    public void testSimpleLock() throws Exception {
 
-		IProcessDefinition processDefinition = getProcessDefinition();
+        IProcessDefinition processDefinition = getProcessDefinition();
 
-		IProcessInstance processInstance = this.stateFactory
-				.createProcessInstance(processDefinition);
-		ITransaction transaction = this.stateFactory.beginTransaction();
+        IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
+        ITransaction transaction = this.stateFactory.beginTransaction();
         this.stateFactory.saveObject(processInstance);
         transaction.commit();
 
-		Date before = Calendar.getInstance().getTime();
-		this.stateFactory.acquireLock(processInstance, null);
-		assertTrue(before.getTime() + 20000 > Calendar.getInstance().getTime()
-				.getTime());
+        Date before = Calendar.getInstance().getTime();
+        this.stateFactory.acquireLock(processInstance, null);
+        assertTrue(before.getTime() + 20000 > Calendar.getInstance().getTime().getTime());
 
-		this.stateFactory.releaseLock(processInstance, null);
+        this.stateFactory.releaseLock(processInstance, null);
 
-		before = Calendar.getInstance().getTime();
-		this.stateFactory.acquireLock(processInstance, null);
-		assertTrue(before.getTime() + 20000 > Calendar.getInstance().getTime()
-				.getTime());
+        before = Calendar.getInstance().getTime();
+        this.stateFactory.acquireLock(processInstance, null);
+        assertTrue(before.getTime() + 20000 > Calendar.getInstance().getTime().getTime());
 
-		this.stateFactory.releaseLock(processInstance, null);
-	}
+        this.stateFactory.releaseLock(processInstance, null);
+    }
 
-	public void testThreadedLock() throws Exception {
-		IProcessDefinition processDefinition = getProcessDefinition();
+    public void testThreadedLock() throws Exception {
+        IProcessDefinition processDefinition = getProcessDefinition();
 
-		IProcessInstance processInstance = this.stateFactory
-				.createProcessInstance(processDefinition);
-		this.stateFactory.saveObject(processInstance);
+        IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
+        this.stateFactory.saveObject(processInstance);
 
-		Locker one = new Locker(processInstance, this.stateFactory);
-		Locker two = new Locker(processInstance, this.stateFactory);
+        Locker one = new Locker(processInstance, this.stateFactory);
+        Locker two = new Locker(processInstance, this.stateFactory);
 
-		Thread runner1 = new Thread(one, "One");
-		Thread runner2 = new Thread(two, "Two");
+        Thread runner1 = new Thread(one, "One");
+        Thread runner2 = new Thread(two, "Two");
 
-		// Runner 1 will start and aquire lock
-		runner1.start();
-		Thread.sleep(1000);
-		assertTrue(one.locked);
-		// Runner 2 should start an wait on 1
-		runner2.start();
-		assertFalse(two.locked);
-		one.wait = false;
-		Thread.sleep(1000);
-		assertTrue(one.unlocked);
-		assertFalse(one.locked);
-		assertTrue(two.locked);
-		two.wait = false;
-		Thread.sleep(1000);
-		assertTrue(two.unlocked);
-		assertFalse(two.locked);
-	}
+        // Runner 1 will start and aquire lock
+        runner1.start();
+        Thread.sleep(1000);
+        assertTrue(one.locked);
+        // Runner 2 should start an wait on 1
+        runner2.start();
+        assertFalse(two.locked);
+        one.wait = false;
+        Thread.sleep(1000);
+        assertTrue(one.unlocked);
+        assertFalse(one.locked);
+        assertTrue(two.locked);
+        two.wait = false;
+        Thread.sleep(1000);
+        assertTrue(two.unlocked);
+        assertFalse(two.locked);
+    }
 
-	/**
-	 * Workflow Runner
-	 */
-	private static class Locker implements Runnable {
+    /**
+     * Workflow Runner
+     */
+    private static class Locker implements Runnable {
 
-		public boolean locked = false;
+        public boolean locked = false;
 
-		public boolean unlocked = false;
+        public boolean unlocked = false;
 
-		public boolean wait = true;
+        public boolean wait = true;
 
-		public IStateFactory stateFactory;
+        public IStateFactory stateFactory;
 
-		IProcessInstance instance;
+        IProcessInstance instance;
 
-		public Locker(IProcessInstance instance, IStateFactory stateFactory) {
-			this.instance = instance;
-			this.stateFactory = stateFactory;
-		}
+        public Locker(IProcessInstance instance, IStateFactory stateFactory) {
+            this.instance = instance;
+            this.stateFactory = stateFactory;
+        }
 
-		public void run() {
-			try {
-				this.stateFactory.acquireLock(this.instance, null);
-				this.locked = true;
-				while (this.wait) {
-					Thread.sleep(1);
-				}
+        public void run() {
+            try {
+                this.stateFactory.acquireLock(this.instance, null);
+                this.locked = true;
+                while (this.wait) {
+                    Thread.sleep(1);
+                }
 
-				this.stateFactory.releaseLock(this.instance, null);
-				this.locked = false;
-				this.unlocked = true;
-			} catch (LockException e) {
-				assertNull(e);
+                this.stateFactory.releaseLock(this.instance, null);
+                this.locked = false;
+                this.unlocked = true;
+            } catch (LockException e) {
+                assertNull(e);
 
-			} catch (InterruptedException e) {
-				assertNull(e);
-			}
+            } catch (InterruptedException e) {
+                assertNull(e);
+            }
 
-		}
+        }
 
-	}
+    }
 
 }
