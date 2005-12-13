@@ -17,4 +17,9 @@
             </construct>
         </invoke-factory>
     </implementation>
+    <service-point id="noopTaskAction" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.taskAction.NoopHiveMindTaskAction"/>
+        </invoke-factory>
+    </service-point>
 </module>
