@@ -145,6 +145,7 @@ public class ZebraSecurity {
             Query tasks = session
                     .createQuery("from ZebraTaskInstance ati where (ati.taskOwner = :user or ati.taskOwner is null) and ati.showInTaskList = :show");
             tasks.setBoolean("show", true);
+            tasks.setEntity("user", user);
 
             tasks.setCacheable(true);
 

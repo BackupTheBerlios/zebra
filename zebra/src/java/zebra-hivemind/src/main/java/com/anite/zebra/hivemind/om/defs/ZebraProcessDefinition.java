@@ -238,7 +238,7 @@ public class ZebraProcessDefinition extends AbstractProcessDefinition {
     @Transient
     public PermissionSet getStartPermissions() throws NestableException {
         ZebraSecurity security = (ZebraSecurity) RegistryManager.getInstance().getRegistry().getService(
-                "zebra.ZebraSecurity", ZebraSecurity.class);
+                "zebra.zebraSecurity", ZebraSecurity.class);
         return security.getPermissionSet(this.getStartPermissionsText());
 
     }
