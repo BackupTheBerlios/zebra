@@ -5,7 +5,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-hivemind</artifactId>
     <packaging>jar</packaging>
-    <version>1.0</version>
+    <version>1.1</version>
     <name>Zebra Hivemind Layer</name>
     <url>http://zebra.berlios.de/</url>
     <developers>
@@ -53,6 +53,20 @@
                     <execution>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>site</goal>
+                            <goal>deploy</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -137,6 +151,10 @@
             <id>zebra-berlios</id>
             <url>scp://shell.berlios.de/home/groups/zebra/htdocs/maven2</url>
         </repository>
+        <site>
+            <id>zebra-berlios</id>
+            <url>scp://shell.berlios.de/home/groups/zebra/htdocs/cc/zebra-hivemind</url>
+        </site>
     </distributionManagement>
     <reporting>
         <plugins>
