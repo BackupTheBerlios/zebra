@@ -58,6 +58,17 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.5</source>
@@ -111,6 +122,18 @@
       <id>zebra-berlios</id>
       <url>scp://shell.berlios.de/home/groups/zebra/htdocs/maven2</url>
     </repository>
+    <site>
+      <id>zebra-berlios</id>
+      <url>scp://shell.berlios.de/home/groups/zebra/htdocs/cc/fulcrum-security</url>
+    </site>
   </distributionManagement>
-  <reporting/>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>fulcrum-hivemind</groupId>
+        <artifactId>hivedoc-maven-plugin</artifactId>
+        <version>0.2</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

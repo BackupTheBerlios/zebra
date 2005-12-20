@@ -47,6 +47,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <downloadSources>true</downloadSources>
+        </configuration>
         <executions>
           <execution>
             <phase>compile</phase>
@@ -126,6 +129,18 @@
       <id>zebra-berlios</id>
       <url>scp://shell.berlios.de/home/groups/zebra/htdocs/maven2</url>
     </repository>
+    <site>
+      <id>zebra-berlios</id>
+      <url>scp://shell.berlios.de/home/groups/zebra/htdocs/cc/fulcrum-hivemind</url>
+    </site>
   </distributionManagement>
-  <reporting/>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>fulcrum-hivemind</groupId>
+        <artifactId>hivedoc-maven-plugin</artifactId>
+        <version>0.2</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
