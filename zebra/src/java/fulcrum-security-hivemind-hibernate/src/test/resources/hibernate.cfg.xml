@@ -14,6 +14,10 @@
   <property name="connection.password">test</property>
   <property name="connection.url">jdbc:mckoi:local://./src/test/resources/mcKoi.conf?create_or_boot=true</property>
   <property name="dialect">org.hibernate.dialect.MckoiDialect</property>
-  <mapping resource="DynamicHibernate.hbm.xml"/>
+  <mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser"/>
+  <mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicGroup"/>
+  <mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicRole"/>
+  <mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicPermission"/>
+  
  </session-factory>
 </hibernate-configuration>

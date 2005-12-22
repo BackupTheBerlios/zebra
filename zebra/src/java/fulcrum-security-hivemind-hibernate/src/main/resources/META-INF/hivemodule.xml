@@ -19,7 +19,7 @@
     <invoke-factory>
       <construct class="org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl">
         <set property="className"
-          value="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser"/>
+          value="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser"/>
         <set-service property="authenticator" service-id="fulcrum.security.authenticatorTextMatch"/>
         <set-service property="aclFactory" service-id="fulcrum.security.aclFactoryDynamic"/>
       </construct>
@@ -29,7 +29,7 @@
     <invoke-factory>
       <construct class="org.apache.fulcrum.security.hibernate.HibernateGroupManagerImpl">
         <set property="className"
-          value="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup"/>
+          value="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicGroup"/>
       </construct>
     </invoke-factory>
   </service-point>
@@ -38,7 +38,7 @@
     <invoke-factory>
       <construct class="org.apache.fulcrum.security.hibernate.HibernatePermissionManagerImpl">
         <set property="className"
-          value="org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission"/>
+          value="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicPermission"/>
       </construct>
     </invoke-factory>
   </service-point>
@@ -46,7 +46,7 @@
     <invoke-factory>
       <construct class="org.apache.fulcrum.security.hibernate.HibernateRoleManagerImpl">
         <set property="className"
-          value="org.apache.fulcrum.security.model.dynamic.entity.DynamicRole"/>
+          value="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicRole"/>
       </construct>
     </invoke-factory>
   </service-point>
