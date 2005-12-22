@@ -5,7 +5,7 @@
     <groupId>fulcrum-hivemind</groupId>
     <artifactId>fulcrum-hibernate</artifactId>
     <packaging>jar</packaging>
-    <version>1.6</version>
+    <version>1.7</version>
     <name>fulcrum-hivemind-hibernate - Hibernate Session manager for Hivemind</name>
     <url>http://gnasher.aniteps.com/docs/</url>
     <build>
@@ -70,19 +70,8 @@
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate</artifactId>
-            <version>3.1rc2</version>
-        </dependency>
-        <!-- Hibernate Annotations -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
-            <version>3.1b6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>ejb3-persistence</artifactId>
-            <version>draft</version>
+            <version>3.1beta7</version>
         </dependency>
         <!-- End Hibernate Annotations -->
         <!-- DB Driver -->
