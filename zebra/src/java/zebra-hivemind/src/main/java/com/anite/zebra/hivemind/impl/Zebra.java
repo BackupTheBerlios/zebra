@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 
 import com.anite.zebra.core.Engine;
@@ -101,12 +102,12 @@ public class Zebra {
        
     }
 
-    public List<ZebraTaskInstance> getOnlyOwnedTaskList(DynamicUser user) {
+    public List<ZebraTaskInstance> getOnlyOwnedTaskList(HibernateDynamicUser user) {
         
         return zebraSecurity.getOnlyOwnedTaskList(user);
     }
 
-    public List<ZebraTaskInstance> getOnlyDelegatedTaskList(DynamicUser user) {
+    public List<ZebraTaskInstance> getOnlyDelegatedTaskList(HibernateDynamicUser user) {
         
         return zebraSecurity.getOnlyDelegatedTaskList(user);
     }
@@ -135,7 +136,7 @@ public class Zebra {
      * @throws DestructException 
      * 
      */
-    public void killProcess(ZebraProcessInstance processInstance, DynamicUser owner) throws StateFailureException,
+    public void killProcess(ZebraProcessInstance processInstance, HibernateDynamicUser owner) throws StateFailureException,
             DestructException {
 
         List<ZebraProcessInstance> processesToKill = processInstance.getRunningChildProcesses();

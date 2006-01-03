@@ -29,6 +29,7 @@ import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
@@ -65,9 +66,9 @@ public class ZebraSecurityManagerTest extends TestCase {
 
     private Zebra zebra;
 
-    DynamicUser adminUser;
+    HibernateDynamicUser adminUser;
 
-    DynamicUser user;
+    HibernateDynamicUser user;
 
     /*
      * @see TestCase#setUp()
@@ -162,15 +163,15 @@ public class ZebraSecurityManagerTest extends TestCase {
         modelManager.grant(userGroup, userRole);
 
         //create user
-        DynamicUser adminUser;
-        DynamicUser user;
+        HibernateDynamicUser adminUser;
+        HibernateDynamicUser user;
 
         userManager = (UserManager) RegistryManager.getInstance().getRegistry().getService(
                 "fulcrum.security.hivemind.userManagerDynamic", org.apache.fulcrum.security.UserManager.class);
 
-        adminUser = (DynamicUser) userManager.getUserInstance("ZEBRA_ADMIN_USER");
+        adminUser = (HibernateDynamicUser) userManager.getUserInstance("ZEBRA_ADMIN_USER");
 
-        user = (DynamicUser) userManager.getUserInstance("ZEBRA_USER");
+        user = (HibernateDynamicUser) userManager.getUserInstance("ZEBRA_USER");
         // TODO add authentication stuff
         userManager.addUser(user, "password");
         userManager.addUser(adminUser, "password");
@@ -197,19 +198,19 @@ public class ZebraSecurityManagerTest extends TestCase {
 
         zebra.startProcess(processInstance);
 
-        List<ZebraTaskInstance> taskList = zebra.getTaskList((DynamicUser) userManager.getUser("ZEBRA_ADMIN_USER"));
+        List<ZebraTaskInstance> taskList = zebra.getTaskList((HibernateDynamicUser) userManager.getUser("ZEBRA_ADMIN_USER"));
 
         assertTrue(checkIfInTaskList(taskList, "First Screen"));
 
-        taskList = zebra.getTaskList((DynamicUser) userManager.getUser("ZEBRA_USER"));
+        taskList = zebra.getTaskList((HibernateDynamicUser) userManager.getUser("ZEBRA_USER"));
         assertFalse(checkIfInTaskList(taskList, "First Screen"));
         
         testTaskDef(FIRST_SCREEN, processInstance);
 
-        taskList = zebra.getTaskList((DynamicUser) userManager.getUser("ZEBRA_ADMIN_USER"));
+        taskList = zebra.getTaskList((HibernateDynamicUser) userManager.getUser("ZEBRA_ADMIN_USER"));
         assertTrue(checkIfInTaskList(taskList, "Second Screen"));
         
-        taskList = zebra.getTaskList((DynamicUser) userManager.getUser("ZEBRA_USER"));
+        taskList = zebra.getTaskList((HibernateDynamicUser) userManager.getUser("ZEBRA_USER"));
         assertTrue(checkIfInTaskList(taskList, "Second Screen"));
         
         testTaskDef(SECOND_SCREEN, processInstance);

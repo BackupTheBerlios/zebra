@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -173,11 +174,11 @@ public class ZebraSecurity {
 
     }
 
-    public List<ZebraTaskInstance> getOnlyOwnedTaskList(DynamicUser user) {
+    public List<ZebraTaskInstance> getOnlyOwnedTaskList(HibernateDynamicUser user) {
         throw new NotImplementedException("See Antelope for how to implement");
     }
 
-    public List<ZebraTaskInstance> getOnlyDelegatedTaskList(DynamicUser user) {
+    public List<ZebraTaskInstance> getOnlyDelegatedTaskList(HibernateDynamicUser user) {
         throw new NotImplementedException("See Antelope for how to implement");
     }
 

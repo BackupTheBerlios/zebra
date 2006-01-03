@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -104,7 +104,7 @@ public class ZebraProcessInstance implements IProcessInstance {
     private String processName;
 
     /** The user that activated this process */
-    private DynamicUser activatedBy;
+    private HibernateDynamicUser activatedBy;
 
     /** The property set catch all for anything at all */
     private Map<String, ZebraPropertySetEntry> propertySet = new HashMap<String, ZebraPropertySetEntry>();
@@ -224,6 +224,8 @@ public class ZebraProcessInstance implements IProcessInstance {
      * @hibernate.collection-element column="realPermissionName" type="string"
      * @hibernate.collection-cache usage="transactional"
      * @return Returns the dynamicPermissionMap.
+     * 
+     * @TODO implement me using CollectionOfElements once Hibernate Annonations B7 is integrated
      */
     @Transient
     //  @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
@@ -373,11 +375,11 @@ public class ZebraProcessInstance implements IProcessInstance {
      * @return
      */
     @ManyToOne
-    public DynamicUser getActivatedBy() {
+    public HibernateDynamicUser getActivatedBy() {
         return this.activatedBy;
     }
 
-    public void setActivatedBy(DynamicUser activatedBy) {
+    public void setActivatedBy(HibernateDynamicUser activatedBy) {
         this.activatedBy = activatedBy;
     }
 

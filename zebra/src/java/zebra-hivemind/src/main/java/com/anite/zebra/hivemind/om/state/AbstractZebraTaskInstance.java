@@ -32,7 +32,7 @@ import javax.persistence.Transient;
 
 import org.apache.commons.lang.exception.NestableException;
 import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.util.PermissionSet;
 
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
@@ -66,7 +66,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 
 	private String routingAnswer;
 
-	private DynamicUser taskOwner;
+	private HibernateDynamicUser taskOwner;
 
 	private String caption;
 
@@ -80,7 +80,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 
 	private Date actualCompletionDate;
 
-	private DynamicUser decisionMadeBy;
+	private HibernateDynamicUser decisionMadeBy;
 
 	private Priority priority;
 
@@ -220,11 +220,11 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	}
 
 	@ManyToOne
-	public DynamicUser getTaskOwner() {
+	public HibernateDynamicUser getTaskOwner() {
 		return this.taskOwner;
 	}
 
-	public void setTaskOwner(DynamicUser user) {
+	public void setTaskOwner(HibernateDynamicUser user) {
 		this.taskOwner = user;
 	}
 
@@ -303,7 +303,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	 * @return
 	 */
 	@ManyToOne
-	public DynamicUser getDecisionMadeBy() {
+	public HibernateDynamicUser getDecisionMadeBy() {
 		return this.decisionMadeBy;
 	}
 
@@ -312,7 +312,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	 * addition to the task owner who completed the task that is automatically
 	 * set
 	 */
-	public void setDecisionMadeBy(DynamicUser decisionMadeBy) {
+	public void setDecisionMadeBy(HibernateDynamicUser decisionMadeBy) {
 		this.decisionMadeBy = decisionMadeBy;
 	}
 
