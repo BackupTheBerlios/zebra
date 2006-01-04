@@ -26,7 +26,6 @@ import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.hibernate.factory.HibernateSessionFactory;
-import org.apache.fulcrum.quartz.tables.CreateMcKoiTables;
 import org.apache.fulcrum.quartz.tables.CreatePostgresTables;
 import org.apache.hivemind.ServiceImplementationFactory;
 import org.apache.hivemind.ServiceImplementationFactoryParameters;
@@ -57,10 +56,9 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 	/*
 	 * This class only supports use of the following databases/drivers
 	 * to support a new db, create a new class to create the tables using
-	 * the McKoi or Postgres ones as an example and add the appropriate 
+	 * Postgres ones as an example and add the appropriate 
 	 * block into the createTables method.
 	 */
-	private static final String MCKOI = "com.mckoi.JDBCDriver";
 	private static final String POSTGRESQL = "org.postgresql.Driver";
 	
 	private SchedulerFactory schedulerFactory = new StdSchedulerFactory();
@@ -159,19 +157,13 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 	 */
 	private void createTables(Connection conn, String driver) throws SQLException
 	{
-		if (MCKOI.equalsIgnoreCase(driver))
-		{
-			CreateMcKoiTables tableCreator = new CreateMcKoiTables();
-			tableCreator.createTables(conn);
-			return;
-		}
 		if (POSTGRESQL.equalsIgnoreCase(driver))
 		{
 			CreatePostgresTables tableCreator = new CreatePostgresTables();
 			tableCreator.createTables(conn);
 			return;
 		}
-		throw new RuntimeException("Driver not recognised as either McKoi or Postgres:" + driver);
+		throw new RuntimeException("Driver not recognised as Postgres:" + driver);
 	}
 	
 }

@@ -46,9 +46,9 @@ public abstract class CreateTables {
 			{
 				/*
 				 * ignore this if it is a table does not exist exception from
-				 * postgresql on a drop statement.
+				 * postgresql or McKoi on a drop statement.
 				 */
-				if (!sqle.getMessage().endsWith("does not exist"))
+				if ((!sqle.getMessage().endsWith("does not exist")) && (!sqle.getMessage().endsWith("does not exist.")))
 				{
 					sqle.printStackTrace();
 				}
