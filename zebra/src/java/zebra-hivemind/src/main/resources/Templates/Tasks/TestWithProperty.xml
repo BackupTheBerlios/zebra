@@ -1,4 +1,4 @@
-<ACGWFD.TaskTemplate name="Hivemind" icon="Bee.bmp" description="A hivemind service" routingparallel="no">
+<ACGWFD.TaskTemplate name="TestWithProperty" icon="Bee.bmp" description="Test Property Set stuff" routingparallel="no">
 	<properties name="(General)">
 		<property name="synchronise" type="boolean" value="false" locked="no"/>
 		<property name="auto" type="boolean" value="true" locked="yes"/>
@@ -6,7 +6,8 @@
 	</properties>
 	<properties name="(General Task Properties)">
 		<property name="ShowInTaskList" value="no" type="Boolean" locked="yes"/>
-		<property name="ServiceId" type="string" value="zebra.quartzTask" locked="yes"/>
+		<property name="ServiceId" type="string" value="zebra.test.noopTaskAction" locked="yes"/>
+		<property name="Wait" type="string" value="" locked="no"/>
 	</properties>
 	<properties name="(Inputs)"/>
 </ACGWFD.TaskTemplate>

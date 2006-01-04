@@ -37,6 +37,8 @@ public class ZebraPropertySetEntry {
 
     private String value = null;
 
+    private String key = null;
+    
     private Serializable object = null;
 
     /** Version Flag for serialisation   */
@@ -62,17 +64,6 @@ public class ZebraPropertySetEntry {
         setObject(object);
     }
 
-    /**
-     * 
-     */
-    @Id(generate = GeneratorType.AUTO)
-    public Integer getId() {
-        return this.propertySetId;
-    }
-
-    public void setId(Integer propertySetId) {
-        this.propertySetId = propertySetId;
-    }
 
     /**
      * A string property set value
@@ -117,4 +108,22 @@ public class ZebraPropertySetEntry {
     public void setObject(Serializable object) {
         this.object = object;
     }
+
+    @Id(generate = GeneratorType.AUTO)
+    public Integer getPropertySetId() {
+		return propertySetId;
+	}
+
+	public void setPropertySetId(Integer propertySetId) {
+		this.propertySetId = propertySetId;
+	}
+
+	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
 }

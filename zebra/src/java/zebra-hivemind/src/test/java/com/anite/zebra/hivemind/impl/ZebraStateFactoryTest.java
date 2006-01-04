@@ -38,6 +38,8 @@ import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.core.state.api.ITransaction;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
+import com.anite.zebra.hivemind.om.state.ZebraPropertySetEntry;
+import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
 /**
  * @author Ben.Gidley
@@ -146,6 +148,8 @@ public class ZebraStateFactoryTest extends TestCase {
         ITaskInstance taskInstance = this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
         assertNotNull(taskInstance);
         assertEquals(processInstance, taskInstance.getProcessInstance());
+        ZebraTaskInstance zebraTaskInstance = (ZebraTaskInstance) taskInstance;
+        zebraTaskInstance.getPropertySet().put("bob", new ZebraPropertySetEntry("bob"));
         assertEquals(foe, taskInstance.getFOE());
 
         t = this.stateFactory.beginTransaction();
@@ -153,6 +157,12 @@ public class ZebraStateFactoryTest extends TestCase {
         t.commit();
 
         assertTrue(taskInstance.getTaskInstanceId().longValue() > 0);
+        
+        t = this.stateFactory.beginTransaction();
+        this.stateFactory.deleteObject(taskInstance);
+        t.commit();
+
+        
     }
 
 }

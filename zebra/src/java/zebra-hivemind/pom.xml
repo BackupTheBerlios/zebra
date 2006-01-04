@@ -105,6 +105,11 @@
     <dependencies>
         <dependency>
             <groupId>fulcrum-hivemind</groupId>
+            <artifactId>fulcrum-quartz</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fulcrum-hivemind</groupId>
             <artifactId>fulcrum-hibernate</artifactId>
             <version>1.7</version>
         </dependency>

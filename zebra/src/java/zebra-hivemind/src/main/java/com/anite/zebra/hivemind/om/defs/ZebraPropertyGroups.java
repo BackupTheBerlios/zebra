@@ -53,7 +53,7 @@ public class ZebraPropertyGroups extends PropertyGroups {
     }
 
 	@OneToMany(targetEntity = ZebraPropertyElement.class, cascade=CascadeType.ALL)
-	@JoinTable(table = @Table(name = "propertyGroupElements"), joinColumns = { @JoinColumn(name = "propertyGroupsId") }, inverseJoinColumns = @JoinColumn(name = "propertyId"))
+	//@JoinTable(table = @Table(name = "propertyGroupElements"), joinColumns = { @JoinColumn(name = "propertyGroupsId") }, inverseJoinColumns = @JoinColumn(name = "propertyId"))
     protected Set getPropertyElements() {
         return super.getPropertyElements();
     }

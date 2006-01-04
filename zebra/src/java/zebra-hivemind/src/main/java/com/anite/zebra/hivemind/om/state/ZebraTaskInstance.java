@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 
@@ -74,7 +75,8 @@ public class ZebraTaskInstance extends AbstractZebraTaskInstance {
 	 * @return
 	 */
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@MapKey
+	@MapKey(name="key")
+	@JoinColumn
 	public Map<String, ZebraPropertySetEntry> getPropertySet() {
 		return this.propertySet;
 	}

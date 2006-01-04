@@ -44,4 +44,9 @@
             <construct class="com.anite.zebra.core.Engine"></construct>
         </invoke-factory>
     </service-point>
+	<service-point id="QuartzTaskAction" interface="com.anite.zebra.core.api.ITaskAction">
+		<invoke-factory>
+			<construct class="com.anite.zebra.hivemind.taskAction.QuartzServiceTaskAction"></construct>
+		</invoke-factory>
+	</service-point>
 </module>
