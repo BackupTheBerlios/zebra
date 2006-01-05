@@ -3,6 +3,10 @@
  */
 package org.apache.fulcrum.hibernate.factory;
 
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.apache.hivemind.ServiceImplementationFactory;
 import org.apache.hivemind.ServiceImplementationFactoryParameters;
@@ -14,6 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.connection.ConnectionProvider;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
@@ -34,6 +39,10 @@ public class HibernateSessionFactory implements ServiceImplementationFactory, Re
 
     private boolean updateSchema = false;
     private boolean createSchema = false;
+    
+    private DataSource connectionProviderDataSource = null;
+    
+    private Properties hibernateProperties = null;
 
     /**
      * Called by factory when creating service
@@ -43,7 +52,7 @@ public class HibernateSessionFactory implements ServiceImplementationFactory, Re
         try {
             Configuration config = new AnnotationConfiguration();
             config.configure();
-
+            hibernateProperties = config.getProperties();
             if (createSchema){ 
                 SchemaExport export = new SchemaExport(config);
                 export.drop(true, true);
@@ -53,8 +62,11 @@ public class HibernateSessionFactory implements ServiceImplementationFactory, Re
                 new SchemaUpdate(config).execute(true, true);
             }
             sessionFactory = config.buildSessionFactory();
-
+            ConnectionProvider connectionProvider = config.buildSettings().getConnectionProvider();
+            connectionProviderDataSource = 
+            	new HibernateConnectionProviderDataSource(connectionProvider);
         } catch (HibernateException e) {
+        	e.printStackTrace();
             throw new NestableRuntimeException(e);
         }
     }
@@ -119,4 +131,13 @@ public class HibernateSessionFactory implements ServiceImplementationFactory, Re
         this.createSchema = createSchema;
     }
 
+    public DataSource getConnectionProviderDataSource()
+    {
+    	return this.connectionProviderDataSource;
+    }
+    
+    public Properties getHibernateProperties()
+    {
+    	return this.hibernateProperties;
+    }
 }
