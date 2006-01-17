@@ -20,9 +20,6 @@ import junit.framework.TestCase;
 
 import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
-import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
-import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
-import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
@@ -32,7 +29,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 /**
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: ACLFactoryTest.java,v 1.2 2005/11/15 09:30:30 bgidley Exp $
+ * @version $Id: ACLFactoryTest.java,v 1.3 2006/01/17 09:17:24 biggus_richus Exp $
  */
 public class ACLFactoryTest extends TestCase {
 
@@ -59,24 +56,5 @@ public class ACLFactoryTest extends TestCase {
         assertTrue(acl instanceof DynamicAccessControlList);
         DynamicAccessControlList dacl = (DynamicAccessControlList) acl;
         assertTrue(dacl.hasPermission(permission));
-
     }
-
-    public void testCreatingBasicACL() throws Exception {
-        ACLFactory factory = (ACLFactory) RegistryManager.getInstance().getRegistry().getService(
-                "fulcrum.security.aclFactoryBasic", ACLFactory.class);
-        BasicUser user = new BasicUser();
-        user.setName("bob");
-        user.setId(new Integer(1));
-        BasicGroup group = new BasicGroup();
-        group.setName("group1");
-        group.setId(new Integer(1));
-        user.addGroup(group);
-        AccessControlList acl = factory.getAccessControlList(user);
-        assertTrue(acl instanceof BasicAccessControlList);
-        BasicAccessControlList bacl = (BasicAccessControlList) acl;
-        assertTrue(bacl.hasGroup(group));
-
-    }
-
 }

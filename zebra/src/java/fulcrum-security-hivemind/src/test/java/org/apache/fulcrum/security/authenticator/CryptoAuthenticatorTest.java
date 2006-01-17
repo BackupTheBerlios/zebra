@@ -24,32 +24,36 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 /**
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: CryptoAuthenticatorTest.java,v 1.2 2005/11/15 09:30:28 bgidley Exp $
+ * @version $Id: CryptoAuthenticatorTest.java,v 1.3 2006/01/17 09:17:23 biggus_richus Exp $
  */
 public class CryptoAuthenticatorTest extends TestCase
 {
-    
     private static final String preDefinedInput = "Oeltanks";
     private static final String preDefinedResult = "uVDiJHaavRYX8oWt5ctkaa7j1cw=";
+    
+	private Authenticator authenticator;
+	private User user;
     /**
     	* Constructor for CryptoAuthenticatorTest.
     	* @param arg0
     	*/
-    public CryptoAuthenticatorTest(String arg0)
-    {
+    public CryptoAuthenticatorTest(String arg0) {
         super(arg0);
     }
-    public void setUp()
-    {
-        
-    }
-    public void testAuthenticate() throws Exception
-    {
-        User user = new DynamicUser();
+    
+    public void setUp() {
+        user = new DynamicUser();
         user.setName("Bob");
         user.setPassword(preDefinedResult);
-        Authenticator authenticator = (Authenticator)RegistryManager.getInstance().getRegistry().getService("fulcrum.security.authenticatorCrypto", Authenticator.class);
+        authenticator = (Authenticator)RegistryManager.getInstance().getRegistry().getService("fulcrum.security.authenticatorCrypto", Authenticator.class);        
+    }
+    
+    public void testAuthenticate() throws Exception {
         assertTrue(authenticator.authenticate(user, preDefinedInput));
         assertFalse(authenticator.authenticate(user, "mypassword"));
+    }
+    
+    public void testGetCryptoPassword() throws Exception {
+    	assertEquals(authenticator.getCryptoPassword(preDefinedInput), preDefinedResult);
     }
 }

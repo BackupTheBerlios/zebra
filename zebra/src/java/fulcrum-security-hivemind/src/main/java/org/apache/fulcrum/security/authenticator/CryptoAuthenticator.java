@@ -26,7 +26,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * their password
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: CryptoAuthenticator.java,v 1.1 2005/11/14 18:20:49 bgidley Exp $
+ * @version $Id: CryptoAuthenticator.java,v 1.2 2006/01/17 09:17:24 biggus_richus Exp $
  * @avalon.component name="crypto-authenticator"
  * @avalon.service type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
@@ -52,31 +52,33 @@ public class CryptoAuthenticator implements Authenticator
     public boolean authenticate(User user, String password) throws  DataBackendException
     {
  
-        try
-        {
+        /*try {
             CryptoAlgorithm ca = cryptoService.getCryptoAlgorithm(algorithm);
             ca.setCipher(cipher);
-            String output = ca.encrypt(password);
+            String output = ca.encrypt(password);*/
+        	String output = getCryptoPassword(password);
             return output.equals(user.getPassword());
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+        /*}
+        catch (NoSuchAlgorithmException e) {
             throw new DataBackendException(e.getMessage(), e);
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             throw new DataBackendException(ex.getMessage(), ex);
-        }
+        }*/
     }
+    
     public String getAlgorithm() {
         return algorithm;
     }
+    
     public void setAlgorithm(String algorithm) {
         this.algorithm = algorithm;
     }
+    
     public String getCipher() {
         return cipher;
     }
+    
     public void setCipher(String cipher) {
         this.cipher = cipher;
     }
@@ -85,5 +87,15 @@ public class CryptoAuthenticator implements Authenticator
         this.cryptoService = cryptoService;
     }
     
-
+	public String getCryptoPassword(String password) throws DataBackendException {
+		try {
+			CryptoAlgorithm ca = cryptoService.getCryptoAlgorithm(algorithm);
+	        ca.setCipher(cipher);
+	        return ca.encrypt(password);
+		} catch (NoSuchAlgorithmException e) {
+            throw new DataBackendException(e.getMessage(), e);
+		} catch (Exception e) {
+            throw new DataBackendException(e.getMessage(), e);
+		}
+	}
 }

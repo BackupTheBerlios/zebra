@@ -25,17 +25,40 @@ import junit.framework.TestCase;
 /**
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: TextMatchAuthenticatorTest.java,v 1.2 2005/11/15 13:17:58 bgidley Exp $
+ * @version $Id: TextMatchAuthenticatorTest.java,v 1.3 2006/01/17 09:17:23 biggus_richus Exp $
  */
 public class TextMatchAuthenticatorTest extends TestCase
 {
+    private static final String password = "myPassword";
+
+    private Authenticator authenticator;
+	private User user;
+	
+    /**
+    	* Constructor for CryptoAuthenticatorTest.
+    	* @param arg0
+    	*/
+    public TextMatchAuthenticatorTest(String arg0) {
+        super(arg0);
+    }
+    
+    public void setUp() {
+        user = new DynamicUser();
+        user.setName("Bob");
+        user.setPassword(password);
+    	authenticator = (Authenticator) RegistryManager.getInstance().getRegistry().getService("fulcrum.security.authenticatorTextMatch", Authenticator.class);;
+    }
+
     public void testAuthenticate() throws Exception
     {
     	User user = new DynamicUser();
     	user.setName("Bob");
     	user.setPassword("myPassword");
-    	Authenticator authenticator = (Authenticator) RegistryManager.getInstance().getRegistry().getService("fulcrum.security.authenticatorTextMatch", Authenticator.class);;
 		assertTrue(authenticator.authenticate(user,"myPassword"));
 		assertFalse(authenticator.authenticate(user,"mypassword"));
+    }
+
+    public void testGetCryptoPassword() throws Exception {
+    	assertEquals(authenticator.getCryptoPassword(password), password);
     }
 }

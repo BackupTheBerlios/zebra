@@ -22,11 +22,14 @@ import org.apache.fulcrum.security.util.DataBackendException;
  * objects that allow different SPI's to have different authentication.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: Authenticator.java,v 1.1 2005/11/14 18:20:49 bgidley Exp $
+ * @version $Id: Authenticator.java,v 1.2 2006/01/17 09:17:24 biggus_richus Exp $
  */
 public interface Authenticator
 {
 
     public boolean authenticate(User user, String password)
         throws  DataBackendException;
+    
+    public String getCryptoPassword(String password)
+    	throws DataBackendException;
 }

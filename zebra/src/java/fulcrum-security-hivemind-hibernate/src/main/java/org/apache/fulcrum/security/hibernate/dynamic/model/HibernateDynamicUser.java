@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.hibernate.dynamic.model;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -54,6 +57,30 @@ public class HibernateDynamicUser extends DynamicUser {
     @ManyToMany
     public Set<HibernateDynamicGroup> getGroupsAsSet() {
         return super.getGroupsAsSet();
+    }
+    
+    @Override
+    @Type(type="java.util.Date")
+    public Date getPasswordExpiryDate() {
+    	return super.getPasswordExpiryDate();
+    }
+    
+    @Override
+    @Type(type="java.util.Date")
+    public Date getLockedDate() {
+    	return super.getLockedDate();
+    }
+    
+    @Override
+    @Type(type="int")
+    public int getLoginAttempts() {
+    	return super.getLoginAttempts();
+    }
+    
+    @Override
+    @CollectionOfElements
+    public List<String> getPasswordHistory() {
+    	return super.getPasswordHistory();
     }
 
 }

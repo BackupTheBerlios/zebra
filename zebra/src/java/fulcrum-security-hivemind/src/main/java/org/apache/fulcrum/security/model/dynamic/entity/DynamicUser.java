@@ -15,7 +15,10 @@ package org.apache.fulcrum.security.model.dynamic.entity;
  *  limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
@@ -33,54 +36,131 @@ import org.apache.fulcrum.security.util.GroupSet;
  * If user C has D in their delegatees - C assumes D's groups,roles and permissions
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicUser.java,v 1.1 2005/11/14 18:20:50 bgidley Exp $
+ * @version $Id: DynamicUser.java,v 1.2 2006/01/17 09:17:25 biggus_richus Exp $
  */
 public class DynamicUser extends SecurityEntityImpl implements User
 {
     private String password;
+    private Date passwordExpiryDate;
+    private Date locked;
+    private int loginAttempts;
+        
+    private List passwordHistory = new ArrayList<String>();
     private Set groupSet = new GroupSet();
     private Set delegators = new HashSet();
     private Set delegatees = new HashSet();
 
+    /**
+     * 
+     * @return Returns the password history.
+     *
+     * @author richard.brooks
+     * Created on Jan 11, 2006
+     */
+    public List getPasswordHistory() {
+    	return this.passwordHistory;
+    }
+    
+    /**
+     * 
+     * @param passwordHistory The password history to set.
+     *
+     * @author richard.brooks
+     * Created on Jan 11, 2006
+     */
+    public void setPasswordHistory(List passwordHistory) {
+    	this.passwordHistory = passwordHistory;
+    }
+    
 	/**
 	 * @return Returns the delegatees.
 	 */
 	public Set getDelegatees() {
 		return delegatees;
 	}
+	
 	/**
 	 * @param delegatees The delegatees to set.
 	 */
 	public void setDelegatees(Set delegatees) {
 		this.delegatees = delegatees;
 	}
+	
 	/**
 	 * @return Returns the delegators.
 	 */
 	public Set getDelegators() {
 		return delegators;
 	}
+	
 	/**
 	 * @param delegates The delegators to set.
 	 */
 	public void setDelegators(Set delegates) {
 		this.delegators = delegates;
 	}
+	
     /**
-     * @return
+     * @return Returns the password.
      */
     public String getPassword()
     {
         return password;
     }
+    
     /**
-     * @param password
+     * @param password The password to set.
      */
     public void setPassword(String password)
     {
         this.password = password;
     }
+    
     /**
+     * 
+     * @return The expiry date of the current password.
+     *
+     * @author richard.brooks
+     * Created on Jan 11, 2006
+     */
+    public Date getPasswordExpiryDate() {
+		return passwordExpiryDate;
+	}
+
+    /**
+     * 
+     * @param passwordExpiryDate Set the expiry date of the password.
+     *
+     * @author richard.brooks
+     * Created on Jan 11, 2006
+     */
+	public void setPasswordExpiryDate(Date passwordExpiryDate) {
+		this.passwordExpiryDate = passwordExpiryDate;
+	}
+
+	/**
+	 * 
+	 * @return Return whether the user is locked.
+	 *
+	 * @author richard.brooks
+	 * Created on Jan 11, 2006
+	 */
+	public Date getLockedDate() {
+		return locked;
+	}
+
+	/**
+	 * 
+	 * @param locked Sets whether the user is locked
+	 *
+	 * @author richard.brooks
+	 * Created on Jan 11, 2006
+	 */
+	public void setLockedDate(Date locked) {
+		this.locked = locked;
+	}
+	
+	/**
     * @return
     */
     public GroupSet getGroups()
@@ -92,6 +172,7 @@ public class DynamicUser extends SecurityEntityImpl implements User
     		return (GroupSet)groupSet;
     	}
     }
+    
     /**
      * @param groups
      */
@@ -102,10 +183,12 @@ public class DynamicUser extends SecurityEntityImpl implements User
     	else
     		this.groupSet = new GroupSet();
     }
+    
     public void removeGroup(Group group)
     {
         getGroups().remove(group);
     }
+    
     public void addGroup(Group group)
     {
         getGroups().add(group);
@@ -115,8 +198,17 @@ public class DynamicUser extends SecurityEntityImpl implements User
 	{
 		this.groupSet = groups;
 	}
+	
 	public Set getGroupsAsSet()
 	{
 		return groupSet;
+	}
+
+	public int getLoginAttempts() {
+		return loginAttempts;
+	}
+
+	public void setLoginAttempts(int loginAttempts) {
+		this.loginAttempts = loginAttempts;
 	}
 }

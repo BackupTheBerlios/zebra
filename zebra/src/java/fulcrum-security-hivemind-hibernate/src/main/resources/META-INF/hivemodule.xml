@@ -20,6 +20,10 @@
       <construct class="org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl">
         <set property="className"
           value="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser"/>
+		<set property="passwordDuration" value="28"/>
+		<set property="passwordCyclePolicy" value="5"/>
+		<set property="maxLoginAttempts" value="3"/>
+		<set property="lockReset" value="12"/>
         <set-service property="authenticator" service-id="fulcrum.security.authenticatorTextMatch"/>
         <set-service property="aclFactory" service-id="fulcrum.security.aclFactoryDynamic"/>
       </construct>

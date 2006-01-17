@@ -15,11 +15,15 @@ package org.apache.fulcrum.security;
  *  limitations under the License.
  */
 import org.apache.fulcrum.security.acl.AccessControlList;
+import org.apache.fulcrum.security.authenticator.Authenticator;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.PasswordExpiredException;
+import org.apache.fulcrum.security.util.PasswordHistoryException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserLockedException;
 import org.apache.fulcrum.security.util.UserSet;
 /**
  * An UserManager performs {@link org.apache.fulcrum.security.entity.User} objects
@@ -31,7 +35,7 @@ import org.apache.fulcrum.security.util.UserSet;
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.1 2005/11/14 18:20:47 bgidley Exp $
+ * @version $Id: UserManager.java,v 1.2 2006/01/17 09:17:25 biggus_richus Exp $
  */
 public interface UserManager 
 {
@@ -118,9 +122,12 @@ public interface UserManager
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
+     * @throws UserLockedException 
+     * @throws PasswordExpiredException 
      */
     User getUser(String username, String password)
-        throws PasswordMismatchException, UnknownEntityException, DataBackendException;
+        throws PasswordMismatchException, UnknownEntityException,
+			DataBackendException, UserLockedException, PasswordExpiredException;
 
 	/**
 	   * Retrieves all users defined in the system.
@@ -153,9 +160,11 @@ public interface UserManager
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
+     * @throws UserLockedException 
+     * @throws PasswordExpiredException 
      */
     void authenticate(User user, String password)
-        throws PasswordMismatchException, UnknownEntityException, DataBackendException;
+        throws PasswordMismatchException, UnknownEntityException, DataBackendException, UserLockedException, PasswordExpiredException;
     /**
      * Creates new user account with specified attributes.
      *
@@ -186,9 +195,13 @@ public interface UserManager
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
+     * @throws PasswordHistoryException 
+     * @throws UserLockedException 
+     * @throws PasswordExpiredException 
      */
     void changePassword(User user, String oldPassword, String newPassword)
-        throws PasswordMismatchException, UnknownEntityException, DataBackendException;
+        throws PasswordMismatchException, UnknownEntityException,
+			DataBackendException, PasswordHistoryException, UserLockedException, PasswordExpiredException;
     /**
      * Forcibly sets new password for an User.
      *
@@ -203,8 +216,9 @@ public interface UserManager
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
+     * @throws PasswordHistoryException 
      */
-    void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException;
+    void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException, PasswordHistoryException;
     
     /**
        * Return a Class object representing the system's chosen implementation of
@@ -216,7 +230,23 @@ public interface UserManager
        */
     public AccessControlList getACL(User user) throws UnknownEntityException;
     
+    /**
+     * 
+     * @return
+     *
+     * @author richard.brooks
+     * Created on Jan 11, 2006
+     */
+	Authenticator getAuthenticator();
 	
+	/**
+	 * 
+	 * @param authenticator
+	 *
+	 * @author richard.brooks
+	 * Created on Jan 11, 2006
+	 */
+	void setAuthenticator(Authenticator authenticator);
 
 
     

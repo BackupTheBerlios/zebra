@@ -16,11 +16,13 @@ package org.apache.fulcrum.security.entity;
  *  limitations under the License.
  */
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 /**
  * This interface represents the basic functionality of a user.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: User.java,v 1.1 2005/11/14 18:20:46 bgidley Exp $
+ * @version $Id: User.java,v 1.2 2006/01/17 09:17:23 biggus_richus Exp $
  */
 public interface User extends Serializable, SecurityEntity
 {
@@ -47,4 +49,77 @@ public interface User extends Serializable, SecurityEntity
      */
     void setPassword(String password);
     
+    /**
+     * 
+     * @return The date on which the user's password expires.
+     *
+     * @author richard.brooks
+     * Created on Jan 12, 2006
+     */
+    Date getPasswordExpiryDate();
+    
+    /**
+     * 
+     * @param expiryDate The date the user's password is due to expire.
+     *
+     * @author richard.brooks
+     * Created on Jan 12, 2006
+     */
+    void setPasswordExpiryDate(Date expiryDate);
+    
+    /**
+     * 
+     * @return The date the user was locked
+     *
+     * @author richard.brooks
+     * Created on Jan 12, 2006
+     */
+    Date getLockedDate();
+    
+    /**
+     * 
+     * @param locked Date of locking.
+     *
+     * @author richard.brooks
+     * Created on Jan 12, 2006
+     */
+    void setLockedDate(Date locked);
+    
+    /**
+     * 
+     * @return A list of the user's most recent passwords.
+     *
+     * @author richard.brooks
+     * Created on Jan 12, 2006
+     */
+    List getPasswordHistory();
+    
+    /**
+     * 
+     * @param passwordHistory List of passwords.
+     *
+     * @author richard.brooks
+     * Created on Jan 12, 2006
+     */
+    void setPasswordHistory(List passwordHistory);
+    
+    /**
+     * Gets the number of sequential failed login attempts.
+     * 
+     * @return number of failed login attempts
+     *
+     * @author richard.brooks
+     * Created on Jan 16, 2006
+     */
+    int getLoginAttempts();
+    
+    /**
+     * Sets the number of failed login attempts.
+     * 
+     * @param loginAttempts number of failed login attempts.
+     *
+     * @author richard.brooks
+     * Created on Jan 16, 2006
+     */
+    void setLoginAttempts(int loginAttempts);
 }
