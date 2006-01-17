@@ -35,7 +35,7 @@ import org.apache.fulcrum.security.util.UserSet;
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.2 2006/01/17 09:17:25 biggus_richus Exp $
+ * @version $Id: UserManager.java,v 1.3 2006/01/17 15:43:10 biggus_richus Exp $
  */
 public interface UserManager 
 {
@@ -164,7 +164,7 @@ public interface UserManager
      * @throws PasswordExpiredException 
      */
     void authenticate(User user, String password)
-        throws PasswordMismatchException, UnknownEntityException, DataBackendException, UserLockedException, PasswordExpiredException;
+        throws PasswordMismatchException, UnknownEntityException, DataBackendException, UserLockedException;
     /**
      * Creates new user account with specified attributes.
      *
@@ -201,7 +201,7 @@ public interface UserManager
      */
     void changePassword(User user, String oldPassword, String newPassword)
         throws PasswordMismatchException, UnknownEntityException,
-			DataBackendException, PasswordHistoryException, UserLockedException, PasswordExpiredException;
+			DataBackendException, PasswordHistoryException, UserLockedException;
     /**
      * Forcibly sets new password for an User.
      *

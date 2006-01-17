@@ -42,7 +42,7 @@ import org.apache.fulcrum.security.util.UserLockedException;
  * 
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractUserManager.java,v 1.4 2006/01/17 09:17:25 biggus_richus Exp $
+ * @version $Id: AbstractUserManager.java,v 1.5 2006/01/17 15:43:11 biggus_richus Exp $
  */
 public abstract class AbstractUserManager extends AbstractEntityManager
 		implements UserManager {
@@ -109,6 +109,11 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 			throws PasswordMismatchException, UnknownEntityException,
 			UserLockedException, DataBackendException, PasswordExpiredException {
 		User user = getUser(userName);
+		
+		if (user.getPasswordExpiryDate().compareTo(new Date()) <= 0) {
+			throw new PasswordExpiredException("Password expired on "+user.getPasswordExpiryDate());
+		}
+		
 		authenticate(user, password);
 		return user;
 	}
@@ -161,12 +166,10 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 *                if the user's account does not exist in the database.
 	 * @exception DataBackendException
 	 *                if there is a problem accessing the storage.
-	 * @throws PasswordExpiredException
-	 * 				  is the user's password has expired
 	 */
 	public void authenticate(User user, String password)
 			throws PasswordMismatchException, UnknownEntityException,
-			DataBackendException, UserLockedException, PasswordExpiredException {
+			DataBackendException, UserLockedException {
 
 		if (user.getLockedDate() != null) {
 			Calendar cal = Calendar.getInstance();
@@ -176,13 +179,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 			}
 		}
 		
-		if (user.getPasswordExpiryDate().compareTo(new Date()) <= 0) {
-			throw new PasswordExpiredException("Password expired on "+user.getPasswordExpiryDate());
-		}
-		
 		if (!authenticator.authenticate(user, password)) {
 			user.setLoginAttempts(user.getLoginAttempts()+1);
-			System.out.println(user.getLoginAttempts()+" max="+maxLoginAttempts+" lockTime= "+lockReset);
 			if (user.getLoginAttempts() == maxLoginAttempts) {
 				user.setLockedDate(new Date());
 				user.setLoginAttempts(0);
@@ -209,16 +207,14 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 *                if the user's account does not exist in the database.
 	 * @exception DataBackendException
 	 *                if there is a problem accessing the storage.
-	 * @throws PasswordExpiredException 
 	 */
 	public void changePassword(User user, String oldPassword, String newPassword)
-			throws PasswordMismatchException, PasswordHistoryException,
-			UserLockedException, UnknownEntityException, DataBackendException, PasswordExpiredException {
+			throws PasswordMismatchException, UserLockedException, 
+			       UnknownEntityException, DataBackendException, PasswordHistoryException {
 		if (!checkExists(user)) {
 			throw new UnknownEntityException("The account '" + user.getName()
 					+ "' does not exist");
 		}
-
 		authenticate(user, oldPassword);
 		cyclePassword(user, newPassword);
 		// save the changes in the database imediately, to prevent the password

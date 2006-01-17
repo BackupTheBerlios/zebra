@@ -93,6 +93,17 @@ public abstract class AbstractUserManagerTest extends
 		} catch (PasswordMismatchException pme) {
 			// good
 		}
+
+		// Simulate password expiry
+		GregorianCalendar gc = new GregorianCalendar(1974, 4, 25);
+		user.setLockedDate(gc.getTime());
+		user.setPasswordExpiryDate(gc.getTime());
+		try {
+			getUserManager().getUser("richard", "va");
+			fail("Should have thrown PasswordExpiredException");
+		} catch (PasswordExpiredException ule) {
+			//good
+		}
 	}
 
 	public void testGetAllUsers() throws Exception {
@@ -139,15 +150,6 @@ public abstract class AbstractUserManagerTest extends
 		GregorianCalendar gc = new GregorianCalendar(1974, 4, 25);
 		user.setLockedDate(gc.getTime());
 		getUserManager().authenticate(user, "jc");
-		
-		// Simulate password expiry
-		user.setPasswordExpiryDate(gc.getTime());
-		try {
-			getUserManager().authenticate(user, "jc");
-			fail("Should have thrown PasswordExpiredException");
-		} catch (PasswordExpiredException ule) {
-			//good
-		}
 	}
 
 	public void testChangePassword() throws Exception {
