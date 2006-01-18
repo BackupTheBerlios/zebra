@@ -42,7 +42,7 @@ import org.apache.fulcrum.security.util.UserLockedException;
  * 
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractUserManager.java,v 1.5 2006/01/17 15:43:11 biggus_richus Exp $
+ * @version $Id: AbstractUserManager.java,v 1.6 2006/01/18 08:38:55 biggus_richus Exp $
  */
 public abstract class AbstractUserManager extends AbstractEntityManager
 		implements UserManager {
@@ -184,7 +184,6 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 			if (user.getLoginAttempts() == maxLoginAttempts) {
 				user.setLockedDate(new Date());
 				user.setLoginAttempts(0);
-				System.out.println("User locked");
 			}
 			throw new PasswordMismatchException("Can not authenticate user.");
 		}
