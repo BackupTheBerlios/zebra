@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.TemporalType;
 
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.hibernate.annotations.CollectionOfElements;
@@ -60,19 +61,19 @@ public class HibernateDynamicUser extends DynamicUser {
     }
     
     @Override
-    @Type(type="java.util.Date")
+    @Basic(temporalType = TemporalType.DATE)
     public Date getPasswordExpiryDate() {
     	return super.getPasswordExpiryDate();
     }
     
     @Override
-    @Type(type="java.util.Date")
+    @Basic(temporalType = TemporalType.DATE)
     public Date getLockedDate() {
     	return super.getLockedDate();
     }
     
     @Override
-    @Type(type="int")
+    @Basic
     public int getLoginAttempts() {
     	return super.getLoginAttempts();
     }
