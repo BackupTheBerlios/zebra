@@ -25,18 +25,18 @@ public class CreatePostgresTables extends CreateTables{
 	
 	
 	public void addCommands() {
-	addSql("DROP TABLE qrtz_locks;");
-	addSql("drop table qrtz_job_listeners;");
-	addSql("drop table qrtz_trigger_listeners;");
-	addSql("drop table qrtz_fired_triggers;");
-	addSql("DROP TABLE qrtz_paused_trigger_grps;");
-	addSql("DROP TABLE qrtz_scheduler_state;");
-	addSql("drop table qrtz_simple_triggers;");
-	addSql("drop table qrtz_cron_triggers;");
-	addSql("DROP TABLE qrtz_blob_triggers;");
-	addSql("drop table qrtz_triggers;");
-	addSql("drop table qrtz_job_details;");
-	addSql("drop table qrtz_calendars;");
+	addSql("DROP TABLE quartz.qrtz_locks;");
+	addSql("drop table quartz.qrtz_job_listeners;");
+	addSql("drop table quartz.qrtz_trigger_listeners;");
+	addSql("drop table quartz.qrtz_fired_triggers;");
+	addSql("DROP TABLE quartz.qrtz_paused_trigger_grps;");
+	addSql("DROP TABLE quartz.qrtz_scheduler_state;");
+	addSql("drop table quartz.qrtz_simple_triggers;");
+	addSql("drop table quartz.qrtz_cron_triggers;");
+	addSql("DROP TABLE quartz.qrtz_blob_triggers;");
+	addSql("drop table quartz.qrtz_triggers;");
+	addSql("drop table quartz.qrtz_job_details;");
+	addSql("drop table quartz.qrtz_calendars;");
 	addSql("drop schema quartz;");
 	addSql("create schema quartz;");
 	addSql("set search_path to public, quartz;");
