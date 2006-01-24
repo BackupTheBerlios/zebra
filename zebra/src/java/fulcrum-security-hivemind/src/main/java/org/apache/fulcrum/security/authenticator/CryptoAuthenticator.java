@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -21,81 +22,73 @@ import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+
 /**
- * This class authenticates using the Fulcrum Crypto service a user and
- * their password
- *
+ * This class authenticates using the Fulcrum Crypto service a user and their
+ * password
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: CryptoAuthenticator.java,v 1.2 2006/01/17 09:17:24 biggus_richus Exp $
+ * @version $Id: CryptoAuthenticator.java,v 1.2 2006/01/17 09:17:24
+ *          biggus_richus Exp $
  * @avalon.component name="crypto-authenticator"
  * @avalon.service type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
-public class CryptoAuthenticator implements Authenticator
-{
-    boolean composed = false;
-    private CryptoService cryptoService = null;
-    private String algorithm="java";
-    private String cipher="SHA-1";
-    /**
-     * Authenticate an username with the specified password. If authentication
-     * is successful the method returns true. If it fails, it returns false
-     * If there are any problems, an exception is thrown.
-     * 
-     *
-     * @param usernameAndDomain an string in the format [domain]/[username].
-     * @param password the user supplied password.
-     * @exception UnknownEntityException if the user's account does not
-     *            exist in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *            storage.
-     */
-    public boolean authenticate(User user, String password) throws  DataBackendException
-    {
- 
-        /*try {
-            CryptoAlgorithm ca = cryptoService.getCryptoAlgorithm(algorithm);
-            ca.setCipher(cipher);
-            String output = ca.encrypt(password);*/
-        	String output = getCryptoPassword(password);
-            return output.equals(user.getPassword());
-        /*}
-        catch (NoSuchAlgorithmException e) {
-            throw new DataBackendException(e.getMessage(), e);
-        }
-        catch (Exception ex) {
-            throw new DataBackendException(ex.getMessage(), ex);
-        }*/
-    }
-    
-    public String getAlgorithm() {
-        return algorithm;
-    }
-    
-    public void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
-    
-    public String getCipher() {
-        return cipher;
-    }
-    
-    public void setCipher(String cipher) {
-        this.cipher = cipher;
-    }
-   
-    public void setCryptoService(CryptoService cryptoService) {
-        this.cryptoService = cryptoService;
-    }
-    
-	public String getCryptoPassword(String password) throws DataBackendException {
+public class CryptoAuthenticator implements Authenticator {
+	boolean composed = false;
+
+	private CryptoService cryptoService = null;
+
+	private String algorithm = "java";
+
+	private String cipher = "SHA-1";
+
+	/**
+	 * Authenticate an username with the specified password. If authentication
+	 * is successful the method returns true. If it fails, it returns false If
+	 * there are any problems, an exception is thrown.
+	 * 
+	 * 
+	 * @param usernameAndDomain
+	 *            an string in the format [domain]/[username].
+	 * @param password
+	 *            the user supplied password.
+	 * @exception DataBackendException
+	 *                if there is a problem accessing the storage.
+	 */
+	public boolean authenticate(User user, String password)
+			throws DataBackendException {
+		String output = getCryptoPassword(password);
+		return output.equals(user.getPassword());
+	}
+
+	public String getAlgorithm() {
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public String getCipher() {
+		return cipher;
+	}
+
+	public void setCipher(String cipher) {
+		this.cipher = cipher;
+	}
+
+	public void setCryptoService(CryptoService cryptoService) {
+		this.cryptoService = cryptoService;
+	}
+
+	public String getCryptoPassword(String password)
+			throws DataBackendException {
 		try {
 			CryptoAlgorithm ca = cryptoService.getCryptoAlgorithm(algorithm);
-	        ca.setCipher(cipher);
-	        return ca.encrypt(password);
-		} catch (NoSuchAlgorithmException e) {
-            throw new DataBackendException(e.getMessage(), e);
+			ca.setCipher(cipher);
+			return ca.encrypt(password);
 		} catch (Exception e) {
-            throw new DataBackendException(e.getMessage(), e);
+			throw new DataBackendException(e.getMessage(), e);
 		}
 	}
 }

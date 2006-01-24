@@ -22,7 +22,7 @@ import java.util.List;
  * This interface represents the basic functionality of a user.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: User.java,v 1.2 2006/01/17 09:17:23 biggus_richus Exp $
+ * @version $Id: User.java,v 1.3 2006/01/24 11:38:53 biggus_richus Exp $
  */
 public interface User extends Serializable, SecurityEntity
 {
@@ -74,7 +74,7 @@ public interface User extends Serializable, SecurityEntity
      * @author richard.brooks
      * Created on Jan 12, 2006
      */
-    Date getLockedDate();
+    long getLockTime();
     
     /**
      * 
@@ -83,7 +83,7 @@ public interface User extends Serializable, SecurityEntity
      * @author richard.brooks
      * Created on Jan 12, 2006
      */
-    void setLockedDate(Date locked);
+    void setLockTime(long locked);
     
     /**
      * 

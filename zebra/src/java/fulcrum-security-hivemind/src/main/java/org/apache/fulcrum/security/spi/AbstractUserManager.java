@@ -42,11 +42,13 @@ import org.apache.fulcrum.security.util.UserLockedException;
  * 
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractUserManager.java,v 1.6 2006/01/18 08:38:55 biggus_richus Exp $
+ * @version $Id: AbstractUserManager.java,v 1.7 2006/01/24 11:38:55 biggus_richus Exp $
  */
 public abstract class AbstractUserManager extends AbstractEntityManager
 		implements UserManager {
 
+	private static final long HOURS_TO_MILLIS = 3600000L;
+	
 	protected abstract User persistNewUser(User user)
 			throws DataBackendException;
 
@@ -61,11 +63,11 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	// Lock Reset will be dependency injected.
 	private int passwordCyclePolicy;
 
-	private int passwordDuration;
+	private int passwordDurationDays;
 	
 	private int maxLoginAttempts;
 	
-	private int lockReset;
+	private int lockResetHours;
 
 	public AccessControlList getACL(User user) throws UnknownEntityException {
 		return getAclFactory().getAccessControlList(user);
@@ -114,7 +116,12 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 			throw new PasswordExpiredException("Password expired on "+user.getPasswordExpiryDate());
 		}
 		
-		authenticate(user, password);
+		try {
+			authenticate(user, password);
+		} finally {
+			saveUser(user);
+		}
+		
 		return user;
 	}
 
@@ -157,32 +164,40 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 * exception was thrown.
 	 * 
 	 * @param user
-	 *            an User object to authenticate.
+	 *            a User object to authenticate.
 	 * @param password
 	 *            the user supplied password.
 	 * @exception PasswordMismatchException
 	 *                if the supplied password was incorrect.
-	 * @exception UnknownEntityException
-	 *                if the user's account does not exist in the database.
 	 * @exception DataBackendException
 	 *                if there is a problem accessing the storage.
 	 */
 	public void authenticate(User user, String password)
-			throws PasswordMismatchException, UnknownEntityException,
+			throws PasswordMismatchException, UnknownEntityException, 
 			DataBackendException, UserLockedException {
 
-		if (user.getLockedDate() != null) {
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.HOUR_OF_DAY, (-1 * lockReset));
-			if (cal.getTime().before(user.getLockedDate())) {
+		if (!checkExists(user)) {
+			throw new UnknownEntityException("The account '" + user.getName()
+					+ "' does not exist");
+		}
+
+		if (user.getLockTime() != 0) {
+			long elapsedTime = user.getLockTime() + (HOURS_TO_MILLIS * lockResetHours);
+
+			// See if enough time has elapsed to unlock the user 
+			if (elapsedTime > System.currentTimeMillis()) {
+				// Nope
 				throw new UserLockedException("User is locked");
+			} else {
+				// Yep
+				user.setLockTime(0);
 			}
 		}
 		
 		if (!authenticator.authenticate(user, password)) {
 			user.setLoginAttempts(user.getLoginAttempts()+1);
 			if (user.getLoginAttempts() == maxLoginAttempts) {
-				user.setLockedDate(new Date());
+				user.setLockTime(System.currentTimeMillis());
 				user.setLoginAttempts(0);
 			}
 			throw new PasswordMismatchException("Can not authenticate user.");
@@ -210,16 +225,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	public void changePassword(User user, String oldPassword, String newPassword)
 			throws PasswordMismatchException, UserLockedException, 
 			       UnknownEntityException, DataBackendException, PasswordHistoryException {
-		if (!checkExists(user)) {
-			throw new UnknownEntityException("The account '" + user.getName()
-					+ "' does not exist");
-		}
 		authenticate(user, oldPassword);
-		cyclePassword(user, newPassword);
-		// save the changes in the database imediately, to prevent the password
-		// being 'reverted' to the old value if the user data is lost somehow
-		// before it is saved at session's expiry.
-		saveUser(user);
+		forcePassword(user, newPassword);
 	}
 
 	/**
@@ -266,7 +273,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 		GregorianCalendar passwordExpiry = new GregorianCalendar(date.get(Calendar.YEAR),
                 												 date.get(Calendar.MONTH),
                 												 date.get(Calendar.DAY_OF_MONTH));
-		passwordExpiry.add(Calendar.DAY_OF_MONTH, getPasswordDuration());
+		passwordExpiry.add(Calendar.DAY_OF_MONTH, getPasswordDurationDays());
 		user.setPasswordExpiryDate(passwordExpiry.getTime());
 	}
 
@@ -288,18 +295,15 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 *                if there is a problem accessing the storage.
 	 */
 	public void forcePassword(User user, String password)
-			throws UnknownEntityException, DataBackendException,
-			PasswordHistoryException {
-		if (!checkExists(user)) {
-			throw new UnknownEntityException("The account '" + user.getName()
-					+ "' does not exist");
-		}
-		// user.setPassword(authenticator.getCryptoPassword(password));
-		cyclePassword(user, password);
+			throws DataBackendException, PasswordHistoryException {		
+		try {
+			cyclePassword(user, password);
+		} finally {
 		// save the changes in the database immediately, to prevent the
 		// password being 'reverted' to the old value if the user data
 		// is lost somehow before it is saved at session's expiry.
-		saveUser(user);
+			saveUser(user);
+		}
 	}
 
 	/**
@@ -370,7 +374,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 		}
 		user.setPassword(authenticator.getCryptoPassword(password));
 		setPasswordExpiry(user);
-		user.setLockedDate(null);
+		user.setLockTime(0);
 		user.setLoginAttempts(0);
 		try {
 			return persistNewUser(user);
@@ -417,20 +421,20 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 		this.passwordCyclePolicy = passwordCyclePolicy;
 	}
 
-	public int getPasswordDuration() {
-		return this.passwordDuration;
+	public int getPasswordDurationDays() {
+		return this.passwordDurationDays;
 	}
 
-	public void setPasswordDuration(int passwordDuration) {
-		this.passwordDuration = passwordDuration;
+	public void setPasswordDurationDays(int passwordDuration) {
+		this.passwordDurationDays = passwordDuration;
 	}
 
-	public int getLockReset() {
-		return lockReset;
+	public int getLockResetHours() {
+		return lockResetHours;
 	}
 
-	public void setLockReset(int lockReset) {
-		this.lockReset = lockReset;
+	public void setLockResetHours(int lockReset) {
+		this.lockResetHours = lockReset;
 	}
 
 	public int getMaxLoginAttempts() {

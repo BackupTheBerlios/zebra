@@ -35,7 +35,7 @@ import org.apache.fulcrum.security.util.UserSet;
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.3 2006/01/17 15:43:10 biggus_richus Exp $
+ * @version $Id: UserManager.java,v 1.4 2006/01/24 11:38:54 biggus_richus Exp $
  */
 public interface UserManager 
 {
@@ -142,11 +142,9 @@ public interface UserManager
     * to exist in the storage.
     *
     * @param user the user object to save
-    * @throws UnknownEntityException if the user's account does not
-    *         exist in the database.
     * @throws DataBackendException if there is a problem accessing the storage.
     */
-    void saveUser(User user) throws UnknownEntityException, DataBackendException;
+    void saveUser(User user) throws DataBackendException;
     /**
      * Authenticate an User with the specified password. If authentication
      * is successful the method returns nothing. If there are any problems,

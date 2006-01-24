@@ -96,7 +96,7 @@ public abstract class AbstractUserManagerTest extends
 
 		// Simulate password expiry
 		GregorianCalendar gc = new GregorianCalendar(1974, 4, 25);
-		user.setLockedDate(gc.getTime());
+		user.setLockTime(gc.getTimeInMillis());
 		user.setPasswordExpiryDate(gc.getTime());
 		try {
 			getUserManager().getUser("richard", "va");
@@ -148,7 +148,7 @@ public abstract class AbstractUserManagerTest extends
 		
 		// Simulate enough time passing since user was locked
 		GregorianCalendar gc = new GregorianCalendar(1974, 4, 25);
-		user.setLockedDate(gc.getTime());
+		user.setLockTime(gc.getTimeInMillis());
 		getUserManager().authenticate(user, "jc");
 	}
 
@@ -183,7 +183,8 @@ public abstract class AbstractUserManagerTest extends
 		}
 		getUserManager().changePassword(user, "six", "seven");
 		getUserManager().changePassword(user, "seven", "one");
-		getUserManager().authenticate(user, "one");		
+		getUserManager().authenticate(user, "one");
+		getUserManager().changePassword(user, "one", "ninety-nine");
 	}
 
 	public void testForcePassword() throws Exception {

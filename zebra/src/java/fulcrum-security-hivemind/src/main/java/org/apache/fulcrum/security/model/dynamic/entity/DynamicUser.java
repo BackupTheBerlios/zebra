@@ -36,13 +36,13 @@ import org.apache.fulcrum.security.util.GroupSet;
  * If user C has D in their delegatees - C assumes D's groups,roles and permissions
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicUser.java,v 1.2 2006/01/17 09:17:25 biggus_richus Exp $
+ * @version $Id: DynamicUser.java,v 1.3 2006/01/24 11:38:54 biggus_richus Exp $
  */
 public class DynamicUser extends SecurityEntityImpl implements User
 {
     private String password;
     private Date passwordExpiryDate;
-    private Date locked;
+    private long locked;
     private int loginAttempts;
         
     private List passwordHistory = new ArrayList<String>();
@@ -145,7 +145,7 @@ public class DynamicUser extends SecurityEntityImpl implements User
 	 * @author richard.brooks
 	 * Created on Jan 11, 2006
 	 */
-	public Date getLockedDate() {
+	public long getLockTime() {
 		return locked;
 	}
 
@@ -156,7 +156,7 @@ public class DynamicUser extends SecurityEntityImpl implements User
 	 * @author richard.brooks
 	 * Created on Jan 11, 2006
 	 */
-	public void setLockedDate(Date locked) {
+	public void setLockTime(long locked) {
 		this.locked = locked;
 	}
 	
