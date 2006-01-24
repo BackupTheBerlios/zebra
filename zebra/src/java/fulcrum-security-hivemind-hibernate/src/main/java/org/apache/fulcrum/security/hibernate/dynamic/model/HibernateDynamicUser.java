@@ -67,9 +67,9 @@ public class HibernateDynamicUser extends DynamicUser {
     }
     
     @Override
-    @Basic(temporalType = TemporalType.DATE)
-    public Date getLockedDate() {
-    	return super.getLockedDate();
+    @Basic
+    public long getLockTime() {
+    	return super.getLockTime();
     }
     
     @Override

@@ -37,7 +37,7 @@ public class PersistenceHelperHivemindImplementation implements PersistenceHelpe
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            session.update(entity);
+            session.saveOrUpdate(entity);
             transaction.commit();
 
         } catch (HibernateException he) {

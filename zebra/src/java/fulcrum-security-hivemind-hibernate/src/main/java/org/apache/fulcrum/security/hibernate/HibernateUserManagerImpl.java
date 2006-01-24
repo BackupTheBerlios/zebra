@@ -30,7 +30,7 @@ import org.hibernate.Query;
  * This implementation persists to a database via Hibernate.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: HibernateUserManagerImpl.java,v 1.1 2005/11/25 08:50:12 bgidley Exp $
+ * @version $Id: HibernateUserManagerImpl.java,v 1.2 2006/01/24 11:57:56 biggus_richus Exp $
  */
 public class HibernateUserManagerImpl extends AbstractUserManager {
 
@@ -131,7 +131,6 @@ public class HibernateUserManagerImpl extends AbstractUserManager {
      * Creates new user account with specified attributes.
      *
      * @param user the object describing account to be created.
-     * @param password The password to use for the account.
      *
      * @throws DataBackendException if there was an error accessing the
      *         data backend.
@@ -151,14 +150,8 @@ public class HibernateUserManagerImpl extends AbstractUserManager {
      *         backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public void saveUser(User user) throws DataBackendException, UnknownEntityException {
-        boolean userExists = false;
-        userExists = checkExists(user);
-        if (userExists) {
+    public void saveUser(User user) throws DataBackendException {
             getPersistenceHelper().updateEntity(user);
-        } else {
-            throw new UnknownEntityException("Unknown user '" + user + "'");
-        }
     }
 
     /**
