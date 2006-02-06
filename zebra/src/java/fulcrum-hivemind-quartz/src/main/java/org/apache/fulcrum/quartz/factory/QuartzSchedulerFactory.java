@@ -85,9 +85,9 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 			Properties hibernateProperties = hibernateSessionFactory
 					.getHibernateProperties();
 			String driver = hibernateProperties.getProperty(HIBERNATE_DRIVER_KEY);
-			System.out.println("url:" +hibernateProperties.getProperty(HIBERNATE_URL_KEY));
-			System.out.println("username:" +hibernateProperties.getProperty(HIBERNATE_USERNAME_KEY));
-			System.out.println("password:" +hibernateProperties.getProperty(HIBERNATE_PASSWORD_KEY));
+			//System.out.println("url:" +hibernateProperties.getProperty(HIBERNATE_URL_KEY));
+			//System.out.println("username:" +hibernateProperties.getProperty(HIBERNATE_USERNAME_KEY));
+			//System.out.println("password:" +hibernateProperties.getProperty(HIBERNATE_PASSWORD_KEY));
 			checkTables(driver);
 			Properties defaults = new Properties();
 			defaults.load(this.getClass().getResourceAsStream(

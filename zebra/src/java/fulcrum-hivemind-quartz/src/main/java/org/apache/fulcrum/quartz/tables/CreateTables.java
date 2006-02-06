@@ -38,7 +38,7 @@ public abstract class CreateTables {
 			{
 				Statement stmt = conn.createStatement();
 				String q = itr.next();
-				System.out.println(q);
+				//System.out.println(q);
 				conn.setAutoCommit(true);
 				stmt.execute(q);
 			}
