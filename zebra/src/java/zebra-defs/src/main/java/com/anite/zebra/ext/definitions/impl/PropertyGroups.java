@@ -40,7 +40,7 @@ public class PropertyGroups implements IPropertyGroups {
         for (Iterator i = propertyElements.iterator(); i.hasNext();) {
             PropertyElement pe = (PropertyElement) i.next();
             if (pe.getGroup().equalsIgnoreCase(name)) {
-                p.add(pe.getKey(), pe.getValue());
+                p.put(pe.getKey(), pe.getValue());
             }
         }
         return p;

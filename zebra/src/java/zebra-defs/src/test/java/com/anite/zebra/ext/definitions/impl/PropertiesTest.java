@@ -21,6 +21,8 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import com.anite.zebra.ext.definitions.impl.Properties;
+
 /**
  * @author Eric Pugh
  * 
@@ -76,15 +78,6 @@ public class PropertiesTest extends TestCase {
         assertEquals(true, props.getBoolean("bool"));
     }
 
-    public void testGetBooleanMissing() {
-        try {
-            props.getBoolean("theMissingBoolean");
-            fail("Should have thrown Exception");
-        } catch (NullPointerException npe) {
-            //good
-        }
-    }
-    
     public void testContainsKey() {
        
         assertFalse(props.containsKey("theMissingBoolean"));
