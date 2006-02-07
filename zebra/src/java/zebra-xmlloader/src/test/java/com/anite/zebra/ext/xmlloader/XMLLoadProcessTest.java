@@ -71,7 +71,7 @@ public class XMLLoadProcessTest extends TestCase {
         loadProcess.setPropertyElementClass(propertyElementClass);
         loadProcess.setPropertyGroupsClass(propertyGroupsClass);
         loadProcess.setRoutingDefinitionClass(routingDefinitionClass);
-        xmlFile = new File("src/test/test-resources/nowhitespace.acgwfd.xml");
+        xmlFile = new File("src/test/resources/test-resources/nowhitespace.acgwfd.xml");
         IProcessVersions results = loadProcess.loadFromFile(xmlFile);
         assertEquals(3, results.getProcessVersions().size());
     }
@@ -85,7 +85,7 @@ public class XMLLoadProcessTest extends TestCase {
         loadProcess.setPropertyElementClass(propertyElementClass);
         loadProcess.setPropertyGroupsClass(propertyGroupsClass);
         loadProcess.setRoutingDefinitionClass(routingDefinitionClass);
-        File xmlFile = new File("src/test/test-resources/prettyprinted.acgwfd.xml");
+        File xmlFile = new File("src/test/resources/test-resources/prettyprinted.acgwfd.xml");
 
         IProcessVersions results = loadProcess.loadFromFile(xmlFile);
         assertEquals("New Test1 Process",results.getName());
@@ -110,7 +110,7 @@ public class XMLLoadProcessTest extends TestCase {
         loadProcess.setPropertyElementClass(propertyElementClass);
         loadProcess.setPropertyGroupsClass(propertyGroupsClass);
         loadProcess.setRoutingDefinitionClass(routingDefinitionClass);
-        File xmlFile = new File("src/test/test-resources/OneBadOneGoodVersion.acgwfd.xml");
+        File xmlFile = new File("src/test/resources/test-resources/OneBadOneGoodVersion.acgwfd.xml");
         
         IProcessVersions results = loadProcess.loadFromFile(xmlFile);
         assertEquals(results.getProcessVersions().size(),1);
@@ -124,7 +124,7 @@ public class XMLLoadProcessTest extends TestCase {
         loadProcess.setPropertyElementClass(propertyElementClass);
         loadProcess.setPropertyGroupsClass(propertyGroupsClass);
         loadProcess.setRoutingDefinitionClass(routingDefinitionClass);
-        File xmlFile = new File("src/test/test-resources/OneBad.acgwfd.xml");
+        File xmlFile = new File("src/test/resources/test-resources/OneBad.acgwfd.xml");
         
         IProcessVersions results = loadProcess.loadFromFile(xmlFile);
         assertEquals(results.getProcessVersions().size(),0);

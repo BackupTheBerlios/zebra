@@ -66,7 +66,7 @@ public class SimpleTest extends TestCase {
         lf.setPropertyElementClass(propertyElementClass);
         lf.setPropertyGroupsClass(propertyGroupsClass);
         lf.setRoutingDefinitionClass(routingDefinitionClass);
-        lf.loadProcessDef(new File("src/test/test-resources/testLoadingObjectsLoadedFromXML.acgwfd.xml")
+        lf.loadProcessDef(new File("src/test/resources/test-resources/testLoadingObjectsLoadedFromXML.acgwfd.xml")
                 .getAbsoluteFile());
 
         assertEquals("Loaded " + lf.getAllProcessVersions().size() + " process versions", 1, lf.getAllProcessVersions()
