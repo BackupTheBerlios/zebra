@@ -40,7 +40,7 @@ public class HivemindServiceTaskActionTest extends TestCase {
         Zebra zebra = RegistryHelper.getInstance().getZebra();
         ZebraProcessInstance pi = zebra.createProcessPaused("HivemindServiceProcess");
         
-        assertFalse(NoopHiveMindTaskAction.run);
+        NoopHiveMindTaskAction.run = false;
         zebra.startProcess(pi);
         
         // The process should run directly to the end 
