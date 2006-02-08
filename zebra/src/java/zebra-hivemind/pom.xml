@@ -5,7 +5,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-hivemind</artifactId>
     <packaging>jar</packaging>
-    <version>1.1</version>
+    <version>1.6</version>
     <name>Zebra Hivemind Layer</name>
     <url>http://zebra.berlios.de/</url>
     <developers>
@@ -23,6 +23,22 @@
     </scm>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkMode>once</forkMode>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <childDelegation>false</childDelegation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -174,11 +190,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
-            <plugin>
+           <!-- <plugin>
                 <groupId>fulcrum-hivemind</groupId>
                 <artifactId>hivedoc-maven-plugin</artifactId>
                 <version>0.2</version>
-            </plugin>
+                <configuration>
+                    <ignoredJars>
+                        <ignoredJar>hivemind-1.1.jar</ignoredJar>
+                        <ignoredJar>hivemind-lib-1.1.jar</ignoredJar>
+                        <ignoredJar>tapestry-contrib-4.0.jar</ignoredJar>
+                    </ignoredJars>
+                </configuration>
+            </plugin>-->
         </plugins>
     </reporting>
 </project>
