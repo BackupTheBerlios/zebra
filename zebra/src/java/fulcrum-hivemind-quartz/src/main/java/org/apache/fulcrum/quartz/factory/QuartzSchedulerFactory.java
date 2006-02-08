@@ -85,9 +85,9 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 			Properties hibernateProperties = hibernateSessionFactory
 					.getHibernateProperties();
 			String driver = hibernateProperties.getProperty(HIBERNATE_DRIVER_KEY);
-			//System.out.println("url:" +hibernateProperties.getProperty(HIBERNATE_URL_KEY));
-			//System.out.println("username:" +hibernateProperties.getProperty(HIBERNATE_USERNAME_KEY));
-			//System.out.println("password:" +hibernateProperties.getProperty(HIBERNATE_PASSWORD_KEY));
+			log.debug("url:" +hibernateProperties.getProperty(HIBERNATE_URL_KEY));
+            log.debug("username:" +hibernateProperties.getProperty(HIBERNATE_USERNAME_KEY));
+            log.debug("password:" +hibernateProperties.getProperty(HIBERNATE_PASSWORD_KEY));
 			checkTables(driver);
 			Properties defaults = new Properties();
 			defaults.load(this.getClass().getResourceAsStream(
@@ -102,7 +102,7 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 					hibernateProperties.getProperty(HIBERNATE_PASSWORD_KEY));
 			defaults.put("org.quartz.dataSource.quartzDS.maxConnections",
 					DEFAULT_MAX_CONNECTIONS);
-			System.out.println(defaults.toString());
+			log.info(defaults.toString());
 			SchedulerFactory schedulerFactory = new StdSchedulerFactory(
 					defaults);
 			scheduler = schedulerFactory.getScheduler();
