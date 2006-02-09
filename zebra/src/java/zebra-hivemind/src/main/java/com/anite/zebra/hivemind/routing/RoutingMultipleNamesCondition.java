@@ -28,7 +28,7 @@ import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
 /**
  * Run routing if the instance routing answer contains the routing answer can
- * handle multiple successful routings uisnng ';' as a seperator.
+ * handle multiple successful routings using ';' as a seperator.
  * 
  * @author Ben.Gidley
  */
