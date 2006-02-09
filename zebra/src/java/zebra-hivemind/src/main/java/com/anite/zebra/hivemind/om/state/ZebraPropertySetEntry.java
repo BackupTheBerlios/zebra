@@ -37,8 +37,6 @@ public class ZebraPropertySetEntry {
 
     private String value = null;
 
-    private String key = null;
-    
     private Serializable object = null;
 
     /** Version Flag for serialisation   */
@@ -94,7 +92,6 @@ public class ZebraPropertySetEntry {
      * BLOB support is too different from other JDBC drivers for it
      * to work here. 
      * 
-     * @hibernate.property type="serializable" length="1000000"
      * @return Returns the object.
      */
     @Basic
@@ -116,14 +113,5 @@ public class ZebraPropertySetEntry {
 
 	public void setPropertySetId(Integer propertySetId) {
 		this.propertySetId = propertySetId;
-	}
-
-	
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
+	}	
 }
