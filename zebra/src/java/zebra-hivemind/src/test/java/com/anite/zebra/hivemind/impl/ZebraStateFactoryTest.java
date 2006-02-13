@@ -75,8 +75,10 @@ public class ZebraStateFactoryTest extends TestCase {
         IProcessDefinition processDefinition = getProcessDefinition();
 
         ITransaction t = this.stateFactory.beginTransaction();
-        IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
-
+        ZebraProcessInstance processInstance = (ZebraProcessInstance) this.stateFactory.createProcessInstance(processDefinition);
+        ZebraPropertySetEntry propSet = new ZebraPropertySetEntry();
+        propSet.setValue("temp");
+        processInstance.getPropertySet().put("One", propSet);
         this.stateFactory.saveObject(processInstance);
         t.commit();
 
@@ -84,7 +86,11 @@ public class ZebraStateFactoryTest extends TestCase {
 
         IFOE foe = this.stateFactory.createFOE(processInstance);
         t = this.stateFactory.beginTransaction();
-        ITaskInstance taskInstance = this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
+        ZebraTaskInstance taskInstance = (ZebraTaskInstance) this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
+        ZebraPropertySetEntry propSet2 = new ZebraPropertySetEntry();
+        propSet2.setValue("temp");
+        processInstance.getPropertySet().put("One", propSet2);
+        
         this.stateFactory.saveObject(processInstance);
         this.stateFactory.saveObject(taskInstance);
         t.commit();
