@@ -341,7 +341,8 @@ public class ZebraProcessInstance implements IProcessInstance {
      * @return
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @MapKey
+    @MapKey(name="key")
+    @JoinColumn
     public Map<String, ZebraPropertySetEntry> getPropertySet() {
         return this.propertySet;
     }
@@ -427,8 +428,10 @@ public class ZebraProcessInstance implements IProcessInstance {
         return results;
     }
 
-    @Transient
+    @SuppressWarnings("unchecked")
+	@Transient
     public List<ZebraProcessInstance> getRunningRelatedProcesses() {
+        List<ZebraProcessInstance> results = new ArrayList<ZebraProcessInstance>();
 
         if (this.getRelatedKey() != null) {
 
@@ -442,9 +445,8 @@ public class ZebraProcessInstance implements IProcessInstance {
             q.setParameter("relatedClass", this.getRelatedClass());
             q.setLong("relatedKey", this.getRelatedKey().longValue());
             q.setLong("state", IProcessInstance.STATE_RUNNING);
-            return q.list();
+            results = q.list();
         }
-        List<ZebraProcessInstance> results = new ArrayList<ZebraProcessInstance>();
         return results;
     }
 
@@ -457,9 +459,10 @@ public class ZebraProcessInstance implements IProcessInstance {
      * @throws HibernateException
      *             hibernate exception
      */
-    @Transient
+    @SuppressWarnings("unchecked")
+	@Transient
     public List<ZebraProcessInstance> getCompleteRelatedProcesses() {
-
+    	List<ZebraProcessInstance> results = new ArrayList<ZebraProcessInstance>();
         if (this.getRelatedKey() != null) {
 
             String querySQL = "select api from ZebraProcessInstance api where api.relatedClass =:relatedClass";
@@ -473,9 +476,9 @@ public class ZebraProcessInstance implements IProcessInstance {
             q.setParameter("relatedKey", this.getRelatedKey());
             q.setLong("state", IProcessInstance.STATE_COMPLETE);
 
-            return q.list();
+            results = q.list();
         }
-        return new ArrayList<ZebraProcessInstance>();
+        return results;
     }
 
     /**
@@ -487,13 +490,12 @@ public class ZebraProcessInstance implements IProcessInstance {
      */
     @Transient
     public List<ZebraProcessInstance> getNotRunningChildProcesses() throws HibernateException {
-        List results = new ArrayList();
+        List<ZebraProcessInstance> results = new ArrayList<ZebraProcessInstance>();
 
         String querySQL = "select api from ZebraProcessInstance api where api.parentProcessInstance.processInstanceId =:guid";
         querySQL += " and api.state!=:state";
 
         Session s = RegistryHelper.getInstance().getSession();
-        ;
         Query q = s.createQuery(querySQL);
         q.setLong("state", IProcessInstance.STATE_RUNNING);
         q.setCacheable(true);
