@@ -1,7 +1,7 @@
 package org.apache.fulcrum.hibernate;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
@@ -12,7 +12,7 @@ public class SampleAnnotation {
     
     private String value;
 
-    @Id(generate=GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Long getId() {
         return this.id;
     }
