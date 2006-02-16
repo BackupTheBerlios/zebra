@@ -24,10 +24,10 @@ import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddableSuperclass;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.exception.NestableException;
@@ -48,7 +48,7 @@ import com.anite.zebra.hivemind.om.defs.ZebraTaskDefinition;
  * @author Matthew.Norris
  * @author Ben Gidley
  */
-@EmbeddableSuperclass
+@MappedSuperclass
 public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 
 	/* Properties for implementing the interface */
@@ -140,7 +140,7 @@ public abstract class AbstractZebraTaskInstance implements ITaskInstance {
 	/**
 	 * @return Returns the taskInstanceId.
 	 */
-	@Id(generate = GeneratorType.AUTO)
+	@Id @GeneratedValue
 	public Long getTaskInstanceId() {
 		return this.taskInstanceId;
 	}

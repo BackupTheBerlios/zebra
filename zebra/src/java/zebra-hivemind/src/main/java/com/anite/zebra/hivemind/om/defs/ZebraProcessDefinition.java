@@ -22,13 +22,12 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.exception.NestableException;
@@ -80,7 +79,7 @@ public class ZebraProcessDefinition extends AbstractProcessDefinition {
 
     private Long id;
 
-    private Set taskDefinitions = new HashSet();
+    private Set<ITaskDefinition> taskDefinitions = new HashSet<ITaskDefinition>();
 
     private Set routingDefinitions = new HashSet();
 
@@ -96,7 +95,7 @@ public class ZebraProcessDefinition extends AbstractProcessDefinition {
 
     private IProcessVersions processVersions;
 
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Long getId() {
         return this.id;
     }
@@ -106,7 +105,7 @@ public class ZebraProcessDefinition extends AbstractProcessDefinition {
     }
 
     @OneToMany(targetEntity = ZebraTaskDefinition.class, cascade = CascadeType.ALL)
-    @JoinTable(table = @Table(name = "processTaskDefinitions"), joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "taskDefinitionId"))
+    @JoinTable(name = "processTaskDefinitions", joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "taskDefinitionId"))
     public Set getTaskDefinitions() {
         return this.taskDefinitions;
     }
@@ -114,7 +113,7 @@ public class ZebraProcessDefinition extends AbstractProcessDefinition {
     /**
      * @param taskDefinitions The taskDefinitions to set.
      */
-    public void setTaskDefinitions(Set taskDefinitions) {
+    public void setTaskDefinitions(Set<ITaskDefinition> taskDefinitions) {
         this.taskDefinitions = taskDefinitions;
     }
 
@@ -162,7 +161,7 @@ public class ZebraProcessDefinition extends AbstractProcessDefinition {
     }
 
     @OneToMany(targetEntity = ZebraRoutingDefinition.class, cascade = CascadeType.ALL)
-    @JoinTable(table = @Table(name = "processDefinitionRoutings"), joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
+    @JoinTable(name = "processDefinitionRoutings", joinColumns = { @JoinColumn(name = "processDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
     public Set getRoutingDefinitions() {
         return this.routingDefinitions;
     }

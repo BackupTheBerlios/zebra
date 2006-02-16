@@ -19,7 +19,7 @@ package com.anite.zebra.hivemind.om.defs;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -55,7 +55,7 @@ public class ZebraRoutingDefinition extends RoutingDefinition implements IXmlDef
         this.xmlId = xmlId;
     }
 
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Long getId() {
         return super.getId();
     }

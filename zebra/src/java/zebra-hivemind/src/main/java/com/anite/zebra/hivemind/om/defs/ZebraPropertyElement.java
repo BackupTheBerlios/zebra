@@ -19,7 +19,7 @@ package com.anite.zebra.hivemind.om.defs;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import com.anite.zebra.ext.definitions.impl.PropertyElement;
@@ -45,7 +45,7 @@ public class ZebraPropertyElement extends PropertyElement {
 	/**
 	 * @return Returns the id.
 	 */
-	@Id(generate = GeneratorType.AUTO)
+	@Id @GeneratedValue
 	public Long getId() {
 		return super.getId();
 	}

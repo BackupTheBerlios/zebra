@@ -129,6 +129,7 @@ public class ProcessDestruct implements IProcessDestruct {
 	 * @param processInstance
 	 * @param taskInstance
 	 */
+	@SuppressWarnings("unchecked")
 	private void mapProcessOutputs(ZebraProcessInstance processInstance,
 			ZebraTaskInstance parentTaskInstance) throws Exception {
 

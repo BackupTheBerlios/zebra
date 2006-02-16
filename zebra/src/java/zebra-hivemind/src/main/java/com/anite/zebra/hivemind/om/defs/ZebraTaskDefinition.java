@@ -21,13 +21,12 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.fulcrum.hivemind.RegistryManager;
@@ -100,7 +99,7 @@ public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinitio
      * 
      * @return Returns the id.
      */
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Long getId() {
         return super.getId();
     }
@@ -143,7 +142,7 @@ public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinitio
      * @return Returns the routingIn.
      */
     @OneToMany(targetEntity = ZebraRoutingDefinition.class, cascade = CascadeType.ALL)
-    @JoinTable(table = @Table(name = "taskDefinitionRoutingIn"), joinColumns = { @JoinColumn(name = "taskDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
+    @JoinTable(name = "taskDefinitionRoutingIn", joinColumns = { @JoinColumn(name = "taskDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
     public Set getRoutingIn() {
         return super.getRoutingIn();
     }
@@ -152,7 +151,7 @@ public class ZebraTaskDefinition extends TaskDefinition implements IXmlDefinitio
      * @return Returns the routingOut.
      */
     @OneToMany(targetEntity = ZebraRoutingDefinition.class, cascade = CascadeType.ALL)
-    @JoinTable(table = @Table(name = "taskDefinitionRoutingOut"), joinColumns = { @JoinColumn(name = "taskDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
+    @JoinTable(name = "taskDefinitionRoutingOut", joinColumns = { @JoinColumn(name = "taskDefinitionId") }, inverseJoinColumns = @JoinColumn(name = "routingDefinitionId"))
     public Set getRoutingOut() {
         return super.getRoutingOut();
     }

@@ -22,7 +22,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
@@ -108,7 +108,7 @@ public class ZebraPropertySetEntry {
         this.object = object;
     }
 
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Integer getPropertySetId() {
 		return propertySetId;
 	}

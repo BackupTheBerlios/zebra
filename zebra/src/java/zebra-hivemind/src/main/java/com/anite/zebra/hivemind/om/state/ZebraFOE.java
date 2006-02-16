@@ -18,7 +18,7 @@
 package com.anite.zebra.hivemind.om.state;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -63,7 +63,7 @@ public class ZebraFOE implements IFOE {
     /**
      * @return Returns the antelopeFoeID.
      */
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Integer getId() {
         return this.id;
     }

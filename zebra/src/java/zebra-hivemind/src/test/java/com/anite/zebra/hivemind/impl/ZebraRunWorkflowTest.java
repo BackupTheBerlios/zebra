@@ -58,8 +58,6 @@ public class ZebraRunWorkflowTest extends TestCase {
 
     private static final String THE_END = "The End";
 
-    private static final String SUBPROCESS = "SubProcess";
-
     private static final String SUBPROCESS_TASK = "SubProcess Task";
 
     private static final String DO_YOU_WANT_TO_TRY_AND_SUBPROCESS = "Do you want to try and subprocess?";

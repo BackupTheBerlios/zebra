@@ -10,6 +10,7 @@
 		<property name="hibernate.connection.url">jdbc:postgresql:zebra</property>
 		<property name="hibernate.connection.username">zebra</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="connection.pool_size">0</property>
 		
 		<mapping class="com.anite.zebra.hivemind.om.defs.ZebraPropertyElement"/>
 		<mapping class="com.anite.zebra.hivemind.om.defs.ZebraProcessVersions"/>

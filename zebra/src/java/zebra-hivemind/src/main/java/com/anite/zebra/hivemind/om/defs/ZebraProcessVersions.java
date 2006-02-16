@@ -22,12 +22,11 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.anite.zebra.ext.definitions.api.IProcessVersion;
@@ -47,12 +46,12 @@ public class ZebraProcessVersions implements IProcessVersions {
 
     private String name;
 
-    private Set<IProcessVersion> processVersions = new HashSet();
+    private Set<IProcessVersion> processVersions = new HashSet<IProcessVersion>();
 
     /**
      * @return Returns the id. 
      */
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Long getId() {
         return id;
     }
@@ -88,7 +87,7 @@ public class ZebraProcessVersions implements IProcessVersions {
     }
 
     @OneToMany(targetEntity = ZebraProcessDefinition.class, cascade = CascadeType.ALL)
-    @JoinTable(table = @Table(name = "processVersionProcesses"), joinColumns = { @JoinColumn(name = "processVersionId") }, inverseJoinColumns = @JoinColumn(name = "processDefinitionId"))
+    @JoinTable(name = "processVersionProcesses", joinColumns = { @JoinColumn(name = "processVersionId") }, inverseJoinColumns = @JoinColumn(name = "processDefinitionId"))
     public Set<IProcessVersion> getProcessVersions() {
         return processVersions;
     }

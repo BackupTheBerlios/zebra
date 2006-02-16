@@ -5,7 +5,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-hivemind</artifactId>
     <packaging>jar</packaging>
-    <version>1.8</version>
+    <version>1.9</version>
     <name>Zebra Hivemind Layer</name>
     <url>http://zebra.berlios.de/</url>
     <developers>
@@ -122,17 +122,12 @@
         <dependency>
             <groupId>fulcrum-hivemind</groupId>
             <artifactId>fulcrum-quartz</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>fulcrum-hivemind</groupId>
-            <artifactId>fulcrum-hibernate</artifactId>
-            <version>1.8</version>
+            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>fulcrum-hivemind</groupId>
             <artifactId>fulcrum-security-hibernate</artifactId>
-            <version>1.9</version>
+            <version>1.11</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

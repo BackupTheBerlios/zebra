@@ -17,7 +17,7 @@
 package com.anite.zebra.hivemind.om.state;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
@@ -62,7 +62,7 @@ public class Priority {
 	/**
 	 * @return Returns the priorityId.
 	 */
-	@Id(generate = GeneratorType.AUTO)
+	@Id @GeneratedValue
 	public Long getPriorityId() {
 		return this.priorityId;
 	}

@@ -18,7 +18,6 @@
 package com.anite.zebra.hivemind.om.state;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
 import javax.persistence.Id;
 
 /**
@@ -53,7 +52,7 @@ public class DatabaseLock {
     /**
      * @return Returns the processInstanceId.
      */
-    @Id(generate=GeneratorType.NONE)
+    @Id
     public Long getProcessInstanceId() {
         return this.processInstanceId;
     }

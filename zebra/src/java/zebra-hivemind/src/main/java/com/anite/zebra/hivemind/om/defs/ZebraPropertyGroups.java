@@ -21,12 +21,9 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import com.anite.zebra.ext.definitions.impl.PropertyGroups;
 
@@ -47,7 +44,7 @@ public class ZebraPropertyGroups extends PropertyGroups {
      * @return Returns the id.
      * @hibernate.id generator-class="native"
      */
-	@Id(generate=GeneratorType.AUTO)
+	@Id @GeneratedValue
     public Long getId() {
         return super.getId();
     }

@@ -30,7 +30,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -266,7 +266,7 @@ public class ZebraProcessInstance implements IProcessInstance {
      * @return Returns the processInstanceId.
      * 
      */
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     public Long getProcessInstanceId() {
         return this.processInstanceId;
     }
@@ -342,7 +342,7 @@ public class ZebraProcessInstance implements IProcessInstance {
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapKey(name="key")
-    @JoinColumn
+    //@JoinColumn
     public Map<String, ZebraPropertySetEntry> getPropertySet() {
         return this.propertySet;
     }
