@@ -6,12 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
@@ -21,15 +21,24 @@ import org.hibernate.annotations.Type;
 @Entity
 public class HibernateDynamicUser extends DynamicUser {
 
-    @Override
+    /**
+	 * 
+	 * @author richard.brooks
+	 * Created on 14-Feb-2006
+	 */
+	private static final long serialVersionUID = 7837009296539278078L;
+
+	@SuppressWarnings("unchecked")
+	@Override
     @ManyToMany(mappedBy="delegators")
     public Set<HibernateDynamicUser> getDelegatees() {
         return super.getDelegatees();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @ManyToMany
-    @JoinTable(table = @Table(name = "HIBUSER_DELEGATES"), joinColumns = { @JoinColumn(name = "DELEGATOR_ID") }, inverseJoinColumns = { @JoinColumn(name = "DELEGATEE_ID") })
+    @JoinTable(name = "HIBUSER_DELEGATES", joinColumns = { @JoinColumn(name = "DELEGATOR_ID") }, inverseJoinColumns = { @JoinColumn(name = "DELEGATEE_ID") })
     public Set<HibernateDynamicUser> getDelegators() {
         return super.getDelegators();
     }
@@ -41,7 +50,7 @@ public class HibernateDynamicUser extends DynamicUser {
     }
 
     @Override
-    @Id(generate = GeneratorType.AUTO)
+    @Id @GeneratedValue
     @Type(type = "long")
     public Object getId() {
         return super.getId();
@@ -54,14 +63,15 @@ public class HibernateDynamicUser extends DynamicUser {
         return super.getName();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @ManyToMany
     public Set<HibernateDynamicGroup> getGroupsAsSet() {
         return super.getGroupsAsSet();
     }
     
     @Override
-    @Basic(temporalType = TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     public Date getPasswordExpiryDate() {
     	return super.getPasswordExpiryDate();
     }
@@ -78,10 +88,10 @@ public class HibernateDynamicUser extends DynamicUser {
     	return super.getLoginAttempts();
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @CollectionOfElements
     public List<String> getPasswordHistory() {
     	return super.getPasswordHistory();
     }
-
 }

@@ -4,7 +4,7 @@ import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -14,20 +14,22 @@ import org.hibernate.annotations.Type;
 @Entity
 public class HibernateDynamicRole extends DynamicRole{
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @ManyToMany
     public Set<HibernateDynamicGroup> getGroupsAsSet() {
         return super.getGroupsAsSet();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @ManyToMany
     public Set<HibernateDynamicPermission> getPermissionsAsSet() {
         return super.getPermissionsAsSet();
     }
 
     @Override
-    @Id(generate=GeneratorType.AUTO)
+    @Id @GeneratedValue
     @Type(type="long")
     public Object getId() {
         return super.getId();

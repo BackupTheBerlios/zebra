@@ -5,7 +5,7 @@
     <groupId>fulcrum-hivemind</groupId>
     <artifactId>fulcrum-security-hibernate</artifactId>
     <packaging>jar</packaging>
-	<version>1.10</version>
+	<version>1.12</version>
     <name>fulcrum-hibernate-security- Fuclrum Security Hibernate layer for Hivemind</name>
     <url>http://gnasher.aniteps.com/docs/</url>
     <build>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>fulcrum-hivemind</groupId>
             <artifactId>fulcrum-hibernate</artifactId>
-            <version>1.9</version>
+            <version>1.10</version>
         </dependency>
     </dependencies>
     <distributionManagement>
