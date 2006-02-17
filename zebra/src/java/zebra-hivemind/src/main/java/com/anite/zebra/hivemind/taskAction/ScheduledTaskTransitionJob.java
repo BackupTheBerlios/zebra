@@ -16,13 +16,18 @@
  */
 package com.anite.zebra.hivemind.taskAction;
 
+import org.apache.fulcrum.hivemind.RegistryManager;
 import org.hibernate.Session;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import com.anite.zebra.core.api.ITaskAction;
 import com.anite.zebra.core.exceptions.TransitionException;
+import com.anite.zebra.core.factory.exceptions.StateFailureException;
+import com.anite.zebra.core.state.api.ITaskInstance;
+import com.anite.zebra.core.state.api.ITransaction;
 import com.anite.zebra.hivemind.impl.Zebra;
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 import com.anite.zebra.hivemind.util.RegistryHelper;
@@ -37,17 +42,22 @@ public class ScheduledTaskTransitionJob implements Job {
 
 		Session session = RegistryHelper.getInstance().getSession();
 
+        
+        
 		ZebraTaskInstance task = (ZebraTaskInstance) session.load(
 				ZebraTaskInstance.class, taskInstanceId);
-		task.setState(ZebraTaskInstance.STATE_AWAITINGCOMPLETE);
+		task.setOutcome("Done");        
+        task.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
 		Zebra zebra = RegistryHelper.getInstance().getZebra();
+       
 		try {
-			zebra.transitionTask(task);
+            zebra.transitionTask(task);
 		} catch (TransitionException te) {
 			throw new JobExecutionException(te);
-		}
+		} 
 		
-		// Tell hivemind to recycle thread
+		// Tell hivemind to recycle thread        
+        RegistryManager.getInstance().getRegistry().cleanupThread();
 
 	}
 

@@ -11,7 +11,6 @@
 		<property name="hibernate.connection.username">zebra</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="connection.pool_size">0</property>
-		
 		<mapping class="com.anite.zebra.hivemind.om.defs.ZebraPropertyElement"/>
 		<mapping class="com.anite.zebra.hivemind.om.defs.ZebraProcessVersions"/>
 		<mapping class="com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition"/>
@@ -25,10 +24,10 @@
 		<mapping class="com.anite.zebra.hivemind.om.state.ZebraPropertySetEntry"/>
 		<mapping class="com.anite.zebra.hivemind.om.state.ZebraTaskInstance"/>
 		<mapping class="com.anite.zebra.hivemind.om.state.ZebraTaskInstanceHistory"/>
-		
 		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser"/>
 		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicGroup"/>
 		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicRole"/>
-		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicPermission"/>
+		<mapping
+			class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicPermission"/>
 	</session-factory>
 </hibernate-configuration>

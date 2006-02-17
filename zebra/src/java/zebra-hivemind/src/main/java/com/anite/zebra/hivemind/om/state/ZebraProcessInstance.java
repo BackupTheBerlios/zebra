@@ -340,15 +340,25 @@ public class ZebraProcessInstance implements IProcessInstance {
      * 
      * @return
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="processInstance")
     @MapKey(name="key")
-    //@JoinColumn
     public Map<String, ZebraPropertySetEntry> getPropertySet() {
         return this.propertySet;
     }
 
     public void setPropertySet(Map<String, ZebraPropertySetEntry> propertySetEntries) {
         this.propertySet = propertySetEntries;
+    }
+    
+    /**
+     * A helper function to ensure the referential integrity in maintained
+     * @param key
+     * @param entry
+     */
+    public void addPropertySetEntry(String key, ZebraPropertySetEntry entry){
+        entry.setKey(key);
+        entry.setProcessInstance(this);
+        this.getPropertySet().put(key, entry);
     }
 
     /**

@@ -68,7 +68,7 @@ public class ClusterSafeLockManager implements LockManager {
                     // It is vaguely possible someone beat us to it
                     try {
                         lock = null;
-                        Thread.sleep(10);
+                        Thread.sleep(100);
                     } catch (InterruptedException e1) {
                         log.error("Interupted while trying to lock - this should not occur", e1);
                         throw new LockException(e1);
@@ -82,7 +82,7 @@ public class ClusterSafeLockManager implements LockManager {
                 }
             } else {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(100);
                 } catch (InterruptedException e1) {
                     log.error("Interupted while trying to lock - this should not occur", e1);
                     throw new LockException(e1);

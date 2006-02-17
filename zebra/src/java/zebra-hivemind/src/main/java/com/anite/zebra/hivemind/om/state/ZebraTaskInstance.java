@@ -73,13 +73,23 @@ public class ZebraTaskInstance extends AbstractZebraTaskInstance {
 	 * 
 	 * @return
 	 */
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="taskInstance", fetch=FetchType.LAZY)
 	@MapKey(name="key")
-	//@JoinColumn
 	public Map<String, ZebraPropertySetEntry> getPropertySet() {
 		return this.propertySet;
 	}
 
+     /**
+     * A helper function to ensure the referential integrity in maintained
+     * @param key
+     * @param entry
+     */
+    public void addPropertySetEntry(String key, ZebraPropertySetEntry entry){
+        entry.setKey(key);
+        entry.setTaskInstance(this);
+        this.getPropertySet().put(key, entry);
+    }
+    
 	/**
 	 * @param propertySetEntries
 	 *            The propertySetEntries to set.

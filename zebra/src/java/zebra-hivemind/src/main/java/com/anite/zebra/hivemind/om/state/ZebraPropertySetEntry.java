@@ -24,6 +24,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * @author Matthew.Norris
@@ -34,6 +35,10 @@ import javax.persistence.Id;
 public class ZebraPropertySetEntry {
 
     private Integer propertySetId;
+    
+    private ZebraTaskInstance taskInstance;
+    
+    private ZebraProcessInstance processInstance;
 
     private String value = null;
 
@@ -43,6 +48,24 @@ public class ZebraPropertySetEntry {
 
     /** Version Flag for serialisation   */
     static final long serialVersionUID = 1L;
+
+    @ManyToOne
+    public ZebraProcessInstance getProcessInstance() {
+        return processInstance;
+    }
+
+    public void setProcessInstance(ZebraProcessInstance processInstance) {
+        this.processInstance = processInstance;
+    }
+
+    @ManyToOne
+    public ZebraTaskInstance getTaskInstance() {
+        return taskInstance;
+    }
+
+    public void setTaskInstance(ZebraTaskInstance taskInstance) {
+        this.taskInstance = taskInstance;
+    }
 
     public ZebraPropertySetEntry() {
         //noop
@@ -117,7 +140,7 @@ public class ZebraPropertySetEntry {
 		this.propertySetId = propertySetId;
 	}
 
-	
+	@Basic
 	public String getKey() {
 		return key;
 	}
@@ -125,4 +148,6 @@ public class ZebraPropertySetEntry {
 	public void setKey(String key) {
 		this.key = key;
 	}
+    
+    
 }
