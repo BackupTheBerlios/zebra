@@ -23,11 +23,8 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.anite.zebra.core.api.ITaskAction;
 import com.anite.zebra.core.exceptions.TransitionException;
-import com.anite.zebra.core.factory.exceptions.StateFailureException;
 import com.anite.zebra.core.state.api.ITaskInstance;
-import com.anite.zebra.core.state.api.ITransaction;
 import com.anite.zebra.hivemind.impl.Zebra;
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 import com.anite.zebra.hivemind.util.RegistryHelper;
@@ -36,7 +33,7 @@ public class ScheduledTaskTransitionJob implements Job {
 
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
-		JobDataMap data = context.getJobDetail().getJobDataMap();
+		JobDataMap data = context.getMergedJobDataMap();
 		Long taskInstanceId = (Long) data
 				.get(QuartzServiceTaskAction.TASK_INSTANCE_ID_KEY);
 

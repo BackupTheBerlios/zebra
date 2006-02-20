@@ -39,6 +39,8 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
     public static final Log log = LogFactory.getLog(QuartzServiceTaskAction.class);
 
     public static final String TASK_INSTANCE_ID_KEY = "taskInstanceId";
+    
+    public static final String JOB_NAME = "QuartzServiceTaskAction";
 
     private static final long SECONDS_DELAY = 1000L;
 
@@ -80,10 +82,13 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
                 /*
                  * Create your Scheduled job
                  */
-                JobDetail jobDetail = new JobDetail(taskInstance.getTaskInstanceId().toString(), null,
-                        ScheduledTaskTransitionJob.class);
-                jobDetail.getJobDataMap().put(TASK_INSTANCE_ID_KEY, taskInstance.getTaskInstanceId());
-                /*
+            	JobDetail jobDetail = scheduler.getJobDetail(JOB_NAME, null);
+            	if (jobDetail == null) {
+            		jobDetail = new JobDetail(taskInstance.getTaskInstanceId().toString(), null,
+                            ScheduledTaskTransitionJob.class);
+            	}
+
+            	/*
                  * get the poll interval from taskInstace.getTaskDefinition
                  * (downcast to ZebraTaskDefinition) get property.
                  */
@@ -102,7 +107,8 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
 
                 SimpleTrigger trigger = new SimpleTrigger();
                 trigger.setStartTime(new Date(new Date().getTime() + delay(wait)));
-                trigger.setName("delay");
+                trigger.setName(taskInstance.getTaskInstanceId().toString());
+                trigger.getJobDataMap().put(TASK_INSTANCE_ID_KEY, taskInstance.getTaskInstanceId());
                 scheduler.scheduleJob(jobDetail, trigger);
                 /*
                  * Don't set the state unlike every other task action as the state
