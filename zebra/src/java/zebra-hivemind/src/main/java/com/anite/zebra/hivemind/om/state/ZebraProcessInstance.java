@@ -362,6 +362,19 @@ public class ZebraProcessInstance implements IProcessInstance {
     }
 
     /**
+     * Remove item from the property set
+     * @param key
+     */
+    public void removePropertySetEntry(String key){
+        ZebraPropertySetEntry entry = this.getPropertySet().get(key);
+        if (entry != null){
+            entry.setKey(null);
+            entry.setProcessInstance(null);
+        }
+        this.getPropertySet().remove(key);        
+    }
+    
+    /**
      * @return Returns the processName.
      */
     @Basic

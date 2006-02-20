@@ -90,6 +90,20 @@ public class ZebraTaskInstance extends AbstractZebraTaskInstance {
         this.getPropertySet().put(key, entry);
     }
     
+    /**
+     * Remove item from the property set
+     * @param key
+     */
+    public void removePropertySetEntry(String key){
+        ZebraPropertySetEntry entry = this.getPropertySet().get(key);
+        if (entry != null){
+            entry.setKey(null);
+            entry.setTaskInstance(null);
+        }
+        this.getPropertySet().remove(key);
+        
+    }
+    
 	/**
 	 * @param propertySetEntries
 	 *            The propertySetEntries to set.

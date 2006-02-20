@@ -16,15 +16,12 @@
  */
 package com.anite.zebra.hivemind.impl;
 
-import java.util.Set;
-
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.hivemind.Resource;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.util.ClasspathResource;
-import org.hibernate.LockMode;
 import org.hibernate.Session;
 
 import com.anite.zebra.core.state.api.ITransaction;
@@ -181,6 +178,22 @@ public class PropertySetBehaviourTest extends TestCase {
             assertEquals(BOB, bobEntry2.getValue());
             
         }
+        
+        // Remove something from the process property set
+        RegistryManager.getInstance().getRegistry().cleanupThread();
+        pi = (ZebraProcessInstance) session.load(ZebraProcessInstance.class, pi.getProcessInstanceId());
+        pi.removePropertySetEntry(BOB);
+        
+        ITransaction t = zebra.getStateFactory().beginTransaction();
+        zebra.getStateFactory().saveObject(pi);
+        t.commit();
+        
+        session.evict(pi);
+        RegistryManager.getInstance().getRegistry().cleanupThread();
+        pi = (ZebraProcessInstance) session.load(ZebraProcessInstance.class, pi.getProcessInstanceId());
+       
+        assertFalse(pi.getPropertySet().containsKey(BOB));
+        
         
     }
 }
