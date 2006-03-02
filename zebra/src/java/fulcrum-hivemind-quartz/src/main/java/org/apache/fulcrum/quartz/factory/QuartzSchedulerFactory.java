@@ -49,7 +49,6 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 
 	private static final String HIBERNATE_USERNAME_KEY = "hibernate.connection.username";
 
-	private static final String HIBERNATE_POOL_SIZE_KEY = "hibernate.connection.pool_size";
 
 	private static final String DEFAULT_MAX_CONNECTIONS = "10";
 
@@ -61,8 +60,6 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 	 */
 	private static final String POSTGRESQL = "org.postgresql.Driver";
 	
-	private SchedulerFactory schedulerFactory = new StdSchedulerFactory();
-
 	private Scheduler scheduler = null;
 
 	private HibernateSessionFactory hibernateSessionFactory = null;
