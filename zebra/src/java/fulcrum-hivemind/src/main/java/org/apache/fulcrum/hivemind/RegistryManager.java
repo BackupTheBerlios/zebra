@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hivemind.Registry;
 import org.apache.hivemind.Resource;
 import org.apache.hivemind.impl.DefaultClassResolver;
@@ -12,6 +14,8 @@ import org.apache.hivemind.impl.XmlModuleDescriptorProvider;
 
 public class RegistryManager {
 
+    private static final Log log = LogFactory.getLog(RegistryManager.class);
+
     private Registry registry = null;
 
     private List<Resource> resources = new ArrayList<Resource>();
@@ -19,7 +23,7 @@ public class RegistryManager {
     private static RegistryManager _instance;
 
     private RegistryManager() {
-        
+        log.debug("Registry Manager Constructed");
     }
 
     /**
@@ -27,7 +31,7 @@ public class RegistryManager {
      * @return
      */
     protected Registry constructRegistry() {
-
+        log.debug("Constructing Registry (in call)");
         RegistryBuilder builder = new RegistryBuilder();
 
         builder.addDefaultModuleDescriptorProvider();
@@ -40,17 +44,20 @@ public class RegistryManager {
 
     }
 
-    public static RegistryManager getInstance() {
+    public static RegistryManager getInstance() {        
         if (_instance == null) {
+            log.debug("Constructing RegistryManager");
             _instance = new RegistryManager();
         }
         return _instance;
     }
 
-    public Registry getRegistry() {
-        if (this.registry==null){
+    public synchronized Registry getRegistry() {
+        if (this.registry == null) {
+            log.debug("Constructing Registry");
             this.registry = constructRegistry();
-        }        
+            log.debug("Constructed Registry");
+        }
         return this.registry;
     }
 
