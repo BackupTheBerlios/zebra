@@ -26,6 +26,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleTrigger;
 
+import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.exceptions.RunTaskException;
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
 import com.anite.zebra.core.state.api.ITaskInstance;
@@ -127,7 +128,8 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
                 throw new RunTaskException(se);
             } catch (StateFailureException e) {
                 throw new RunTaskException(e);
-            }
+            } catch (DefinitionNotFoundException e) {
+                throw new RunTaskException(e);            }
         } else {
             // Trigger has fired
             taskInstance.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);

@@ -119,7 +119,7 @@ public class ZebraTaskInstance extends AbstractZebraTaskInstance {
         return this.getTaskInstanceId().toString();
         }
         else {
-            return "New instance of TD:" + this.getTaskDefinition().getId();
+            return "New instance of TD:" + this.getTaskDefinitionId();
         }
     }
 }

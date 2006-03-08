@@ -28,6 +28,7 @@ import org.apache.hivemind.Resource;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.util.ClasspathResource;
 
+import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.exceptions.TransitionException;
 import com.anite.zebra.hivemind.om.defs.ZebraTaskDefinition;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
@@ -183,12 +184,13 @@ public class ZebraRunWorkflowTest extends TestCase {
      * @param taskName
      * @param test
      * @throws TransitionException
+     * @throws DefinitionNotFoundException 
      * @throws ComponentException
      * 
      * tests Task Definitions that take a parameter for routing
      */
     private void testTaskDef(String taskName, String test, ZebraProcessInstance processInstance)
-            throws TransitionException {
+            throws TransitionException, DefinitionNotFoundException {
         log.debug("testing task");
         //get process
         //check correct process
@@ -207,12 +209,13 @@ public class ZebraRunWorkflowTest extends TestCase {
     /**
      * @param taskName
      * @throws TransitionException
+     * @throws DefinitionNotFoundException 
      * @throws ComponentException
      * 
      * tests Task Definitions
      */
     private void testDualTaskDef(String taskName, String otherTaskName, ZebraProcessInstance processInstance)
-            throws TransitionException  {
+            throws TransitionException, DefinitionNotFoundException  {
         log.debug("testing 2 parallel tasks");
         //get process
         //check correct process
@@ -261,13 +264,14 @@ public class ZebraRunWorkflowTest extends TestCase {
 
     /**
      * @param taskName
+     * @throws DefinitionNotFoundException 
      * @throws TransitionException
      * @throws ComponentException
      * 
      * tests Task Definitions
      */
     private void testTripleTaskDef(String taskName, String otherTaskName,
-            String thirdTaskName, ZebraProcessInstance processInstance) {
+            String thirdTaskName, ZebraProcessInstance processInstance) throws DefinitionNotFoundException {
         log.debug("testing 3 parallel tasks");
         //get process
         //check correct process

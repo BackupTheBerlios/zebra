@@ -38,6 +38,7 @@ import org.apache.hivemind.Resource;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.util.ClasspathResource;
 
+import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.exceptions.TransitionException;
 import com.anite.zebra.hivemind.om.defs.ZebraTaskDefinition;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
@@ -216,7 +217,7 @@ public class ZebraSecurityManagerTest extends TestCase {
 
     }
 
-    private boolean checkIfInTaskList(List<ZebraTaskInstance> taskList, String taskName) {
+    private boolean checkIfInTaskList(List<ZebraTaskInstance> taskList, String taskName) throws DefinitionNotFoundException {
         boolean inTaskList = false;
         for (ZebraTaskInstance instance : taskList) {
             if (((ZebraTaskDefinition) instance.getTaskDefinition()).getName().equals(taskName)) {
