@@ -5,7 +5,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-hivemind</artifactId>
     <packaging>jar</packaging>
-    <version>1.15</version>
+    <version>2.0</version>
     <name>Zebra Hivemind Layer</name>
     <url>http://zebra.berlios.de/</url>
     <developers>
@@ -19,7 +19,7 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:cvs:pserver:anonymous@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/zebra-hivemind</connection>
+        <connection>scm:cvs:pserver:anonymous:@cvs.zebra.berlios.de:/cvsroot/zebra:zebra/src/java/zebra-hivemind</connection>
     </scm>
     <build>
         <plugins>
@@ -184,19 +184,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-           <!-- <plugin>
-                <groupId>fulcrum-hivemind</groupId>
-                <artifactId>hivedoc-maven-plugin</artifactId>
-                <version>0.2</version>
-                <configuration>
-                    <ignoredJars>
-                        <ignoredJar>hivemind-1.1.jar</ignoredJar>
-                        <ignoredJar>hivemind-lib-1.1.jar</ignoredJar>
-                        <ignoredJar>tapestry-contrib-4.0.jar</ignoredJar>
-                    </ignoredJars>
-                </configuration>
-            </plugin>-->
+            </plugin>        
         </plugins>
     </reporting>
 </project>
