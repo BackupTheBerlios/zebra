@@ -17,8 +17,6 @@
 
 package com.anite.zebra.hivemind.impl;
 
-import java.util.Iterator;
-
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.hivemind.RegistryManager;
@@ -45,6 +43,7 @@ import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
  * @author Ben.Gidley
  */
 public class ZebraStateFactoryTest extends TestCase {
+	private static final String SIMPLEWORKFLOW = "SimpleWorkflow";
 
     private IStateFactory stateFactory;
 
@@ -117,10 +116,7 @@ public class ZebraStateFactoryTest extends TestCase {
     private ZebraProcessDefinition getProcessDefinition() {
         // Load the first process definition it has (e.g. we don't care which
         // process)
-        Iterator processDefinitions = this.definitionsFactory.getAllProcessDefinitionsById().keySet().iterator();
-        ZebraProcessDefinition processDefinition = this.definitionsFactory.getAllProcessDefinitionsById().get(
-                processDefinitions.next());
-        return processDefinition;
+        return this.definitionsFactory.getProcessDefinitionByName(SIMPLEWORKFLOW);
     }
 
     public void testCreatingFOE() throws Exception {

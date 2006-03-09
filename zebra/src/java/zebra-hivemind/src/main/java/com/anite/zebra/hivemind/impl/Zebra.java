@@ -18,11 +18,11 @@ package com.anite.zebra.hivemind.impl;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.hibernate.LockMode;
 
 import com.anite.zebra.core.Engine;
 import com.anite.zebra.core.api.IEngine;
@@ -64,8 +64,8 @@ public class Zebra {
         this.engine = engine;
     }
 
-    public Map<String, ZebraProcessDefinition> getAllProcessDefinitions() {
-        return this.definitionFactory.getAllProcessDefinitionsByName();
+    public ZebraProcessDefinition getProcessDefinition(String processName) {
+        return this.definitionFactory.getProcessDefinitionByName(processName);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Zebra {
      * @throws CreateProcessException 
      */
     public ZebraProcessInstance createProcessPaused(String processName) throws CreateProcessException {
-        return createProcessPaused(this.getAllProcessDefinitions().get(processName));
+        return createProcessPaused(this.getProcessDefinition(processName));
 
     }
 
@@ -86,7 +86,6 @@ public class Zebra {
      * @throws CreateProcessException
      */
     public ZebraProcessInstance createProcessPaused(ZebraProcessDefinition process) throws CreateProcessException {
-
         return (ZebraProcessInstance) engine.createProcess(process);
 
     }

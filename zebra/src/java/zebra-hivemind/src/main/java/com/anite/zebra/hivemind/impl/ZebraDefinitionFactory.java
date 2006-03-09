@@ -12,6 +12,7 @@ import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
+import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -256,16 +257,22 @@ public class ZebraDefinitionFactory {
 		this.session = session;
 	}
 
-	public Map<Long, ZebraProcessDefinition> getAllProcessDefinitionsById() {
-		return this.allProcessDefinitionsById;
+	public ZebraProcessDefinition getProcessDefinitionById(Long id) {
+		ZebraProcessDefinition processDef = allProcessDefinitionsById.get(id);
+		session.lock(processDef, LockMode.NONE);
+		return processDef;
 	}
 
-	public Map<String, ZebraProcessDefinition> getAllProcessDefinitionsByName() {
-		return this.allProcessDefinitionsByName;
+	public ZebraProcessDefinition getProcessDefinitionByName(String name) {
+		ZebraProcessDefinition processDef = allProcessDefinitionsByName.get(name);
+		session.lock(processDef, LockMode.NONE);
+		return processDef;
 	}
 
-	public Map<Long, ZebraTaskDefinition> getAllTaskDefinitionsById() {
-		return this.latestTaskDefinitionsById;
+	public ZebraTaskDefinition getTaskDefinitionById(Long id) {
+		ZebraTaskDefinition taskDef = latestTaskDefinitionsById.get(id);
+		session.lock(taskDef, LockMode.NONE);
+		return taskDef;
 	}
 
 	public String getProcessesPath() {

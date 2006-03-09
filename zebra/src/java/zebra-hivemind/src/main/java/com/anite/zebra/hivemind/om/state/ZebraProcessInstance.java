@@ -256,7 +256,7 @@ public class ZebraProcessInstance implements IProcessInstance {
 
         ZebraDefinitionFactory definitons = (ZebraDefinitionFactory) RegistryManager.getInstance().getRegistry()
                 .getService("zebra.zebraDefinitionFactory", ZebraDefinitionFactory.class);
-        return definitons.getAllProcessDefinitionsById().get(this.processDefinitionId);
+        return definitons.getProcessDefinitionById(this.processDefinitionId);
 
     }
 

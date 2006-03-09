@@ -74,9 +74,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 	 * Check to see it if starts up by checking at least 1 process has loaded
 	 */
 	public void testStartUp() {
-		assertTrue(this.zebraDefinitionFactory.getAllProcessDefinitionsByName()
-				.size() > 0);
-
+		assertNotNull(this.zebraDefinitionFactory.getProcessDefinitionByName(SIMPLEWORKFLOW));
 	}
 
 	/**
@@ -85,7 +83,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 	 */
 	public void testSimpleWorkflow() {
 		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
-				.getAllProcessDefinitionsByName().get(SIMPLEWORKFLOW);
+				.getProcessDefinitionByName(SIMPLEWORKFLOW);
 		assertNotNull(processDefinition);
 		assertEquals(SIMPLEWORKFLOW, processDefinition.getName());
 
@@ -153,7 +151,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 	 */
 	public void testSplitWorkflow(){
 		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
-				.getAllProcessDefinitionsByName().get(SPLIT);
+				.getProcessDefinitionByName(SPLIT);
 		assertNotNull(processDefinition);
 		assertEquals(SPLIT, processDefinition.getName());
 		// how many?
@@ -244,7 +242,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 	public void testGetProcessDefinitionByName()
 			{
 		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
-				.getAllProcessDefinitionsByName().get(SIMPLEWORKFLOW);
+				.getProcessDefinitionByName(SIMPLEWORKFLOW);
 		assertNotNull(processDefinition);
 		assertEquals(SIMPLEWORKFLOW, processDefinition.getName());
 
@@ -252,9 +250,9 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 
 	public void testGetProcessDefinitionByID() {
 		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
-				.getAllProcessDefinitionsByName().get(SIMPLEWORKFLOW);
+				.getProcessDefinitionByName(SIMPLEWORKFLOW);
 		ZebraProcessDefinition processDefinitionById = this.zebraDefinitionFactory
-				.getAllProcessDefinitionsById().get(processDefinition.getId());
+				.getProcessDefinitionById(processDefinition.getId());
 
 		assertEquals(processDefinition, processDefinitionById);
 	}
@@ -269,7 +267,7 @@ public class ZebraDefinitionsFactoryTest extends TestCase {
 
 		Long taskID = null;
 		ZebraProcessDefinition processDefinition = this.zebraDefinitionFactory
-				.getAllProcessDefinitionsByName().get(SIMPLEWORKFLOW);
+				.getProcessDefinitionByName(SIMPLEWORKFLOW);
 		assertNotNull(processDefinition);
 		assertEquals(SIMPLEWORKFLOW, processDefinition.getName());
 

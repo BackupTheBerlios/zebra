@@ -18,7 +18,6 @@ package com.anite.zebra.hivemind.impl;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 
 import junit.framework.TestCase;
 
@@ -35,6 +34,7 @@ import com.anite.zebra.core.state.api.ITransaction;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 
 public class LockMangerTest extends TestCase {
+	private static final String SIMPLEWORKFLOW = "SimpleWorkflow";
 
     public void setUp() {
 
@@ -58,10 +58,7 @@ public class LockMangerTest extends TestCase {
     private ZebraProcessDefinition getProcessDefinition() {
         // Load the first process definition it has (e.g. we don't care which
         // process)
-        Iterator processDefinitions = this.definitionsFactory.getAllProcessDefinitionsById().keySet().iterator();
-        ZebraProcessDefinition processDefinition = this.definitionsFactory.getAllProcessDefinitionsById().get(
-                processDefinitions.next());
-        return processDefinition;
+        return this.definitionsFactory.getProcessDefinitionByName(SIMPLEWORKFLOW);
     }
 
     /**
