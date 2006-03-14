@@ -1,5 +1,7 @@
 package com.anite.zebra.hivemind.impl;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -248,6 +250,33 @@ public class ZebraDefinitionFactory {
 		// Set up the two maps
 		getDistinctLatestVersions();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Long> getTaskDefinitionIds(String processName, String taskName) {
+    	StringBuffer sql = new StringBuffer();
+    	sql.append("SELECT td.id ");
+    	sql.append("FROM ZebraProcessDefinition pd, processTaskDefinitions ptd, ZebraTaskDefinition td, ZebraProcessVersions pv ");
+    	sql.append("WHERE pd.id=ptd.processDefinitionId ");
+    	sql.append("AND pd.versionId=pv.id ");
+    	sql.append("AND pd.id=ptd.processDefinitionId ");
+    	sql.append("AND ptd.taskDefinitionId=td.id ");
+    	sql.append("AND pv.name=:processName ");
+    	sql.append("AND td.name=:taskName");
+    	
+    	Query q = session.createSQLQuery(sql.toString());
+    	q.setString("processName", processName);
+    	q.setString("taskName", taskName);
+    	
+    	// Query stupidly returns a list of BigIntegers. 
+    	// Need to convert them into Longs. Yawn.
+    	List<BigInteger> results = q.list();
+    	List<Long> properResults = new ArrayList<Long>(results.size());
+    	for (BigInteger i : results) {
+    		properResults.add(i.longValue());
+    	}
+    	
+    	return properResults;
+    }
 
 	public Session getSession() {
 		return this.session;
