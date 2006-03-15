@@ -59,7 +59,7 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.core.exceptions.RunTaskException;
 import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.ITaskInstance;
-import com.anite.zebra.hivemind.impl.ZebraDefinitionFactory;
+import com.anite.zebra.hivemind.api.ZebraDefinitionFactory;
 import com.anite.zebra.hivemind.impl.ZebraSecurity;
 import com.anite.zebra.hivemind.util.RegistryHelper;
 

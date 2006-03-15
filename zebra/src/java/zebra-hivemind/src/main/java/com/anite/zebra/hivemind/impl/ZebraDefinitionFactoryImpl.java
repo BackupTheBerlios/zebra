@@ -19,6 +19,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import com.anite.zebra.ext.xmlloader.LoadFromFile;
+import com.anite.zebra.hivemind.api.ZebraDefinitionFactory;
 import com.anite.zebra.hivemind.om.defs.IXmlDefinition;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessVersions;
@@ -35,9 +36,9 @@ import com.anite.zebra.hivemind.om.defs.ZebraTaskDefinition;
  * @author ben.gidley
  * 
  */
-public class ZebraDefinitionFactory {
+public class ZebraDefinitionFactoryImpl implements ZebraDefinitionFactory {
     /** logging */
-    private static Log log = LogFactory.getLog(ZebraDefinitionFactory.class);
+    private static Log log = LogFactory.getLog(ZebraDefinitionFactoryImpl.class);
 
     /* Variables for configuration */
     private String processesPath;
@@ -53,8 +54,8 @@ public class ZebraDefinitionFactory {
     //private Map<String, ZebraProcessDefinition> allProcessDefinitionsByName = new HashMap<String, ZebraProcessDefinition>();
     //	private Map<Long, ZebraProcessDefinition> allProcessDefinitionsById = new HashMap<Long, ZebraProcessDefinition>();
     //private Map<Long, ZebraTaskDefinition> latestTaskDefinitionsById = new HashMap<Long, ZebraTaskDefinition>();
-    /**
-     * Get a task definition
+    /* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraDefinitionFactory#getTaskDefinition(java.lang.Long)
      */
     public ZebraTaskDefinition getTaskDefinition(Long id) {
         ZebraTaskDefinition taskDefinition;
@@ -208,6 +209,9 @@ public class ZebraDefinitionFactory {
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraDefinitionFactory#getTaskDefinitionIds(java.lang.String, java.lang.String)
+     */
     @SuppressWarnings("unchecked")
     public List<Long> getTaskDefinitionIds(String processName, String taskName) {
         StringBuffer sql = new StringBuffer();
@@ -244,10 +248,16 @@ public class ZebraDefinitionFactory {
         this.session = session;
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraDefinitionFactory#getProcessDefinitionById(java.lang.Long)
+     */
     public ZebraProcessDefinition getProcessDefinitionById(Long id) {
         return (ZebraProcessDefinition) session.load(ZebraProcessDefinition.class, id);
     }
 
+    /* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraDefinitionFactory#getProcessDefinitionByName(java.lang.String)
+     */
     public ZebraProcessDefinition getProcessDefinitionByName(String name) {
         Criteria criteria = session.createCriteria(ZebraProcessVersions.class);
         criteria.add(Restrictions.eq("name", name));

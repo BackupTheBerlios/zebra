@@ -17,7 +17,9 @@
 
 package com.anite.zebra.hivemind.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.hibernate.Session;
@@ -36,6 +38,9 @@ import com.anite.zebra.core.state.api.IStateObject;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.core.state.api.ITransaction;
 import com.anite.zebra.hivemind.api.LockManager;
+import com.anite.zebra.hivemind.api.StateFactoryEvent;
+import com.anite.zebra.hivemind.api.StateFactoryListener;
+import com.anite.zebra.hivemind.api.ZebraStateFactory;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 import com.anite.zebra.hivemind.om.defs.ZebraTaskDefinition;
 import com.anite.zebra.hivemind.om.state.ZebraFOE;
@@ -54,8 +59,10 @@ import com.anite.zebra.hivemind.util.RegistryHelper;
  * @author eric.pugh
  * @author Ben Gidley
  */
-public class ZebraStateFactory implements IStateFactory {
+public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
 
+    private List<StateFactoryListener> listeners = new ArrayList<StateFactoryListener>();
+    
 	/**
 	 * This should be manually injected by hivemind
 	 */
@@ -68,17 +75,17 @@ public class ZebraStateFactory implements IStateFactory {
 
 	private Log log;
 
-	/**
-	 * Create a new FOE
-	 */
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#createFOE(com.anite.zebra.core.state.api.IProcessInstance)
+     */
 	public IFOE createFOE(IProcessInstance processInstance)
 			throws CreateObjectException {
 		return new ZebraFOE(processInstance);
 	}
 
-	/**
-	 * Delete with extra step of creating a task instance history object
-	 */
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#deleteObject(com.anite.zebra.core.state.api.IStateObject)
+     */
 	public void deleteObject(IStateObject stateObject)
 			throws StateFailureException {
 
@@ -145,18 +152,9 @@ public class ZebraStateFactory implements IStateFactory {
 						+ taskDef.getName());
 	}
 
-	/**
-	 * Create a process using the correct implementation class
-	 * 
-	 * Note: Previous versions of Zebra had a helper here to identify the user
-	 * creating the process this is no longer the case.
-	 * 
-	 * To do something similar either set ActivatedBy as you get the process
-	 * back to your application or register an event using Hivemind on this
-	 * service.
-	 * 
-	 * TODO plan some event interfaces for ZebraHivemind
-	 */
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#createProcessInstance(com.anite.zebra.core.definitions.api.IProcessDefinition)
+     */
 	public IProcessInstance createProcessInstance(
 			IProcessDefinition processDefinition) throws CreateObjectException {
 
@@ -171,12 +169,9 @@ public class ZebraStateFactory implements IStateFactory {
 		return processInstance;
 	}
 
-	/**
-	 * Create a task and set properties
-	 * 
-	 * Previous versions of Zebra had a preset mechanism here. This has been
-	 * removed for now This needs to be rewritten generically.
-	 */
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#createTaskInstance(com.anite.zebra.core.definitions.api.ITaskDefinition, com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.state.api.IFOE)
+     */
 	public ITaskInstance createTaskInstance(ITaskDefinition taskDefinition,
 			IProcessInstance processInstance, IFOE flowOfExecution)
 			throws CreateObjectException {
@@ -199,9 +194,18 @@ public class ZebraStateFactory implements IStateFactory {
 				.getShowInTaskList());
 		antelopeProcessInstance.getTaskInstances().add(antelopeTaskInstance);
 
+        // Fire event listeners
+        StateFactoryEvent stateFactoryEvent = new StateFactoryEvent(this, antelopeTaskInstance);
+        for (StateFactoryListener stateFactoryListener : listeners){
+            stateFactoryListener.createTaskInstance(stateFactoryEvent);
+        }
+        
 		return antelopeTaskInstance;
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#beginTransaction()
+     */
 	public ITransaction beginTransaction() throws StateFailureException {
 
 		return new HibernateTransaction(RegistryHelper.getInstance()
@@ -209,11 +213,17 @@ public class ZebraStateFactory implements IStateFactory {
 
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#saveObject(com.anite.zebra.core.state.api.IStateObject)
+     */
 	public void saveObject(IStateObject object) throws StateFailureException {
 		RegistryHelper.getInstance().getSession().saveOrUpdate(object);
 
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#acquireLock(com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.api.IEngine)
+     */
 	public void acquireLock(IProcessInstance processInstance, IEngine engine)
 			throws LockException {
 
@@ -222,6 +232,9 @@ public class ZebraStateFactory implements IStateFactory {
 
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#releaseLock(com.anite.zebra.core.state.api.IProcessInstance, com.anite.zebra.core.api.IEngine)
+     */
 	public void releaseLock(IProcessInstance processInstance, IEngine engine)
 			throws LockException {
 
@@ -229,10 +242,16 @@ public class ZebraStateFactory implements IStateFactory {
 				.getInstance().getSession());
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#getLockManager()
+     */
 	public LockManager getLockManager() {
 		return this.lockManager;
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#setLockManager(com.anite.zebra.hivemind.api.LockManager)
+     */
 	public void setLockManager(LockManager lockManager) {
 		this.lockManager = lockManager;
 	}
@@ -245,12 +264,32 @@ public class ZebraStateFactory implements IStateFactory {
 		this.log = log;
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#getPriorityManager()
+     */
 	public PriorityManager getPriorityManager() {
 		return this.priorityManager;
 	}
 
+	/* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#setPriorityManager(com.anite.zebra.hivemind.impl.PriorityManager)
+     */
 	public void setPriorityManager(PriorityManager priorityManager) {
 		this.priorityManager = priorityManager;
 	}
+    
+    /* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#addStateFactoryListener(com.anite.zebra.hivemind.api.StateFactoryListener)
+     */
+    public void addStateFactoryListener(StateFactoryListener listener){
+        listeners.add(listener);
+    }
+    
+    /* (non-Javadoc)
+     * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#removeStateFactoryListener(com.anite.zebra.hivemind.api.StateFactoryListener)
+     */
+    public void removeStateFactoryListener(StateFactoryListener listener){
+        listeners.remove(listener);
+    }
 
 }

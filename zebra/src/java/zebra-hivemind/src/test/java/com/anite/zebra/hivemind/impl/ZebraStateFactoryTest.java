@@ -34,6 +34,8 @@ import com.anite.zebra.core.state.api.IFOE;
 import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.core.state.api.ITransaction;
+import com.anite.zebra.hivemind.api.StateFactoryListener;
+import com.anite.zebra.hivemind.api.ZebraDefinitionFactory;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
 import com.anite.zebra.hivemind.om.state.ZebraPropertySetEntry;
@@ -43,7 +45,7 @@ import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
  * @author Ben.Gidley
  */
 public class ZebraStateFactoryTest extends TestCase {
-	private static final String SIMPLEWORKFLOW = "SimpleWorkflow";
+    private static final String SIMPLEWORKFLOW = "SimpleWorkflow";
 
     private IStateFactory stateFactory;
 
@@ -59,6 +61,7 @@ public class ZebraStateFactoryTest extends TestCase {
                 IStateFactory.class);
         this.definitionsFactory = (ZebraDefinitionFactory) RegistryManager.getInstance().getRegistry().getService(
                 "zebra.zebraDefinitionFactory", ZebraDefinitionFactory.class);
+
     }
 
     public void testCreatingTransaction() throws StateFailureException {
@@ -74,7 +77,8 @@ public class ZebraStateFactoryTest extends TestCase {
         IProcessDefinition processDefinition = getProcessDefinition();
 
         ITransaction t = this.stateFactory.beginTransaction();
-        ZebraProcessInstance processInstance = (ZebraProcessInstance) this.stateFactory.createProcessInstance(processDefinition);
+        ZebraProcessInstance processInstance = (ZebraProcessInstance) this.stateFactory
+                .createProcessInstance(processDefinition);
         ZebraPropertySetEntry propSet = new ZebraPropertySetEntry();
         propSet.setValue("temp");
         processInstance.getPropertySet().put("One", propSet);
@@ -85,11 +89,12 @@ public class ZebraStateFactoryTest extends TestCase {
 
         IFOE foe = this.stateFactory.createFOE(processInstance);
         t = this.stateFactory.beginTransaction();
-        ZebraTaskInstance taskInstance = (ZebraTaskInstance) this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
+        ZebraTaskInstance taskInstance = (ZebraTaskInstance) this.stateFactory.createTaskInstance(taskDefinition,
+                processInstance, foe);
         ZebraPropertySetEntry propSet2 = new ZebraPropertySetEntry();
         propSet2.setValue("temp");
         processInstance.getPropertySet().put("One", propSet2);
-        
+
         this.stateFactory.saveObject(processInstance);
         this.stateFactory.saveObject(taskInstance);
         t.commit();
@@ -159,11 +164,35 @@ public class ZebraStateFactoryTest extends TestCase {
         t.commit();
 
         assertTrue(taskInstance.getTaskInstanceId().longValue() > 0);
-        
+
         t = this.stateFactory.beginTransaction();
         this.stateFactory.deleteObject(taskInstance);
         t.commit();
 
+    }
+
+    public void testEventFiring() throws Exception {
+        
+        StateFactoryListener stateFactoryListener = (StateFactoryListener) RegistryManager.getInstance().getRegistry().getService(StateFactoryListener.class);
+        stateFactoryListener.createTaskInstance(null);
+        
+        int count = StateFactoryListenerService.count;
+        
+        IProcessDefinition processDefinition = getProcessDefinition();
+
+        IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
+
+        ITransaction t = this.stateFactory.beginTransaction();
+        this.stateFactory.saveObject(processInstance);
+        t.commit();
+
+        ITaskDefinition taskDefinition = processDefinition.getFirstTask();
+
+        IFOE foe = this.stateFactory.createFOE(processInstance);
+        ITaskInstance taskInstance = this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
+        assertNotNull(taskInstance);
+        
+        assertEquals(count +1, StateFactoryListenerService.count);
         
     }
 

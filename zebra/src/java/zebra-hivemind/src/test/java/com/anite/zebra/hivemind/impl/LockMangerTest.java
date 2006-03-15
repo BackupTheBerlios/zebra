@@ -31,6 +31,7 @@ import com.anite.zebra.core.exceptions.LockException;
 import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.ITransaction;
+import com.anite.zebra.hivemind.api.ZebraDefinitionFactory;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 
 public class LockMangerTest extends TestCase {

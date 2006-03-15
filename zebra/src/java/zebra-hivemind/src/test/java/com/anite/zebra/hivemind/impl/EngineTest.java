@@ -16,14 +16,14 @@
  */
 package com.anite.zebra.hivemind.impl;
 
+import junit.framework.TestCase;
+
 import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.hivemind.Resource;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.util.ClasspathResource;
 
 import com.anite.zebra.core.api.IEngine;
-
-import junit.framework.TestCase;
 
 public class EngineTest extends TestCase {
 

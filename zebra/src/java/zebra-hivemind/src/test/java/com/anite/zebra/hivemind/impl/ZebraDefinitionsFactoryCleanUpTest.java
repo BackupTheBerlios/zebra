@@ -30,6 +30,7 @@ import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
 import com.anite.zebra.ext.definitions.api.IPropertyGroups;
 import com.anite.zebra.ext.definitions.impl.RoutingDefinition;
 import com.anite.zebra.ext.definitions.impl.TaskDefinition;
+import com.anite.zebra.hivemind.api.ZebraDefinitionFactory;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 
 public class ZebraDefinitionsFactoryCleanUpTest extends TestCase {

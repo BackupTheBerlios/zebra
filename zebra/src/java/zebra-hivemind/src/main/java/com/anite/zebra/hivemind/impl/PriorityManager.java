@@ -40,52 +40,58 @@ public class PriorityManager {
 	public static final String NORMAL = "Normal";
 
 	private Long defaultPriorityId;
+    
+    private Session session;
 
-	/**
-	 * prevents instantiation
-	 */
-	public PriorityManager() {
-		// prevent creation
-		Session session = RegistryHelper.getInstance().getSession();
-		Query query = session.createQuery("from " + Priority.class.getName()
-				+ " where caption=:caption");
+    
+    public Session getSession() {
+        return session;
+    }
 
-		// Find each value in the list
-		query.setString("caption", LOW);
-		List lowList = query.list();
-		if (lowList.size() != 1) {
-			Priority low = new Priority();
-			low.setCaption(LOW);
-			Transaction t = session.beginTransaction();
-			session.save(low);
-			t.commit();
-		}
+    public void setSession(Session session) {
+        this.session = session;
+    }
 
-		query.setString("caption", NORMAL);
-		List normalList = query.list();
-		if (normalList.size() != 1) {
-			Priority normal = new Priority();
-			normal.setCaption(NORMAL);
-			Transaction t = session.beginTransaction();
-			session.save(normal);
-			t.commit();
-			this.defaultPriorityId = normal.getPriorityId();
-		} else {
-			Priority normal = (Priority) normalList.get(0);
-			this.defaultPriorityId = normal.getPriorityId();
-		}
-			
+    public void initializeService(){
+        Query query = session.createQuery("from " + Priority.class.getName()
+                + " where caption=:caption");
 
-		query.setString("caption", URGENT);
-		List urgentList = query.list();
-		if (urgentList.size() != 1) {
-			Priority urgent = new Priority();
-			urgent.setCaption(URGENT);
-			Transaction t = session.beginTransaction();
-			session.save(urgent);
-			t.commit();
-		}
-	}
+        // Find each value in the list
+        query.setString("caption", LOW);
+        List lowList = query.list();
+        if (lowList.size() != 1) {
+            Priority low = new Priority();
+            low.setCaption(LOW);
+            Transaction t = session.beginTransaction();
+            session.save(low);
+            t.commit();
+        }
+
+        query.setString("caption", NORMAL);
+        List normalList = query.list();
+        if (normalList.size() != 1) {
+            Priority normal = new Priority();
+            normal.setCaption(NORMAL);
+            Transaction t = session.beginTransaction();
+            session.save(normal);
+            t.commit();
+            this.defaultPriorityId = normal.getPriorityId();
+        } else {
+            Priority normal = (Priority) normalList.get(0);
+            this.defaultPriorityId = normal.getPriorityId();
+        }
+            
+
+        query.setString("caption", URGENT);
+        List urgentList = query.list();
+        if (urgentList.size() != 1) {
+            Priority urgent = new Priority();
+            urgent.setCaption(URGENT);
+            Transaction t = session.beginTransaction();
+            session.save(urgent);
+            t.commit();
+        }
+    }
 
 	/**
 	 * Fetch the default priority

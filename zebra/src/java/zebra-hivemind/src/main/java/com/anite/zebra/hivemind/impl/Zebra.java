@@ -29,9 +29,10 @@ import com.anite.zebra.core.exceptions.CreateProcessException;
 import com.anite.zebra.core.exceptions.DestructException;
 import com.anite.zebra.core.exceptions.StartProcessException;
 import com.anite.zebra.core.exceptions.TransitionException;
-import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
 import com.anite.zebra.core.state.api.ITransaction;
+import com.anite.zebra.hivemind.api.ZebraDefinitionFactory;
+import com.anite.zebra.hivemind.api.ZebraStateFactory;
 import com.anite.zebra.hivemind.lifecycle.ProcessDestruct;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
@@ -49,7 +50,7 @@ public class Zebra {
 
     private ZebraDefinitionFactory definitionFactory;
 
-    private IStateFactory stateFactory;
+    private ZebraStateFactory stateFactory;
 
     private IEngine engine;
     
@@ -189,11 +190,11 @@ public class Zebra {
      * Get the State Factory (there is in general very few reasons an application)
      * @return
      */
-    public IStateFactory getStateFactory() {
+    public ZebraStateFactory getStateFactory() {
         return this.stateFactory;
     }
 
-    public void setStateFactory(IStateFactory stateFactory) {
+    public void setStateFactory(ZebraStateFactory stateFactory) {
         this.stateFactory = stateFactory;
     }
 

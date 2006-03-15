@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module id="zebra.test" version="1.0.0">
-    
     <implementation service-id="fulcrum.hibernate.HibernateSessionFactory">
         <invoke-factory model="singleton">
             <construct class="org.apache.fulcrum.hibernate.factory.HibernateSessionFactory"
@@ -11,7 +10,7 @@
     </implementation>
     <implementation service-id="zebra.zebraDefinitionFactory">
         <invoke-factory>
-            <construct class="com.anite.zebra.hivemind.impl.ZebraDefinitionFactory">
+            <construct class="com.anite.zebra.hivemind.impl.ZebraDefinitionFactoryImpl">
                 <set property="processesPath" value="src/test/resources/processes"/>
                 <set-service property="session" service-id="fulcrum.hibernate.Session"/>
             </construct>
@@ -22,4 +21,15 @@
             <construct class="com.anite.zebra.hivemind.taskAction.NoopHiveMindTaskAction"/>
         </invoke-factory>
     </service-point>
+    <service-point id="stateFactoryListener"
+        interface="com.anite.zebra.hivemind.api.StateFactoryListener">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.impl.StateFactoryListenerService">
+                <event-listener service-id="zebra.zebraState"/>
+            </construct>
+        </invoke-factory>
+    </service-point>
+    <contribution configuration-id="hivemind.EagerLoad">
+        <load service-id="zebra.test.stateFactoryListener"/>
+    </contribution>
 </module>
