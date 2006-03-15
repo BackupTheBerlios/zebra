@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
-import org.hibernate.LockMode;
 
 import com.anite.zebra.core.Engine;
 import com.anite.zebra.core.api.IEngine;
