@@ -86,12 +86,17 @@
     <dependency>
       <groupId>hivemind</groupId>
       <artifactId>hivemind</artifactId>
-      <version>1.1</version>
+      <version>1.1.1</version>
     </dependency>
     <dependency>
       <groupId>hivemind</groupId>
       <artifactId>hivemind-lib</artifactId>
-      <version>1.1</version>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>hivemind</groupId>
+      <artifactId>hivemind-jmx</artifactId>
+      <version>1.1.1</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
@@ -146,9 +151,9 @@
         <artifactId>hivedoc-maven-plugin</artifactId>
         <version>0.2</version>
         <configuration>
-          <ignoredJars>            
+          <ignoredJars>
             <ignoredJar>hivemind-1.1.jar</ignoredJar>
-            <ignoredJar>hivemind-lib-1.1.jar</ignoredJar>            
+            <ignoredJar>hivemind-lib-1.1.jar</ignoredJar>
           </ignoredJars>
         </configuration>
       </plugin>

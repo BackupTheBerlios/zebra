@@ -1,10 +1,12 @@
 package org.apache.fulcrum.hivemind;
 
-
-
 import junit.framework.TestCase;
 
+import org.apache.hivemind.ApplicationRuntimeException;
 import org.apache.hivemind.Registry;
+import org.apache.hivemind.Resource;
+import org.apache.hivemind.impl.DefaultClassResolver;
+import org.apache.hivemind.util.ClasspathResource;
 
 public class RegistryManagerTest extends TestCase {
 
@@ -24,4 +26,23 @@ public class RegistryManagerTest extends TestCase {
         assertNotNull(registry);
     }
 
+    public void testResourceLoading() {
+
+        RegistryManager.getInstance().rebuildRegistry();
+        Resource resource = new ClasspathResource(new DefaultClassResolver(), "META-INF/hivemodule_hivemindtest.xml");
+        RegistryManager.getInstance().getResources().add(resource);
+
+        IDummy dummyService = (IDummy) RegistryManager.getInstance().getRegistry().getService(DummyService.class);
+        
+        assertNotNull(dummyService);
+        
+        RegistryManager.getInstance().rebuildRegistry();
+        try {
+            dummyService = (IDummy) RegistryManager.getInstance().getRegistry().getService(DummyService.class);
+        } catch (ApplicationRuntimeException e) {
+            return;
+        }
+        fail();
+        
+    }
 }

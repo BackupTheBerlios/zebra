@@ -44,7 +44,7 @@ public class RegistryManager {
 
     }
 
-    public static RegistryManager getInstance() {        
+    public static RegistryManager getInstance() {
         if (_instance == null) {
             log.debug("Constructing RegistryManager");
             _instance = new RegistryManager();
@@ -72,6 +72,19 @@ public class RegistryManager {
      */
     public void setResources(List<Resource> resources) {
         this.resources = resources;
+    }
+
+    /**
+     * Forces the registry to rebuild - used for unit testing
+     *
+     */
+    public void rebuildRegistry() {
+
+        this.resources.clear();
+        if (this.registry != null) {
+            this.registry.shutdown();
+        }
+        this.registry = null;
     }
 
 }
