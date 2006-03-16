@@ -22,7 +22,11 @@ import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.hivemind.Resource;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.util.ClasspathResource;
+import org.hibernate.HibernateException;
+import org.hibernate.TransactionException;
 
+import com.anite.zebra.core.exceptions.CreateProcessException;
+import com.anite.zebra.core.exceptions.StartProcessException;
 import com.anite.zebra.hivemind.impl.Zebra;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
 import com.anite.zebra.hivemind.util.RegistryHelper;
@@ -37,9 +41,13 @@ public class LogTaskActionTest  extends TestCase {
 
     public void testService() throws Exception {
 
-        Zebra zebra = RegistryHelper.getInstance().getZebra();
-        ZebraProcessInstance pi = zebra.createProcessPaused("testProcess");
-        
-        zebra.startProcess(pi);        
+        try {
+            Zebra zebra = RegistryHelper.getInstance().getZebra();
+            ZebraProcessInstance pi = zebra.createProcessPaused("testProcess");
+            
+            zebra.startProcess(pi);
+        } catch (StartProcessException e) {
+            e.printStackTrace();
+        }        
     }
 }

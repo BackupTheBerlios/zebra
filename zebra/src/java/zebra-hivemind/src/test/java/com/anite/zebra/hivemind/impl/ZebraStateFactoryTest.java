@@ -34,8 +34,10 @@ import com.anite.zebra.core.state.api.IFOE;
 import com.anite.zebra.core.state.api.IProcessInstance;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.core.state.api.ITransaction;
+import com.anite.zebra.hivemind.api.StateFactoryEvent;
 import com.anite.zebra.hivemind.api.StateFactoryListener;
 import com.anite.zebra.hivemind.api.ZebraDefinitionFactory;
+import com.anite.zebra.hivemind.api.ZebraStateFactory;
 import com.anite.zebra.hivemind.om.defs.ZebraProcessDefinition;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
 import com.anite.zebra.hivemind.om.state.ZebraPropertySetEntry;
@@ -45,9 +47,19 @@ import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
  * @author Ben.Gidley
  */
 public class ZebraStateFactoryTest extends TestCase {
+    public class InnerStateListener implements StateFactoryListener {
+        public int count = 0;
+
+        public void createTaskInstance(StateFactoryEvent stateFactoryEvent) {
+            count++;
+
+        }
+
+    }
+
     private static final String SIMPLEWORKFLOW = "SimpleWorkflow";
 
-    private IStateFactory stateFactory;
+    private ZebraStateFactory stateFactory;
 
     private ZebraDefinitionFactory definitionsFactory;
 
@@ -57,8 +69,8 @@ public class ZebraStateFactoryTest extends TestCase {
                 "META-INF/hivemodule_zebradefinitions.xml");
         RegistryManager.getInstance().getResources().add(resource);
 
-        this.stateFactory = (IStateFactory) RegistryManager.getInstance().getRegistry().getService("zebra.zebraState",
-                IStateFactory.class);
+        this.stateFactory = (ZebraStateFactory) RegistryManager.getInstance().getRegistry().getService(
+                "zebra.zebraState", ZebraStateFactory.class);
         this.definitionsFactory = (ZebraDefinitionFactory) RegistryManager.getInstance().getRegistry().getService(
                 "zebra.zebraDefinitionFactory", ZebraDefinitionFactory.class);
 
@@ -171,13 +183,18 @@ public class ZebraStateFactoryTest extends TestCase {
 
     }
 
-    public void testEventFiring() throws Exception {
-        
-        StateFactoryListener stateFactoryListener = (StateFactoryListener) RegistryManager.getInstance().getRegistry().getService(StateFactoryListener.class);
+    /**
+     * Add a listener via a eager loaded service
+     * @throws Exception
+     */
+    public void testServiceEventFiring() throws Exception {
+
+        StateFactoryListener stateFactoryListener = (StateFactoryListener) RegistryManager.getInstance().getRegistry()
+                .getService(StateFactoryListener.class);
         stateFactoryListener.createTaskInstance(null);
-        
+
         int count = StateFactoryListenerService.count;
-        
+
         IProcessDefinition processDefinition = getProcessDefinition();
 
         IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
@@ -191,9 +208,37 @@ public class ZebraStateFactoryTest extends TestCase {
         IFOE foe = this.stateFactory.createFOE(processInstance);
         ITaskInstance taskInstance = this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
         assertNotNull(taskInstance);
-        
-        assertEquals(count +1, StateFactoryListenerService.count);
-        
+
+        assertEquals(count + 1, StateFactoryListenerService.count);
+
+    }
+
+    /**
+     * Add a listener directly to the service
+     * @throws Exception
+     */
+    public void testNonServiceEventFiring() throws Exception {
+        StateFactoryListener listener = new InnerStateListener();
+
+        stateFactory.addStateFactoryListener(listener);
+
+        int count = ((InnerStateListener) listener).count;
+
+        IProcessDefinition processDefinition = getProcessDefinition();
+        IProcessInstance processInstance = this.stateFactory.createProcessInstance(processDefinition);
+
+        ITransaction t = this.stateFactory.beginTransaction();
+        this.stateFactory.saveObject(processInstance);
+        t.commit();
+
+        ITaskDefinition taskDefinition = processDefinition.getFirstTask();
+
+        IFOE foe = this.stateFactory.createFOE(processInstance);
+        ITaskInstance taskInstance = this.stateFactory.createTaskInstance(taskDefinition, processInstance, foe);
+        assertNotNull(taskInstance);
+
+        assertEquals(count + 1, ((InnerStateListener) listener).count);
+
     }
 
 }

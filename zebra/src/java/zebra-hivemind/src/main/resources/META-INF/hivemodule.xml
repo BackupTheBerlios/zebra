@@ -29,6 +29,9 @@
             <construct class="com.anite.zebra.hivemind.impl.PriorityManager"/>
         </invoke-factory>
     </service-point>
+    <contribution configuration-id="hivemind.EagerLoad">
+        <load service-id="priorityManager"/>
+    </contribution>
     <service-point id="clusterSafeLock" interface="com.anite.zebra.hivemind.api.LockManager">
         <invoke-factory>
             <construct class="com.anite.zebra.hivemind.impl.ClusterSafeLockManager"/>
