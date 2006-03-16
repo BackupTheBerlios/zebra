@@ -32,13 +32,13 @@ public class RegistryManagerTest extends TestCase {
         Resource resource = new ClasspathResource(new DefaultClassResolver(), "META-INF/hivemodule_hivemindtest.xml");
         RegistryManager.getInstance().getResources().add(resource);
 
-        IDummy dummyService = (IDummy) RegistryManager.getInstance().getRegistry().getService(DummyService.class);
+        IDummy dummyService = (IDummy) RegistryManager.getInstance().getRegistry().getService(IDummy.class);
         
         assertNotNull(dummyService);
         
         RegistryManager.getInstance().rebuildRegistry();
         try {
-            dummyService = (IDummy) RegistryManager.getInstance().getRegistry().getService(DummyService.class);
+            dummyService = (IDummy) RegistryManager.getInstance().getRegistry().getService(IDummy.class);
         } catch (ApplicationRuntimeException e) {
             return;
         }
