@@ -5,7 +5,7 @@
     <groupId>fulcrum-hivemind</groupId>
     <artifactId>fulcrum-hibernate</artifactId>
     <packaging>jar</packaging>
-    <version>1.11</version>
+    <version>1.12</version>
     <name>fulcrum-hivemind-hibernate - Hibernate Session manager for Hivemind</name>
     <url>http://gnasher.aniteps.com/docs/</url>
     <build>
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>fulcrum-hivemind</groupId>
             <artifactId>fulcrum-hivemind</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
         </dependency>
         <!-- Hibernate -->
         <dependency>
@@ -79,6 +79,7 @@
             <groupId>mckoi</groupId>
             <artifactId>mckoi</artifactId>
             <version>1.0.2</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>postgresql</groupId>
