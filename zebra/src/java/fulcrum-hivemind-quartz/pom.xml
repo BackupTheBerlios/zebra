@@ -5,7 +5,7 @@
     <groupId>fulcrum-hivemind</groupId>
     <artifactId>fulcrum-quartz</artifactId>
     <packaging>jar</packaging>
-    <version>1.4</version>
+    <version>1.5</version>
     <name>fulcrum-hivemind-quartz - Scheduler factory for Hivemind</name>
     <url>http://gnasher.aniteps.com/docs/</url>
     <build>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>fulcrum-hivemind</groupId>
             <artifactId>fulcrum-hibernate</artifactId>
-            <version>1.11</version>
+            <version>1.12</version>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
