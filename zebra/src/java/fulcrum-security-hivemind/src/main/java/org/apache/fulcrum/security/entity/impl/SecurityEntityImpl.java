@@ -25,12 +25,14 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * will equal "eDit" and "edit";
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: SecurityEntityImpl.java,v 1.1 2005/11/14 18:20:50 bgidley Exp $
+ * @version $Id: SecurityEntityImpl.java,v 1.2 2006/03/18 16:19:39 biggus_richus Exp $
  */
 public class SecurityEntityImpl implements SecurityEntity
 {
     private String name;
     private Object id;
+    private boolean disabled;
+    
     /**
      * @return
      */
@@ -86,4 +88,12 @@ public class SecurityEntityImpl implements SecurityEntity
     {
         return HashCodeBuilder.reflectionHashCode(this);
     }
+    
+	public boolean isDisabled() {
+		return disabled;
+	}
+	
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
 }

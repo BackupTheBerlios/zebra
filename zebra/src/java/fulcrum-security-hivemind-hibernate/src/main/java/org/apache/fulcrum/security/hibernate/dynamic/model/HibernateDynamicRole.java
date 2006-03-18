@@ -12,7 +12,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class HibernateDynamicRole extends DynamicRole{
+public class HibernateDynamicRole extends DynamicRole {
 
     @SuppressWarnings("unchecked")
 	@Override
@@ -41,4 +41,9 @@ public class HibernateDynamicRole extends DynamicRole{
         return super.getName();
     }
 
+    @Override
+    @Basic
+    public boolean isDisabled() {
+    	return super.isDisabled();
+    }
 }

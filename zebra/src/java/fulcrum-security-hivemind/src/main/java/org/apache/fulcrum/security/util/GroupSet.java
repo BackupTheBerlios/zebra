@@ -31,12 +31,14 @@ import org.apache.fulcrum.security.entity.Group;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: GroupSet.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: GroupSet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class GroupSet
         extends SecuritySet
 {
-    /**
+	private static final long serialVersionUID = 6882240173053961011L;
+
+	/**
      * Constructs an empty GroupSet
      */
     public GroupSet()
@@ -65,7 +67,8 @@ public class GroupSet
      * @return True if Group was added; false if GroupSet
      * already contained the Group.
      */
-    public boolean add(Group group)
+    @SuppressWarnings("unchecked")
+	public boolean add(Group group)
     {
         if (contains(group)){
             return false;            
@@ -195,7 +198,8 @@ public class GroupSet
      *
      * @return An Array of Group objects.
      */
-    public Group[] getGroupsArray()
+    @SuppressWarnings("unchecked")
+	public Group[] getGroupsArray()
     {
         return (Group[]) getSet().toArray(new Group[0]);
     }

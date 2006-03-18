@@ -9,6 +9,8 @@ package org.apache.fulcrum.security.util;
  */
 public class PasswordHistoryException extends TurbineSecurityException {
 
+	private static final long serialVersionUID = -6489327035014664329L;
+
 	/**
      * Construct a PasswordHistoryException with specified detail message.
      * @param msg The detail message.

@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -30,7 +31,7 @@ import org.hibernate.Query;
  * This implementation persists to a database via Hibernate.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: HibernateGroupManagerImpl.java,v 1.1 2005/11/25 08:50:13 bgidley Exp $
+ * @version $Id: HibernateGroupManagerImpl.java,v 1.2 2006/03/18 16:18:21 biggus_richus Exp $
  */
 public class HibernateGroupManagerImpl extends AbstractGroupManager {
     private PersistenceHelper persistenceHelper;
@@ -44,7 +45,7 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager {
      *         data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException {
+    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException, EntityDisabledException {
         Group group = null;
         try {
 
@@ -57,8 +58,10 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager {
                 throw new UnknownEntityException("Could not find group" + name);
             }
             group = (Group) groups.get(0);
-            //session.close();
-        } catch (HibernateException e) {
+            if (group.isDisabled()) {
+            	throw new EntityDisabledException("Group is unavailable");
+            }
+     } catch (HibernateException e) {
             throw new DataBackendException("Error retriving group information", e);
         }
         return group;
@@ -86,6 +89,27 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager {
     }
 
     /**
+     * Retrieves all non-disabled groups defined in the system.
+     *
+     * @return the names of all groups defined in the system.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     */
+    public GroupSet getGroups() throws DataBackendException {
+        GroupSet groupSet = new GroupSet();
+        try {
+
+            Query groupsQuery = getPersistenceHelper().retrieveSession().createQuery(
+                    "from " + getClassName() + " g where g.disabled = false");
+            List groups = groupsQuery.list();
+            groupSet.add(groups);
+        } catch (HibernateException e) {
+            throw new DataBackendException("Error retriving group information", e);
+        }
+        return groupSet;
+    }
+
+    /**
      * Removes a Group from the system.
      *
      * @param group The object describing the group to be removed.
@@ -96,6 +120,19 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager {
     public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException {
         getPersistenceHelper().removeEntity(group);
     }
+    
+    /**
+     * Disables a Group (effectively rendering it as removed, but without actually removing it).
+     *
+     * @param group The object describing the group to be disabled.
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
+     * @throws UnknownEntityException if the group does not exist.
+     */
+    public synchronized void disableGroup(Group group) throws DataBackendException, UnknownEntityException {
+        getPersistenceHelper().disableEntity(group);
+    }
+    
 
     /**
      * Renames an existing Group.
@@ -178,7 +215,7 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager {
      * @throws UnknownEntityException
      *             if the group does not exist.
      */
-public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException {
+public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException, EntityDisabledException {
 
         Group group = null;
 
@@ -194,7 +231,10 @@ public Group getGroupById(Object id) throws DataBackendException, UnknownEntityE
                     throw new UnknownEntityException("Could not find group by id " + id);
                 }
                 group = (Group) groups.get(0);
-
+                
+                if (group.isDisabled()) {
+                	throw new EntityDisabledException("Group is unavailable");
+                }
             } catch (HibernateException e) {
                 throw new DataBackendException("Error retriving group information", e);
             }

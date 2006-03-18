@@ -27,6 +27,7 @@ import org.apache.fulcrum.security.authenticator.Authenticator;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.ACLFactory;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordExpiredException;
 import org.apache.fulcrum.security.util.PasswordHistoryException;
@@ -42,7 +43,7 @@ import org.apache.fulcrum.security.util.UserLockedException;
  * 
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractUserManager.java,v 1.7 2006/01/24 11:38:55 biggus_richus Exp $
+ * @version $Id: AbstractUserManager.java,v 1.8 2006/03/18 16:19:37 biggus_richus Exp $
  */
 public abstract class AbstractUserManager extends AbstractEntityManager
 		implements UserManager {
@@ -109,7 +110,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 */
 	public User getUser(String userName, String password)
 			throws PasswordMismatchException, UnknownEntityException,
-			UserLockedException, DataBackendException, PasswordExpiredException {
+			UserLockedException, DataBackendException, PasswordExpiredException, EntityDisabledException {
 		User user = getUser(userName);
 		
 		if (user.getPasswordExpiryDate().compareTo(new Date()) <= 0) {
@@ -126,8 +127,13 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	}
 
 	public User getUser(String name) throws DataBackendException,
-			UnknownEntityException {
+			UnknownEntityException, EntityDisabledException {
 		User user = getAllUsers().getUserByName(name);
+		
+		if (user.isDisabled()) {
+			throw new EntityDisabledException("The specified user is unavailable");
+		}
+		
 		if (user == null) {
 			throw new UnknownEntityException(
 					"The specified user does not exist");
@@ -149,8 +155,13 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 *             if there is a problem accessing the storage.
 	 */
 	public User getUserById(Object id) throws DataBackendException,
-			UnknownEntityException {
+			UnknownEntityException, EntityDisabledException {
 		User user = getAllUsers().getUserById(id);
+
+		
+		if (user.isDisabled()) {
+			throw new EntityDisabledException("The specified user is unavailable");
+		}
 		if (user == null) {
 			throw new UnknownEntityException(
 					"The specified user does not exist");
@@ -171,16 +182,21 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 *                if the supplied password was incorrect.
 	 * @exception DataBackendException
 	 *                if there is a problem accessing the storage.
+	 * @throws EntityDisabledException 
 	 */
 	public void authenticate(User user, String password)
 			throws PasswordMismatchException, UnknownEntityException, 
-			DataBackendException, UserLockedException {
+			DataBackendException, UserLockedException, EntityDisabledException {
 
 		if (!checkExists(user)) {
 			throw new UnknownEntityException("The account '" + user.getName()
 					+ "' does not exist");
 		}
 
+		if (user.isDisabled()) {
+			throw new EntityDisabledException("User is disabled");
+		}
+		
 		if (user.getLockTime() != 0) {
 			long elapsedTime = user.getLockTime() + (HOURS_TO_MILLIS * lockResetHours);
 
@@ -224,7 +240,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 */
 	public void changePassword(User user, String oldPassword, String newPassword)
 			throws PasswordMismatchException, UserLockedException, 
-			       UnknownEntityException, DataBackendException, PasswordHistoryException {
+			       UnknownEntityException, DataBackendException, PasswordHistoryException, EntityDisabledException {
 		authenticate(user, oldPassword);
 		forcePassword(user, newPassword);
 	}
@@ -241,6 +257,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 	 * @author richard.brooks
 	 * Created on Jan 16, 2006
 	 */
+	@SuppressWarnings("unchecked")
 	private void cyclePassword(User user, String newPassword)
 			throws DataBackendException, PasswordHistoryException {
 		String cryptoPassword = authenticator.getCryptoPassword(newPassword);
@@ -368,20 +385,18 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 			throw new DataBackendException(
 					"Could not create a user with empty name!");
 		}
+		
 		if (checkExists(user)) {
 			throw new EntityExistsException("The account '" + user.getName()
-					+ "' already exists");
+					+ "' is unavailable");
 		}
+		
 		user.setPassword(authenticator.getCryptoPassword(password));
 		setPasswordExpiry(user);
 		user.setLockTime(0);
 		user.setLoginAttempts(0);
-		try {
-			return persistNewUser(user);
-		} catch (Exception e) {
-			throw new DataBackendException("Failed to create account '"
-					+ user.getName() + "'", e);
-		}
+
+		return persistNewUser(user);
 	}
 
 	public Authenticator getAuthenticator() {

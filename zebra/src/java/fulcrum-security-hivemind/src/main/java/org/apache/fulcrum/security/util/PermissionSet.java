@@ -31,12 +31,14 @@ import org.apache.fulcrum.security.entity.Permission;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: PermissionSet.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: PermissionSet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class PermissionSet
     extends SecuritySet
 {
-    /**
+	private static final long serialVersionUID = 4532868341893924965L;
+
+	/**
      * Constructs an empty PermissionSet
      */
     public PermissionSet()
@@ -65,7 +67,8 @@ public class PermissionSet
      * @return True if Permission was added; false if PermissionSet
      * already contained the Permission.
      */
-    public boolean add(Permission permission)
+    @SuppressWarnings("unchecked")
+	public boolean add(Permission permission)
     {
         if (contains(permission)){
             return false;            
@@ -195,7 +198,8 @@ public class PermissionSet
      *
      * @return An Array of Permission Objects.
      */
-    public Permission[] getPermissionsArray()
+    @SuppressWarnings("unchecked")
+	public Permission[] getPermissionsArray()
     {
         return (Permission[]) getSet().toArray(new Permission[0]);
     }

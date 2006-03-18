@@ -31,12 +31,14 @@ import org.apache.fulcrum.security.entity.Role;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: RoleSet.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: RoleSet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class RoleSet
         extends SecuritySet
 {
-    /**
+	private static final long serialVersionUID = -7878336668034575930L;
+
+	/**
      * Constructs an empty RoleSet
      */
     public RoleSet()
@@ -65,7 +67,8 @@ public class RoleSet
      * @return True if Role was added; false if RoleSet already
      * contained the Role.
      */
-    public boolean add(Role role)
+    @SuppressWarnings("unchecked")
+	public boolean add(Role role)
     {
         if (contains(role)){
             return false;            
@@ -193,7 +196,8 @@ public class RoleSet
      *
      * @return An Array of Role objects.
      */
-    public Role[] getRolesArray()
+    @SuppressWarnings("unchecked")
+	public Role[] getRolesArray()
     {
         return (Role[]) getSet().toArray(new Role[0]);
     }

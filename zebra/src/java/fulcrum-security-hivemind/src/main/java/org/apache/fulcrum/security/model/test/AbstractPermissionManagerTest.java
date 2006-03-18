@@ -21,6 +21,7 @@ import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -93,6 +94,25 @@ public abstract class AbstractPermissionManagerTest extends AbstractSecurityServ
             //good
         }
     }
+    
+	public void testDisablePermission() throws Exception {
+        Permission permission = getPermissionManager().getPermissionInstance("CLEAN_KENNEL_L");
+        getPermissionManager().addPermission(permission);
+        getPermissionManager().disablePermission(permission);
+		try {
+			getPermissionManager().getPermissionByName(permission.getName());
+			fail("Should have thrown EntityDisabledException");
+		} catch (EntityDisabledException ede) {
+			// brilliant!
+		}
+		
+		try {
+			getPermissionManager().addPermission(permission);
+			fail("Should have thrown EntityExistsException");
+		} catch (EntityExistsException eee) {
+			// brilliant!
+		}
+	}
 
     public void testAddPermission() throws Exception {
         Permission permission = getPermissionManager().getPermissionInstance("CLEAN_BIG_KENNEL");

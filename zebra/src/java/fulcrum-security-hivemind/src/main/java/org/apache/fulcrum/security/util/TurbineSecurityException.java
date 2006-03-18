@@ -20,12 +20,14 @@ package org.apache.fulcrum.security.util;
  * Thrown by SecurityService methods to indicate various problems.
  *
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: TurbineSecurityException.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: TurbineSecurityException.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class TurbineSecurityException
     extends Exception
 {
-    /**
+	private static final long serialVersionUID = 1768881827472257142L;
+
+	/**
      * Construct an SecurityException with specified detail message.
      *
      * @param msg The detail message.

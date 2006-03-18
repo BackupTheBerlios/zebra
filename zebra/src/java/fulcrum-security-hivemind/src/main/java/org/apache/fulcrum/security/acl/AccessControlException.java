@@ -21,12 +21,14 @@ import org.apache.fulcrum.security.util.TurbineSecurityException;
  * was not permitted by the security settings.
  *
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: AccessControlException.java,v 1.1 2005/11/14 18:20:49 bgidley Exp $
+ * @version $Id: AccessControlException.java,v 1.2 2006/03/18 16:19:37 biggus_richus Exp $
  */
 public class AccessControlException
     extends TurbineSecurityException
 {
-    /**
+	private static final long serialVersionUID = 1053699577313013739L;
+
+	/**
      * Construct an AccessControlException with specified detail message.
      *
      * @param msg The detail message.

@@ -59,10 +59,15 @@ public class HibernateDynamicUser extends DynamicUser {
     @Override
     @Basic
     public String getName() {
-
         return super.getName();
     }
 
+    @Override
+    @Basic
+    public boolean isDisabled() {
+    	return super.isDisabled();
+    }
+    
     @SuppressWarnings("unchecked")
 	@Override
     @ManyToMany

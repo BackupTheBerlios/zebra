@@ -30,7 +30,7 @@ import org.hibernate.Query;
  * This implementation persists to a database via Hibernate.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: HibernatePermissionManagerImpl.java,v 1.1 2005/11/25 08:50:12 bgidley Exp $
+ * @version $Id: HibernatePermissionManagerImpl.java,v 1.2 2006/03/18 16:18:21 biggus_richus Exp $
  */
 public class HibernatePermissionManagerImpl extends AbstractPermissionManager {
     private PersistenceHelper persistenceHelper;
@@ -47,6 +47,27 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager {
         try {
             Query permissionQuery = getPersistenceHelper().retrieveSession().createQuery(
                     "from " + getClassName() + "");
+            List permissions = permissionQuery.list();
+            permissionSet.add(permissions);
+
+        } catch (HibernateException e) {
+            throw new DataBackendException("Error retriving permission information", e);
+        }
+        return permissionSet;
+    }
+
+    /**
+     * Retrieves all non-disabled permissions defined in the system.
+     *
+     * @return the names of all non-disabled roles defined in the system.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     */
+    public PermissionSet getPermissions() throws DataBackendException {
+        PermissionSet permissionSet = new PermissionSet();
+        try {
+            Query permissionQuery = getPersistenceHelper().retrieveSession().createQuery(
+                    "from " + getClassName() + " p where p.disabled = false");
             List permissions = permissionQuery.list();
             permissionSet.add(permissions);
 
@@ -104,6 +125,18 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager {
     }
 
     /**
+     * Disables a Permission (effectively rendering it as removed).
+     *
+     * @param permission The object describing the permission to be removed.
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
+     * @throws UnknownEntityException if the permission does not exist.
+     */
+    public synchronized void disablePermission(Permission permission) throws DataBackendException, UnknownEntityException {
+        getPersistenceHelper().disableEntity(permission);
+    }
+
+    /**
      * Removes a Permission from the system.
      *
      * @param permission The object describing the permission to be removed.
@@ -111,15 +144,8 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager {
      *         backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public synchronized void removePermission(Permission permission) throws DataBackendException,
-            UnknownEntityException {
-        boolean permissionExists = false;
-        permissionExists = checkExists(permission);
-        if (permissionExists) {
-            getPersistenceHelper().removeEntity(permission);
-        } else {
-            throw new UnknownEntityException("Unknown permission '" + permission + "'");
-        }
+    public synchronized void removePermission(Permission permission) throws DataBackendException, UnknownEntityException {
+        getPersistenceHelper().removeEntity(permission);
     }
 
     /**

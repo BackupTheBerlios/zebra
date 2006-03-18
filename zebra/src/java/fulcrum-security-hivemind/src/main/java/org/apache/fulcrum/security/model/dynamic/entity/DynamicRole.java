@@ -30,7 +30,7 @@ import org.apache.fulcrum.security.util.PermissionSet;
  * all in many to many relationships.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicRole.java,v 1.1 2005/11/14 18:20:50 bgidley Exp $
+ * @version $Id: DynamicRole.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class DynamicRole extends SecurityEntityImpl implements Role
 {

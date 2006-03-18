@@ -20,12 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.apache.fulcrum.security.AbstractSecurityServiceTest;
-import org.apache.fulcrum.security.PermissionManager;
-import org.apache.fulcrum.security.RoleManager;
-import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -230,7 +225,8 @@ public abstract class AbstractDynamicModelManagerTest extends AbstractSecuritySe
         assertFalse(((DynamicRole) role).getGroups().contains(group));
     }
 
-    public void testRetrieveingUsersByGroup() throws Exception {
+    @SuppressWarnings("unchecked")
+	public void testRetrieveingUsersByGroup() throws Exception {
         User user = getUserManager().getUserInstance("Joe3");
         getUserManager().addUser(user, "mc");
         String GROUP_NAME = "oddbug2";

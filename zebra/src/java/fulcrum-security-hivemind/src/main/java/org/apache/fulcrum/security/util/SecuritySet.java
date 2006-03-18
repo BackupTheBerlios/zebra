@@ -38,7 +38,7 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: SecuritySet.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: SecuritySet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public abstract class SecuritySet implements Serializable, Set
 {
@@ -69,7 +69,8 @@ public abstract class SecuritySet implements Serializable, Set
 	 * @return A Set Object
 	 *  
 	 */
-    public Set getSet()
+    @SuppressWarnings("unchecked")
+	public Set getSet()
     {
         return new HashSet(idMap.values());
     }
@@ -78,7 +79,8 @@ public abstract class SecuritySet implements Serializable, Set
 	 * 
 	 * @return The Set of Names in this Object, backed by the actual data.
 	 */
-    public Set getNames()
+    @SuppressWarnings("unchecked")
+	public Set getNames()
     {
         Set names = new HashSet();
         for (Iterator i = getSet().iterator();i.hasNext();){
@@ -253,7 +255,8 @@ public abstract class SecuritySet implements Serializable, Set
 	 * 
 	 * @see java.util.Collection#toArray(java.lang.Object[])
 	 */
-    public Object[] toArray(Object[] a)
+    @SuppressWarnings("unchecked")
+	public Object[] toArray(Object[] a)
     {
         return getSet().toArray(a);
     }

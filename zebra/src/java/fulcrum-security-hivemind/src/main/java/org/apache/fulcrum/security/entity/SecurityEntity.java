@@ -25,7 +25,7 @@ package org.apache.fulcrum.security.entity;
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
- * @version $Id: SecurityEntity.java,v 1.1 2005/11/14 18:20:46 bgidley Exp $
+ * @version $Id: SecurityEntity.java,v 1.2 2006/03/18 16:19:37 biggus_richus Exp $
  */
 
 public interface SecurityEntity
@@ -57,4 +57,22 @@ public interface SecurityEntity
      * @param id The new Id of the SecurityEntity
      */
     void setId(Object id);
+    
+    /**
+     * 
+     * @return Whether the SecurityEntity is disabled
+     *
+     * @author richard.brooks
+     * Created on 17-Mar-2006
+     */
+    boolean isDisabled();
+    
+    /**
+     * 
+     * @param disabled Whether the SecurityEntity is diabled
+     *
+     * @author richard.brooks
+     * Created on 17-Mar-2006
+     */
+    void setDisabled(boolean disabled);
 }

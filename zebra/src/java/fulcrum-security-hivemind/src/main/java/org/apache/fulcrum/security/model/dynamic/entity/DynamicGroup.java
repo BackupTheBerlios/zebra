@@ -30,12 +30,13 @@ import org.apache.fulcrum.security.util.UserSet;
  * all in many to many relationships.
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicGroup.java,v 1.1 2005/11/14 18:20:50 bgidley Exp $
+ * @version $Id: DynamicGroup.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class DynamicGroup extends SecurityEntityImpl implements Group
 {
     private Set roleSet = new RoleSet();
     private Set userSet = new UserSet();
+    
     /**
      * @return
      */

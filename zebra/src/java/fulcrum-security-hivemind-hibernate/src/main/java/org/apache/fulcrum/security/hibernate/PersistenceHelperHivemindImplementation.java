@@ -30,7 +30,11 @@ public class PersistenceHelperHivemindImplementation implements PersistenceHelpe
             }
             throw new DataBackendException("Problem removing entity:" + he.getMessage(), he);
         }
-
+    }
+    
+    public void disableEntity(SecurityEntity entity) throws DataBackendException {
+    	entity.setDisabled(true);
+    	updateEntity(entity);
     }
 
     public void updateEntity(SecurityEntity entity) throws DataBackendException {

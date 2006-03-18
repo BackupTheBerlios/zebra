@@ -12,7 +12,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class HibernateDynamicGroup extends DynamicGroup{
+public class HibernateDynamicGroup extends DynamicGroup {
 
     @Override
     @Id @GeneratedValue
@@ -39,10 +39,12 @@ public class HibernateDynamicGroup extends DynamicGroup{
 	@Override
     @ManyToMany
     public Set<HibernateDynamicUser> getUsersAsSet() {
-
         return super.getUsersAsSet();
     }
 
-   
-
+    @Override
+    @Basic
+    public boolean isDisabled() {
+    	return super.isDisabled();
+    }
 }

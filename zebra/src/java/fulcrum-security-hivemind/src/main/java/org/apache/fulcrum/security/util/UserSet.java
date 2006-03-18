@@ -27,12 +27,14 @@ import org.apache.fulcrum.security.entity.User;
  * force the type of set.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: UserSet.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: UserSet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class UserSet
         extends SecuritySet
 {
-    /**
+	private static final long serialVersionUID = 4415634631270197073L;
+
+	/**
      * Constructs an empty UserSet
      */
     public UserSet()
@@ -61,7 +63,8 @@ public class UserSet
      * @return True if User was added; false if UserSet already
      * contained the User.
      */
-    public boolean add(User user)
+    @SuppressWarnings("unchecked")
+	public boolean add(User user)
     {
         if (contains(user)){
             return false;            
@@ -192,7 +195,8 @@ public class UserSet
      *
      * @return An Array of User objects.
      */
-    public User[] getUsersArray()
+    @SuppressWarnings("unchecked")
+	public User[] getUsersArray()
     {
         return (User[]) getSet().toArray(new User[0]);
     }

@@ -15,11 +15,10 @@ package org.apache.fulcrum.security.spi;
  *  limitations under the License.
  */
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -28,15 +27,11 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * with testing and prototyping of ideas.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractGroupManager.java,v 1.1 2005/11/14 18:20:48 bgidley Exp $
+ * @version $Id: AbstractGroupManager.java,v 1.2 2006/03/18 16:19:37 biggus_richus Exp $
  */
 public abstract class AbstractGroupManager
     extends AbstractEntityManager
-    implements GroupManager
-{
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractGroupManager.class);
-
+    implements GroupManager {
     protected abstract Group persistNewGroup(Group group) throws DataBackendException;
 
     /**
@@ -48,15 +43,12 @@ public abstract class AbstractGroupManager
     * @return an object implementing Group interface.
     * @throws DataBackendException if the object could not be instantiated.
     */
-    public Group getGroupInstance() throws DataBackendException
-    {
+    public Group getGroupInstance() throws DataBackendException {
         Group group;
-        try
-        {
+        try {
             group = (Group) Class.forName(getClassName()).newInstance();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             throw new DataBackendException(
                 "Problem creating instance of class " + getClassName(),
                 e);
@@ -76,8 +68,7 @@ public abstract class AbstractGroupManager
     	*
     	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Group getGroupInstance(String groupName) throws DataBackendException
-    {
+    public Group getGroupInstance(String groupName) throws DataBackendException {
         Group group = getGroupInstance();
         group.setName(groupName);
         return group;
@@ -93,13 +84,17 @@ public abstract class AbstractGroupManager
      * @throws UnknownEntityException if the group does not exist.
      */
     public Group getGroupByName(String name)
-        throws DataBackendException, UnknownEntityException
-    {
+        throws DataBackendException, UnknownEntityException, EntityDisabledException {
         Group group = getAllGroups().getGroupByName(name);
-        if (group == null)
-        {
+        
+        if (group == null) {
             throw new UnknownEntityException("The specified group does not exist");
         }
+        
+        if (group.isDisabled()) {
+        	throw new EntityDisabledException("Group is disabled");
+        }
+        
         return group;
     }
     /**
@@ -115,13 +110,16 @@ public abstract class AbstractGroupManager
      *            storage.
      */
     public Group getGroupById(Object id)
-        throws DataBackendException, UnknownEntityException
-    {
+        throws DataBackendException, UnknownEntityException, EntityDisabledException {
         Group group = getAllGroups().getGroupById(id);
-        if (group == null)
-        {
+        if (group == null) {
             throw new UnknownEntityException("The specified group does not exist");
         }
+        
+        if (group.isDisabled()) {
+        	throw new EntityDisabledException("Group is disabled");
+        }
+        
         return group;
     }
 
@@ -135,29 +133,17 @@ public abstract class AbstractGroupManager
     	* @throws EntityExistsException if the group already exists.
     	*/
     public synchronized Group addGroup(Group group)
-        throws DataBackendException, EntityExistsException
-    {
-        boolean groupExists = false;
-        if (StringUtils.isEmpty(group.getName()))
-        {
+        throws DataBackendException, EntityExistsException {
+        if (StringUtils.isEmpty(group.getName())) {
             throw new DataBackendException("Could not create a group with empty name!");
         }
-        if (group.getId() != null)
-        {
-            throw new DataBackendException("Could not create a group with an id!");
-        }
-        groupExists = checkExists(group);
-        if (!groupExists)
-        {
 
-            // return the object with correct id
-            return persistNewGroup(group);
+        if (checkExists(group)) {
+	        throw new EntityExistsException(
+	                "Group '" + group + "' is unavailable");
         }
-        else
-        {
-            throw new EntityExistsException(
-                "Group '" + group + "' already exists");
-        }
+
+        return persistNewGroup(group);
     }
     
     /**
@@ -170,8 +156,7 @@ public abstract class AbstractGroupManager
 	* @throws DataBackendException if there was an error accessing
 	*         the data backend.
 	*/
-	public boolean checkExists(Group group) throws DataBackendException
-	{
+	public boolean checkExists(Group group) throws DataBackendException	{
 	    return checkExists(group.getName());
 	}      
 

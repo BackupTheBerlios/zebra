@@ -21,12 +21,14 @@ package org.apache.fulcrum.security.util;
  * backend of the SecurityService.
  *
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: DataBackendException.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: DataBackendException.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class DataBackendException
     extends TurbineSecurityException
 {
-    /**
+	private static final long serialVersionUID = 4037968846303489743L;
+
+	/**
      * Construct an DataBackendException with specified detail message.
      *
      * @param msg The detail message.

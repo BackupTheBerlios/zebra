@@ -18,7 +18,6 @@ public class HibernateDynamicPermission extends DynamicPermission {
 	@Override
     @ManyToMany
     public Set<HibernateDynamicRole> getRolesAsSet() {
-
         return super.getRolesAsSet();
     }
 
@@ -35,5 +34,9 @@ public class HibernateDynamicPermission extends DynamicPermission {
         return super.getName();
     }
     
-
+    @Override
+    @Basic
+    public boolean isDisabled() {
+    	return super.isDisabled();
+    }
 }

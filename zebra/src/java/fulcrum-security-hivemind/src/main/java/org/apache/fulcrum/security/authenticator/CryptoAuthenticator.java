@@ -15,13 +15,10 @@ package org.apache.fulcrum.security.authenticator;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import java.security.NoSuchAlgorithmException;
-
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
 import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
  * This class authenticates using the Fulcrum Crypto service a user and their

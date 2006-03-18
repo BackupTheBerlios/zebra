@@ -20,8 +20,9 @@ package org.apache.fulcrum.security.util;
  * Thrown to indicate that the password supplied by user was incorrect.
  *
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: PasswordMismatchException.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: PasswordMismatchException.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
+@SuppressWarnings("serial")
 public class PasswordMismatchException
     extends TurbineSecurityException
 {

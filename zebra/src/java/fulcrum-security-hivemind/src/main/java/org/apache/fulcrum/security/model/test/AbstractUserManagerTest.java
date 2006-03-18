@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.fulcrum.security.AbstractSecurityServiceTest;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordExpiredException;
 import org.apache.fulcrum.security.util.PasswordHistoryException;
@@ -152,6 +153,7 @@ public abstract class AbstractUserManagerTest extends
 		getUserManager().authenticate(user, "jc");
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testChangePassword() throws Exception {
 		User user = getUserManager().getUserInstance("Jonathan");
 		getUserManager().addUser(user, "one");
@@ -234,12 +236,31 @@ public abstract class AbstractUserManagerTest extends
 		assertNotNull(acl);
 	}
 
+	public void testDisableUser() throws Exception {
+		User user = getUserManager().getUserInstance("Dave");
+		getUserManager().addUser(user, "scottysaywhat");
+		getUserManager().disableUser(user);
+		try {
+			getUserManager().getUser(user.getName());
+			fail("Should have thrown EntityDisabledException");
+		} catch (EntityDisabledException ede) {
+			// brilliant!
+		}
+		
+		try {
+			getUserManager().addUser(user, "scottyzip");
+			fail("Should have thrown EntityExistsException");
+		} catch (EntityExistsException eee) {
+			// brilliant!
+		}
+	}
+	
 	public void testRemoveUser() throws Exception {
 		User user = getUserManager().getUserInstance("Rick");
 		getUserManager().addUser(user, "nb");
 		getUserManager().removeUser(user);
 		try {
-			User user2 = getUserManager().getUser(user.getName());
+			getUserManager().getUser(user.getName());
 			fail("Should have thrown UEE");
 		} catch (UnknownEntityException uee) {
 			// good

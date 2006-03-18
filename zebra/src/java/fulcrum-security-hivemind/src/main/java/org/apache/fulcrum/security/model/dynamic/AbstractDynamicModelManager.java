@@ -171,6 +171,7 @@ public abstract class AbstractDynamicModelManager extends AbstractManager
 	 * side of the function. It is not abstract as a in memory implementation
 	 * would not need to do anything.
 	 */
+	@SuppressWarnings("unchecked")
 	public void addDelegate(User delegator, User delegatee)
 			throws DataBackendException, UnknownEntityException {
 		DynamicUser dynamicDelegator = (DynamicUser) delegator;

@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
@@ -40,13 +38,9 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley </a>
- * @version $Id: DynamicACLFactory.java,v 1.1 2005/11/14 18:20:46 bgidley Exp $
+ * @version $Id: DynamicACLFactory.java,v 1.2 2006/03/18 16:19:38 biggus_richus Exp $
  */
 public class DynamicACLFactory extends AbstractManager implements ACLFactory {
-
-	/** Logging */
-	private static Log log = LogFactory.getLog(DynamicACLFactory.class);
-
 	/**
 	 * Construct a new ACL object.
 	 * 
@@ -64,8 +58,6 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory {
 	 */
 	private AccessControlList getAclInstance(Map roles, Map permissions)
 			throws UnknownEntityException {
-		Object[] objects = { roles, permissions };
-		String[] signatures = { Map.class.getName(), Map.class.getName() };
 		AccessControlList accessControlList;
 		try {
 			/*
@@ -84,6 +76,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory {
 		return accessControlList;
 	}
 
+	@SuppressWarnings("unchecked")
 	public AccessControlList getAccessControlList(User user) {
 		Map roleSets = new HashMap();
 		Map permissionSets = new HashMap();
@@ -106,6 +99,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addDelegators(DynamicUser user, Set users) {
 		for (Iterator iter = user.getDelegators().iterator(); iter.hasNext();) {
 			DynamicUser delegatorUser = (DynamicUser) iter.next();
@@ -126,6 +120,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory {
 	 * @param roleSets
 	 * @param permissionSets
 	 */
+	@SuppressWarnings("unchecked")
 	private void addRolesAndPermissions(User user, Map roleSets,
 			Map permissionSets) {
 		for (Iterator i = ((DynamicUser) user).getGroups().iterator(); i

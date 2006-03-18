@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.hibernate;
  */
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -33,12 +31,9 @@ import org.hibernate.Query;
  * This implementation persists to a database via Hibernate.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: HibernateRoleManagerImpl.java,v 1.1 2005/11/25 08:50:12 bgidley Exp $
+ * @version $Id: HibernateRoleManagerImpl.java,v 1.2 2006/03/18 16:18:21 biggus_richus Exp $
  */
 public class HibernateRoleManagerImpl extends AbstractRoleManager {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernateRoleManagerImpl.class);
-
     private PersistenceHelper persistenceHelper;
 
     /**
@@ -110,6 +105,26 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager {
     }
 
     /**
+     * Retrieves all non-disabled roles defined in the system.
+     *
+     * @return the names of all non-disabled roles defined in the system.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     */
+    public RoleSet getRoles() throws DataBackendException {
+        RoleSet roleSet = new RoleSet();
+        try {
+            Query query = getPersistenceHelper().retrieveSession().createQuery("from " + getClassName() + " r where r.disabled = false");
+
+            List roles = query.list();
+            roleSet.add(roles);
+        } catch (HibernateException e) {
+            throw new DataBackendException("Error retriving role information", e);
+        }
+        return roleSet;
+    }
+
+    /**
      * Creates a new role with specified attributes.
      *
      * @param role the object describing the role to be created.
@@ -133,19 +148,19 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager {
      * @throws UnknownEntityException if the role does not exist.
      */
     public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException {
-        boolean roleExists = false;
-        try {
-            roleExists = checkExists(role);
-            if (roleExists) {
-                getPersistenceHelper().removeEntity(role);
-            } else {
-                throw new UnknownEntityException("Unknown role '" + role + "'");
-            }
-        } catch (Exception e) {
-            log.error("Failed to delete a Role");
-            log.error(e);
-            throw new DataBackendException("removeRole(Role) failed", e);
-        }
+        getPersistenceHelper().removeEntity(role);
+    }
+
+    /**
+     * Disables a Role (effectively rendering it as removed).
+     *
+     * @param role The object describing the role to be disabled.
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
+     * @throws UnknownEntityException if the role does not exist.
+     */
+    public synchronized void disableRole(Role role) throws DataBackendException, UnknownEntityException {
+        getPersistenceHelper().disableEntity(role);
     }
 
     /**

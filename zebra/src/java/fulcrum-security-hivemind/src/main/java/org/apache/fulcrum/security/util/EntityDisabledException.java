@@ -7,18 +7,18 @@ package org.apache.fulcrum.security.util;
  * Created on Jan 13, 2006
  */
 
-public class UserLockedException extends TurbineSecurityException {
+public class EntityDisabledException extends TurbineSecurityException {
 
-	private static final long serialVersionUID = 8284553869426136480L;
+	private static final long serialVersionUID = 3325662922250048072L;
 
 	/**
-     * Construct a UserLockedException with specified detail message.
+     * Construct a UserDisabledException with specified detail message.
      * @param msg The detail message.
      *
      * @author richard.brooks
-     * Created on Jan 13, 2006
+     * Created on Mar 17, 2006
      */
-	public UserLockedException(String msg)
+	public EntityDisabledException(String msg)
     {
         super(msg);
     }

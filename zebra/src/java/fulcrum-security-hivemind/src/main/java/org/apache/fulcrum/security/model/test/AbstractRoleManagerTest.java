@@ -18,6 +18,7 @@ package org.apache.fulcrum.security.model.test;
 
 import org.apache.fulcrum.security.AbstractSecurityServiceTest;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -93,7 +94,7 @@ public abstract class AbstractRoleManagerTest extends AbstractSecurityServiceTes
         int size = getRoleManager().getAllRoles().size();
         getRoleManager().removeRole(role);
         try {
-            Role role2 = getRoleManager().getRoleById(role.getId());
+            getRoleManager().getRoleById(role.getId());
             fail("Should have thrown UEE");
         } catch (UnknownEntityException uee) {
             //good
@@ -101,6 +102,25 @@ public abstract class AbstractRoleManagerTest extends AbstractSecurityServiceTes
         assertEquals(size - 1, getRoleManager().getAllRoles().size());
     }
 
+	public void testDisableRole() throws Exception {
+        Role role = getRoleManager().getRoleInstance("CLEAN_KENNEL_L");
+        getRoleManager().addRole(role);
+        getRoleManager().disableRole(role);
+		try {
+			getRoleManager().getRoleByName(role.getName());
+			fail("Should have thrown EntityDisabledException");
+		} catch (EntityDisabledException ede) {
+			// brilliant!
+		}
+		
+		try {
+			getRoleManager().addRole(role);
+			fail("Should have thrown EntityExistsException");
+		} catch (EntityExistsException eee) {
+			// brilliant!
+		}
+	}
+    
     public void testCheckExists() throws Exception {
         Role role = getRoleManager().getRoleInstance("GREET_PEOPLE");
         getRoleManager().addRole(role);

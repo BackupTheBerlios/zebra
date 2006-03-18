@@ -8,6 +8,8 @@ package org.apache.fulcrum.security.util;
  */
 
 public class PasswordExpiredException extends TurbineSecurityException {
+	private static final long serialVersionUID = 7248522630844763772L;
+
 	/**
      * Construct a PasswordExpiredException with specified detail message.
      * @param msg The detail message.

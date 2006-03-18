@@ -32,6 +32,8 @@ public interface PersistenceHelper
 	
 	public void updateEntity(SecurityEntity entity) throws DataBackendException;
 	
+	public void disableEntity(SecurityEntity entity) throws DataBackendException;
+	
 	public void addEntity(SecurityEntity entity) throws DataBackendException;
 	
 	public Session retrieveSession() throws HibernateException;

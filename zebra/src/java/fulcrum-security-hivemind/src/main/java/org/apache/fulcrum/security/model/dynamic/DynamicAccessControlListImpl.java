@@ -31,11 +31,12 @@ import org.apache.fulcrum.security.util.RoleSet;
  * @todo Need to rethink the two maps..  Why not just a single list of groups?  That would
  * then cascade down to all the other roles and so on..
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicAccessControlListImpl.java,v 1.1 2005/11/14 18:20:46 bgidley Exp $
+ * @version $Id: DynamicAccessControlListImpl.java,v 1.2 2006/03/18 16:19:38 biggus_richus Exp $
  */
 public class DynamicAccessControlListImpl implements DynamicAccessControlList
 {
-    /** The sets of roles that the user has in different groups */
+	private static final long serialVersionUID = -5180551537096244085L;
+	/** The sets of roles that the user has in different groups */
     private Map roleSets;
     /** The sets of permissions that the user has in different groups */
     private Map permissionSets;

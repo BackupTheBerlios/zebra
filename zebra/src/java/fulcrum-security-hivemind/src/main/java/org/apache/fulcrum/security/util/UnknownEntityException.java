@@ -21,12 +21,14 @@ package org.apache.fulcrum.security.util;
  * was requested does not exist.
  *
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id: UnknownEntityException.java,v 1.1 2005/11/14 18:20:45 bgidley Exp $
+ * @version $Id: UnknownEntityException.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
  */
 public class UnknownEntityException
     extends TurbineSecurityException
 {
-    /**
+	private static final long serialVersionUID = 6902116254535728203L;
+
+	/**
      * Construct an UnknownEntityException with specified detail message.
      *
      * @param msg The detail message.
