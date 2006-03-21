@@ -47,6 +47,7 @@ import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.hibernate.HibernateException;
@@ -757,6 +758,8 @@ public class ZebraProcessInstance implements IProcessInstance {
 
             this.registerDynamicPermission(dynamicPermissionName, permission);
 
+        } catch (EntityDisabledException e) {
+            log.error("Could not get permission:" + userName, e);
         } catch (DataBackendException e) {
             log.error("Could not get permission:" + userName, e);
             throw new RunTaskException(e);

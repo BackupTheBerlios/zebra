@@ -15,6 +15,7 @@ import org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityDisabledException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -81,6 +82,8 @@ public class ZebraSecurity {
                         this.log.error("Somehow the entity exists and does not exist", e);
                         throw new NestableRuntimeException(e);
                     }
+                } catch (EntityDisabledException e) {
+                    log.error("Error getting permission set:", e);
                 }
             }
 
@@ -109,6 +112,9 @@ public class ZebraSecurity {
             }
             this.permissionManager.addPermission(permission);
             return permission;
+        } catch (EntityDisabledException e) {
+            this.log.error("Failed to find or create permission:" + permissionName, e);
+            throw new NestableRuntimeException(e);
         } catch (DataBackendException e) {
             this.log.error("Failed to find or create permission:" + permissionName, e);
             throw new NestableRuntimeException(e);
