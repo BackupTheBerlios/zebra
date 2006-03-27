@@ -27,7 +27,6 @@ import org.apache.hivemind.util.ClasspathResource;
 import com.anite.zebra.core.definitions.api.IProcessDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
-import com.anite.zebra.core.factory.api.IStateFactory;
 import com.anite.zebra.core.factory.exceptions.CreateObjectException;
 import com.anite.zebra.core.factory.exceptions.StateFailureException;
 import com.anite.zebra.core.state.api.IFOE;
