@@ -29,7 +29,15 @@ import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 public abstract class ZebraTaskAction implements ITaskAction {
 
     public final void runTask(ITaskInstance task) throws RunTaskException {
-        this.runTask((ZebraTaskInstance) task);
+        try {
+            this.runTask((ZebraTaskInstance) task);
+        } catch (Throwable e) {
+            // This should not be necessary - but as some badly written tasks have been
+            // throwing RunTimeExceptions we have this.
+            // Throwing a runtime exceptions is an extremely bad idea as it leaves locks on the process 
+            // in the DB
+            throw new RunTaskException(e);
+        }
     }
 
     /**
