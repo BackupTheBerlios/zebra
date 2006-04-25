@@ -5,7 +5,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-hivemind</artifactId>
     <packaging>jar</packaging>
-    <version>2.4</version>
+    <version>2.5</version>
     <name>Zebra Hivemind Layer</name>
     <url>http://zebra.berlios.de/</url>
     <developers>
