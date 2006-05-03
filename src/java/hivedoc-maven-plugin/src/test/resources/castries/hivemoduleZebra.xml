@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.zebra" version="1.0.0">
+    <implementation service-id="zebra.zebraDefinitionFactory" if="not (class org.mortbay.Jetty)">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.impl.ZebraDefinitionFactoryImpl">
+                <set property="processesPath" value="src/main/webapp/WEB-INF/processes"/>
+                <set-service property="session" service-id="fulcrum.hibernate.Session"/>
+            </construct>
+        </invoke-factory>
+    </implementation>
+    <implementation service-id="zebra.zebraDefinitionFactory" if="class org.mortbay.Jetty">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.impl.ZebraDefinitionFactory">
+                <set property="processesPath" value="WEB-INF/processes"/>
+                <set-service property="session" service-id="fulcrum.hibernate.Session"/>
+            </construct>
+        </invoke-factory>
+    </implementation>
+    
+    <!-- 
+    	listener to calculate the due date for the different types of calls 
+    	(query, web, courtesy).
+    -->
+    <service-point id="dueDateFactoryListener"
+        interface="com.anite.zebra.hivemind.api.StateFactoryListener">
+        <invoke-factory>
+            <construct class="com.anite.castries.services.callrecord.DueDateListener">
+                <event-listener service-id="zebra.zebraState"/>
+            </construct>
+        </invoke-factory>
+    </service-point>
+    <contribution configuration-id="hivemind.EagerLoad">
+        <load service-id="com.anite.castries.zebra.dueDateFactoryListener"/>
+    </contribution>
+    
+</module>

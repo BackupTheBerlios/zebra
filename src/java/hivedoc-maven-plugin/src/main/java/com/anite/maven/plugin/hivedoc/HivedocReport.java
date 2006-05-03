@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,12 +36,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.hivemind.ModuleDescriptorProvider;
-import org.apache.hivemind.ant.RegistrySerializer;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.impl.XmlModuleDescriptorProvider;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -50,10 +50,13 @@ import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
-import org.w3c.dom.Document;
+import org.dom4j.Document;
+import org.dom4j.io.DocumentSource;
+
 
 /**
  * @goal hivedoc
+ * @requiresDependencyResolution compile
  * @description builds hivedoc for the current project
  * @author ben.gidley
  *
@@ -62,6 +65,11 @@ public class HivedocReport extends AbstractMojo implements MavenReport {
 
     private static final String XSLT_FILE = "hivemind.xsl";
 
+    /**
+     * @parameter
+     */
+    private List ignoredJars;
+    
     /**
      * @readonly
      * @parameter expression="${project}"
@@ -76,7 +84,7 @@ public class HivedocReport extends AbstractMojo implements MavenReport {
             ModuleDescriptorProvider provider = new XmlModuleDescriptorProvider(new DefaultClassResolver(
                     getClassLoader()));
 
-            RegistrySerializer serializer = new RegistrySerializer();
+            Dom4JRegistrySerializer serializer = new Dom4JRegistrySerializer();
             serializer.addModuleDescriptorProvider(provider);
 
             Document result = serializer.createRegistryDocument();
@@ -85,7 +93,7 @@ public class HivedocReport extends AbstractMojo implements MavenReport {
             File outputFolder = new File(project.getReporting().getOutputDirectory() + "/hivedoc");
             outputFolder.mkdirs();
             File outputFile = new File(outputFolder, "index.html");
-            Source registryDocument = new DOMSource(result);
+            DocumentSource registryDocument = new DocumentSource(result);
             Source xsltFile = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(XSLT_FILE));
             Result output = new StreamResult(new FileOutputStream(outputFile));
 
@@ -154,8 +162,25 @@ public class HivedocReport extends AbstractMojo implements MavenReport {
      * @throws DependencyResolutionRequiredException
      */
     private String[] getClasspath() throws DependencyResolutionRequiredException {
-        List paths = project.getRuntimeClasspathElements();
+    	List paths = project.getRuntimeClasspathElements();
         paths.add(new File(project.getBuild().getOutputDirectory()).getAbsolutePath() + "/");
+
+        // Now remove hivemind itself and hivemind lib as they appear to have
+        // invalid hivemodules that break the xslt
+        for (int i = 0; i < paths.size(); i++) {
+            String file = (String) paths.get(i);
+
+            if (this.ignoredJars != null) {
+                for (Iterator iter = ignoredJars.iterator(); iter.hasNext();) {
+                    String name = (String) iter.next();
+                    if (file.endsWith(name)) {
+                        paths.remove(file);
+                        i--;
+                    }
+                }
+
+            } 
+        }
 
         return (String[]) paths.toArray(new String[0]);
     }
@@ -214,7 +239,7 @@ public class HivedocReport extends AbstractMojo implements MavenReport {
 
     public void setReportOutputDirectory(File outputDirectory) {
         //noop
-        
+
     }
 
     public File getReportOutputDirectory() {

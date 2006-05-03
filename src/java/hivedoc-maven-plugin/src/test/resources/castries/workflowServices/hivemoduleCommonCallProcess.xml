@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.workflows.commonCallProcess" version="1.0.0">
+    <service-point id="WhichCallType" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct class="com.anite.castries.workflows.commonCallProcess.WhichCallType"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="CallQueueService"
+        interface="com.anite.castries.workflows.commonCallProcess.CallQueueService">
+        <invoke-factory>
+            <construct class="com.anite.castries.workflows.commonCallProcess.CallQueueService"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="CallMadeLogOutcomeAndFollowUp"
+        interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.commonCallProcess.CallMadeLogOutcomeAndFollowUp"
+            />
+        </invoke-factory>
+    </service-point>
+    <service-point id="QueueReissueNotice" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct class="com.anite.castries.workflows.commonCallProcess.QueueReissueNotice"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="PhoneNumber" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct class="com.anite.castries.workflows.commonCallProcess.PhoneNumber"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="QueueIssuePaperForm" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct class="com.anite.castries.workflows.commonCallProcess.QueueIssuePaperForm"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="QueueIssuePasswordReminder" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.commonCallProcess.QueueIssuePasswordReminder"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="IsValidCallBack" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.commonCallProcess.IsValidCallBack">
+                <set property="callsAllowed" value="2" />
+              </construct>  
+        </invoke-factory>
+    </service-point>
+    <service-point id="CallBackDelayMet" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.commonCallProcess.CallBackDelayMet"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="CallStateManager" interface="com.anite.castries.services.callrecord.api.CallStateManager">
+		<invoke-factory model="threaded">
+			<construct class="com.anite.castries.services.callrecord.CallStateManagerImpl" />
+		</invoke-factory>
+	</service-point>
+	
+</module>

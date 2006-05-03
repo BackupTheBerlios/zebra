@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.tpr.soapgateway" version="1.0.0">
+  <service-point id="replication" interface="com.anite.tpr.soapgateway.replication.api.Replication">
+    <invoke-factory model="threaded">
+      <construct class="com.anite.tpr.soapgateway.replication.impl.ReplicationImpl"> </construct>
+    </invoke-factory>
+  </service-point>
+  <service-point id="newReturn" interface="com.anite.tpr.soapgateway.newReturn.api.NewReturn">
+    <invoke-factory model="threaded">
+      <construct class="com.anite.tpr.soapgateway.newReturn.impl.NewReturnImpl"> </construct>
+    </invoke-factory>
+  </service-point>
+  <service-point id="export" interface="com.anite.tpr.soapgateway.export.api.Export">
+    <invoke-factory model="threaded">
+      <construct class="com.anite.tpr.soapgateway.export.impl.ExportImpl"> </construct>
+    </invoke-factory>
+  </service-point>
+  <implementation service-id="com.anite.tpr.serviceRequestManager.serviceRequestManager">
+    <invoke-factory>
+      <construct class="com.anite.tpr.serviceRequestManager.impl.ServiceRequestManagerImpl"/>
+    </invoke-factory>
+  </implementation>
+</module>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.randomString" version="1.0.0">
+    <service-point id="RandomString" interface="com.anite.castries.randomString.api.RandomStringGeneration">
+        <invoke-factory>
+            <construct class="com.anite.castries.randomString.impl.RandomStringImpl">
+                <set property="passwordSubLength" value="3"/>
+                <set property="usernameLength" value="6"/>
+                <set property="callBackCodeLength" value="6"/>
+            </construct>
+        </invoke-factory>
+    </service-point>
+</module>

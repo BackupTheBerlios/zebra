@@ -6,7 +6,7 @@
     <artifactId>hivedoc-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Hivedoc Plugin</name>
-    <version>0.2</version>
+    <version>0.3</version>
     <inceptionYear>2005</inceptionYear>
     <developers>
         <developer>
@@ -26,7 +26,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
-                    <downloadSources>true</downloadSources>
+                    <downloadSources>false</downloadSources>
                 </configuration>
                 <executions>
                     <execution>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>hivemind</groupId>
             <artifactId>hivemind</artifactId>
-            <version>1.1</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>

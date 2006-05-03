@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.openreports.authentication" version="1.0.0">
+    <service-point id="Authentication" interface="com.anite.castries.openreports.authentication.AuthenticationService">
+        <invoke-factory>
+            <construct class="com.anite.castries.openreports.authentication.DefaultAuthenticationService">
+                <!-- Time in seconds that the key is valid for. -->
+				<set property="expiryTime" value="600"/>
+            </construct>
+        </invoke-factory>
+		<interceptor service-id="hivemind.LoggingInterceptor"/>
+    </service-point>
+</module>

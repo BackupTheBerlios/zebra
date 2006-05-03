@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.configuration" version="1.0.0">
+	<!--All user configuratable implementations should be put here
+		Items that are theoretically configurable but unlikely to be configured should not
+		go here and should be in their own submodule file -->
+	<implementation service-id="fulcrum.security.hivemind.userManagerDynamic">
+		<invoke-factory>
+			<construct class="org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl">
+				<set property="className"
+					value="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser"/>
+				<set property="passwordDurationDays" value="28"/>
+				<set property="passwordCyclePolicy" value="5"/>
+				<set property="maxLoginAttempts" value="3"/>
+				<set property="lockResetHours" value="12"/>
+				<set-service property="authenticator"
+					service-id="fulcrum.security.authenticatorCrypto"/>
+				<set-service property="aclFactory" service-id="fulcrum.security.aclFactoryDynamic"/>
+			</construct>
+		</invoke-factory>
+	</implementation>
+	<implementation service-id="tprformcomponents.GeneralExceptionPresenter">
+		<invoke-factory>
+			<construct class="com.anite.tpr.services.exception.GeneralExceptionPresenter">
+				<set-object property="exceptionPageName" value="infrastructure:exceptionPageName"/>
+				<set-object property="requestExceptionReporter"
+					value="infrastructure:requestExceptionReporter"/>
+				<set-object property="responseRenderer" value="infrastructure:responseRenderer"/>
+				<set-configuration property="exceptionCases"
+					configuration-id="tprformcomponents.exceptionCases"/>
+			</construct>
+		</invoke-factory>
+	</implementation>
+	<contribution configuration-id="tapestry.InfrastructureOverrides">
+		<property name="exceptionPresenter"
+			object="service:tprformcomponents.GeneralExceptionPresenter"/>
+	</contribution>
+	<!-- The TPR Timeouts -->
+	<contribution configuration-id="printmanager.TprTimeLimits">
+		<timeLimits processTimeOut="58" issueChaserLetter="42" dueDateForCompletion="37"
+			issueReminderLetter="21" beginCourtesyCall="5"/>
+	</contribution>
+	<contribution configuration-id="tprformcomponents.exceptionCases">
+		<exceptionCase exceptionClass="org.hibernate.HibernateException" page="HibernateException"/>
+		<!-- Remove next line to send all other errors to the browser -->
+		<!-- exceptionCase exceptionClass="java.lang.Throwable" page="GeneralException"/-->
+	</contribution>
+</module>

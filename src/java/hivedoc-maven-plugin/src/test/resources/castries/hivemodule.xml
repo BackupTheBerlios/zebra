@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries" version="1.0.0">
+  <!-- On pain of being mocked no services should be declared 
+  here put them in submodules depending on what they are for 
+  Items likely to be user configured are to reside in the configuration.xml module 
+  -->
+  <sub-module descriptor="configuration.xml"/>
+  <sub-module descriptor="hivemoduleAuthentication.xml"/>
+  <sub-module descriptor="hivemoduleDataRetention.xml"/>
+  <sub-module descriptor="hivemoduleSoap.xml"/>
+  <sub-module descriptor="hivemoduleZebra.xml"/>
+  <sub-module descriptor="workflowServices/hivemoduleRandomGeneration.xml"/>
+  <!-- All workflow related services to reside in the workflow services sub folder
+       Each workflow will have its own sub-module -->
+  <sub-module descriptor="workflowServices/hivemoduleShared.xml"/>
+  <sub-module descriptor="workflowServices/hivemoduleSchemeReturn.xml"/>
+  <sub-module descriptor="workflowServices/hivemoduleSchemeTracking.xml"/>
+  <sub-module descriptor="workflowServices/hivemoduleCommonCallProcess.xml"/>
+  <sub-module descriptor="workflowServices/hivemoduleSchemeReturnDataEntry.xml"/>
+</module>

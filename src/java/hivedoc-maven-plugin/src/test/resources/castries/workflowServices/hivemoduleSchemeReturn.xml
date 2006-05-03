@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.workflows.schemeManagement" version="1.0.0">
+    <service-point id="QueueSchemeReturnNoticePrintItem"
+        interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeManagement.QueueSchemeReturnNoticePrintItem"
+            />
+        </invoke-factory>
+    </service-point>
+    <service-point id="LogXmlIssueRecievedEvent" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeManagement.LogXmlIssueRecievedEvent"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="AwaitPrintItemProcessing" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeManagement.AwaitPrintItemProcessing"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="GenerateTargetIssueDate" interface="com.anite.castries.workflows.schemeManagement.GenerateTargetIssueDate">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeManagement.GenerateTargetIssueDate"/>
+        </invoke-factory>
+    </service-point>
+</module>

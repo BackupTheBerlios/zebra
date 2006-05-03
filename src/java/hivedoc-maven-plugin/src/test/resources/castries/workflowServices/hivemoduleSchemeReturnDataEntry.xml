@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.workflows.schemeReturnDataEntry" version="1.0.0">    
+    <service-point id="DataEntryQueueService" interface="com.anite.castries.workflows.schemeReturnDataEntry.DataEntryQueueService">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeReturnDataEntry.DataEntryQueueService"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="QueueConfirmationLetters" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeReturnDataEntry.QueueConfirmationLetters"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="Duplicate" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeReturnDataEntry.Duplicate"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="Valid" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct
+                class="com.anite.castries.workflows.schemeReturnDataEntry.Valid"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="DuplicatePSRService"
+        interface="com.anite.castries.workflows.schemeReturnDataEntry.DuplicatePSRService">
+        <invoke-factory>
+            <construct class="com.anite.castries.workflows.schemeReturnDataEntry.DuplicatePSRService">
+				<set property="separator" value="-DUP-"/>
+			</construct>
+        </invoke-factory>
+    </service-point>
+</module>
+

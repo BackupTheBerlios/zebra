@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.workflows.shared" version="1.0.0">
+    <service-point id="GenerateSchemePassword" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct class="com.anite.castries.workflows.shared.GenerateSchemePassword"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="GeneratePassword" interface="com.anite.castries.services.password.GeneratePassword">
+        <invoke-factory>
+            <construct class="com.anite.castries.services.password.GeneratePassword"/>
+        </invoke-factory>
+    </service-point>    
+</module>

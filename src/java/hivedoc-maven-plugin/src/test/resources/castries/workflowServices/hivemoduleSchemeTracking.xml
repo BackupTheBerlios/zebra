@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.workflows.schemeTracking"
+	version="1.0.0">
+	<service-point id="PreReceiptSchedulerLogic"
+		interface="com.anite.zebra.core.api.ITaskAction">
+		<invoke-factory>
+			<construct
+				class="com.anite.castries.workflows.schemeTracking.PreReceiptSchedulerLogic">
+				<set-configuration property="timeLimits"
+					configuration-id="printmanager.TprTimeLimits" />
+			</construct>
+		</invoke-factory>
+	</service-point>
+	<service-point id="PostReceiptSchedulerLogic"
+		interface="com.anite.zebra.core.api.ITaskAction">
+		<invoke-factory>
+			<construct
+				class="com.anite.castries.workflows.schemeTracking.PostReceiptSchedulerLogic">
+				<set-configuration property="timeLimits"
+					configuration-id="printmanager.TprTimeLimits" />
+			</construct>
+		</invoke-factory>
+	</service-point>
+	<service-point id="QueueReminderLetters"
+		interface="com.anite.zebra.core.api.ITaskAction">
+		<invoke-factory>
+			<construct
+				class="com.anite.castries.workflows.schemeTracking.QueueReminderLetters" />
+		</invoke-factory>
+	</service-point>
+	<service-point id="QueueOverdueLetters"
+		interface="com.anite.zebra.core.api.ITaskAction">
+		<invoke-factory>
+			<construct
+				class="com.anite.castries.workflows.schemeTracking.QueueOverdueLetters" />
+		</invoke-factory>
+	</service-point>
+	<service-point id="ExportInvalidData"
+		interface="com.anite.zebra.core.api.ITaskAction">
+		<invoke-factory>
+			<construct
+				class="com.anite.castries.workflows.schemeTracking.ExportInvalidData" />
+		</invoke-factory>
+	</service-point>
+	<service-point id="ExportValidData"
+		interface="com.anite.zebra.core.api.ITaskAction">
+		<invoke-factory>
+			<construct
+				class="com.anite.castries.workflows.schemeTracking.ExportValidData" />
+		</invoke-factory>
+	</service-point>
+</module>

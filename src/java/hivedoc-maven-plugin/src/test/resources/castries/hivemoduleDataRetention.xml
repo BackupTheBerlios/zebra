@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="com.anite.castries.dataretention" version="1.0.0">
+    <service-point id="DataRetention" interface="com.anite.castries.dataretention.api.IDataRetentionService">
+        <invoke-factory>
+            <construct class="com.anite.castries.dataretention.impl.DataRetentionService">
+                <set property="minElapsedMonths" value="12"/>
+            </construct>
+        </invoke-factory>
+		<interceptor service-id="hivemind.LoggingInterceptor"/>
+    </service-point>
+</module>
