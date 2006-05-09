@@ -109,7 +109,7 @@
     <distributionManagement>
         <repository>
             <id>zebra-berlios</id>
-            <url>scp://shell.berlios.de/home/groups/zebra/htdocs/maven2</url>
+            <url>scp://shell.berlios.de/home/groups/zebra/htdocs/maven2plugins</url>
         </repository>
         <site>
             <id>zebra-berlios</id>
