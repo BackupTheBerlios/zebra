@@ -50,7 +50,7 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 	private static final String HIBERNATE_USERNAME_KEY = "hibernate.connection.username";
 
 
-	private static final String DEFAULT_MAX_CONNECTIONS = "10";
+	private static final String DEFAULT_MAX_CONNECTIONS = "27";
 
 	/*
 	 * This class only supports use of the following databases/drivers
@@ -99,7 +99,7 @@ public class QuartzSchedulerFactory implements ServiceImplementationFactory,
 					hibernateProperties.getProperty(HIBERNATE_PASSWORD_KEY));
 			defaults.put("org.quartz.dataSource.quartzDS.maxConnections",
 					DEFAULT_MAX_CONNECTIONS);
-			log.info(defaults.toString());
+            log.info(defaults.toString());
 			SchedulerFactory schedulerFactory = new StdSchedulerFactory(
 					defaults);
 			scheduler = schedulerFactory.getScheduler();
