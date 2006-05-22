@@ -31,31 +31,26 @@ import com.anite.zebra.hivemind.util.RegistryHelper;
 
 public class ScheduledTaskTransitionJob implements Job {
 
-	public void execute(JobExecutionContext context)
-			throws JobExecutionException {
-		JobDataMap data = context.getMergedJobDataMap();
-		Long taskInstanceId = (Long) data
-				.get(QuartzServiceTaskAction.TASK_INSTANCE_ID_KEY);
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        try {
+            JobDataMap data = context.getMergedJobDataMap();
+            Long taskInstanceId = (Long) data.get(QuartzServiceTaskAction.TASK_INSTANCE_ID_KEY);
 
-		Session session = RegistryHelper.getInstance().getSession();
+            Session session = RegistryHelper.getInstance().getSession();
 
-        
-        
-		ZebraTaskInstance task = (ZebraTaskInstance) session.load(
-				ZebraTaskInstance.class, taskInstanceId);
-		task.setOutcome("Done");        
-        task.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
-		Zebra zebra = RegistryHelper.getInstance().getZebra();
-       
-		try {
+            ZebraTaskInstance task = (ZebraTaskInstance) session.load(ZebraTaskInstance.class, taskInstanceId);
+            task.setOutcome("Done");
+            task.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
+            Zebra zebra = RegistryHelper.getInstance().getZebra();
+
             zebra.transitionTask(task);
-		} catch (TransitionException te) {
-			throw new JobExecutionException(te);
-		} 
-		
-		// Tell hivemind to recycle thread        
-        RegistryManager.getInstance().getRegistry().cleanupThread();
+        } catch (TransitionException te) {
+            throw new JobExecutionException(te);
+        } finally {
+            // Tell hivemind to recycle thread
+            RegistryManager.getInstance().getRegistry().cleanupThread();
+        }
 
-	}
+    }
 
 }

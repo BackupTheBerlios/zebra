@@ -40,7 +40,7 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
     public static final Log log = LogFactory.getLog(QuartzServiceTaskAction.class);
 
     public static final String TASK_INSTANCE_ID_KEY = "taskInstanceId";
-    
+
     public static final String JOB_NAME = "QuartzServiceTaskAction";
 
     private static final long SECONDS_DELAY = 1000L;
@@ -83,13 +83,13 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
                 /*
                  * Create your Scheduled job
                  */
-            	JobDetail jobDetail = scheduler.getJobDetail(JOB_NAME, null);
-            	if (jobDetail == null) {
-            		jobDetail = new JobDetail(taskInstance.getTaskInstanceId().toString(), null,
+                JobDetail jobDetail = scheduler.getJobDetail(JOB_NAME, null);
+                if (jobDetail == null) {
+                    jobDetail = new JobDetail(taskInstance.getTaskInstanceId().toString(), null,
                             ScheduledTaskTransitionJob.class);
-            	}
+                }
 
-            	/*
+                /*
                  * get the poll interval from taskInstace.getTaskDefinition
                  * (downcast to ZebraTaskDefinition) get property.
                  */
@@ -110,6 +110,11 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
                 trigger.setStartTime(new Date(new Date().getTime() + delay(wait)));
                 trigger.setName(taskInstance.getTaskInstanceId().toString());
                 trigger.getJobDataMap().put(TASK_INSTANCE_ID_KEY, taskInstance.getTaskInstanceId());
+                
+                
+                trigger.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+                
+                
                 scheduler.scheduleJob(jobDetail, trigger);
                 /*
                  * Don't set the state unlike every other task action as the state
@@ -119,7 +124,7 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
                 // Need to make sure that state (which is STATE_RUNNING) is saved in the DB
                 // This is a bug in the w/f engine as it hsould save it for us
                 taskInstance.setState(ITaskInstance.STATE_RUNNING);
-                ITransaction t = zebra.getStateFactory().beginTransaction();                
+                ITransaction t = zebra.getStateFactory().beginTransaction();
                 zebra.getStateFactory().saveObject(taskInstance);
                 t.commit();
                 log.info("Save task in state:" + taskInstance.getState());
@@ -129,7 +134,8 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
             } catch (StateFailureException e) {
                 throw new RunTaskException(e);
             } catch (DefinitionNotFoundException e) {
-                throw new RunTaskException(e);            }
+                throw new RunTaskException(e);
+            }
         } else {
             // Trigger has fired
             taskInstance.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
