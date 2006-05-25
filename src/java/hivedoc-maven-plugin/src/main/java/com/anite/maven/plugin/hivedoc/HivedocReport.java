@@ -55,6 +55,7 @@ import org.dom4j.io.DocumentSource;
 
 
 /**
+ * @phase site
  * @goal hivedoc
  * @requiresDependencyResolution compile
  * @description builds hivedoc for the current project
@@ -217,7 +218,13 @@ public class HivedocReport extends AbstractMojo implements MavenReport {
     }
 
     public void generate(Sink sink, Locale locale) throws MavenReportException {
-       //noop - done in execute
+    	try {
+			execute();
+		} catch (MojoExecutionException e) {
+			throw new MavenReportException("It broke");
+		} catch (MojoFailureException e) {
+			throw new MavenReportException("It broke");
+		}
         
     }
 
