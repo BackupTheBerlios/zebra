@@ -24,10 +24,16 @@
 		<mapping class="com.anite.zebra.hivemind.om.state.ZebraPropertySetEntry"/>
 		<mapping class="com.anite.zebra.hivemind.om.state.ZebraTaskInstance"/>
 		<mapping class="com.anite.zebra.hivemind.om.state.ZebraTaskInstanceHistory"/>
+		
+		<mapping class="com.anite.zebra.hivemind.om.timedtask.FiredTimedTask"/>
+		<mapping class="com.anite.zebra.hivemind.om.timedtask.Time"/>
+		<mapping class="com.anite.zebra.hivemind.om.timedtask.TimedTask"/>
+		
 		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicUser"/>
 		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicGroup"/>
 		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicRole"/>
-		<mapping
-			class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicPermission"/>
+		<mapping class="org.apache.fulcrum.security.hibernate.dynamic.model.HibernateDynamicPermission"/>
+		
+		
 	</session-factory>
 </hibernate-configuration>
