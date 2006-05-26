@@ -21,6 +21,7 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Session;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -55,6 +56,16 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
 
     private Zebra zebra;
 
+    private Session session;
+    
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+    
     public Zebra getZebra() {
         return zebra;
     }
@@ -204,5 +215,7 @@ public class QuartzServiceTaskAction extends ZebraTaskAction {
         }
         return delay * SECONDS_DELAY;
     }
+
+    
 
 }
