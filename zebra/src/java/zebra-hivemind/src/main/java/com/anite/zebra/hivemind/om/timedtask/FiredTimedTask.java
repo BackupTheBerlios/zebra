@@ -18,12 +18,14 @@ package com.anite.zebra.hivemind.om.timedtask;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstanceHistory;
 
 @Entity
-public class FiredTimedTask extends TimedTask {
+public class FiredTimedTask extends AbstractTimedTask {
 
     private Date startTime;
 
@@ -43,6 +45,8 @@ public class FiredTimedTask extends TimedTask {
         this.endTime = endTime;
     }
 
+    @Basic
+    @Column(length=4000)
     public String getExceptionText() {
         return exceptionText;
     }
@@ -76,7 +80,7 @@ public class FiredTimedTask extends TimedTask {
         this.zebraTaskInstanceHistory = zebraTaskInstanceHistory;
     }
     
-    public FiredTimedTask() {
+    protected FiredTimedTask() {
         
     }
     

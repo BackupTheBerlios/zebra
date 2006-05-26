@@ -32,93 +32,102 @@ import com.anite.zebra.hivemind.om.timedtask.TimedTask;
 
 public class TimedTaskRunnerImpl implements TimedTaskRunner {
 
-    private TimedTaskManager timedTaskManager;
+	private TimedTaskManager timedTaskManager;
 
-    private FiredTimedTaskManager firedTimedTaskManager;
+	private FiredTimedTaskManager firedTimedTaskManager;
 
-    private Log log;
+	private Log log;
 
-    private Zebra zebra;
+	private Zebra zebra;
 
-    public void setZebra(Zebra zebra) {
-        this.zebra = zebra;
-    }
+	public void setZebra(Zebra zebra) {
+		this.zebra = zebra;
+	}
 
-    /*
-     * method for injection
-     */
-    public void setFiredTimedTaskManager(FiredTimedTaskManager firedTimedTaskManager) {
-        this.firedTimedTaskManager = firedTimedTaskManager;
-    }
+	/*
+	 * method for injection
+	 */
+	public void setFiredTimedTaskManager(
+			FiredTimedTaskManager firedTimedTaskManager) {
+		this.firedTimedTaskManager = firedTimedTaskManager;
+	}
 
-    /*
-     * Method for injection
-     */
-    public void setLog(Log log) {
-        this.log = log;
-    }
+	/*
+	 * Method for injection
+	 */
+	public void setLog(Log log) {
+		this.log = log;
+	}
 
-    /*
-     * Method for injection
-     */
-    public void setTimedTaskManager(TimedTaskManager timedTaskManager) {
-        this.timedTaskManager = timedTaskManager;
-    }
+	/*
+	 * Method for injection
+	 */
+	public void setTimedTaskManager(TimedTaskManager timedTaskManager) {
+		this.timedTaskManager = timedTaskManager;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.anite.zebra.hivemind.api.TimedTaskRunner#runTasksForTime(com.anite.zebra.hivemind.om.timedtask.Time)
-     */
-    public void runTasksForTime(Time time) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.anite.zebra.hivemind.api.TimedTaskRunner#runTasksForTime(com.anite.zebra.hivemind.om.timedtask.Time)
+	 */
+	public void runTasksForTime(Time time) {
 
-        List<TimedTask> timedTasks = timedTaskManager.getTasksForTime(time);
+		List<TimedTask> timedTasks = timedTaskManager.getTasksForTime(time);
 
-        for (TimedTask timedTask : timedTasks) {
+		for (TimedTask timedTask : timedTasks) {
 
-            runTask(timedTask);
+			runTask(timedTask);
 
-        }
+		}
 
-    }
+	}
 
-    public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins) {
+	public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins) {
 
-        TimedTask timedTask = new TimedTask();
-        timedTask.setZebraTaskInstance(zti);
-        // create time 
-        // add to timed task
+		TimedTask timedTask = new TimedTask();
+		timedTask.setZebraTaskInstanceId(zti.getTaskInstanceId());
+		// create time
+		// add to timed task
 
-    }
+	}
 
-    /**
-     * Runt the timed task by retrieving the associated zebra task instance and transtioningit it
-     * 
-     * @param timedTask
-     */
-    protected void runTask(TimedTask timedTask) {
+	/**
+	 * Runt the timed task by retrieving the associated zebra task instance and
+	 * transtioningit it
+	 * 
+	 * @param timedTask
+	 */
+	protected void runTask(TimedTask timedTask) {
 
-        FiredTimedTask firedTimedTask = new FiredTimedTask(timedTask);
+		FiredTimedTask firedTimedTask = new FiredTimedTask(timedTask);
 
-        ZebraTaskInstance zti = timedTask.getZebraTaskInstance();
+		ZebraTaskInstance zti = zebra.getStateFactory().loadTaskInstance(
+				timedTask.getZebraTaskInstanceId());
 
-        zti.setOutcome("Done");
-        zti.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
+		zti.setOutcome("Done");
+		zti.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
 
-        try {
+		try {
 
-            zebra.transitionTask(zti);
+			zebra.transitionTask(zti);
 
-            // set all the properties on the fired timed task
+			// set all the properties on the fired timed task
 
-        } catch (TransitionException e) {
-            // log the execption also?
-            firedTimedTask.setExceptionText(e.getMessage());
-            firedTimedTask.setFailed(true);
+		} catch (TransitionException e) {
+			log.error(e);
+			firedTimedTask.setExceptionText("Failed to transition task: "
+					+ e.getMessage());
+			firedTimedTask.setFailed(true);
+		} catch (Throwable e) {
+			log.error(e);
+			firedTimedTask.setExceptionText("Throwable: " + e.getMessage());
+			firedTimedTask.setFailed(true);
+		} finally {
+			firedTimedTaskManager.saveOrUpdate(firedTimedTask);
+			timedTaskManager.delete(timedTask);
+		}
 
-        } finally {
-            firedTimedTaskManager.saveOrUpdate(firedTimedTask);
-        }
-
-    }
+	}
 
 }

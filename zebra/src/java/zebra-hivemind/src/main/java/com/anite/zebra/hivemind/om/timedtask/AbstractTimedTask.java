@@ -16,14 +16,30 @@
  */
 package com.anite.zebra.hivemind.om.timedtask;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
-@Entity
-public class TimedTask extends AbstractTimedTask {
+@MappedSuperclass
+public class AbstractTimedTask extends BaseDomain {
+	private Time time;
 
-   
+	private Long zebraTaskInstanceId;
 
+	public Time getTime() {
+		return time;
+	}
+
+	public void setTime(Time time) {
+		this.time = time;
+	}
+
+	public Long getZebraTaskInstanceId() {
+		return zebraTaskInstanceId;
+	}
+
+	public void setZebraTaskInstanceId(Long zebraTaskInstanceId) {
+		this.zebraTaskInstanceId = zebraTaskInstanceId;
+	}
 }

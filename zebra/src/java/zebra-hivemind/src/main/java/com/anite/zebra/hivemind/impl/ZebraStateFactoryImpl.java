@@ -63,6 +63,8 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
 
     private List<StateFactoryListener> listeners = new ArrayList<StateFactoryListener>();
     
+    private Session session;
+    
 	/**
 	 * This should be manually injected by hivemind
 	 */
@@ -89,10 +91,7 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
 	public void deleteObject(IStateObject stateObject)
 			throws StateFailureException {
 
-		Session s;
 		try {
-			s = RegistryHelper.getInstance().getSession();
-
 			if (stateObject instanceof ZebraTaskInstance) {
 
 				ZebraTaskInstance antelopeTaskInstance = (ZebraTaskInstance) stateObject;
@@ -107,7 +106,7 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
 						.getTaskDefinition();
 				antelopeTaskInstanceHistory.setShowInHistory(new Boolean(
 						taskDefinition.getShowInHistory()));
-				s.save(antelopeTaskInstanceHistory);
+				getSession().save(antelopeTaskInstanceHistory);
 
 				// Tidy up process reference
 				ZebraProcessInstance processInstance = (ZebraProcessInstance) antelopeTaskInstance
@@ -120,10 +119,10 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
 						antelopeTaskInstanceHistory);
 				antelopeTaskInstanceHistory.setProcessInstance(processInstance);
 
-                s.save(processInstance);
+				getSession().save(processInstance);
                 
 			}
-			s.delete(stateObject);
+			getSession().delete(stateObject);
 		} catch (Exception e) {
 			this.log.error("Failed to delete:" + stateObject.toString(), e);
 			throw new StateFailureException("Failed to delete State Object", e);
@@ -208,8 +207,7 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
      */
 	public ITransaction beginTransaction() throws StateFailureException {
 
-		return new HibernateTransaction(RegistryHelper.getInstance()
-				.getSession());
+		return new HibernateTransaction(getSession());
 
 	}
 
@@ -217,7 +215,7 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
      * @see com.anite.zebra.hivemind.impl.ZebraStateFactory#saveObject(com.anite.zebra.core.state.api.IStateObject)
      */
 	public void saveObject(IStateObject object) throws StateFailureException {
-		RegistryHelper.getInstance().getSession().saveOrUpdate(object);
+		getSession().saveOrUpdate(object);
 
 	}
 
@@ -227,8 +225,7 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
 	public void acquireLock(IProcessInstance processInstance, IEngine engine)
 			throws LockException {
 
-		this.lockManager.aquireLock(processInstance, RegistryHelper
-				.getInstance().getSession());
+		this.lockManager.aquireLock(processInstance, getSession());
 
 	}
 
@@ -238,8 +235,7 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
 	public void releaseLock(IProcessInstance processInstance, IEngine engine)
 			throws LockException {
 
-		this.lockManager.releaseLock(processInstance, RegistryHelper
-				.getInstance().getSession());
+		this.lockManager.releaseLock(processInstance, getSession());
 	}
 
 	/* (non-Javadoc)
@@ -291,5 +287,17 @@ public class ZebraStateFactoryImpl implements IStateFactory, ZebraStateFactory {
     public void removeStateFactoryListener(StateFactoryListener listener){
         listeners.remove(listener);
     }
+
+	public ZebraTaskInstance loadTaskInstance(Long taskInstanceId) {
+		return (ZebraTaskInstance) getSession().load(ZebraTaskInstance.class, taskInstanceId);
+	}
+
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
+	}
 
 }

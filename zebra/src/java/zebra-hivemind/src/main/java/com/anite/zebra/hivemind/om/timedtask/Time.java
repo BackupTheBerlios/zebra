@@ -18,10 +18,18 @@ package com.anite.zebra.hivemind.om.timedtask;
 
 import javax.persistence.Entity;
 
+/**
+ * Represents a time of day to the nearest minute 
+ * @author Mike Jones
+ *
+ */
 @Entity
 public class Time extends BaseDomain {
 
     private String name;
+    
+    private Integer hour;
+    private Integer minute;
 
     public String getName() {
         return name;
@@ -30,6 +38,22 @@ public class Time extends BaseDomain {
     public void setName(String name) {
         this.name = name;
     }
+
+	public Integer getHour() {
+		return hour;
+	}
+
+	public void setHour(Integer hour) {
+		this.hour = hour;
+	}
+
+	public Integer getMinute() {
+		return minute;
+	}
+
+	public void setMinute(Integer minute) {
+		this.minute = minute;
+	}
     
     
 

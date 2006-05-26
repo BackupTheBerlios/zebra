@@ -1,6 +1,7 @@
 package com.anite.zebra.hivemind.api;
 
 import com.anite.zebra.core.factory.api.IStateFactory;
+import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
 public interface ZebraStateFactory extends IStateFactory {
     /**
@@ -10,5 +11,7 @@ public interface ZebraStateFactory extends IStateFactory {
     public abstract void addStateFactoryListener(StateFactoryListener listener);
 
     public abstract void removeStateFactoryListener(StateFactoryListener listener);
+    
+    public ZebraTaskInstance loadTaskInstance(Long zebraTaskInstanceId);
 
 }
