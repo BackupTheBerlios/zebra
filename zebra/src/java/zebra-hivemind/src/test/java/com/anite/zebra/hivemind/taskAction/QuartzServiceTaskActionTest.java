@@ -42,9 +42,7 @@ public class QuartzServiceTaskActionTest extends TestCase {
         
         zebra.startProcess(pi);
         
-        Thread.sleep(90000000);
-        
-        
+        // This test needs to be run manually.
         
     }
 }

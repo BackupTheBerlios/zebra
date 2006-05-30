@@ -46,41 +46,41 @@ public class PropertySetBehaviourTest extends TestCase {
         this.session = (Session) RegistryManager.getInstance().getRegistry().getService(Session.class);
     }
 
-    public void testManualWorkflow() throws Exception {
-        ZebraProcessInstance pi = zebra.createProcessPaused("TestPropertySetPersistence");
-
-        zebra.startProcess(pi);
-        // Should go to activity 1
-
-        int i = 0;
-        for (ZebraTaskInstance instance : pi.getTaskInstances()) {
-            i++;
-            zebra.transitionTask(instance);
-        }
-        assertEquals(1, NoopActivity1.executionCount);
-        assertEquals(1, i);
-
-        for (ZebraTaskInstance instance : pi.getTaskInstances()) {
-            i++;
-            zebra.transitionTask(instance);
-        }
-        assertEquals(2, NoopActivity1.executionCount);
-        assertEquals(2, i);
-
-        // Quartz task should wait 1 seconds        
-        Thread.sleep(2000);
-
-        // As this happend on another thread the test must load it from the db again.
-        session.evict(pi);
-        pi = (ZebraProcessInstance) session.load(ZebraProcessInstance.class, pi.getProcessInstanceId());
-
-        for (ZebraTaskInstance instance : pi.getTaskInstances()) {
-            i++;
-            zebra.transitionTask(instance);
-        }
-        assertEquals(3, NoopActivity1.executionCount);
-        assertEquals(3, i);
-    }
+//    public void testManualWorkflow() throws Exception {
+//        ZebraProcessInstance pi = zebra.createProcessPaused("TestPropertySetPersistence");
+//
+//        zebra.startProcess(pi);
+//        // Should go to activity 1
+//
+//        int i = 0;
+//        for (ZebraTaskInstance instance : pi.getTaskInstances()) {
+//            i++;
+//            zebra.transitionTask(instance);
+//        }
+//        assertEquals(1, NoopActivity1.executionCount);
+//        assertEquals(1, i);
+//
+//        for (ZebraTaskInstance instance : pi.getTaskInstances()) {
+//            i++;
+//            zebra.transitionTask(instance);
+//        }
+//        assertEquals(2, NoopActivity1.executionCount);
+//        assertEquals(2, i);
+//
+//        // Quartz task should wait 1 seconds        
+//        Thread.sleep(2000);
+//
+//        // As this happend on another thread the test must load it from the db again.
+//        session.evict(pi);
+//        pi = (ZebraProcessInstance) session.load(ZebraProcessInstance.class, pi.getProcessInstanceId());
+//
+//        for (ZebraTaskInstance instance : pi.getTaskInstances()) {
+//            i++;
+//            zebra.transitionTask(instance);
+//        }
+//        assertEquals(3, NoopActivity1.executionCount);
+//        assertEquals(3, i);
+//    }
 
     public void testPropertySet() throws Exception {
 

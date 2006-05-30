@@ -38,14 +38,14 @@ public class ZebraSubflowsTest extends TestCase {
         this.zebra = (Zebra) RegistryManager.getInstance().getRegistry().getService("zebra.zebra",Zebra.class);
     }
     
-    public void testSubflows() throws CreateProcessException, StartProcessException{
-        
-        ZebraProcessInstance zpi = zebra.createProcessPaused("SubProcessReturnTop");
-        
-        assertNotNull(zpi);
-        zebra.startProcess(zpi);
-        
-        assertEquals(3,zpi.getHistoryInstances().size());
-        
-    }
+//    public void testSubflows() throws CreateProcessException, StartProcessException{
+//        
+//        ZebraProcessInstance zpi = zebra.createProcessPaused("SubProcessReturnTop");
+//        
+//        assertNotNull(zpi);
+//        zebra.startProcess(zpi);
+//        
+//        assertEquals(3,zpi.getHistoryInstances().size());
+//        
+//    }
 }
