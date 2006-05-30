@@ -39,7 +39,9 @@
     </service-point>
     <service-point id="zebraState" interface="com.anite.zebra.hivemind.api.ZebraStateFactory">
         <invoke-factory>
-            <construct class="com.anite.zebra.hivemind.impl.ZebraStateFactoryImpl"> </construct>
+            <construct class="com.anite.zebra.hivemind.impl.ZebraStateFactoryImpl">
+                <set-service property="session" service-id="fulcrum.hibernate.Session"/>
+            </construct>
         </invoke-factory>
     </service-point>
     <service-point id="engine" interface="com.anite.zebra.core.api.IEngine">
@@ -49,9 +51,37 @@
             </construct>
         </invoke-factory>
     </service-point>
-	<service-point id="QuartzTaskAction" interface="com.anite.zebra.core.api.ITaskAction">
-		<invoke-factory>
-			<construct class="com.anite.zebra.hivemind.taskAction.QuartzServiceTaskAction"></construct>
-		</invoke-factory>
-	</service-point>
+    <service-point id="QuartzTaskAction" interface="com.anite.zebra.core.api.ITaskAction">
+        <invoke-factory>
+            <construct class="com.anite.zebra.hivemind.taskAction.QuartzServiceTaskAction"/>
+        </invoke-factory>
+    </service-point>
+    <service-point id="TimedTaskRunner" interface="com.anite.zebra.hivemind.api.TimedTaskRunner">
+        <invoke-factory>
+        <construct class="com.anite.zebra.hivemind.impl.TimedTaskRunnerImpl"></construct>
+        </invoke-factory>
+    </service-point>
+    <service-point id="TimedTaskManager"
+        interface="com.anite.zebra.hivemind.manager.TimedTaskManager">
+        <invoke-factory>
+        <construct class="com.anite.zebra.hivemind.manager.impl.HibernateTimedTaskManager">
+            <set-service property="session" service-id="fulcrum.hibernate.Session"/>
+        </construct>
+        </invoke-factory>
+    </service-point>
+    <service-point id="FiredTimedTaskManager"
+        interface="com.anite.zebra.hivemind.manager.FiredTimedTaskManager">
+        <invoke-factory>
+        <construct class="com.anite.zebra.hivemind.manager.impl.HibernateFiredTimedTaskManager">
+            <set-service property="session" service-id="fulcrum.hibernate.Session"/>
+        </construct>
+            </invoke-factory>
+    </service-point>
+    <service-point id="TimeManager" interface="com.anite.zebra.hivemind.manager.TimeManager">
+        <invoke-factory>
+        <construct class="com.anite.zebra.hivemind.manager.impl.HibernateTimeManager">
+            <set-service property="session" service-id="fulcrum.hibernate.Session"/>
+        </construct>
+            </invoke-factory>
+    </service-point>
 </module>

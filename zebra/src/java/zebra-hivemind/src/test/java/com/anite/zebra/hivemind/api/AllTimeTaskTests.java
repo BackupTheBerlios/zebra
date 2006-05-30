@@ -16,28 +16,24 @@
  */
 package com.anite.zebra.hivemind.api;
 
-import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
-import com.anite.zebra.hivemind.om.timedtask.Time;
-import com.anite.zebra.hivemind.om.timedtask.TimedTask;
+import com.anite.zebra.hivemind.manager.FiredTimedTaskManagerTest;
+import com.anite.zebra.hivemind.manager.TimeManagerTest;
+import com.anite.zebra.hivemind.manager.TimedTaskManagerTest;
 
-/**
- * Interface to queuing and running timed tasks.
- * @author Mike Jones
- *
- */
-public interface TimedTaskRunner {
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-    /**
-     * Run all the {@link TimedTask}'s for the {@link Time} 
-     * @param time
-     */
-    public void runTasksForTime(Time time);
+public class AllTimeTaskTests {
 
-    /**
-     * For the zebra task instance create a new timed task for to run at a specific time (this )
-     * @param zti
-     * @param time
-     */
-    public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins);
+	public static Test suite() {
+		TestSuite suite = new TestSuite("Test for com.anite.zebra.hivemind.api");
+		//$JUnit-BEGIN$
+		suite.addTestSuite(TimedTaskRunnerTest.class);
+		//$JUnit-END$
+		suite.addTestSuite(FiredTimedTaskManagerTest.class);
+		suite.addTestSuite(TimedTaskManagerTest.class);
+		suite.addTestSuite(TimeManagerTest.class);
+		return suite;
+	}
 
 }

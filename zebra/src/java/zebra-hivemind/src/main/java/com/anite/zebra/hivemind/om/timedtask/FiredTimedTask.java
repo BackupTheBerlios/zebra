@@ -31,7 +31,7 @@ public class FiredTimedTask extends AbstractTimedTask {
 
     private Date endTime;
 
-    private ZebraTaskInstanceHistory zebraTaskInstanceHistory;
+    private Long zebraTaskInstanceHistoryId;
 
     private boolean failed;
 
@@ -71,14 +71,8 @@ public class FiredTimedTask extends AbstractTimedTask {
         this.startTime = startTime;
     }
 
-
-    public ZebraTaskInstanceHistory getZebraTaskInstanceHistory() {
-        return zebraTaskInstanceHistory;
-    }
-
-    public void setZebraTaskInstanceHistory(ZebraTaskInstanceHistory zebraTaskInstanceHistory) {
-        this.zebraTaskInstanceHistory = zebraTaskInstanceHistory;
-    }
+    
+   
     
     protected FiredTimedTask() {
         
@@ -87,5 +81,13 @@ public class FiredTimedTask extends AbstractTimedTask {
     public FiredTimedTask(TimedTask timedTask) {
         // set timed task properties to the fired time task
     }
+
+	public Long getZebraTaskInstanceHistoryId() {
+		return zebraTaskInstanceHistoryId;
+	}
+
+	public void setZebraTaskInstanceHistoryId(Long zebraTaskInstanceHistoryId) {
+		this.zebraTaskInstanceHistoryId = zebraTaskInstanceHistoryId;
+	}
 
 }

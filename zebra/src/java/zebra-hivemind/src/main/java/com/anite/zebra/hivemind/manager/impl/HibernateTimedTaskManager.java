@@ -18,6 +18,9 @@ package com.anite.zebra.hivemind.manager.impl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+
 import com.anite.zebra.hivemind.manager.TimedTaskManager;
 import com.anite.zebra.hivemind.om.timedtask.Time;
 import com.anite.zebra.hivemind.om.timedtask.TimedTask;
@@ -25,8 +28,11 @@ import com.anite.zebra.hivemind.om.timedtask.TimedTask;
 public class HibernateTimedTaskManager extends HibernateManager<TimedTask> implements TimedTaskManager {
 
     public List<TimedTask> getTasksForTime(Time time) {
-        // TODO Auto-generated method stub
-        return null;
+
+    	Criteria criteria = getSession().createCriteria(TimedTask.class);
+    	criteria.add(Restrictions.eq("time", time));
+    	
+        return criteria.list();
     }
     
     

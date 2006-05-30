@@ -14,31 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.anite.zebra.hivemind.manager.impl;
+package com.anite.zebra.hivemind.manager;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-
-import com.anite.zebra.hivemind.manager.TimeManager;
 import com.anite.zebra.hivemind.om.timedtask.Time;
 
-public class HibernateTimeManager extends HibernateManager<Time> implements TimeManager{
 
-	public Time createOrFetchTime(int hours, int mins) {
-		Criteria criteria = getSession().createCriteria(Time.class);
-		criteria.add(Restrictions.eq("hour", hours));
-		criteria.add(Restrictions.eq("minute", mins));
+public class TimeManagerTest extends BaseManagerTest<TimeManager> {
+	
+	public void testCreateOrFindTime(){
 		
-		Time result = (Time) criteria.uniqueResult();
+		TimeManager timeManager = (TimeManager) manager;
 		
-		if (result == null){
-			result = new Time();
-			result.setHour(hours);
-			result.setMinute(mins);
-			this.saveOrUpdate(result);
-		}
+		Time time = timeManager.createOrFetchTime(0, 0);
+		assertNotNull(time);
 		
-		return result;
+		assertNotNull(time.getId());
+		
 	}
-
 }

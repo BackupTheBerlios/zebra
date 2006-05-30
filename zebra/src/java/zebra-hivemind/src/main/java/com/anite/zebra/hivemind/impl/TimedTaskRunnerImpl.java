@@ -24,17 +24,26 @@ import com.anite.zebra.core.exceptions.TransitionException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.hivemind.api.TimedTaskRunner;
 import com.anite.zebra.hivemind.manager.FiredTimedTaskManager;
+import com.anite.zebra.hivemind.manager.TimeManager;
 import com.anite.zebra.hivemind.manager.TimedTaskManager;
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 import com.anite.zebra.hivemind.om.timedtask.FiredTimedTask;
 import com.anite.zebra.hivemind.om.timedtask.Time;
 import com.anite.zebra.hivemind.om.timedtask.TimedTask;
+import com.sun.msv.datatype.xsd.TimeType;
 
+/**
+ * 
+ * @author Mike Jones
+ *
+ */
 public class TimedTaskRunnerImpl implements TimedTaskRunner {
 
 	private TimedTaskManager timedTaskManager;
 
 	private FiredTimedTaskManager firedTimedTaskManager;
+
+	private TimeManager timeManager;
 
 	private Log log;
 
@@ -87,9 +96,8 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 
 		TimedTask timedTask = new TimedTask();
 		timedTask.setZebraTaskInstanceId(zti.getTaskInstanceId());
-		// create time
-		// add to timed task
-
+		timedTask.setTime(getTimeManager().createOrFetchTime(hours, mins));
+		getTimedTaskManager().saveOrUpdate(timedTask);
 	}
 
 	/**
@@ -111,9 +119,7 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 		try {
 
 			zebra.transitionTask(zti);
-
-			// set all the properties on the fired timed task
-
+			firedTimedTask.setFailed(false);
 		} catch (TransitionException e) {
 			log.error(e);
 			firedTimedTask.setExceptionText("Failed to transition task: "
@@ -128,6 +134,22 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 			timedTaskManager.delete(timedTask);
 		}
 
+	}
+
+	public TimeManager getTimeManager() {
+		return timeManager;
+	}
+
+	public void setTimeManager(TimeManager timeManager) {
+		this.timeManager = timeManager;
+	}
+
+	public FiredTimedTaskManager getFiredTimedTaskManager() {
+		return firedTimedTaskManager;
+	}
+
+	public TimedTaskManager getTimedTaskManager() {
+		return timedTaskManager;
 	}
 
 }

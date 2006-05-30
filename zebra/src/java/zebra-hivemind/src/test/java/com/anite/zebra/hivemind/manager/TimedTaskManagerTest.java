@@ -16,10 +16,7 @@
  */
 package com.anite.zebra.hivemind.manager;
 
-import com.anite.zebra.hivemind.om.timedtask.Time;
 
-public interface TimeManager extends BaseManager<Time> {
-
-    public Time createOrFetchTime(int hours, int mins);
-
+public class TimedTaskManagerTest extends BaseManagerTest<TimedTaskManager> {
+	
 }

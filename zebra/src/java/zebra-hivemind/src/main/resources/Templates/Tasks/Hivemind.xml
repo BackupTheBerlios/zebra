@@ -6,7 +6,7 @@
 	</properties>
 	<properties name="(General Task Properties)">
 		<property name="ShowInTaskList" value="no" type="Boolean" locked="yes"/>
-		<property name="ServiceId" type="string" value="zebra.quartzTask" locked="yes"/>
+		<property name="ServiceId" type="string" value="" locked="no"/>
 	</properties>
 	<properties name="(Inputs)"/>
 </ACGWFD.TaskTemplate>
