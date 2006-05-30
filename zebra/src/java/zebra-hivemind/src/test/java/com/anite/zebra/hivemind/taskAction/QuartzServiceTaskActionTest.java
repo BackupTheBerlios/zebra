@@ -42,11 +42,7 @@ public class QuartzServiceTaskActionTest extends TestCase {
         
         zebra.startProcess(pi);
         
-        // This return as soon as Zebra can't run any more tasks immediately.
-        
-        Thread.sleep(60000);
-        
-        // by now it will have run
+        Thread.sleep(90000000);
         
         
         

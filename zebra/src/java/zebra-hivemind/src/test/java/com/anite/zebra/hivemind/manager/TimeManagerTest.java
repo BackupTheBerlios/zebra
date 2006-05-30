@@ -18,17 +18,30 @@ package com.anite.zebra.hivemind.manager;
 
 import com.anite.zebra.hivemind.om.timedtask.Time;
 
-
 public class TimeManagerTest extends BaseManagerTest<TimeManager> {
-	
-	public void testCreateOrFindTime(){
-		
+
+	public void testCreateOrFindTime() {
+
 		TimeManager timeManager = (TimeManager) manager;
-		
+
 		Time time = timeManager.createOrFetchTime(0, 0);
 		assertNotNull(time);
-		
+
 		assertNotNull(time.getId());
+
+	}
+
+	public void testTimeGetJobName() {
+
+		TimeManager timeManager = (TimeManager) manager;
+
+		Time time = timeManager.createOrFetchTime(0, 0);
+		assertEquals(time.getJobName(), "00:00");
 		
+		time = timeManager.createOrFetchTime(1, 11);
+		assertEquals(time.getJobName(), "01:11");
+
+		time = timeManager.createOrFetchTime(11, 4);
+		assertEquals(time.getJobName(), "11:04");
 	}
 }

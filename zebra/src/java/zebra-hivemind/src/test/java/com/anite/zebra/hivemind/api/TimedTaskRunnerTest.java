@@ -32,11 +32,14 @@ import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
 import com.anite.zebra.hivemind.taskAction.NoopHiveMindTaskAction;
 
 public class TimedTaskRunnerTest extends TestCase {
-
-	public void testService() {
+	public void setUp() {
 		Resource resource = new ClasspathResource(new DefaultClassResolver(),
 				"META-INF/hivemodule_zebradefinitions.xml");
 		RegistryManager.getInstance().getResources().add(resource);
+	}
+
+	public void testService() {
+
 		TimedTaskRunner timedTaskRunner = (TimedTaskRunner) RegistryManager
 				.getInstance().getRegistry().getService(
 						"zebra.TimedTaskRunner", TimedTaskRunner.class);

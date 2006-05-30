@@ -17,6 +17,7 @@
 package com.anite.zebra.hivemind.om.timedtask;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 /**
  * Represents a time of day to the nearest minute 
@@ -55,6 +56,25 @@ public class Time extends BaseDomain {
 		this.minute = minute;
 	}
     
-    
+	/**
+	 * Provide the job name to represent this time
+	 * @return
+	 */
+	@Transient
+    public String getJobName(){
+		StringBuffer name = new StringBuffer();
+		
+		if (hour < 10){
+			name.append("0");						
+		} 
+		name.append(hour);
+		name.append(":");
+		if (minute < 10){
+			name.append("0");
+		}
+		name.append(minute);
+		
+		return name.toString();
+	}
 
 }

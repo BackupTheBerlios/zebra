@@ -7,7 +7,8 @@
 	<properties name="(General Task Properties)">
 		<property name="ShowInTaskList" value="no" type="Boolean" locked="yes"/>
 		<property name="ServiceId" type="string" value="zebra.QuartzTaskAction" locked="yes"/>
-		<property name="Wait" type="string" value="" locked="no"/>
+		<property name="hour" type="int" value="" locked="no"/>
+		<property name="minute" type="int" value="" locked="no"/>
 	</properties>
 	<properties name="(Inputs)"/>
 </ACGWFD.TaskTemplate>

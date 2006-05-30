@@ -16,13 +16,21 @@
  */
 package com.anite.zebra.hivemind.impl;
 
+import java.rmi.registry.Registry;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
+import org.apache.fulcrum.hivemind.RegistryManager;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.TriggerUtils;
 
 import com.anite.zebra.core.exceptions.TransitionException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.hivemind.api.TimedTaskRunner;
+import com.anite.zebra.hivemind.job.TimedTaskRunnerJob;
 import com.anite.zebra.hivemind.manager.FiredTimedTaskManager;
 import com.anite.zebra.hivemind.manager.TimeManager;
 import com.anite.zebra.hivemind.manager.TimedTaskManager;
@@ -30,14 +38,25 @@ import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 import com.anite.zebra.hivemind.om.timedtask.FiredTimedTask;
 import com.anite.zebra.hivemind.om.timedtask.Time;
 import com.anite.zebra.hivemind.om.timedtask.TimedTask;
-import com.sun.msv.datatype.xsd.TimeType;
 
 /**
+ * Runs the tasks.
+ * 
+ * The manages all interactions with the OM Managers and Quartz.
+ * 
+ * Quartz is injected into the service
  * 
  * @author Mike Jones
- *
+ * @author Ben GIdley
+ * 
  */
 public class TimedTaskRunnerImpl implements TimedTaskRunner {
+
+	static public final String MINUTE = "minute";
+
+	static public final String HOUR = "hour";
+
+	private static final String TIME_TASK_RUNNER = "TimeTaskRunner";
 
 	private TimedTaskManager timedTaskManager;
 
@@ -48,6 +67,16 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 	private Log log;
 
 	private Zebra zebra;
+
+	private Scheduler scheduler;
+
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
+
+	public void setScheduler(Scheduler scheduler) {
+		this.scheduler = scheduler;
+	}
 
 	public void setZebra(Zebra zebra) {
 		this.zebra = zebra;
@@ -95,9 +124,46 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 	public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins) {
 
 		TimedTask timedTask = new TimedTask();
+		Time time = getTimeManager().createOrFetchTime(hours, mins);
 		timedTask.setZebraTaskInstanceId(zti.getTaskInstanceId());
-		timedTask.setTime(getTimeManager().createOrFetchTime(hours, mins));
+		timedTask.setTime(time);
 		getTimedTaskManager().saveOrUpdate(timedTask);
+
+		// Now verify there is a quartz job for requested time.
+		try {
+			JobDetail jobDetail = scheduler.getJobDetail(time.getJobName(),
+					TIME_TASK_RUNNER);
+
+			if (jobDetail == null){
+				createJobDetail(time);
+			}
+
+		} catch (SchedulerException e) {
+			log.error(e);
+		}
+
+	}
+
+	/**
+	 * Create the job in quartz for the passed time.
+	 * @param time
+	 * @throws SchedulerException
+	 */
+	private void createJobDetail(Time time) throws SchedulerException {
+		JobDetail jobDetail = new JobDetail();
+		jobDetail.setName(time.getJobName());
+		jobDetail.setDescription("Time Task Runner Job");
+		jobDetail.setDurability(false);
+		jobDetail.setGroup(TIME_TASK_RUNNER);
+		jobDetail.setJobClass(TimedTaskRunnerJob.class);
+		jobDetail.setRequestsRecovery(true);
+		JobDataMap jobDataMap = new JobDataMap();
+		jobDataMap.put(HOUR, time.getHour());
+		jobDataMap.put(MINUTE, time.getMinute());
+		jobDetail.setJobDataMap(jobDataMap);
+
+		scheduler.scheduleJob(jobDetail, TriggerUtils.makeDailyTrigger(time.getJobName(), time
+				.getHour(), time.getMinute()));
 	}
 
 	/**
@@ -132,6 +198,7 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 		} finally {
 			firedTimedTaskManager.saveOrUpdate(firedTimedTask);
 			timedTaskManager.delete(timedTask);
+			RegistryManager.getInstance().getRegistry().cleanupThread();
 		}
 
 	}
