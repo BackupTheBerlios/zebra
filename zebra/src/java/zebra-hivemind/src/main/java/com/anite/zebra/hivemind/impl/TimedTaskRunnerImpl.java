@@ -16,7 +16,7 @@
  */
 package com.anite.zebra.hivemind.impl;
 
-import java.rmi.registry.Registry;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -183,9 +183,11 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 		zti.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
 
 		try {
-
+			firedTimedTask.setZebraTaskInstanceId(zti.getTaskInstanceId());
+			firedTimedTask.setStartTime(new Date());
 			zebra.transitionTask(zti);
 			firedTimedTask.setFailed(false);
+			firedTimedTask.setEndTime(new Date());			
 		} catch (TransitionException e) {
 			log.error(e);
 			firedTimedTask.setExceptionText("Failed to transition task: "

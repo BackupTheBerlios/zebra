@@ -79,7 +79,8 @@ public class FiredTimedTask extends AbstractTimedTask {
     }
     
     public FiredTimedTask(TimedTask timedTask) {
-        // set timed task properties to the fired time task
+    	this.setTime(timedTask.getTime());
+    	
     }
 
 	public Long getZebraTaskInstanceHistoryId() {
