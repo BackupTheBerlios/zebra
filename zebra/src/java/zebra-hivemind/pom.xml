@@ -134,14 +134,19 @@
             <groupId>zebra</groupId>
             <artifactId>zebra-core</artifactId>
             <version>0.5.2-dev</version>
-        </dependency>     
+        </dependency>
         <dependency>
             <groupId>zebra</groupId>
             <artifactId>zebra-xmlloader</artifactId>
             <version>1.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>jaxme</groupId>
+                    <artifactId>jaxme-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- End Zebra -->
-       
     </dependencies>
     <distributionManagement>
         <repository>
@@ -174,7 +179,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>        
+            </plugin>
         </plugins>
     </reporting>
 </project>
