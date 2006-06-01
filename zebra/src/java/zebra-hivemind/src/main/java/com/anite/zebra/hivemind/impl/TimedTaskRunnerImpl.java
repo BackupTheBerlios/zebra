@@ -173,7 +173,8 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 	 * @param timedTask
 	 */
 	protected void runTask(TimedTask timedTask) {
-
+		log.debug("Running Task Instance:" + timedTask.getZebraTaskInstanceId());
+		
 		FiredTimedTask firedTimedTask = new FiredTimedTask(timedTask);
 
 		ZebraTaskInstance zti = zebra.getStateFactory().loadTaskInstance(
