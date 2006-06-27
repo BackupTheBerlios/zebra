@@ -134,7 +134,7 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 			JobDetail jobDetail = scheduler.getJobDetail(time.getJobName(),
 					TIME_TASK_RUNNER);
 
-			if (jobDetail == null){
+			if (jobDetail == null) {
 				createJobDetail(time);
 			}
 
@@ -146,6 +146,7 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 
 	/**
 	 * Create the job in quartz for the passed time.
+	 * 
 	 * @param time
 	 * @throws SchedulerException
 	 */
@@ -162,8 +163,8 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 		jobDataMap.put(MINUTE, time.getMinute());
 		jobDetail.setJobDataMap(jobDataMap);
 
-		scheduler.scheduleJob(jobDetail, TriggerUtils.makeDailyTrigger(time.getJobName(), time
-				.getHour(), time.getMinute()));
+		scheduler.scheduleJob(jobDetail, TriggerUtils.makeDailyTrigger(time
+				.getJobName(), time.getHour(), time.getMinute()));
 	}
 
 	/**
@@ -173,22 +174,23 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 	 * @param timedTask
 	 */
 	protected void runTask(TimedTask timedTask) {
-		log.debug("Running Task Instance:" + timedTask.getZebraTaskInstanceId());
-		
+		log
+				.debug("Running Task Instance:"
+						+ timedTask.getZebraTaskInstanceId());
+
 		FiredTimedTask firedTimedTask = new FiredTimedTask(timedTask);
-
-		ZebraTaskInstance zti = zebra.getStateFactory().loadTaskInstance(
-				timedTask.getZebraTaskInstanceId());
-
-		zti.setOutcome("Done");
-		zti.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
-
 		try {
+			ZebraTaskInstance zti = zebra.getStateFactory().loadTaskInstance(
+					timedTask.getZebraTaskInstanceId());
+
+			zti.setOutcome("Done");
+			zti.setState(ITaskInstance.STATE_AWAITINGCOMPLETE);
+
 			firedTimedTask.setZebraTaskInstanceId(zti.getTaskInstanceId());
 			firedTimedTask.setStartTime(new Date());
 			zebra.transitionTask(zti);
 			firedTimedTask.setFailed(false);
-			firedTimedTask.setEndTime(new Date());			
+			firedTimedTask.setEndTime(new Date());
 		} catch (TransitionException e) {
 			log.error(e);
 			firedTimedTask.setExceptionText("Failed to transition task: "
