@@ -56,7 +56,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager {
 			Query query = getPersistenceHelper().retrieveSession().createQuery(
 					"from " + getClassName() + " su where su.name=:name");
 			query.setString("name", userName);
-
+						
 			users = query.list();
 		} catch (HibernateException e) {
 			throw new DataBackendException("Error retriving user information",
@@ -87,7 +87,8 @@ public class HibernateUserManagerImpl extends AbstractUserManager {
 			Query query = getPersistenceHelper().retrieveSession().createQuery(
 					"from " + getClassName() + " su where su.name=:name");
 			query.setString("name", userName.toLowerCase());
-
+			query.setCacheable(true);
+			
 			users = query.list();
 		} catch (HibernateException e) {
 			throw new DataBackendException("Error retriving user information",
@@ -241,6 +242,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager {
 								"from " + getClassName()
 										+ " su where su.id=:id");
 				query.setLong("id", (Long) id);
+				query.setCacheable(true);
 				List users = query.list();
 				if (users.size() == 0) {
 					throw new UnknownEntityException(
