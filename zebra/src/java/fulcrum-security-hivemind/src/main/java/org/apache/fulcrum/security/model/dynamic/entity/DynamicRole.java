@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.dynamic.entity;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -25,116 +26,109 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 
 /**
- * Represents the "simple" model where permissions are related to roles,
- * roles are related to groups and groups are related to users,
- * all in many to many relationships.
- *
+ * Represents the "simple" model where permissions are related to roles, roles
+ * are related to groups and groups are related to users, all in many to many
+ * relationships.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicRole.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
+ * @version $Id: DynamicRole.java,v 1.3 2006/07/19 09:15:17 bgidley Exp $
  */
-public class DynamicRole extends SecurityEntityImpl implements Role
-{
-    private Set permissionSet = new PermissionSet();
+public class DynamicRole extends SecurityEntityImpl implements Role {
+	private Set permissionSet = new PermissionSet();
 
-    private Set groupSet = new GroupSet();
-    /**
-     * @return
-     */
-    public PermissionSet getPermissions()
-    {
-    	if( permissionSet instanceof PermissionSet )
-    		return (PermissionSet) permissionSet;
-    	else {
-    		permissionSet = new PermissionSet(permissionSet);
-    		return (PermissionSet)permissionSet;
-    	}
-    }
-    /**
-     * @return
-     */
-    public Set getPermissionsAsSet()
-    {
-        return permissionSet;
-    }
+	private Set groupSet = new GroupSet();
 
-    public void setPermissionsAsSet(Set permissions)
-    {
-        this.permissionSet = permissions;;
-    }
-    /**
-     * @param permissionSet
-     */
-    public void setPermissions(PermissionSet permissionSet)
-    {
-    	if( permissionSet != null )
-    		this.permissionSet = permissionSet;
-    	else
-    		this.permissionSet = new PermissionSet();
-    }
+	/**
+	 * @return
+	 */
+	public PermissionSet getPermissions() {
 
-    /**
-    * This method should only be used by a RoleManager.  Not directly.
-    * @param permission
-    */
-    public void addPermission(Permission permission)
-    {
-        getPermissions().add(permission);
-    }
-    /**
-     * This method should only be used by a RoleManager.  Not directly.
-     * @param permission
-     */
-    public void removePermission(Permission permission)
-    {
-        getPermissions().remove(permission);
-    }
+		return new PermissionSet(permissionSet);
 
-    /**
-    	* @return
-    	*/
-    public GroupSet getGroups()
-    {
-    	if( groupSet instanceof GroupSet )
-    		return (GroupSet) groupSet;
-    	else {
-    		groupSet = new GroupSet(groupSet);
-    		return (GroupSet)groupSet;
-    	}
-    }
-    /**
-    	* @param groupSet
-    	*/
-    public void setGroups(GroupSet groupSet)
-    {
-    	if( groupSet != null )
-    		this.groupSet = groupSet;
-    	else
-    		this.groupSet = new GroupSet();
-    }
+	}
 
-    /**
-    * This method should only be used by a RoleManager.  Not directly.
-    * @param group
-    */
-    public void addGroup(Group group)
-    {
-        getGroups().add(group);
-    }
-    /**
-	* This method should only be used by a RoleManager.  Not directly.
-	* @param group
-	*/
-    public void removeGroup(Group group)
-    {
-        getGroups().remove(group);
-    }
+	/**
+	 * @return
+	 */
+	public Set getPermissionsAsSet() {
+		return permissionSet;
+	}
 
-    public void setGroupsAsSet(Set groups)
-    {
-        this.groupSet = groups;
-    }
-    public Set getGroupsAsSet()
-    {
-        return groupSet;
-    }
+	public void setPermissionsAsSet(Set permissions) {
+		this.permissionSet = permissions;
+		;
+	}
+
+	/**
+	 * @param permissionSet
+	 */
+	public void setPermissions(PermissionSet permissionSet) {
+		if (permissionSet != null)
+			this.permissionSet = permissionSet;
+		else
+			this.permissionSet = new PermissionSet();
+	}
+
+	/**
+	 * This method should only be used by a RoleManager. Not directly.
+	 * 
+	 * @param permission
+	 */
+	public void addPermission(Permission permission) {
+		getPermissions().add(permission);
+	}
+
+	/**
+	 * This method should only be used by a RoleManager. Not directly.
+	 * 
+	 * @param permission
+	 */
+	public void removePermission(Permission permission) {
+		getPermissions().remove(permission);
+	}
+
+	/**
+	 * @return
+	 */
+	public GroupSet getGroups() {
+
+		return new GroupSet(groupSet);
+
+	}
+
+	/**
+	 * @param groupSet
+	 */
+	public void setGroups(GroupSet groupSet) {
+		if (groupSet != null)
+			this.groupSet = groupSet;
+		else
+			this.groupSet = new GroupSet();
+	}
+
+	/**
+	 * This method should only be used by a RoleManager. Not directly.
+	 * 
+	 * @param group
+	 */
+	public void addGroup(Group group) {
+		getGroups().add(group);
+	}
+
+	/**
+	 * This method should only be used by a RoleManager. Not directly.
+	 * 
+	 * @param group
+	 */
+	public void removeGroup(Group group) {
+		getGroups().remove(group);
+	}
+
+	public void setGroupsAsSet(Set groups) {
+		this.groupSet = groups;
+	}
+
+	public Set getGroupsAsSet() {
+		return groupSet;
+	}
 }

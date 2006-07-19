@@ -28,7 +28,7 @@ import org.apache.fulcrum.security.util.RoleSet;
  * all in many to many relationships.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicPermission.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
+ * @version $Id: DynamicPermission.java,v 1.3 2006/07/19 09:15:17 bgidley Exp $
  */
 public class DynamicPermission extends SecurityEntityImpl implements Permission
 {
@@ -38,12 +38,8 @@ public class DynamicPermission extends SecurityEntityImpl implements Permission
      * @return
      */
     public RoleSet getRoles() {
-        if (roleSet instanceof RoleSet)
-            return (RoleSet) roleSet;
-        else {
-            roleSet = new RoleSet(roleSet);
-            return (RoleSet) roleSet;
-        }
+    	
+    	return new RoleSet(roleSet);
     }
 
     /**

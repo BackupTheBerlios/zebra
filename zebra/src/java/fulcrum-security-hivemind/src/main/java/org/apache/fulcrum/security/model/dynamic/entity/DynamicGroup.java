@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.dynamic.entity;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -25,104 +26,87 @@ import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UserSet;
 
 /**
- * Represents the "dynamic" model where permissions are related to roles,
- * roles are related to groups and groups are related to userSet,
- * all in many to many relationships.
+ * Represents the "dynamic" model where permissions are related to roles, roles
+ * are related to groups and groups are related to userSet, all in many to many
+ * relationships.
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: DynamicGroup.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
+ * @version $Id: DynamicGroup.java,v 1.3 2006/07/19 09:15:17 bgidley Exp $
  */
-public class DynamicGroup extends SecurityEntityImpl implements Group
-{
-    private Set roleSet = new RoleSet();
-    private Set userSet = new UserSet();
-    
-    /**
-     * @return
-     */
-    public UserSet getUsers()
-    {
-    	if( userSet instanceof UserSet )
-    		return (UserSet) userSet;
-    	else {
-    		userSet = new UserSet(userSet);
-    		return (UserSet)userSet;
-    	}
-    }
+public class DynamicGroup extends SecurityEntityImpl implements Group {
+	private Set roleSet = new RoleSet();
 
-    /**
-     * @param userSet
-     */
-    public void setUsers(UserSet userSet)
-    {
-    	if( userSet != null )
-    		this.userSet = userSet;
-    	else
-    		this.userSet = new UserSet();
-    }
-    
+	private Set userSet = new UserSet();
+
 	/**
 	 * @return
 	 */
-	public Set getUsersAsSet()
-	{
+	public UserSet getUsers() {
+		return new UserSet(userSet);
+	}
+
+	/**
+	 * @param userSet
+	 */
+	public void setUsers(UserSet userSet) {
+		if (userSet != null)
+			this.userSet = userSet;
+		else
+			this.userSet = new UserSet();
+	}
+
+	/**
+	 * @return
+	 */
+	public Set getUsersAsSet() {
 		return userSet;
 	}
 
 	/**
 	 * @param userSet
 	 */
-	public void setUsersAsSet(Set users)
-	{
+	public void setUsersAsSet(Set users) {
 		this.userSet = users;
-	}    
+	}
 
-    /**
-     * @return
-     */
-    public RoleSet getRoles()
-    {
-    	if( roleSet instanceof RoleSet )
-    		return (RoleSet) roleSet;
-    	else {
-    		roleSet = new RoleSet(roleSet);
-    		return (RoleSet)roleSet;
-    	}
-    }
-    /**
-     * @param roleSet
-     */
-    public void setRoles(RoleSet roleSet)
-    {
-    	if( roleSet != null )
-    		this.roleSet = roleSet;
-    	else
-    		this.roleSet = new RoleSet();
-    }
-    public void addRole(Role role)
-    {
-        getRoles().add(role);
-    }
-    public void removeRole(Role role)
-    {
-        getRoles().remove(role);
-    }
+	/**
+	 * @return
+	 */
+	public RoleSet getRoles() {
+		return new RoleSet(roleSet);
+	}
 
-    public void addUser(User user)
-    {
-        getUsers().add(user);
-    }
-    public void removeUser(User user)
-    {
-        getUsers().remove(user);
-    }
-    
-	public void setRolesAsSet(Set roles)
-	{
+	/**
+	 * @param roleSet
+	 */
+	public void setRoles(RoleSet roleSet) {
+		if (roleSet != null)
+			this.roleSet = roleSet;
+		else
+			this.roleSet = new RoleSet();
+	}
+
+	public void addRole(Role role) {
+		getRoles().add(role);
+	}
+
+	public void removeRole(Role role) {
+		getRoles().remove(role);
+	}
+
+	public void addUser(User user) {
+		getUsers().add(user);
+	}
+
+	public void removeUser(User user) {
+		getUsers().remove(user);
+	}
+
+	public void setRolesAsSet(Set roles) {
 		this.roleSet = roles;
 	}
-	public Set getRolesAsSet()
-	{
+
+	public Set getRolesAsSet() {
 		return roleSet;
-	}    
+	}
 }

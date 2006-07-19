@@ -18,6 +18,7 @@ package org.apache.fulcrum.security.util;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.fulcrum.security.entity.User;
 
@@ -27,7 +28,7 @@ import org.apache.fulcrum.security.entity.User;
  * force the type of set.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: UserSet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
+ * @version $Id: UserSet.java,v 1.3 2006/07/19 09:15:16 bgidley Exp $
  */
 public class UserSet
         extends SecuritySet
@@ -50,10 +51,9 @@ public class UserSet
      *
      * @param users A collection of users to be contained in the set.
      */
-    public UserSet(Collection users)
+    public UserSet(Set users)
     {
-        super();
-        add(users);
+    	this.wrappedSet = users;
     }
 
     /**
@@ -66,13 +66,7 @@ public class UserSet
     @SuppressWarnings("unchecked")
 	public boolean add(User user)
     {
-        if (contains(user)){
-            return false;            
-        }
-        else {
-            idMap.put(user.getId(), user);
-            return true;
-        }
+    	return wrappedSet.add(user);
     }
     
     /**
@@ -138,10 +132,8 @@ public class UserSet
      */
     public boolean remove(User user)
     {
-        boolean res = contains(user);
-       // nameMap.remove(user.getName());
-        idMap.remove(user.getId());
-        return res;
+    	return wrappedSet.remove(user);
+    	
     }
 
     /**
@@ -187,7 +179,7 @@ public class UserSet
     public User getUserById(Object userId)
     {
         return (userId != null) 
-                ? (User) idMap.get(userId) : null;
+                ? (User) super.getById(userId) : null;
     }
 
     /**

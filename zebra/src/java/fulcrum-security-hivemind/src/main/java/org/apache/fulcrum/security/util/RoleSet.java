@@ -18,6 +18,7 @@ package org.apache.fulcrum.security.util;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Role;
 
@@ -31,7 +32,7 @@ import org.apache.fulcrum.security.entity.Role;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: RoleSet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
+ * @version $Id: RoleSet.java,v 1.3 2006/07/19 09:15:16 bgidley Exp $
  */
 public class RoleSet
         extends SecuritySet
@@ -54,10 +55,9 @@ public class RoleSet
      *
      * @param roles A collection of roles to be contained in the set.
      */
-    public RoleSet(Collection roles)
+    public RoleSet(Set roles)
     {
-        super();
-        add(roles);
+        this.wrappedSet = roles;
     }
 
     /**
@@ -70,13 +70,7 @@ public class RoleSet
     @SuppressWarnings("unchecked")
 	public boolean add(Role role)
     {
-        if (contains(role)){
-            return false;            
-        }
-        else {
-            idMap.put(role.getId(), role);
-            return true;
-        }
+    	return wrappedSet.add(role);
     }
     
     /**
@@ -142,10 +136,7 @@ public class RoleSet
      */
     public boolean remove(Role role)
     {
-        boolean res = contains(role);
-      //  nameMap.remove(role.getName());
-        idMap.remove(role.getId());
-        return res;
+    	return wrappedSet.remove(role);
     }
 
     /**
@@ -171,10 +162,7 @@ public class RoleSet
      */
     public Role getRoleByName(String roleName)
     {
-		return (Role)getByName(roleName);
-		/*roleName=roleName.toLowerCase();
-        return (StringUtils.isNotEmpty(roleName))
-                ? (Role) nameMap.get(roleName) : null;*/
+		return (Role)getByName(roleName);	
     }
 
     /**
@@ -188,7 +176,7 @@ public class RoleSet
     public Role getRoleById(Object roleId)
     {
         return (roleId != null) 
-                ? (Role) idMap.get(roleId) : null;
+                ? (Role) super.getById(roleId) : null;
     }
 
     /**

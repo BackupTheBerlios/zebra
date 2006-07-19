@@ -18,219 +18,190 @@ package org.apache.fulcrum.security.util;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
 
 /**
  * This class represents a set of Groups. It's useful for building
- * administration UI.  It enforces that only
- * Group objects are allowed in the set and only relevant methods
- * are available.
- *
+ * administration UI. It enforces that only Group objects are allowed in the set
+ * and only relevant methods are available.
+ * 
  * @author <a href="mailto:john.mcnally@clearink.com">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: GroupSet.java,v 1.2 2006/03/18 16:19:36 biggus_richus Exp $
+ * @version $Id: GroupSet.java,v 1.3 2006/07/19 09:15:16 bgidley Exp $
  */
-public class GroupSet
-        extends SecuritySet
-{
+public class GroupSet extends SecuritySet {
 	private static final long serialVersionUID = 6882240173053961011L;
 
 	/**
-     * Constructs an empty GroupSet
-     */
-    public GroupSet()
-    {
-        super();
-    }
+	 * Constructs an empty GroupSet
+	 */
+	public GroupSet() {
+		super();
+	}
 
-    /**
-     * Constructs a new GroupSet with specified contents.
-     *
-     * If the given collection contains multiple objects that are
-     * identical WRT equals() method, some objects will be overwritten.
-     *
-     * @param groups A collection of groups to be contained in the set.
-     */
-    public GroupSet(Collection groups)
-    {
-        super();
-        add(groups);
-    }
+	/**
+	 * Constructs a new GroupSet with specified contents.
+	 * 
+	 * If the given collection contains multiple objects that are identical WRT
+	 * equals() method, some objects will be overwritten.
+	 * 
+	 * @param groups
+	 *            A collection of groups to be contained in the set.
+	 */
+	public GroupSet(Set groups) {
+		this.wrappedSet=groups;
+	}
 
-    /**
-     * Adds a Group to this GroupSet.
-     *
-     * @param group A Group.
-     * @return True if Group was added; false if GroupSet
-     * already contained the Group.
-     */
-    @SuppressWarnings("unchecked")
-	public boolean add(Group group)
-    {
-        if (contains(group)){
-            return false;            
-        }
-        else {
-            idMap.put(group.getId(), group);
-            return true;
-        }
-    }
-    
-    /**
-     * Adds a Group to this GroupSet.
-     *
-     * @param obj A Group.
-     * @return True if Group was added; false if GroupSet already
-     * contained the Group.
-     */
-    public boolean add(Object obj) {
-        if(obj instanceof Group){
-            return add((Group)obj);
-        }
-        else {
-            throw new ClassCastException("Object passed to add to GroupSet is not of type Group");
-        }
-    }    
-		
-    /**
-     * Adds the Groups in a Collection to this GroupSet.
-     *
-     * @param groups A Collection of Groups.
-     * @return True if this GroupSet changed as a result; false
-     * if no change to this GroupSet occurred (this GroupSet
-     * already contained all members of the added GroupSet).
-     */
-    public boolean add(Collection groups)
-    {
-        boolean res = false;
-        for (Iterator it = groups.iterator(); it.hasNext();)
-        {
-            Group g = (Group) it.next();
-            res |= add(g);
-        }
-        return res;
-    }
+	/**
+	 * Adds a Group to this GroupSet.
+	 * 
+	 * @param group
+	 *            A Group.
+	 * @return True if Group was added; false if GroupSet already contained the
+	 *         Group.
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean add(Group group) {
+		return wrappedSet.add(group);
 
-    /**
-     * Adds the Groups in another GroupSet to this GroupSet.
-     *
-     * @param groupSet A GroupSet.
-     * @return True if this GroupSet changed as a result; false
-     * if no change to this GroupSet occurred (this GroupSet
-     * already contained all members of the added GroupSet).
-     */
-    public boolean add(GroupSet groupSet)
-    {
-        boolean res = false;
-        for( Iterator it = groupSet.iterator(); it.hasNext();)
-        {
-            Group g = (Group) it.next();
-            res |= add(g);
-        }
-        return res;
-    }
+	}
 
-    /**
-     * Removes a Group from this GroupSet.
-     *
-     * @param group A Group.
-     * @return True if this GroupSet contained the Group
-     * before it was removed.
-     */
-    public boolean remove(Group group)
-    {
-        boolean res = contains(group);
-        //nameMap.remove(group.getName());
-        idMap.remove(group.getId());
-        return res;
-    }
+	/**
+	 * Adds a Group to this GroupSet.
+	 * 
+	 * @param obj
+	 *            A Group.
+	 * @return True if Group was added; false if GroupSet already contained the
+	 *         Group.
+	 */
+	public boolean add(Object obj) {
+		if (obj instanceof Group) {
+			return add((Group) obj);
+		} else {
+			throw new ClassCastException(
+					"Object passed to add to GroupSet is not of type Group");
+		}
+	}
 
-    /**
-     * Checks whether this GroupSet contains a Group.
-     *
-     * @param group A Group.
-     * @return True if this GroupSet contains the Group,
-     * false otherwise.
-     */
-    public boolean contains(Group group)
-    {
-        return super.contains(group);
-    }
+	/**
+	 * Adds the Groups in a Collection to this GroupSet.
+	 * 
+	 * @param groups
+	 *            A Collection of Groups.
+	 * @return True if this GroupSet changed as a result; false if no change to
+	 *         this GroupSet occurred (this GroupSet already contained all
+	 *         members of the added GroupSet).
+	 */
+	public boolean add(Collection groups) {
+		boolean res = false;
+		for (Iterator it = groups.iterator(); it.hasNext();) {
+			Group g = (Group) it.next();
+			res |= add(g);
+		}
+		return res;
+	}
 
+	/**
+	 * Adds the Groups in another GroupSet to this GroupSet.
+	 * 
+	 * @param groupSet
+	 *            A GroupSet.
+	 * @return True if this GroupSet changed as a result; false if no change to
+	 *         this GroupSet occurred (this GroupSet already contained all
+	 *         members of the added GroupSet).
+	 */
+	public boolean add(GroupSet groupSet) {
+		boolean res = false;
+		for (Iterator it = groupSet.iterator(); it.hasNext();) {
+			Group g = (Group) it.next();
+			res |= add(g);
+		}
+		return res;
+	}
 
+	/**
+	 * Removes a Group from this GroupSet.
+	 * 
+	 * @param group
+	 *            A Group.
+	 * @return True if this GroupSet contained the Group before it was removed.
+	 */
+	public boolean remove(Group group) {
+		return super.remove(group);
+	}
 
-    /**
-     * Returns a Group with the given name, if it is contained in
-     * this GroupSet.
-     *
-     * @param groupName Name of Group.
-     * @return Group if argument matched a Group in this
-     * GroupSet; null if no match.
-     */
-    public Group getGroupByName(String groupName)
-    {
-    	/*groupName=groupName.toLowerCase();
-        return (StringUtils.isNotEmpty(groupName))
-                ? (Group) nameMap.get(groupName) : null;
-                */
-		return (Group)getByName(groupName);
-    }
+	/**
+	 * Checks whether this GroupSet contains a Group.
+	 * 
+	 * @param group
+	 *            A Group.
+	 * @return True if this GroupSet contains the Group, false otherwise.
+	 */
+	public boolean contains(Group group) {
+		return super.contains(group);
+	}
 
-    /**
-     * Returns a Group with the given id, if it is contained in
-     * this GroupSet.
-     *
-     * @param groupId Id of the group
-     * @return Group if argument matched a Group in this
-     * GroupSet; null if no match.
-     */
-    public Group getGroupById(Object groupId)
-    {
-        return (groupId != null)
-                ? (Group) idMap.get(groupId) : null;
-    }
+	/**
+	 * Returns a Group with the given name, if it is contained in this GroupSet.
+	 * 
+	 * @param groupName
+	 *            Name of Group.
+	 * @return Group if argument matched a Group in this GroupSet; null if no
+	 *         match.
+	 */
+	public Group getGroupByName(String groupName) {
+		return (Group) getByName(groupName);
+	}
 
-    /**
-     * Returns an Array of Groups in this GroupSet.
-     *
-     * @return An Array of Group objects.
-     */
-    @SuppressWarnings("unchecked")
-	public Group[] getGroupsArray()
-    {
-        return (Group[]) getSet().toArray(new Group[0]);
-    }
+	/**
+	 * Returns a Group with the given id, if it is contained in this GroupSet.
+	 * 
+	 * @param groupId
+	 *            Id of the group
+	 * @return Group if argument matched a Group in this GroupSet; null if no
+	 *         match.
+	 */
+	public Group getGroupById(Object groupId) {
+		return (Group) ((groupId != null) ? super.getById(groupId) : null);
+	}
 
-    /**
-     * Print out a GroupSet as a String
-     *
-     * @returns The Group Set as String
-     *
-     */
-    public String toString()
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append("GroupSet: ");
+	/**
+	 * Returns an Array of Groups in this GroupSet.
+	 * 
+	 * @return An Array of Group objects.
+	 */
+	@SuppressWarnings("unchecked")
+	public Group[] getGroupsArray() {
+		return (Group[]) getSet().toArray(new Group[0]);
+	}
 
-        for(Iterator it = iterator(); it.hasNext();)
-        {
-            Group g = (Group) it.next();
-            sb.append('[');
-            sb.append(g.getName());
-            sb.append(" -> ");
-            sb.append(g.getId());
-            sb.append(']');
-            if (it.hasNext())
-            {
-                sb.append(", ");
-            }
-        }
+	/**
+	 * Print out a GroupSet as a String
+	 * 
+	 * @returns The Group Set as String
+	 * 
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("GroupSet: ");
 
-        return sb.toString();
-    }
-    
-  
+		for (Iterator it = iterator(); it.hasNext();) {
+			Group g = (Group) it.next();
+			sb.append('[');
+			sb.append(g.getName());
+			sb.append(" -> ");
+			sb.append(g.getId());
+			sb.append(']');
+			if (it.hasNext()) {
+				sb.append(", ");
+			}
+		}
+
+		return sb.toString();
+	}
+
 }
