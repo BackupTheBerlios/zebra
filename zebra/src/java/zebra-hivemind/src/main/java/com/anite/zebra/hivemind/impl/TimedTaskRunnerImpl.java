@@ -110,15 +110,19 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 	 * @see com.anite.zebra.hivemind.api.TimedTaskRunner#runTasksForTime(com.anite.zebra.hivemind.om.timedtask.Time)
 	 */
 	public void runTasksForTime(Time time) {
-
+		log.info("Beginning the " + time.getJobName() + " task run");
+		
 		List<TimedTask> timedTasks = timedTaskManager.getTasksForTime(time);
 
-		for (TimedTask timedTask : timedTasks) {
-
+		log.info(time.getJobName() + " run: " + timedTasks.size() + " tasks found");
+		//for (TimedTask timedTask : timedTasks) {
+		for (int i=0; i<timedTasks.size(); i++) {
+			TimedTask timedTask = timedTasks.get(i);
+			log.info(time.getJobName() + " run: running task " + i);
 			runTask(timedTask);
 
 		}
-
+		log.info("Completed the " + time.getJobName() + " task run");
 	}
 
 	public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins) {
