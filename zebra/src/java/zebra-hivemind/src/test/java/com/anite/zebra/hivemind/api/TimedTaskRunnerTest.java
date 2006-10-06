@@ -61,7 +61,7 @@ public class TimedTaskRunnerTest extends TestCase {
 				.getInstance().getRegistry().getService(
 						"zebra.TimedTaskRunner", TimedTaskRunner.class);
 		timedTaskRunner.scheduleTimedTask(zpi.getTaskInstances().iterator()
-				.next(), 1, 0);
+				.next(), 1, 0, null);
 
 		TimeManager timeManager = (TimeManager) RegistryManager.getInstance()
 				.getRegistry().getService(TimeManager.class);

@@ -16,6 +16,8 @@
  */
 package com.anite.zebra.hivemind.api;
 
+import java.util.Date;
+
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 import com.anite.zebra.hivemind.om.timedtask.Time;
 import com.anite.zebra.hivemind.om.timedtask.TimedTask;
@@ -38,6 +40,6 @@ public interface TimedTaskRunner {
      * @param zti
      * @param time
      */
-    public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins);
+    public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins, Date taskDate);
 
 }

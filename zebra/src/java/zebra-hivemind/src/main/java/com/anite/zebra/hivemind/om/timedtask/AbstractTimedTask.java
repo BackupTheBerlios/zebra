@@ -16,12 +16,19 @@
  */
 package com.anite.zebra.hivemind.om.timedtask;
 
+import java.util.Date;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+
+import com.anite.zebra.hivemind.om.timedtask.BaseDomain;
+import com.anite.zebra.hivemind.om.timedtask.Time;
 
 @MappedSuperclass
 public class AbstractTimedTask extends BaseDomain {
 	private Time time;
+	
+	private Date runTaskDate;
 
 	private Long zebraTaskInstanceId;
 
@@ -40,5 +47,13 @@ public class AbstractTimedTask extends BaseDomain {
 
 	public void setZebraTaskInstanceId(Long zebraTaskInstanceId) {
 		this.zebraTaskInstanceId = zebraTaskInstanceId;
+	}
+
+	public Date getRunTaskDate() {
+		return runTaskDate;
+	}
+
+	public void setRunTaskDate(Date runTaskDate) {
+		this.runTaskDate = runTaskDate;
 	}
 }

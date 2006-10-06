@@ -16,7 +16,9 @@
  */
 package com.anite.zebra.hivemind.impl;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -93,26 +95,52 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 	 */
 	public void runTasksForTime(Time time) {
 		log.info("Beginning the " + time.getJobName() + " task run");
-		
+
 		List<TimedTask> timedTasks = timedTaskManager.getTasksForTime(time);
 
-		log.info(time.getJobName() + " run: " + timedTasks.size() + " tasks found");
-		//for (TimedTask timedTask : timedTasks) {
-		for (int i=0; i<timedTasks.size(); i++) {
+		log.info(time.getJobName() + " run: " + timedTasks.size()
+				+ " tasks found");
+		// for (TimedTask timedTask : timedTasks) {
+		for (int i = 0; i < timedTasks.size(); i++) {
 			TimedTask timedTask = timedTasks.get(i);
-			log.info(time.getJobName() + " run: running task " + i);
-			runTask(timedTask);
-
+			if (isTaskDueToday(timedTask)) {
+				log.info(time.getJobName() + " run: running task " + i);
+				runTask(timedTask);
+			}
 		}
 		log.info("Completed the " + time.getJobName() + " task run");
 	}
 
-	public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins) {
+	//checks to see if the task is due to be run today
+	private boolean isTaskDueToday(TimedTask timedTask) {
+		boolean taskOK = false;
+		Calendar calendar = Calendar.getInstance();
+		GregorianCalendar now = new GregorianCalendar();
+
+		now.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+		Date lastThingToday = new Date(now.getTimeInMillis());
+		
+	
+		
+		if (timedTask.getRunTaskDate() == null
+				|| timedTask.getRunTaskDate().equals(lastThingToday)
+				|| timedTask.getRunTaskDate().before(lastThingToday)) {
+
+			taskOK = true;
+		}
+		return taskOK;
+
+	}
+
+	public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins,
+			Date taskDate) {
 
 		TimedTask timedTask = new TimedTask();
 		Time time = getTimeManager().createOrFetchTime(hours, mins);
 		timedTask.setZebraTaskInstanceId(zti.getTaskInstanceId());
 		timedTask.setTime(time);
+		timedTask.setRunTaskDate(taskDate);
 		getTimedTaskManager().saveOrUpdate(timedTask);
 	}
 
@@ -171,6 +199,12 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 
 	public TimedTaskManager getTimedTaskManager() {
 		return timedTaskManager;
+	}
+
+	public void scheduleTimedTask(ZebraTaskInstance zti, int hours, int mins,
+			java.sql.Date date) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

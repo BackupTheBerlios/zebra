@@ -22,8 +22,7 @@ import com.anite.zebra.hivemind.om.timedtask.Time;
 import com.anite.zebra.hivemind.om.timedtask.TimedTask;
 
 public interface TimedTaskManager extends BaseManager<TimedTask> {
-    
-    public List<TimedTask> getTasksForTime(Time time);     
-       
+
+	public List<TimedTask> getTasksForTime(Time time);
 
 }
