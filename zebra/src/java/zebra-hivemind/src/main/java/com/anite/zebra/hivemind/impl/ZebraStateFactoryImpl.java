@@ -47,7 +47,6 @@ import com.anite.zebra.hivemind.om.state.ZebraFOE;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 import com.anite.zebra.hivemind.om.state.ZebraTaskInstanceHistory;
-import com.anite.zebra.hivemind.util.RegistryHelper;
 
 /**
  * Provides the state layer for the workflow engine

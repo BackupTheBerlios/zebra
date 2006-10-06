@@ -21,16 +21,10 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.fulcrum.hivemind.RegistryManager;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.TriggerUtils;
 
 import com.anite.zebra.core.exceptions.TransitionException;
 import com.anite.zebra.core.state.api.ITaskInstance;
 import com.anite.zebra.hivemind.api.TimedTaskRunner;
-import com.anite.zebra.hivemind.job.TimedTaskRunnerJob;
 import com.anite.zebra.hivemind.manager.FiredTimedTaskManager;
 import com.anite.zebra.hivemind.manager.TimeManager;
 import com.anite.zebra.hivemind.manager.TimedTaskManager;
@@ -56,8 +50,6 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 
 	static public final String HOUR = "hour";
 
-	private static final String TIME_TASK_RUNNER = "TimeTaskRunner";
-
 	private TimedTaskManager timedTaskManager;
 
 	private FiredTimedTaskManager firedTimedTaskManager;
@@ -67,16 +59,6 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 	private Log log;
 
 	private Zebra zebra;
-
-	private Scheduler scheduler;
-
-	public Scheduler getScheduler() {
-		return scheduler;
-	}
-
-	public void setScheduler(Scheduler scheduler) {
-		this.scheduler = scheduler;
-	}
 
 	public void setZebra(Zebra zebra) {
 		this.zebra = zebra;
@@ -132,43 +114,6 @@ public class TimedTaskRunnerImpl implements TimedTaskRunner {
 		timedTask.setZebraTaskInstanceId(zti.getTaskInstanceId());
 		timedTask.setTime(time);
 		getTimedTaskManager().saveOrUpdate(timedTask);
-
-		// Now verify there is a quartz job for requested time.
-		try {
-			JobDetail jobDetail = scheduler.getJobDetail(time.getJobName(),
-					TIME_TASK_RUNNER);
-
-			if (jobDetail == null) {
-				createJobDetail(time);
-			}
-
-		} catch (SchedulerException e) {
-			log.error(e);
-		}
-
-	}
-
-	/**
-	 * Create the job in quartz for the passed time.
-	 * 
-	 * @param time
-	 * @throws SchedulerException
-	 */
-	private void createJobDetail(Time time) throws SchedulerException {
-		JobDetail jobDetail = new JobDetail();
-		jobDetail.setName(time.getJobName());
-		jobDetail.setDescription("Time Task Runner Job");
-		jobDetail.setDurability(false);
-		jobDetail.setGroup(TIME_TASK_RUNNER);
-		jobDetail.setJobClass(TimedTaskRunnerJob.class);
-		jobDetail.setRequestsRecovery(true);
-		JobDataMap jobDataMap = new JobDataMap();
-		jobDataMap.put(HOUR, time.getHour());
-		jobDataMap.put(MINUTE, time.getMinute());
-		jobDetail.setJobDataMap(jobDataMap);
-
-		scheduler.scheduleJob(jobDetail, TriggerUtils.makeDailyTrigger(time
-				.getJobName(), time.getHour(), time.getMinute()));
 	}
 
 	/**

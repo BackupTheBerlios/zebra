@@ -18,9 +18,6 @@ package com.anite.zebra.hivemind.om.timedtask;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-
-import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
 @MappedSuperclass
 public class AbstractTimedTask extends BaseDomain {

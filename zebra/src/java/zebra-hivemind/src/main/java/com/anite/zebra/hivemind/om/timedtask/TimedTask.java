@@ -17,9 +17,6 @@
 package com.anite.zebra.hivemind.om.timedtask;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
-import com.anite.zebra.hivemind.om.state.ZebraTaskInstance;
 
 @Entity
 public class TimedTask extends AbstractTimedTask {

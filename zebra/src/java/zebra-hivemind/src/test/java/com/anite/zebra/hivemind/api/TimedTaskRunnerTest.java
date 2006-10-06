@@ -27,7 +27,6 @@ import com.anite.zebra.core.exceptions.CreateProcessException;
 import com.anite.zebra.core.exceptions.StartProcessException;
 import com.anite.zebra.hivemind.impl.Zebra;
 import com.anite.zebra.hivemind.manager.TimeManager;
-import com.anite.zebra.hivemind.om.defs.ZebraProcessVersions;
 import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
 import com.anite.zebra.hivemind.taskAction.NoopHiveMindTaskAction;
 

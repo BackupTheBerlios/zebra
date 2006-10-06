@@ -16,16 +16,12 @@
  */
 package com.anite.zebra.hivemind.impl;
 
+import junit.framework.TestCase;
+
 import org.apache.fulcrum.hivemind.RegistryManager;
 import org.apache.hivemind.Resource;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.util.ClasspathResource;
-
-import com.anite.zebra.core.exceptions.CreateProcessException;
-import com.anite.zebra.core.exceptions.StartProcessException;
-import com.anite.zebra.hivemind.om.state.ZebraProcessInstance;
-
-import junit.framework.TestCase;
 
 public class ZebraSubflowsTest extends TestCase {
    private Zebra zebra;

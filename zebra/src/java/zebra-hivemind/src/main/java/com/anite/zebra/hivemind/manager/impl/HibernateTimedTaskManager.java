@@ -27,7 +27,8 @@ import com.anite.zebra.hivemind.om.timedtask.TimedTask;
 
 public class HibernateTimedTaskManager extends HibernateManager<TimedTask> implements TimedTaskManager {
 
-    public List<TimedTask> getTasksForTime(Time time) {
+    @SuppressWarnings("unchecked")
+	public List<TimedTask> getTasksForTime(Time time) {
 
     	Criteria criteria = getSession().createCriteria(TimedTask.class);
     	criteria.add(Restrictions.eq("time", time));

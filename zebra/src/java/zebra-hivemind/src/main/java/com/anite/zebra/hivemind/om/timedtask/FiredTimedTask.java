@@ -22,8 +22,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import com.anite.zebra.hivemind.om.state.ZebraTaskInstanceHistory;
-
 @Entity
 public class FiredTimedTask extends AbstractTimedTask {
 
