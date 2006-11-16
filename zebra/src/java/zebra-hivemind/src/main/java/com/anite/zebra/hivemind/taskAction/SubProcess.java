@@ -114,23 +114,26 @@ public class SubProcess implements ITaskAction {
 				ZebraPropertySetEntry value;
 				if (parentProcess.getPropertySet().containsKey(key)) {
 					value = parentProcess.getPropertySet().get(key);
+					
 				} else if (parentTaskDefinition.getInputs().containsKey(key)) {
 					ZebraPropertySetEntry element = new ZebraPropertySetEntry();
 					element.setValue((String) parentTaskDefinition.getInputs()
 							.get(key));
 					value = element;
+					
 				} else {
 					ZebraPropertySetEntry element = new ZebraPropertySetEntry();
 					element.setValue((String) subFlowProcessDefinition
 							.getInputs().get(key));
 					value = element;
 				}
-				// value = (ZebraPropertySetEntry)
-				// PersistenceLocator.getInstance().getCurrentSession().saveOrUpdateCopy(value);
+
 				// Take a COPY
 				ZebraPropertySetEntry copyValue = new ZebraPropertySetEntry();
 				copyValue.setValue(value.getValue());
 				copyValue.setObject(value.getObject());
+				copyValue.setProcessInstance(subProcess);
+				copyValue.setKey(key);
 				subProcess.getPropertySet().put(key, copyValue);
 			}
 		} catch (Exception e) {
