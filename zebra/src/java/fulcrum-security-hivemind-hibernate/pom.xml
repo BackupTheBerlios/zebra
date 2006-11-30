@@ -5,7 +5,7 @@
 	<groupId>fulcrum-hivemind</groupId>
 	<artifactId>fulcrum-security-hibernate</artifactId>
 	<packaging>jar</packaging>
-	<version>2.1</version>
+	<version>2.2</version>
 	<name>
 		fulcrum-hibernate-security- Fuclrum Security Hibernate layer for
 		Hivemind
@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>fulcrum-hivemind</groupId>
 			<artifactId>fulcrum-security</artifactId>
-			<version>2.1</version>
+			<version>2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>fulcrum-hivemind</groupId>
