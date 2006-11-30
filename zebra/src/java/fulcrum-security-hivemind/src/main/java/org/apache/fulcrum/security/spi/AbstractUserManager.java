@@ -43,7 +43,7 @@ import org.apache.fulcrum.security.util.UserLockedException;
  * 
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AbstractUserManager.java,v 1.8 2006/03/18 16:19:37 biggus_richus Exp $
+ * @version $Id: AbstractUserManager.java,v 1.9 2006/11/30 13:40:44 biggus_richus Exp $
  */
 public abstract class AbstractUserManager extends AbstractEntityManager
 		implements UserManager {
@@ -188,10 +188,10 @@ public abstract class AbstractUserManager extends AbstractEntityManager
 			throws PasswordMismatchException, UnknownEntityException, 
 			DataBackendException, UserLockedException, EntityDisabledException {
 
-		if (!checkExists(user)) {
-			throw new UnknownEntityException("The account '" + user.getName()
-					+ "' does not exist");
-		}
+//		if (!checkExists(user)) {
+//			throw new UnknownEntityException("The account '" + user.getName()
+//					+ "' does not exist");
+//		}
 
 		if (user.isDisabled()) {
 			throw new EntityDisabledException("User is disabled");

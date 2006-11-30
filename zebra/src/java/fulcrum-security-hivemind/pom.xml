@@ -6,7 +6,7 @@
 	<artifactId>fulcrum-security</artifactId>
 	<packaging>jar</packaging>
 	<name>Fulcrum Security for Hivemind</name>
-	<version>2.1</version>
+	<version>2.2</version>
 	<description>
 		A port of Fulcrum Security to run inside Hivemind.
 	</description>
