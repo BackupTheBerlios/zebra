@@ -6,7 +6,7 @@
     <groupId>zebra</groupId>
     <artifactId>zebra-core</artifactId>
     <name>Zebra Core Process Engine</name>
-    <currentVersion>0.5.2-dev</currentVersion>
+    <currentVersion>0.5.3</currentVersion>
     <inceptionYear>2004</inceptionYear>
     <logo/>
     <organization>
@@ -60,25 +60,6 @@
             <organization/>
             <roles>
                 <role>Senior Architect</role>
-            </roles>
-        </developer>
-		<developer>
-			<name>Ben Gidley</name>
-			<id>bgidley</id>
-			<email>ben.gidley@anite.com</email>
-			<organization/>
-			<roles>
-				<role>Senior Architect</role>
-			</roles>
-		</developer>
-        <developer>
-            <name>Eric Pugh</name>
-            <id>dep4b</id>
-            <email>epugh@opensourceconnections.com</email>
-            <organization> OpenSource Connections </organization>
-            <url>http://www.opensourceconnections.com/</url>
-            <roles>
-                <role>Developer</role>
             </roles>
         </developer>
     </developers>

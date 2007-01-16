@@ -21,6 +21,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.anite.zebra.core.definitions.api.IRoutingDefinition;
 import com.anite.zebra.core.definitions.api.ITaskDefinition;
 import com.anite.zebra.core.exceptions.DefinitionNotFoundException;
@@ -33,7 +36,8 @@ import com.anite.zebra.core.state.api.ITaskInstance;
  * @author Matthew.Norris
  */
 public class TaskSync {
-    /**
+    private static Log log = LogFactory.getLog(TaskSync.class);
+	/**
      * @return Returns TaskDefs marked as Synchronise=TRUE that this TaskDef can
      *         potentially block
      */
@@ -91,9 +95,11 @@ public class TaskSync {
         Map blockingDefs = new HashMap();
         for (Iterator it = processTasks.iterator(); it.hasNext();) {
             ITaskInstance iti = (ITaskInstance) it.next();
-            ITaskDefinition itd = iti.getTaskDefinition();
-            if (!blockingDefs.containsKey(itd.getId())) {
-                blockingDefs.put(itd.getId(), itd);
+            if (!iti.getTaskInstanceId().equals(task.getTaskInstanceId())) {
+	            ITaskDefinition itd = iti.getTaskDefinition();
+	            if (!blockingDefs.containsKey(itd.getId())) {
+	                blockingDefs.put(itd.getId(), itd);
+	            }
             }
         }
         return checkDefInList(blockingDefs, task.getTaskDefinition());
@@ -122,7 +128,10 @@ public class TaskSync {
                 IRoutingDefinition checkRouting = (IRoutingDefinition) it.next();
                 ITaskDefinition srcTask = checkRouting.getOriginatingTaskDefinition();
                 if (blockingDefs.containsKey(srcTask.getId())) {
-                    return true;
+                    if (log.isInfoEnabled()) {
+                    	log.info("Task " + taskDef + " is being blocked by "  + srcTask);
+                    }
+                	return true;
                 }
                 if (!checkList.containsKey(srcTask.getId())) {
                     if (!visitedList.containsKey(srcTask.getId())) {

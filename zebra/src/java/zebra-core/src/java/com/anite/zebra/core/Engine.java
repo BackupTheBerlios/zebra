@@ -334,7 +334,7 @@ public class Engine implements IEngine {
 		for (Iterator it = currentProcess.getTaskInstances()
 				.iterator(); it.hasNext();) {
 			ITaskInstance checkTask = (ITaskInstance) it.next();
-			if (syncList.containsKey(checkTask.getTaskDefinition().getId())) {
+			if (checkTask.getState()==ITaskInstance.STATE_AWAITINGSYNC && syncList.containsKey(checkTask.getTaskDefinition().getId())) {
 				// sync task found, so add to the create list
 				if (!createdTasks.containsKey(checkTask.getTaskInstanceId())) {
 					if (log.isInfoEnabled()) {
