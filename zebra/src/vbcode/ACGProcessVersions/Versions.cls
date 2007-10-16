@@ -84,3 +84,6 @@ Attribute NewEnum.VB_MemberFlags = "40"
     Set NewEnum = mcol.[_NewEnum]
 End Property
 
+Public Sub Remove(pv As ProcessVersion)
+    mcol.Remove "@" & pv.Version
+End Sub

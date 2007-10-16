@@ -124,6 +124,31 @@ Err_Handler:
     Resume 0
 End Function
 
+Public Function FileDeleteVersion(FileName As String, oProcessVersion As ProcessVersion)
+    Dim oDoc As MSXML2.DOMDocument
+    Set oDoc = GetDoc(FileName)
+    Dim oRoot As MSXML2.IXMLDOMNode
+    Set oRoot = GetVersionRoot(oDoc.firstChild)
+    Dim oNode As MSXML2.IXMLDOMNode
+    Dim oNVersions As IXMLDOMNodeList
+    Set oNVersions = oRoot.childNodes
+    Do
+        Set oNode = oNVersions.nextNode
+        If oNode Is Nothing Then Exit Do
+        If CLng(GetNodeAttr(oNode, "VersionID", "-1")) = oProcessVersion.version Then
+            oRoot.removeChild oNode
+            Exit Do
+        End If
+    Loop
+    oDoc.save FileName
+    FileDeleteVersion = True
+End Function
+
+'/ updates the process definition in the XML file, adds a new revision
+Public Function FileSaveRevisionXML(FileName As String, oProcessVersion As ProcessVersion) As Boolean
+    
+End Function
+
 '/ saves the process definition to an XML file
 Public Function FileSaveXML(FileName As String, oVersions As Versions, oProcessDef As ProcessDef) As Boolean
     

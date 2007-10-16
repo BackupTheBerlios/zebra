@@ -1,9 +1,11 @@
 Type=OleDll
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\..\WINDOWS\System32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
 Reference=*\G{2F9D76FD-5387-45C7-8F06-2926FEC87D7E}#1.0#0#..\ACGProcessDefs\ACGProcessDefs.dll#ACGProcessDefs
-Reference=*\G{CCF04066-C857-49A4-8670-93231767A7DA}#1.0#0#..\..\..\..\..\..\..\..\DOCUME~1\matt\MYDOCU~1\SOURCE~1\ZEBRAT~1.ORG\src\vbcode\ACGCON~1\ACGCON~1.DLL#ACGContainer
+Reference=*\G{CCF04066-C857-49A4-8670-93231767A7DA}#1.0#0#..\ACGContainer\ACGContainer.dll#
 Class=ProcessVersion; ProcessVersion.cls
 Class=Versions; Versions.cls
+Class=Revisions; ..\..\..\..\..\..\..\..\..\Documents and Settings\Matthew.Norris\My Documents\Projects\Zebra\zebra\src\vbcode\ACGProcessVersions\Revisions.cls
+Class=Revision; ..\..\..\..\..\..\..\..\..\Documents and Settings\Matthew.Norris\My Documents\Projects\Zebra\zebra\src\vbcode\ACGProcessVersions\Revision.cls
 Startup="(None)"
 HelpFile=""
 Title="ACGZVER"

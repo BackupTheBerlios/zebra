@@ -361,17 +361,39 @@ Private Function XMLTask(oTasks As Tasks, oRoot As IXMLDOMNode) As Boolean
         Debug.Print "Copying task template values"
         CopyProps oTaskTemplate.PropertyGroup, oTaskDef.PropertyGroup
     End If
-    
     For Each oNode In oRoot.childNodes
         fOk = XMLProperties(oTaskDef.PropertyGroup, oNode)
         If Not fOk Then Exit For
     Next
+    If fOk Then
+        '// update props
+        If Not (moProcessTemplate Is Nothing) Then
+            updateLockedProps oTaskDef.PropertyGroup, moProcessTemplate.CommonTaskProperties
+        End If
+        If Not (oTaskTemplate Is Nothing) Then
+            updateLockedProps oTaskDef.PropertyGroup, oTaskTemplate.PropertyGroup
+        End If
+        
+    End If
     XMLTask = fOk
     Exit Function
 Err_Handler:
     Stop
     Resume 0
 End Function
+
+Private Sub updateLockedProps(propsToUpdate As PropertyGroup, propsTemplate As PropertyGroup)
+    Dim ps As Properties
+    Dim p As Property
+    For Each ps In propsTemplate
+        For Each p In ps
+            If p.Locked Then
+                propsToUpdate.Item(ps.Name).Item(p.Name).Value = p.Value
+                propsToUpdate.Item(ps.Name).Item(p.Name).Locked = p.Locked
+            End If
+        Next
+    Next
+End Sub
 
 Private Function XMLRoutings(oRoutings As Routings, oRoot As IXMLDOMNode) As Boolean
     On Error GoTo Err_Handler

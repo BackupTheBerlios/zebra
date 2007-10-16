@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{F74DBB97-4C02-4B5D-AB22-1D7E188F4415}#1.0#0"; "InnovaDSXP.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F74DBB97-4C02-4B5D-AB22-1D7E188F4415}#1.0#0"; "innovadsxp.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmMDI 
    Caption         =   "ACG Workflow Designer"
    ClientHeight    =   8505
@@ -170,7 +170,7 @@ Private Sub MenuHandlerFile(ByRef Command As InnovaDSXP.Command)
                 
             Set oFlow = loadProcess()
             If Not (oFlow Is Nothing) Then
-                Set oDW = ds.DocumentWindows.AddForm(CreateGUID, oFlow.mProcessDef.Name, , oFlow, True)
+                Set oDW = ds.DocumentWindows.AddForm(CreateGUID, oFlow.getCaption, , oFlow, True)
             End If
         Case "TLSAVE"
         Case "TLNEW"
@@ -322,7 +322,7 @@ Private Function loadProcess() As frmFlow
     dlg.Filter = "ACG Process Format|*.acgwfd.xml"
     dlg.FilterIndex = 1
     dlg.DialogTitle = "Load Process"
-    dlg.FileName = Me.Caption
+    '/dlg.FileName = Me.Caption
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowOpen
@@ -336,7 +336,7 @@ Public Sub CommandLineLoadProcess(FileName As String)
     
     Set oFlow = LoadFromFile(FileName)
     If Not (oFlow Is Nothing) Then
-        Set oDW = ds.DocumentWindows.AddForm(CreateGUID, oFlow.mProcessDef.Name, , oFlow, True)
+        Set oDW = ds.DocumentWindows.AddForm(CreateGUID, oFlow.getCaption, , oFlow, True)
     End If
 End Sub
 Private Function LoadFromFile(FileName As String) As frmFlow

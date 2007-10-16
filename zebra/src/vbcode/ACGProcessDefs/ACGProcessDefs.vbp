@@ -1,8 +1,8 @@
 Type=OleDll
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\..\WINDOWS\System32\stdole2.tlb#OLE Automation
-Reference=*\G{EA23E1CD-01DD-423C-85A3-759ED010EE2C}#1.0#0#..\..\..\..\..\..\..\..\DOCUME~1\matt\MYDOCU~1\SOURCE~1\ZEBRAT~1.ORG\src\vbcode\ACGPRO~2\ACGPRO~1.DLL#
-Reference=*\G{CCF04066-C857-49A4-8670-93231767A7DA}#1.0#0#..\..\..\..\..\..\..\..\DOCUME~1\matt\MYDOCU~1\SOURCE~1\ZEBRAT~1.ORG\src\vbcode\ACGCON~1\ACGCON~1.DLL#
-Reference=*\G{63D862BD-0457-4538-BAF5-F646D787BE9B}#1.0#0#..\..\..\..\..\..\..\..\DOCUME~1\matt\MYDOCU~1\SOURCE~1\ZEBRAT~1.ORG\src\vbcode\ACGWFD~1\ACGWFD~1.DLL#
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
+Reference=*\G{EA23E1CD-01DD-423C-85A3-759ED010EE2C}#1.0#0#..\..\..\..\..\..\matt\MYDOCU~1\SOURCE~1\ZEBRAT~1.ORG\src\vbcode\ACGPRO~2\ACGPRO~1.DLL#
+Reference=*\G{CCF04066-C857-49A4-8670-93231767A7DA}#1.0#0#..\ACGContainer\ACGContainer.dll#
+Reference=*\G{63D862BD-0457-4538-BAF5-F646D787BE9B}#1.0#0#..\..\..\..\..\..\matt\MYDOCU~1\SOURCE~1\ZEBRAT~1.ORG\src\vbcode\ACGWFD~1\ACGWFD~1.DLL#
 Class=ProcessDef; ProcessDef.cls
 Class=TaskDef; TaskDef.cls
 Class=RoutingDef; RoutingDef.cls

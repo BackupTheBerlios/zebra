@@ -182,8 +182,12 @@ Attribute VB_Exposed = False
 ' */
 Option Explicit
 Private Const mcstrModule = "frmFlow"
+'// if true then a save will cause an overwrite. some features also disabled in the designer
+Private mForUpdate As Boolean
+Private moVersions As Versions
 Private moParent As Container
 Public mProcessDef As ProcessDef
+Public mProcessVersion As ProcessVersion
 '/ last XY pos of mouse - used for pasting
 Private msglLastX As Single
 Private msglLastY As Single
@@ -265,7 +269,7 @@ Private Sub NodeMoved(oNode As afNode)
         Set oLink = oNode.InLinks(oRouting.Guid)
         For Each oPT In oLink.ExtraPoints
             If Not IgnorePoint(oLink, oPT) Then
-                oRouting.AddPoint oPT.x, oPT.y
+                oRouting.AddPoint oPT.X, oPT.y
             End If
         Next
     Next
@@ -275,7 +279,7 @@ Private Sub NodeMoved(oNode As afNode)
         Set oLink = oNode.OutLinks(oRouting.Guid)
         For Each oPT In oLink.ExtraPoints
             If Not IgnorePoint(oLink, oPT) Then
-                oRouting.AddPoint oPT.x, oPT.y
+                oRouting.AddPoint oPT.X, oPT.y
             End If
         Next
     Next
@@ -297,14 +301,14 @@ Private Sub AlignClosestEdge(oLink As afLink)
     Dim sglL As Single, sglT As Single
     Dim sglR As Single, sglB As Single
     
-    sglL = oPT.x - oNode.Left
-    sglR = (oNode.Left + oNode.Width) - oPT.x
+    sglL = oPT.X - oNode.Left
+    sglR = (oNode.Left + oNode.Width) - oPT.X
     sglT = oPT.y - oNode.Top
     sglB = (oNode.Top + oNode.Height) - oPT.y
     If sglL < sglR And sglL < sglT And sglL < sglB Then
-        oPT.x = oPT.x - sglL
+        oPT.X = oPT.X - sglL
     ElseIf sglR < sglL And sglR < sglT And sglR < sglB Then
-        oPT.x = oPT.x + sglR
+        oPT.X = oPT.X + sglR
     ElseIf sglB < sglL And sglB < sglR And sglB < sglT Then
         oPT.y = oPT.y + sglB
     Else
@@ -334,7 +338,7 @@ Private Sub FlowGUI_AfterStretch()
     Set oTaskDefDest = mProcessDef.Tasks(oLink.Dst.key)
     Set oRouting = mProcessDef.Routings(oLink.key)
     '# check to see if the final point intersects a part of the destination task
-    If Not IntersectNodeLine(oTaskDefDest, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).x, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).y, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).x, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).y, sglX, sglY) Then
+    If Not IntersectNodeLine(oTaskDefDest, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).X, oLink.ExtraPoints(oLink.ExtraPoints.Count - 1).y, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).X, oLink.ExtraPoints(oLink.ExtraPoints.Count - 2).y, sglX, sglY) Then
         fCancel = True
     ElseIf oRouting.TaskDest.Guid <> oTaskDefDest.Guid Then
         '# change destination
@@ -362,7 +366,7 @@ Private Sub FlowGUI_AfterStretch()
     
     For Each oPT In oLink.ExtraPoints
         If Not IgnorePoint(oLink, oPT) Then
-            oRouting.AddPoint oPT.x, oPT.y
+            oRouting.AddPoint oPT.X, oPT.y
         End If
     Next
     oLink.ZOrderIndex = 0
@@ -423,7 +427,7 @@ Private Function NodeCaption(oTaskDef As TaskDef) As String
     NodeCaption = strRtn
 End Function
 
-Private Sub FlowGUI_DragDrop(Source As Control, x As Single, y As Single)
+Private Sub FlowGUI_DragDrop(Source As Control, X As Single, y As Single)
     Const cstrFunc = "flow_DragDrop"
     On Error GoTo Err_Handler
     Dim oNode As AddFlow4Lib.afNode
@@ -437,7 +441,7 @@ Private Sub FlowGUI_DragDrop(Source As Control, x As Single, y As Single)
     
     DoTaskProps oTaskDef, oTaskTemplate
     
-    Set oNode = FlowGUI.Nodes.Add(x + FlowGUI.xScroll, y + FlowGUI.yScroll, Source.Width, Source.Height * 2)
+    Set oNode = FlowGUI.Nodes.Add(X + FlowGUI.xScroll, y + FlowGUI.yScroll, Source.Width, Source.Height * 2)
     
     Set oNode.Picture = Source.Picture
     
@@ -493,7 +497,7 @@ Err_Handler:
 
 End Sub
 
-Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
     Dim oNode As afNode
     Dim oLink As afLink
     Dim oNodeCheck As afNode
@@ -502,9 +506,9 @@ Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, x As Single, 
     Dim fNoChange As Boolean
     
     If Button = vbRightButton Then
-        Set oNode = FlowGUI.GetNodeAtPoint(FlowGUI.xScroll + x, FlowGUI.yScroll + y)
+        Set oNode = FlowGUI.GetNodeAtPoint(FlowGUI.xScroll + X, FlowGUI.yScroll + y)
         If oNode Is Nothing Then
-            Set oLink = FlowGUI.GetLinkAtPoint(FlowGUI.xScroll + x, FlowGUI.yScroll + y)
+            Set oLink = FlowGUI.GetLinkAtPoint(FlowGUI.xScroll + X, FlowGUI.yScroll + y)
             If oLink Is Nothing Then Exit Sub
             For Each oLinkCheck In FlowGUI.SelLinks
                 If oLinkCheck.key = oLink.key Then
@@ -529,7 +533,7 @@ Private Sub FlowGUI_MouseDown(Button As Integer, Shift As Integer, x As Single, 
     End If
 End Sub
 
-Private Sub FlowGUI_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub FlowGUI_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
     Dim ods As DockStudio
     Set ods = Parent.ds
     If Button = vbRightButton Then
@@ -544,7 +548,7 @@ Private Sub FlowGUI_MouseUp(Button As Integer, Shift As Integer, x As Single, y 
             ods.Commands.GetPopupMenu("mnuFlow").ShowPopup
         End If
     End If
-    msglLastX = x
+    msglLastX = X
     msglLastY = y
 End Sub
 
@@ -745,6 +749,8 @@ Private Sub SanitizeRouting(oNode As afNode)
     Next
 End Sub
 Private Sub IContextMenu_Activate()
+    
+    Parent.ds.Commands.Item("tlDeleteVersion").Enabled = mForUpdate
     ShowPropWin
 End Sub
 
@@ -756,6 +762,9 @@ Private Function IContextMenu_CommandClick(ByVal Command As InnovaDSXP.Command) 
             
             IContextMenu_CommandClick = DeleteSelected
             ShowPropWin
+        Case "TLDELETEVERSION"
+            IContextMenu_CommandClick = True
+            Call DeleteVersion
         Case "TLCOPY"
             IContextMenu_CommandClick = CopySelected
             ShowPropWin
@@ -802,6 +811,22 @@ Err_Raise:
     Call ErrRaise(Err, mcstrModule, "IContextMenu_CommandClick")
     
 End Function
+Private Sub DeleteVersion()
+    '// check that the user really wants to do this
+    If MsgBox("Are you SURE you want to DELETE this Version? This operation cannot be undone and will automatically save the current Process Definition.", vbCritical Or vbDefaultButton2 Or vbOKCancel, "Delete Version") = vbCancel Then
+        Exit Sub
+    End If
+    '// save the whole shebang
+    Dim oExport As XMLProcessVersion
+    Set oExport = New XMLProcessVersion
+    oExport.FileDeleteVersion mstrFileName, mProcessVersion
+    '// mark flow as unchanged
+    FlowGUI.SetChangedFlag False
+    '// ...so that we can close this window without an error message
+    Parent.ds.ActiveDocumentWindow.Delete
+    Unload Me
+End Sub
+    
 Public Property Get canRemoveProp(oProp As Property) As Boolean
     canRemoveProp = False
     
@@ -952,6 +977,7 @@ Private Function DeleteSelected() As Boolean
         colRemoveRouting.Remove 1
         mProcessDef.Routings.Remove oRouting.Guid
         FlowGUI.Nodes(oRouting.TaskDest.Guid).InLinks.Remove oRouting.Guid
+    
     Loop
     
         
@@ -1031,9 +1057,9 @@ Private Function CopySelected() As Boolean
                 oNewRouting.ClearPoints
                 For Each oPT In oLink.ExtraPoints
                     If Not IgnorePoint(oLink, oPT) Then
-                        If oPT.x < sglOffsetX Then sglOffsetX = oPT.x
+                        If oPT.X < sglOffsetX Then sglOffsetX = oPT.X
                         If oPT.y < sglOffsetY Then sglOffsetY = oPT.y
-                        oNewRouting.AddPoint oPT.x, oPT.y
+                        oNewRouting.AddPoint oPT.X, oPT.y
                     End If
                 Next
                 CopyPropGroup oRoutingDef.PropertyGroup, oNewRouting.PropertyGroup, False, True
@@ -1288,10 +1314,9 @@ Public Function LoadFlow(FileName As String) As Boolean
     On Error GoTo Err_Handler
     Dim oLoad As XMLProcessVersion
     Set oLoad = New XMLProcessVersion
-    Dim oVersions As Versions
-    Set oVersions = New Versions
+    Set moVersions = New Versions
     mstrFileName = FileName
-    If Not oLoad.FileLoadXML(FileName, oVersions, moTaskTemplates, moProcessTemplates) Then
+    If Not oLoad.FileLoadXML(FileName, moVersions, moTaskTemplates, moProcessTemplates) Then
         '/ try the old loader
         Dim oImport As XMLProcessDef
         Set oImport = New XMLProcessDef
@@ -1311,9 +1336,14 @@ Public Function LoadFlow(FileName As String) As Boolean
         '/ add original GUID's as properties for conversion
         Call AddGUIDForConvert(mProcessDef)
         Kill mstrFileName
-        oLoad.FileSaveXML mstrFileName, oVersions, mProcessDef
+        oLoad.FileSaveXML mstrFileName, moVersions, mProcessDef
     Else
-        Set mProcessDef = oVersions(oVersions.MaxVer).ProcessDef
+        '// pop up versions dialog
+        Set mProcessVersion = frmVersions.showVersions(moVersions)
+        mForUpdate = frmVersions.forUpdate
+        
+        Set mProcessDef = mProcessVersion.ProcessDef
+        '/Set mProcessDef = oVersions(oVersions.MaxVer).ProcessDef
     End If
     
     
@@ -1358,7 +1388,7 @@ End Sub
 Private Function IgnorePoint(oLink As afLink, oPT As afLinkPoint) As Boolean
     '# ignore 1st point
     
-    IgnorePoint = oPT.x = oLink.ExtraPoints(0).x And oPT.y = oLink.ExtraPoints(0).y
+    IgnorePoint = oPT.X = oLink.ExtraPoints(0).X And oPT.y = oLink.ExtraPoints(0).y
     Exit Function
     Dim oSrc As TaskDef
     Dim oDst As TaskDef
@@ -1369,7 +1399,7 @@ Private Function IgnorePoint(oLink As afLink, oPT As afLinkPoint) As Boolean
 End Function
 
 Private Function TouchesStep(oTaskDef As TaskDef, oPT As afLinkPoint) As Boolean
-    TouchesStep = (oPT.x = oTaskDef.Left Or oPT.x = oTaskDef.Width + oTaskDef.Left Or oPT.y = oTaskDef.Top Or oPT.y = oTaskDef.Top + oTaskDef.Height)
+    TouchesStep = (oPT.X = oTaskDef.Left Or oPT.X = oTaskDef.Width + oTaskDef.Left Or oPT.y = oTaskDef.Top Or oPT.y = oTaskDef.Top + oTaskDef.Height)
 End Function
 
 Private Sub SaveFlow(saveAs As Boolean)
@@ -1407,7 +1437,7 @@ Private Sub SaveFlow(saveAs As Boolean)
             oRouting.ClearPoints
             For Each oPT In oLink.ExtraPoints
                 If Not IgnorePoint(oLink, oPT) Then
-                    oRouting.AddPoint oPT.x, oPT.y
+                    oRouting.AddPoint oPT.X, oPT.y
                 End If
             Next
         Next
@@ -1440,8 +1470,13 @@ Private Sub SaveFlow(saveAs As Boolean)
         strErrFunc = "Exporting new file"
         mProcessDef.Name = Left$(dlg.FileTitle, Len(dlg.FileTitle) - Len(".acgwfd.xml"))
         oExport.FileSaveXML dlg.FileName, oVersions, mProcessDef
-        Caption = mProcessDef.Name
+        Caption = getCaption
         Parent.ds.ActiveDocumentWindow.Caption = mProcessDef.Name
+    ElseIf mForUpdate Then
+        '// update the version with a new revision
+        '// TODO
+        'oExport.FileLoadXML mstrFileName, oVersions, moTaskTemplates, moProcessTemplates
+        'oExport.FileSaveXML mstrFileName, oVersions, mProcessDef
     Else
         oExport.FileLoadXML mstrFileName, oVersions, moTaskTemplates, moProcessTemplates
         oExport.FileSaveXML mstrFileName, oVersions, mProcessDef
@@ -1507,7 +1542,7 @@ Private Function AddGUIRouting(oRouting As RoutingDef, Optional OffsetX As Singl
     If oRouting.PointCount = 0 Then
         For Each oPT In oLink.ExtraPoints
             If Not IgnorePoint(oLink, oPT) Then
-                oRouting.AddPoint oPT.x, oPT.y
+                oRouting.AddPoint oPT.X, oPT.y
             End If
         Next
     Else
@@ -1528,7 +1563,7 @@ Private Function AddGUIRouting(oRouting As RoutingDef, Optional OffsetX As Singl
             oRouting.Point sglX, sglY, lngPointCount
             'Debug.Print "Moving Point", sglX, sglY
             Set oPT = oLink.ExtraPoints(lngPointCount)
-            oPT.x = sglX - OffsetX
+            oPT.X = sglX - OffsetX
             oPT.y = sglY - OffsetY
             Set oLink.ExtraPoints.Item(lngPointCount) = oPT
         Next
@@ -1687,3 +1722,10 @@ Private Sub moPropList_PropChanged(oProperty As Property)
     Call Sanitize
 End Sub
 
+Public Property Get forUpdate() As Boolean
+    forUpdate = mForUpdate
+End Property
+
+Public Property Get getCaption() As String
+     getCaption = mProcessDef.Name & " v." & mProcessVersion.version & IIf(mForUpdate, " [UPDATING]", "")
+End Property
