@@ -1085,14 +1085,15 @@ Private Function CopySelected() As Boolean
         Set oTaskOrg = Nothing
         Set oTaskOrg = oNewProcess.Tasks(oLink.Org.key)
         On Error GoTo Err_Handler
+        '/ we only copy the routing into the clipboard IF the source and dest tasks have also been selected
         If Not (oTaskOrg Is Nothing) Then
             On Error Resume Next
             Set oTaskDest = Nothing
             Set oTaskDest = oNewProcess.Tasks(oLink.Dst.key)
             On Error GoTo Err_Handler
             If Not (oTaskDest Is Nothing) Then
-                '# all present and correct
-                Set oNewRouting = oNewProcess.Routings.Add(oTaskOrg, oTaskDest, oRoutingDef.Guid)
+                ' all present and correct, make new GUID for routing to prevent paste errors
+                Set oNewRouting = oNewProcess.Routings.Add(oTaskOrg, oTaskDest, CreateGUID)
                 oNewRouting.ClearPoints
                 For Each oPT In oLink.ExtraPoints
                     If Not IgnorePoint(oLink, oPT) Then
