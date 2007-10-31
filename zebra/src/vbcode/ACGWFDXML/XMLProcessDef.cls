@@ -90,7 +90,7 @@ Public Function ProcessXML(oProcessDef As ProcessDef, oRoot As MSXML2.IXMLDOMNod
     CreateGUID2ID oProcessDef
         
     Set oNode = XMLNode(oRoot, "ProcessDef")
-    oRoot.appendChild oNode
+    'oRoot.appendChild oNode
     
     '/ XMLAttr oNode, "GUID", GUID2ID(oProcessDef.GUID)
     
@@ -122,7 +122,7 @@ Private Function TasksXML(oTasks As Tasks, oRoot As MSXML2.IXMLDOMNode) As Boole
     Dim oNode As MSXML2.IXMLDOMNode
     
     Set oNode = XMLNode(oRoot, "TaskDefs")
-    oRoot.appendChild oNode
+    'oRoot.appendChild oNode
     
     For Each oTaskDef In oTasks
         TaskXML oTaskDef, oNode
@@ -135,7 +135,7 @@ Private Function TaskXML(oTaskDef As TaskDef, oRoot As MSXML2.IXMLDOMNode) As Bo
     Dim oNode As MSXML2.IXMLDOMNode
     
     Set oNode = XMLNode(oRoot, "TaskDef")
-    oRoot.appendChild oNode
+    'oRoot.appendChild oNode
     
     With oTaskDef
         XMLAttr oNode, "GUID", GUID2ID(.GUID)
@@ -155,7 +155,7 @@ Private Function RoutingsXML(oRoutings As Routings, oRoot As MSXML2.IXMLDOMNode)
     Dim oNode As MSXML2.IXMLDOMNode
     
     Set oNode = XMLNode(oRoot, "RoutingDefs")
-    oRoot.appendChild oNode
+    'oRoot.appendChild oNode
     
     For Each oRoutingDef In oRoutings
         RoutingXML oRoutingDef, oNode
@@ -168,7 +168,7 @@ Private Function RoutingXML(oRoutingDef As RoutingDef, oRoot As MSXML2.IXMLDOMNo
     Dim oNode As MSXML2.IXMLDOMNode
 
     Set oNode = XMLNode(oRoot, "RoutingDef")
-    oRoot.appendChild oNode
+    'oRoot.appendChild oNode
     
     With oRoutingDef
         XMLAttr oNode, "GUID", GUID2ID(.GUID)
@@ -189,7 +189,7 @@ Private Function PointsXML(oRoutingDef As RoutingDef, oRoot As MSXML2.IXMLDOMNod
     Dim sglY As Single
     
     Set oNode = XMLNode(oRoot, "Points")
-    oRoot.appendChild oNode
+    'oRoot.appendChild oNode
     
     For lngCount = 1 To oRoutingDef.PointCount
         oRoutingDef.Point sglX, sglY, lngCount
@@ -202,7 +202,7 @@ Private Function PointXML(X As Single, Y As Single, oRoot As MSXML2.IXMLDOMNode)
     Dim oNode As IXMLDOMNode
     
     Set oNode = XMLNode(oRoot, "Point")
-    oRoot.appendChild oNode
+    'oRoot.appendChild oNode
     
     XMLAttr oNode, "X", X
     XMLAttr oNode, "Y", Y

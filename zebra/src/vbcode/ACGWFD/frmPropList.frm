@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BA5F9142-B708-4B5E-93B0-3948F8003F86}#1.0#0"; "PropertyGridControl.ocx"
+Object = "{BA5F9142-B708-4B5E-93B0-3948F8003F86}#1.1#0"; "PropertyGridControl.ocx"
 Begin VB.Form frmPropList 
    Caption         =   "Form1"
    ClientHeight    =   3195
@@ -65,7 +65,7 @@ Private Sub Form_Resize()
     On Error Resume Next
     pg.Move 0, 0, ScaleWidth, ScaleHeight
 End Sub
-Public Sub Init(oParent As Container, oTaskTemplates As TaskTemplates, oProcessTemplates As ProcessTemplates)
+Public Sub init(oParent As Container, oTaskTemplates As TaskTemplates, oProcessTemplates As ProcessTemplates)
     Set moParent = oParent
     Set moTaskTemplates = oTaskTemplates
     Set moProcessTemplates = oProcessTemplates
@@ -86,11 +86,11 @@ Public Property Set PropBag(v As PropertyGroup)
 '    End With
 End Property
 
-Private Sub pg_ContextClick(oProperty As ACGProperties.Property, x As Single, y As Single)
+Private Sub pg_ContextClick(oProperty As ACGProperties.Property, X As Single, y As Single)
     MDI.showPropGroupsPopup oProperty
 End Sub
 
-Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, FileName As String, Cancel As Boolean)
+Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, fileName As String, Cancel As Boolean)
     Const cstrFunc = "pg_FileBrowse"
     On Error GoTo Err_Handler
     
@@ -100,7 +100,7 @@ Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, FileName As Strin
     dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
     dlg.FilterIndex = 1
     dlg.DialogTitle = "Set SubProcess"
-    dlg.FileName = Me.Caption
+    dlg.fileName = Me.Caption
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowOpen
@@ -113,13 +113,13 @@ Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, FileName As Strin
     Dim oVersions As Versions
     Set oVersions = New Versions
     Dim oProcessDef As ProcessDef
-    FileName = dlg.FileName
-    If Not oLoad.FileLoadXML(FileName, oVersions, moTaskTemplates, moProcessTemplates) Then
+    fileName = dlg.fileName
+    If Not oLoad.FileLoadXML(fileName, oVersions, moTaskTemplates, moProcessTemplates) Then
         '/ try the old loader
         Dim oImport As XMLProcessDef
         Set oImport = New XMLProcessDef
         Set oProcessDef = New ProcessDef
-        If Not (oImport.FileLoadXML(FileName, oProcessDef, moTaskTemplates, moProcessTemplates)) Then
+        If Not (oImport.FileLoadXML(fileName, oProcessDef, moTaskTemplates, moProcessTemplates)) Then
             MsgBox "Failed to load process!", vbExclamation
             Cancel = True
             Exit Sub
@@ -130,12 +130,12 @@ Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, FileName As Strin
             Exit Sub
         End If
         oProcessDef.PropertyGroup.Item("(General)").Item("Name").Locked = True
-        Kill FileName
-        oLoad.FileSaveXML FileName, oVersions, oProcessDef
+        Kill fileName
+        oLoad.FileSaveXML fileName, oVersions, oProcessDef
     Else
         Set oProcessDef = oVersions(oVersions.MaxVer).ProcessDef
     End If
-    FileName = oProcessDef.Name
+    fileName = oProcessDef.Name
     '# copy Input and Output property sections
     Dim oPropsSrc As Properties, oPropsDest As Properties
     
@@ -185,4 +185,17 @@ Err_Handler:
         Case Else
             Exit Sub
     End Select
+End Sub
+
+Private Sub pg_TextPopup(oProperty As ACGProperties.Property, Cancel As Boolean)
+    On Error Resume Next
+    Load frmTextPopup
+    If frmTextPopup.doTextPopup(oProperty) Then
+        oProperty.Value = Trim$(frmTextPopup.Text)
+        Cancel = False
+    Else
+        Cancel = True
+    End If
+    Unload frmTextPopup
+    
 End Sub

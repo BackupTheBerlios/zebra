@@ -45,3 +45,9 @@ End Sub
 Public Sub QueryUnload(Cancel As Boolean)
     '
 End Sub
+Public Property Get ProcessDef() As ProcessDef
+    '
+End Property
+Public Sub Refresh()
+    '
+End Sub

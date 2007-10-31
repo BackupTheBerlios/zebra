@@ -37,6 +37,7 @@ Public Function XMLDoc(FirstNodeName As String) As IXMLDOMNode
     Dim oDoc As MSXML2.DOMDocument
     Dim oRoot As MSXML2.IXMLDOMNode
     Set oDoc = New MSXML2.DOMDocument
+'    Set XMLDoc = XMLNode(oDoc.documentElement, FirstNodeName)
     Set oRoot = oDoc.createNode(1, FirstNodeName, "")
     oDoc.appendChild oRoot
     Set XMLDoc = oRoot
@@ -61,9 +62,20 @@ Public Function XMLNode(oXMLNode As IXMLDOMNode, Name As String, Optional Value 
         oValueNode.nodeValue = Value
         oRtn.appendChild oValueNode
     End If
+    oXMLNode.appendChild oRtn
     Set XMLNode = oRtn
 End Function
-
+Public Function xmlNodeDisconnected(oDoc As MSXML2.DOMDocument, Name As String, Optional Value As String = vbNullString) As IXMLDOMNode
+    Dim oRtn As MSXML2.IXMLDOMNode
+    Dim oValueNode As MSXML2.IXMLDOMNode
+    Set oRtn = oDoc.createNode(1, Name, "")
+    If Len(Value) > 0 Then
+        Set oValueNode = oDoc.createNode(3, "", "")
+        oValueNode.nodeValue = Value
+        oRtn.appendChild oValueNode
+    End If
+    Set xmlNodeDisconnected = oRtn
+End Function
 Public Sub XMLAttr(ParentNode As IXMLDOMNode, Name As String, Value As Variant)
     Dim oAttr As MSXML2.IXMLDOMAttribute
     Set oAttr = ParentNode.ownerDocument.createAttribute(Name)

@@ -89,7 +89,18 @@ Private moAppSettings As Properties
 '/ task templates collection
 Private moTemplates As TaskTemplates
 Private moProcessTemplates As ProcessTemplates
+Private mAddins As Collection
+Public Sub refreshActiveProcess()
+    moContextMenu.Refresh
+End Sub
 
+Public Property Get activeProcessDef() As ProcessDef
+    If moContextMenu Is Nothing Then
+        Set activeProcessDef = Nothing
+    Else
+        Set activeProcessDef = moContextMenu.ProcessDef
+    End If
+End Property
 Private Sub ds_CommandClick(ByVal Command As InnovaDSXP.Command)
     Const cstrFunc = "ds_CommandClick"
     On Error GoTo Err_Handler
@@ -112,6 +123,8 @@ Private Sub ds_CommandClick(ByVal Command As InnovaDSXP.Command)
                     MenuHandlerHelp Command
                 Case "EDIT"
                     MenuHandlerEdit Command
+                Case "ADDINS"
+                    menuHandlerAddins Command
                 Case Else
                     If Command.Name = "tlUndo" Then
                         MsgBox "oh come on. did you really think i'd go through all the hassle it takes to make an undo command that worked? is the spellcheck, xml configuration, semi-accurate predictive path gubbins, flow to process conversion, categorized property window, pretty colours and ripped off pictures not enough for you?? jeez... get real people.", vbInformation
@@ -143,7 +156,13 @@ Private Sub MenuHandlerView(ByRef Command As InnovaDSXP.Command)
     End If
     ds.DockWindows.Item(oTool.Tag).Visible = (oTool.State = dsxpCommandToolButtonStateChecked)
 End Sub
-
+Private Sub menuHandlerAddins(ByRef Command As InnovaDSXP.Command)
+    Dim oAddin As IAddin
+    Set oAddin = CreateObject(Command.Name)
+    Dim oAccess As New AddinAccess
+    oAccess.init Me
+    oAddin.runAddin oAccess
+End Sub
 Private Sub MenuHandlerWindow(ByRef Command As InnovaDSXP.Command)
     Dim ofrmMDI As frmMDI
     Select Case UCase$(Command.Name)
@@ -232,15 +251,15 @@ Private Sub MakeNewFlow()
     dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
     dlg.FilterIndex = 1
     dlg.DialogTitle = "New Process"
-    dlg.FileName = "New " & oProcessTemplate.Name & " Process"
+    dlg.fileName = "New " & oProcessTemplate.Name & " Process"
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowSave
     If Err.Number <> 0 Then Exit Sub
     On Error GoTo Err_Handler
     strErrFunc = "Deleting existing file"
-    If Len(Dir$(dlg.FileName)) > 0 Then
-        Kill dlg.FileName
+    If Len(Dir$(dlg.fileName)) > 0 Then
+        Kill dlg.fileName
     End If
     
     strErrFunc = "Exporting new file"
@@ -248,10 +267,10 @@ Private Sub MakeNewFlow()
     Set oExport = New XMLProcessVersion
     oProcess.Name = Left$(dlg.FileTitle, Len(dlg.FileTitle) - Len(".acgwfd.xml"))
     Dim oVersions As New Versions
-    oExport.FileSaveXML dlg.FileName, oVersions, oProcess
+    oExport.FileSaveXML dlg.fileName, oVersions, oProcess
     strErrFunc = "Loading process"
-    oFlow.Init moContainer, oProcessTemplate, moTemplates, moProcessTemplates
-    oFlow.LoadFlow dlg.FileName
+    oFlow.init moContainer, oProcessTemplate, moTemplates, moProcessTemplates
+    oFlow.LoadFlow dlg.fileName
     ds.DocumentWindows.AddForm CreateGUID, oProcess.Name, , oFlow, True
     Exit Sub
 Err_Handler:
@@ -328,22 +347,22 @@ Private Function loadProcess() As frmFlow
     dlg.ShowOpen
     If Err.Number <> 0 Then Exit Function
     
-    Set loadProcess = LoadFromFile(dlg.FileName)
+    Set loadProcess = LoadFromFile(dlg.fileName)
 End Function
-Public Sub CommandLineLoadProcess(FileName As String)
+Public Sub CommandLineLoadProcess(fileName As String)
     Dim oFlow As frmFlow
     Dim oDW As DocumentWindow
     
-    Set oFlow = LoadFromFile(FileName)
+    Set oFlow = LoadFromFile(fileName)
     If Not (oFlow Is Nothing) Then
         Set oDW = ds.DocumentWindows.AddForm(CreateGUID, oFlow.getCaption, , oFlow, True)
     End If
 End Sub
-Private Function LoadFromFile(FileName As String) As frmFlow
+Private Function LoadFromFile(fileName As String) As frmFlow
     Dim oFlow As frmFlow
     Set oFlow = New frmFlow
-    oFlow.Init moContainer, New ProcessTemplate, moTemplates, moProcessTemplates
-    If Not oFlow.LoadFlow(FileName) Then
+    oFlow.init moContainer, New ProcessTemplate, moTemplates, moProcessTemplates
+    If Not oFlow.LoadFlow(fileName) Then
         Unload oFlow
         Set oFlow = Nothing
     End If
@@ -424,6 +443,7 @@ Private Sub Form_Load()
     
     
     LoadProcessTemplates
+    loadAddinMenus
 End Sub
 
 Private Sub InitViewMenu()
@@ -512,17 +532,17 @@ Err_Handler:
     End Select
 End Sub
 
-Private Function loadProcessVers(FileName As String, Optional destPath As String = vbNullString) As Versions
+Private Function loadProcessVers(fileName As String, Optional destPath As String = vbNullString) As Versions
     On Error GoTo Err_Handler
     Const cstrFunc = "loadProcessVers"
     Dim fLoaded As Boolean
     Dim oVersions As New Versions
     Dim oLoad As XMLProcessVersion
     Dim strErrMsg As String
-    strErrMsg = FileName
+    strErrMsg = fileName
     
     Set oLoad = New XMLProcessVersion
-    fLoaded = oLoad.FileLoadXML(FileName, oVersions, moTemplates, moProcessTemplates)
+    fLoaded = oLoad.FileLoadXML(fileName, oVersions, moTemplates, moProcessTemplates)
     
     If fLoaded Then
         Set loadProcessVers = oVersions
@@ -536,12 +556,12 @@ Private Function loadProcessVers(FileName As String, Optional destPath As String
     
     Set oProcessDef = New ProcessDef
     Set oFilter = New XMLProcessDef
-    fLoaded = oFilter.FileLoadXML(FileName, oProcessDef, moTemplates, moProcessTemplates)
+    fLoaded = oFilter.FileLoadXML(fileName, oProcessDef, moTemplates, moProcessTemplates)
     If fLoaded Then
         '/ add original GUID's as properties for conversion
         Call AddGUIDForConvert(oProcessDef)
     Else
-        MsgBox "Failed to convert " & FileName, vbCritical
+        MsgBox "Failed to convert " & fileName, vbCritical
         Exit Function
     End If
     Dim strNewName As String
@@ -551,8 +571,8 @@ Private Function loadProcessVers(FileName As String, Optional destPath As String
         Exit Function
     End If
     
-    Debug.Print "converting " & FileName
-    strNewName = OffsetPath(FileName, destPath)
+    Debug.Print "converting " & fileName
+    strNewName = OffsetPath(fileName, destPath)
     
     strErrMsg = strNewName
     
@@ -577,7 +597,7 @@ Err_Handler:
     End Select
 End Function
 
-Private Function OffsetPath(FileName As String, NewPath As String) As String
+Private Function OffsetPath(fileName As String, NewPath As String) As String
     On Error GoTo Err_Handler:
     Dim intPos As Integer
     Dim intStart As Integer
@@ -585,13 +605,13 @@ Private Function OffsetPath(FileName As String, NewPath As String) As String
     Dim strFileName As String
     
     Do
-        intPos = InStr(intStart, FileName, "\")
+        intPos = InStr(intStart, fileName, "\")
         If intPos < 1 Then
-            OffsetPath = Trim$(Left$(FileName, intStart))
+            OffsetPath = Trim$(Left$(fileName, intStart))
             Exit Do
         End If
-        If StrComp(Left$(FileName, intPos), Left$(NewPath, intPos)) <> 0 Then
-            strFileName = Right$(FileName, Len(FileName) - InStrRev(FileName, "\"))
+        If StrComp(Left$(fileName, intPos), Left$(NewPath, intPos)) <> 0 Then
+            strFileName = Right$(fileName, Len(fileName) - InStrRev(fileName, "\"))
             OffsetPath = NewPath & "\" & strFileName
             Exit Function
         End If
@@ -638,7 +658,16 @@ Private Sub LoadPalette(oPalette As frmPalette)
     oPalette.Redraw
    
 End Sub
-
+Private Sub loadAddinMenus()
+    Dim XMLAddins As New XMLAddinLoader
+    Set mAddins = XMLAddins.loadAddins(getTemplatePath() & "..\Addins")
+    Dim cAddin As Addin
+    Dim cmd As InnovaDSXP.Command
+    For Each cAddin In mAddins
+        Set cmd = ds.Commands.AddToolButton(cAddin.ClassName, cAddin.MenuName, , ds.Categories("Addins"))
+        ds.Commands.GetPopupMenu("mnuAddins").CommandBar.Controls.Add cmd.ID
+    Next
+End Sub
 Private Sub LoadProcessTemplates()
     Dim oXMLProcessTemplate As XMLProcessTemplate
     

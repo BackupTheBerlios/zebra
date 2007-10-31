@@ -142,6 +142,7 @@ Option Explicit
 Private mPropertyGroup As PropertyGroup
 Event PropChanged(ByRef oProperty As Property)
 Event PropRemoved(ByRef oProperty As Property)
+Event TextPopup(ByRef oProperty As Property, ByRef Cancel As Boolean)
 Event FileBrowse(ByRef oProperty As Property, ByRef FileName As String, ByRef Cancel As Boolean)
 Event ContextClick(ByRef oProperty As Property, X As Single, Y As Single)
 Private mfDontRefresh As Boolean
@@ -199,6 +200,8 @@ Private Sub fg_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Si
     mX = X
     mY = Y
 End Sub
+
+
 
 Private Sub UserControl_Initialize()
     ' initialize control
@@ -374,6 +377,10 @@ Private Sub fg_BeforeEdit(ByVal Row As Long, ByVal Col As Long, Cancel As Boolea
             fg.ComboList = "..."
             fg.CellButtonPicture = imgFile
          
+        Case ptString
+            fg.ComboList = "..."
+            fg.CellButtonPicture = imgFile
+        
         Case ptBoolean
             fg.ComboList = "Yes|No"
     End Select
@@ -409,22 +416,31 @@ End Sub
 Private Sub fg_CellButtonClick(ByVal Row As Long, ByVal Col As Long)
     Dim oProp As Property
     Set oProp = fg.RowData(Row)
-    Dim strFileName As String
-    Dim fCancel As Boolean
-    mfDontRefresh = True
-    mfRefreshRequest = False
-    
-    Select Case oProp.PropertyType
-        Case ptFile
-            On Error Resume Next
-            RaiseEvent FileBrowse(oProp, strFileName, fCancel)
-            If Not (fCancel = True Or Err.Number <> 0) Then
-                fg.TextMatrix(Row, fg.Cols - 1) = strFileName
-            End If
-            
-    End Select
-    mfDontRefresh = False
-    If mfRefreshRequest Then Refresh
+    If oProp.PropertyType = ptFile Then
+        Dim strFileName As String
+        Dim fCancel As Boolean
+        mfDontRefresh = True
+        mfRefreshRequest = False
+        
+        Select Case oProp.PropertyType
+            Case ptFile
+                On Error Resume Next
+                RaiseEvent FileBrowse(oProp, strFileName, fCancel)
+                If Not (fCancel = True Or Err.Number <> 0) Then
+                    fg.TextMatrix(Row, fg.Cols - 1) = strFileName
+                End If
+                
+        End Select
+        mfDontRefresh = False
+        If mfRefreshRequest Then Refresh
+    ElseIf oProp.PropertyType = ptString Then
+        Dim strText As String
+        strText = oProp.Value
+        RaiseEvent TextPopup(oProp, fCancel)
+        If Not (fCancel = True Or Err.Number <> 0) Then
+            fg.TextMatrix(Row, fg.Cols - 1) = oProp.Value
+        End If
+    End If
 End Sub
 
 Private Sub fg_DblClick()

@@ -199,7 +199,7 @@ Private moTaskTemplates As TaskTemplates
 Private moProcessTemplates As ProcessTemplates
 Private mstrFileName As String
 
-Public Sub Init(oParent As Container, oProcessTemplate As ProcessTemplate, oTaskTemplates As TaskTemplates, oProcessTemplates As ProcessTemplates)
+Public Sub init(oParent As Container, oProcessTemplate As ProcessTemplate, oTaskTemplates As TaskTemplates, oProcessTemplates As ProcessTemplates)
     Set moParent = oParent
     Set mProcessDef = New ProcessDef
     '/ dont both with this any more
@@ -765,6 +765,9 @@ Private Function IContextMenu_CommandClick(ByVal Command As InnovaDSXP.Command) 
         Case "TLDELETEVERSION"
             IContextMenu_CommandClick = True
             Call DeleteVersion
+        Case "TLDOCUMENT"
+            IContextMenu_CommandClick = True
+            Call documentProcess
         Case "TLCOPY"
             IContextMenu_CommandClick = CopySelected
             ShowPropWin
@@ -811,6 +814,42 @@ Err_Raise:
     Call ErrRaise(Err, mcstrModule, "IContextMenu_CommandClick")
     
 End Function
+Private Sub documentProcess()
+    Const cstrFunc = "documentProcess"
+    Dim strErrFunc As String
+    
+    Dim dlg As MSComDlg.CommonDialog
+    
+    Set dlg = Parent.dlg
+    dlg.Filter = "HTML Documents|*.html"
+    dlg.FilterIndex = 1
+    dlg.DialogTitle = "Document Process"
+    dlg.fileName = mProcessDef.Name
+    dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
+    On Error Resume Next
+    dlg.ShowSave
+    If Err.Number <> 0 Then Exit Sub
+    On Error GoTo Err_Handler
+    strErrFunc = "Deleting existing file"
+    If Len(Dir$(dlg.fileName)) > 0 Then
+        Kill dlg.fileName
+    End If
+    
+    strErrFunc = "Creating documentation"
+    Dim oDocProcess As DocFlow
+    Set oDocProcess = New DocFlow
+    oDocProcess.DocProcess mProcessDef, dlg.fileName, False
+    Exit Sub
+Err_Handler:
+    Select Case StdErrMsg(Err, mcstrModule, cstrFunc + "." & strErrFunc)
+        Case vbIgnore
+            Resume Next
+        Case vbRetry
+            Resume 0
+        Case Else
+            Exit Sub
+    End Select
+End Sub
 Private Sub DeleteVersion()
     '// check that the user really wants to do this
     If MsgBox("Are you SURE you want to DELETE this Version? This operation cannot be undone and will automatically save the current Process Definition.", vbCritical Or vbDefaultButton2 Or vbOKCancel, "Delete Version") = vbCancel Then
@@ -1237,14 +1276,14 @@ Private Sub ExportImage()
     dlg.Filter = "Windows MetaFile|*.wmf|Enhanced Windows MetaFile|*.emf"
     dlg.FilterIndex = 1
     dlg.DialogTitle = "Export Flow Image"
-    dlg.FileName = Me.Caption
+    dlg.fileName = Me.Caption
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowSave
     If Err.Number <> 0 Then Exit Sub
     On Error GoTo Err_Handler
     
-    SaveImage dlg.FileName
+    SaveImage dlg.fileName
     MsgBox "Export Complete"
     
     Exit Sub
@@ -1263,17 +1302,17 @@ Public Property Get ProcessDef() As ACGProcessDefs.ProcessDef
     Set ProcessDef = mProcessDef
 End Property
 
-Public Sub SaveImage(FileName As String)
+Public Sub SaveImage(fileName As String)
     On Error GoTo Err_Handler
     Const cstrFunc = "SaveImage"
-    If Len(Dir$(FileName)) > 0 Then
-        Kill FileName
+    If Len(Dir$(fileName)) > 0 Then
+        Kill fileName
     End If
         
-    If StrComp(Right$(FileName, 4), ".emf", vbTextCompare) Then
-        FlowGUI.SaveImage afTypeMediumFile, afEMF, FileName
+    If StrComp(Right$(fileName, 4), ".emf", vbTextCompare) Then
+        FlowGUI.SaveImage afTypeMediumFile, afEMF, fileName
     Else
-        FlowGUI.SaveImage afTypeMediumFile, afWMF, FileName
+        FlowGUI.SaveImage afTypeMediumFile, afWMF, fileName
     End If
     
     Exit Sub
@@ -1307,21 +1346,21 @@ Private Sub ShowPropWin()
         Set moPropList.PropBag = mProcessDef.PropertyGroup
         oDW.Caption = "Process"
     End If
-    moPropList.Init moParent, moTaskTemplates, moProcessTemplates
+    moPropList.init moParent, moTaskTemplates, moProcessTemplates
 End Sub
-Public Function LoadFlow(FileName As String) As Boolean
+Public Function LoadFlow(fileName As String) As Boolean
     Const cstrFunc = "LoadFlow"
     On Error GoTo Err_Handler
     Dim oLoad As XMLProcessVersion
     Set oLoad = New XMLProcessVersion
     Set moVersions = New Versions
-    mstrFileName = FileName
-    If Not oLoad.FileLoadXML(FileName, moVersions, moTaskTemplates, moProcessTemplates) Then
+    mstrFileName = fileName
+    If Not oLoad.FileLoadXML(fileName, moVersions, moTaskTemplates, moProcessTemplates) Then
         '/ try the old loader
         Dim oImport As XMLProcessDef
         Set oImport = New XMLProcessDef
         Set mProcessDef = New ProcessDef
-        If Not (oImport.FileLoadXML(FileName, mProcessDef, moTaskTemplates, moProcessTemplates)) Then
+        If Not (oImport.FileLoadXML(fileName, mProcessDef, moTaskTemplates, moProcessTemplates)) Then
             MsgBox "Failed to load process!", vbExclamation
             LoadFlow = False
             Exit Function
@@ -1456,20 +1495,20 @@ Private Sub SaveFlow(saveAs As Boolean)
         dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
         dlg.FilterIndex = 1
         dlg.DialogTitle = "New Process"
-        dlg.FileName = "Copy of " & mProcessDef.Name & " Process"
+        dlg.fileName = "Copy of " & mProcessDef.Name & " Process"
         dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
         On Error Resume Next
         dlg.ShowSave
         If Err.Number <> 0 Then Exit Sub
         On Error GoTo Err_Handler
         strErrFunc = "Deleting existing file"
-        If Len(Dir$(dlg.FileName)) > 0 Then
-            Kill dlg.FileName
+        If Len(Dir$(dlg.fileName)) > 0 Then
+            Kill dlg.fileName
         End If
         
         strErrFunc = "Exporting new file"
         mProcessDef.Name = Left$(dlg.FileTitle, Len(dlg.FileTitle) - Len(".acgwfd.xml"))
-        oExport.FileSaveXML dlg.FileName, oVersions, mProcessDef
+        oExport.FileSaveXML dlg.fileName, oVersions, mProcessDef
         Caption = getCaption
         Parent.ds.ActiveDocumentWindow.Caption = mProcessDef.Name
     ElseIf mForUpdate Then
@@ -1477,6 +1516,7 @@ Private Sub SaveFlow(saveAs As Boolean)
         '// TODO
         'oExport.FileLoadXML mstrFileName, oVersions, moTaskTemplates, moProcessTemplates
         'oExport.FileSaveXML mstrFileName, oVersions, mProcessDef
+        MsgBox "ERROR: can't save an updated process yet!!!! File has NOT been saved!", vbCritical
     Else
         oExport.FileLoadXML mstrFileName, oVersions, moTaskTemplates, moProcessTemplates
         oExport.FileSaveXML mstrFileName, oVersions, mProcessDef
@@ -1574,6 +1614,10 @@ End Function
 Private Sub IContextMenu_Deactivate()
     Set moPropList = Nothing
 End Sub
+
+Private Property Get IContextMenu_ProcessDef() As ACGProcessDefs.ProcessDef
+    Set IContextMenu_ProcessDef = mProcessDef
+End Property
 
 Private Sub IContextMenu_QueryUnload(Cancel As Boolean)
     If FlowGUI.IsChanged Then
@@ -1708,6 +1752,19 @@ Err_Handler:
         Case Else
             Exit Sub
     End Select
+End Sub
+
+Private Sub IContextMenu_Refresh()
+    Sanitize
+    ShowPropWin
+    Dim oNode As afNode
+    Dim oTaskDef As TaskDef
+    '/ reset all captions in case properties have been changed
+    For Each oNode In FlowGUI.Nodes
+        Set oTaskDef = mProcessDef.Tasks(oNode.key)
+        oNode.Text = NodeCaption(oTaskDef)
+    Next
+    FlowGUI.Refresh
 End Sub
 
 Private Sub moPropList_PropChanged(oProperty As Property)
