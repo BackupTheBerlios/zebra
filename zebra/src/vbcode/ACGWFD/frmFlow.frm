@@ -808,12 +808,25 @@ Private Function IContextMenu_CommandClick(ByVal Command As InnovaDSXP.Command) 
                 FlowGUI.SetChangedFlag True
                 ShowPropWin
             End If
+        Case "TLCHANGETASKTYPE"
+            IContextMenu_CommandClick = True
+            changeTaskType
     End Select
     Exit Function
 Err_Raise:
     Call ErrRaise(Err, mcstrModule, "IContextMenu_CommandClick")
     
 End Function
+Private Sub changeTaskType()
+    If Not Parent.changeTaskType(mProcessDef.Tasks(FlowGUI.SelectedNode.key)) Then
+        Exit Sub
+    End If
+    FlowGUI.SetChangedFlag True
+    Dim nde As afNode
+    Set nde = FlowGUI.SelectedNode
+    Set nde.Picture = LoadPicture(App.Path & mcstrImagesPath & moTaskTemplates(mProcessDef.Tasks(nde.key).TaskTemplate).Icon)
+    IContextMenu_Refresh
+End Sub
 Private Sub documentProcess()
     Const cstrFunc = "documentProcess"
     Dim strErrFunc As String
@@ -1277,7 +1290,7 @@ Private Sub ExportImage()
     dlg.Filter = "Windows MetaFile|*.wmf|Enhanced Windows MetaFile|*.emf"
     dlg.FilterIndex = 1
     dlg.DialogTitle = "Export Flow Image"
-    dlg.fileName = Me.Caption
+    dlg.fileName = mProcessDef.Name
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowSave

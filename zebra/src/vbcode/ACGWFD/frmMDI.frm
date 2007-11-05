@@ -845,3 +845,8 @@ Public Sub showPropGroupsPopup(oProperty As ACGProperties.Property)
     End With
     ds.Commands.GetPopupMenu("mnuPropGroupsPopup").ShowPopup
 End Sub
+'/ return true if the user changed the task type
+Public Function changeTaskType(oTaskDef As TaskDef) As Boolean
+    changeTaskType = frmChangeTaskType.changeTaskType(oTaskDef, Me, moTemplates)
+    Unload frmChangeTaskType
+End Function

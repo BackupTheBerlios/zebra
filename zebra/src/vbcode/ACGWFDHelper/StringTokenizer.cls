@@ -49,19 +49,20 @@ Public Function Parse(Values As String, Delimeter As String)
     intLast = 1
     
     For intCount = 1 To Len(Values)
-        chPos = Mid$(Values, intCount, intDelLen)
+        chPos = Mid$(Values, intCount, 1)
         Select Case chPos
             Case """"
                 fInQuotes = Not fInQuotes
                 fAddChar = True
             Case Else
                 If Not fInQuotes Then
-                    If StrComp(chPos, Delimeter, vbTextCompare) = 0 Then
+                    If StrComp(Mid$(Values, intCount, intDelLen), Delimeter, vbTextCompare) = 0 Then
                         '# found a delimeter
                         mCol.Add Trim$(strItem)
                         strItem = ""
                         fAddChar = False
-                        intLast = intCount + 1
+                        intCount = intCount + intDelLen - 1
+                        intLast = intCount + intDelLen - 1
                     Else
                         fAddChar = True
                     End If

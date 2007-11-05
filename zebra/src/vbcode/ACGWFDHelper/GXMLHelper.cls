@@ -45,10 +45,14 @@ End Function
 
 Public Function GetNodeAttr(oNode As IXMLDOMNode, Name As String, Optional DefaultValue As String = vbNullString) As String
     On Error Resume Next
-    GetNodeAttr = oNode.Attributes.getNamedItem(Name).nodeValue
+    Dim strValue As String
+    strValue = oNode.Attributes.getNamedItem(Name).nodeValue
     If Err.Number <> 0 Then
-        GetNodeAttr = DefaultValue
+        strValue = DefaultValue
+    Else
+        strValue = Replace(strValue, vbLf, vbCrLf)
     End If
+    GetNodeAttr = strValue
 End Function
 
 Public Function XMLNode(oXMLNode As IXMLDOMNode, Name As String, Optional Value As String = vbNullString) As IXMLDOMNode
