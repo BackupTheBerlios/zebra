@@ -70,7 +70,7 @@ Public Sub StartScan(ProcessesPath As String, oTaskTemplates As TaskTemplates, o
     SaveToFile ValidatePath(OutputPath) & "NeilB.html", "<html>" & NeilB(ValidatePath(ProcessesPath), ValidatePath(OutputPath)) & "</html>"
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc & " parsing file " & strFile)
+    Select Case reportError(Err, Me, cstrFunc, "parsing file " & strFile)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -261,13 +261,13 @@ Err_Handler:
 End Function
 
 
-Private Sub SaveToFile(FileName As String, Content As String)
+Private Sub SaveToFile(fileName As String, Content As String)
     Dim fh As Integer
-    If Len(Dir$(FileName)) > 0 Then
-        Kill FileName
+    If Len(Dir$(fileName)) > 0 Then
+        Kill fileName
     End If
     fh = FreeFile
-    Open FileName For Output As fh
+    Open fileName For Output As fh
     Print #fh, Content
     Close #fh
 End Sub
@@ -398,7 +398,7 @@ Private Function GetScreenNames(FlowPath As String) As String
     GetScreenNames = strRtn
     Exit Function
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, "")
+    Select Case reportError(Err, Me)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -507,7 +507,7 @@ Private Function NeilB(FlowPath As String, OutPath As String) As String
     NeilB = strRtn
     Exit Function
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, "NeilB")
+    Select Case reportError(Err, Me, "NeilB")
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -518,13 +518,13 @@ Err_Handler:
     
 End Function
 
-Private Sub ImportFlow(FileName As String)
+Private Sub ImportFlow(fileName As String)
     Dim oLoad As XMLProcessDef
     Set oLoad = New XMLProcessDef
     Dim oFlow As ProcessDef
     Set oFlow = New ProcessDef
-    If Not oLoad.FileLoadXML(FileName, oFlow, moTaskTemplates, moProcessTemplates) Then
-        Debug.Print "Failed to import " & FileName
+    If Not oLoad.FileLoadXML(fileName, oFlow, moTaskTemplates, moProcessTemplates) Then
+        Debug.Print "Failed to import " & fileName
     Else
         mcolWorkflows.Add oFlow, "@" & UCase$(oFlow.Name)
     End If

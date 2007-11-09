@@ -15,7 +15,7 @@ Option Explicit
 
 Public Function loadAddins(Path As String) As Collection
     '# scan the path for addin templates
-    
+    On Error GoTo Err_Handler
     Dim oScanPath As ScanPath
     Dim lngCount As Long
     Dim fLoadOK As Boolean
@@ -30,9 +30,13 @@ Public Function loadAddins(Path As String) As Collection
     Loop
     
     Set loadAddins = oAddins
+    Exit Function
+Err_Handler:
+    stackError Err, Me, "loadAddins"
 End Function
 
 Private Sub loadAddin(FileName As String, oAddins As Collection)
+    On Error GoTo Err_Handler
     Dim oDoc As MSXML2.DOMDocument
     Dim oRoot As MSXML2.IXMLDOMNode
     
@@ -47,9 +51,13 @@ Private Sub loadAddin(FileName As String, oAddins As Collection)
     End If
     
     processAddin oRoot, oAddins
+    Exit Sub
+Err_Handler:
+    stackError Err, Me, "loadAddin"
 End Sub
 
 Private Sub processAddin(oRoot As MSXML2.IXMLDOMNode, oAddins As Collection)
+    On Error GoTo Err_Handler
     Dim oAddin As Addin
     Dim n As IXMLDOMNode
     For Each n In oRoot.childNodes
@@ -60,6 +68,9 @@ Private Sub processAddin(oRoot As MSXML2.IXMLDOMNode, oAddins As Collection)
             oAddins.Add oAddin
         End If
     Next
+    Exit Sub
+Err_Handler:
+    stackError Err, Me, "processAddin"
     
 End Sub
 

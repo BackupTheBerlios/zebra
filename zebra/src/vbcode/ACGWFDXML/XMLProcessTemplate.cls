@@ -30,6 +30,7 @@ Attribute VB_Exposed = True
 Option Explicit
 
 Public Function LoadTemplates(Path As String, oProcessTemplates As ProcessTemplates) As Boolean
+    On Error GoTo Err_Handler
     Dim oProcessTemplate As ProcessTemplate
     Dim oScan As ScanPath
     Dim strFile As String
@@ -51,8 +52,12 @@ Public Function LoadTemplates(Path As String, oProcessTemplates As ProcessTempla
         End If
     Loop
     LoadTemplates = True
+    Exit Function
+Err_Handler:
+    stackError Err, Me, "LoadTemplates"
 End Function
 Private Function LoadTemplate(FileName As String, oProcessTemplate As ProcessTemplate) As Boolean
+    On Error GoTo Err_Handler
     Dim oDoc As MSXML2.DOMDocument
     Dim oRoot As MSXML2.IXMLDOMNode
     Set oDoc = New MSXML2.DOMDocument
@@ -68,10 +73,13 @@ Private Function LoadTemplate(FileName As String, oProcessTemplate As ProcessTem
     oProcessTemplate.Name = GetNodeAttr(oRoot, "name")
     
     LoadTemplate = LoadAllSettings(oProcessTemplate, oRoot)
-    
+    Exit Function
+Err_Handler:
+    stackError Err, Me, "LoadTemplate"
 End Function
 
 Private Function LoadAllSettings(oProcessTemplate As ProcessTemplate, oRoot As MSXML2.IXMLDOMNode) As Boolean
+    On Error GoTo Err_Handler
     Dim oNode As MSXML2.IXMLDOMNode
     Dim oNewProps As Properties
     LoadAllSettings = False
@@ -86,9 +94,13 @@ Private Function LoadAllSettings(oProcessTemplate As ProcessTemplate, oRoot As M
         End Select
     Next
     LoadAllSettings = True
+    Exit Function
+Err_Handler:
+    stackError Err, Me, "LoadAllSettings"
 End Function
 
 Private Function LoadAppSettings(oProcessTemplate As ProcessTemplate, oRoot As MSXML2.IXMLDOMNode) As Boolean
+    On Error GoTo Err_Handler
     Dim oNode As MSXML2.IXMLDOMNode
     Dim fLoadOK As Boolean
     Dim oPGTemp As PropertyGroup
@@ -133,9 +145,13 @@ Private Function LoadAppSettings(oProcessTemplate As ProcessTemplate, oRoot As M
         End If
     Next
     LoadAppSettings = True
+    Exit Function
+Err_Handler:
+    stackError Err, Me, "LoadAppSettings"
 End Function
 
 Private Function LoadPropGroups(oPropGroup As PropertyGroup, oRoot As IXMLDOMNode) As Boolean
+    On Error GoTo Err_Handler
     Dim oNode As IXMLDOMNode
     Dim oXMLPropPersist As XMLPropPersist
     
@@ -145,5 +161,8 @@ Private Function LoadPropGroups(oPropGroup As PropertyGroup, oRoot As IXMLDOMNod
         If Not oXMLPropPersist.XMLProperties(oPropGroup, oNode) Then Exit Function
     Next
     LoadPropGroups = True
+    Exit Function
+Err_Handler:
+    stackError Err, Me, "LoadPropGroups"
 End Function
 

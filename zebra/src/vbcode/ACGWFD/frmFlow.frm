@@ -461,7 +461,7 @@ Private Sub FlowGUI_DragDrop(Source As Control, X As Single, y As Single)
     FlowGUI.SetFocus
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -486,7 +486,7 @@ Private Sub FlowGUI_KeyUp(KeyCode As Integer, Shift As Integer)
     End If
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -835,8 +835,8 @@ Private Sub documentProcess()
     
     Set dlg = Parent.dlg
     dlg.Filter = "HTML Documents|*.html"
-    dlg.FilterIndex = 1
-    dlg.DialogTitle = "Document Process"
+    dlg.filterIndex = 1
+    dlg.dialogTitle = "Document Process"
     dlg.fileName = mProcessDef.Name
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
@@ -854,7 +854,7 @@ Private Sub documentProcess()
     oDocProcess.DocProcess mProcessDef, dlg.fileName, False
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc + "." & strErrFunc)
+    Select Case reportError(Err, Me, cstrFunc, strErrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -977,7 +977,7 @@ Private Sub ResetToTemplate()
     Call Sanitize
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1136,7 +1136,7 @@ Private Function CopySelected() As Boolean
     
     Exit Function
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1268,7 +1268,7 @@ Private Function Paste() As Boolean
     Paste = True
     Exit Function
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1288,8 +1288,8 @@ Private Sub ExportImage()
     
     Set dlg = Parent.dlg
     dlg.Filter = "Windows MetaFile|*.wmf|Enhanced Windows MetaFile|*.emf"
-    dlg.FilterIndex = 1
-    dlg.DialogTitle = "Export Flow Image"
+    dlg.filterIndex = 1
+    dlg.dialogTitle = "Export Flow Image"
     dlg.fileName = mProcessDef.Name
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
@@ -1302,7 +1302,7 @@ Private Sub ExportImage()
     
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1331,7 +1331,7 @@ Public Sub SaveImage(fileName As String)
     
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1410,7 +1410,7 @@ Public Function LoadFlow(fileName As String) As Boolean
     LoadFlow = True
     Exit Function
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1507,8 +1507,8 @@ Private Sub SaveFlow(saveAs As Boolean)
         
         Set dlg = Parent.dlg
         dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
-        dlg.FilterIndex = 1
-        dlg.DialogTitle = "New Process"
+        dlg.filterIndex = 1
+        dlg.dialogTitle = "New Process"
         dlg.fileName = "Copy of " & mProcessDef.Name & " Process"
         dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
         On Error Resume Next
@@ -1539,7 +1539,7 @@ Private Sub SaveFlow(saveAs As Boolean)
     
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc + "." & strErrFunc)
+    Select Case reportError(Err, Me, cstrFunc, strErrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1566,7 +1566,7 @@ Private Function AddGUINode(oTaskDef As TaskDef, Optional OffsetX As Single = 0,
     Set AddGUINode = oNode
     Exit Function
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1686,7 +1686,7 @@ Private Sub PrintFlow()
     FlowGUI.ShowGrid = True
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -1758,7 +1758,7 @@ Private Sub SpellCheck()
     Set oXLApp = Nothing
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry

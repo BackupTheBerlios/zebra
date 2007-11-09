@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BA5F9142-B708-4B5E-93B0-3948F8003F86}#1.1#0"; "PropertyGridControl.ocx"
+Object = "{BA5F9142-B708-4B5E-93B0-3948F8003F86}#1.2#0"; "PropertyGridControl.ocx"
 Begin VB.Form frmPropList 
    Caption         =   "Form1"
    ClientHeight    =   3195
@@ -98,8 +98,8 @@ Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, fileName As Strin
     Dim oLoad As XMLProcessVersion
     Set dlg = MDI.dlg
     dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
-    dlg.FilterIndex = 1
-    dlg.DialogTitle = "Set SubProcess"
+    dlg.filterIndex = 1
+    dlg.dialogTitle = "Set SubProcess"
     dlg.fileName = Me.Caption
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
@@ -151,7 +151,7 @@ Private Sub pg_FileBrowse(oProperty As ACGProperties.Property, fileName As Strin
     pg.Refresh
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -177,7 +177,7 @@ Private Sub pg_PropRemoved(oProperty As Property)
     'mPropBag.Remove Name
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry

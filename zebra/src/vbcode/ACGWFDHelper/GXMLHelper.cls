@@ -47,7 +47,7 @@ Public Function GetNodeAttr(oNode As IXMLDOMNode, Name As String, Optional Defau
     On Error Resume Next
     Dim strValue As String
     strValue = oNode.Attributes.getNamedItem(Name).nodeValue
-    If Err.Number <> 0 Then
+    If err.Number <> 0 Then
         strValue = DefaultValue
     Else
         strValue = Replace(strValue, vbLf, vbCrLf)
@@ -113,4 +113,5 @@ End Function
 Public Function Speech(Text As String) As String
     Speech = Replace(Text, """", """""")
 End Function
+
 

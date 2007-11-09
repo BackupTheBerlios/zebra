@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmPalette 
    Caption         =   "Form1"
    ClientHeight    =   3195
@@ -30,7 +30,7 @@ Begin VB.Form frmPalette
       _ExtentX        =   450
       _ExtentY        =   2778
       _Version        =   393216
-      Orientation     =   1179648
+      Orientation     =   1245184
    End
    Begin VB.PictureBox picScroll 
       Appearance      =   0  'Flat
@@ -106,7 +106,7 @@ Public Sub AddImage(Caption As String, ID As String, ImageFile As String, ToolTi
     Set ctl.Container = picScroll
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -155,7 +155,7 @@ Public Sub Redraw()
     
     Exit Sub
 Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry

@@ -103,7 +103,7 @@ Public Property Get activeProcessDef() As ProcessDef
 End Property
 Private Sub ds_CommandClick(ByVal Command As InnovaDSXP.Command)
     Const cstrFunc = "ds_CommandClick"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Dim fHandled As Boolean
     If Not (moContextMenu Is Nothing) Then
         fHandled = moContextMenu.CommandClick(Command)
@@ -135,8 +135,8 @@ Private Sub ds_CommandClick(ByVal Command As InnovaDSXP.Command)
     End If
     
     Exit Sub
-Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+err_handler:
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -176,8 +176,10 @@ Private Sub MenuHandlerHelp(ByRef Command As InnovaDSXP.Command)
     Dim ofrmMDI As frmMDI
     Select Case UCase$(Command.Name)
         Case "TLABOUT"
-            MsgBox "Version " & App.Major & "." & App.Minor & "." & App.Revision
-            
+            Dim strMsg As String
+            strMsg = "Template Path: " & getTemplatePath() & vbCrLf
+            strMsg = strMsg & "Version " & App.Major & "." & App.Minor & "." & App.Revision
+            MsgBox strMsg
     End Select
 End Sub
 
@@ -224,7 +226,7 @@ Private Sub SetTemplatePath()
 End Sub
 
 Private Sub MakeNewFlow()
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Dim oFlow As frmFlow
     Dim oDW As DocumentWindow
     Dim oProcessTemplate As ProcessTemplate
@@ -249,14 +251,14 @@ Private Sub MakeNewFlow()
     CopyPropGroup oProcessTemplate.ProcessProperties, oProcess.PropertyGroup, False, True
     
     dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
-    dlg.FilterIndex = 1
-    dlg.DialogTitle = "New Process"
+    dlg.filterIndex = 1
+    dlg.dialogTitle = "New Process"
     dlg.fileName = "New " & oProcessTemplate.Name & " Process"
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowSave
     If Err.Number <> 0 Then Exit Sub
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     strErrFunc = "Deleting existing file"
     If Len(Dir$(dlg.fileName)) > 0 Then
         Kill dlg.fileName
@@ -273,8 +275,8 @@ Private Sub MakeNewFlow()
     oFlow.LoadFlow dlg.fileName
     ds.DocumentWindows.AddForm CreateGUID, oProcess.Name, , oFlow, True
     Exit Sub
-Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc + "." & strErrFunc)
+err_handler:
+    Select Case reportError(Err, Me, cstrFunc, strErrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -339,8 +341,8 @@ Private Sub ExportAll()
 End Sub
 Private Function loadProcess() As frmFlow
     dlg.Filter = "ACG Process Format|*.acgwfd.xml"
-    dlg.FilterIndex = 1
-    dlg.DialogTitle = "Load Process"
+    dlg.filterIndex = 1
+    dlg.dialogTitle = "Load Process"
     '/dlg.FileName = Me.Caption
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
@@ -405,20 +407,28 @@ End Sub
 
 '/ application initialisation - this will be moved out of here at some point!
 Private Sub Form_Load()
+    On Error GoTo err_handler
+    Const cstrFunc = "Form_Load"
+    Dim strErrMsg As String
+    
     Set moContainer = New Container
     Dim oDW As InnovaDSXP.DockWindowForm
     
     Dim oPalette As frmPalette
-    
+    strErrMsg = "Init Palette"
     With ds
         Set oDW = .DockWindows.Item("dwStepTypes")
         Set oPalette = New frmPalette
         Set oDW.Form = oPalette
     End With
    
+    strErrMsg = "Load Palette"
     LoadPalette oPalette
     
+    strErrMsg = "Init View Menu"
+    
     Call InitViewMenu
+    strErrMsg = "Init Proplist"
     
     Dim oPropList As frmPropList
     Set oPropList = New frmPropList
@@ -441,9 +451,21 @@ Private Sub Form_Load()
 '        .AddWarning CreateGUID, "Test", "Problem Test"
 '    End With
     
+    strErrMsg = "Load Process Templates"
     
     LoadProcessTemplates
+    strErrMsg = "Load Addins"
     loadAddinMenus
+Exit Sub
+err_handler:
+    Select Case reportError(Err, Me, cstrFunc, strErrMsg)
+        Case vbIgnore
+            Resume Next
+        Case vbRetry
+            Resume 0
+        Case Else
+            Exit Sub
+    End Select
 End Sub
 
 Private Sub InitViewMenu()
@@ -489,7 +511,7 @@ Private Sub BatchConvert()
     Dim strScanPath As String
     Dim strNewPath As String
     
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Set oBrowse = New clShellBrowse
     With oBrowse
         .Caption = "Select path to convert"
@@ -521,8 +543,8 @@ Private Sub BatchConvert()
 
     MsgBox "Done"
 Exit Sub
-Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc & vbCrLf & "Flow: " & strErrMsg)
+err_handler:
+    Select Case reportError(Err, Me, cstrFunc, "Flow: " & strErrMsg)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -533,7 +555,7 @@ Err_Handler:
 End Sub
 
 Private Function loadProcessVers(fileName As String, Optional destPath As String = vbNullString) As Versions
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Const cstrFunc = "loadProcessVers"
     Dim fLoaded As Boolean
     Dim oVersions As New Versions
@@ -586,8 +608,8 @@ Private Function loadProcessVers(fileName As String, Optional destPath As String
     fLoaded = oLoad.FileLoadXML(strNewName, oVersions, moTemplates, moProcessTemplates)
     Set loadProcessVers = oVersions
     Exit Function
-Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc & vbCrLf & "Process: " & strErrMsg)
+err_handler:
+    Select Case reportError(Err, Me, cstrFunc, "Process: " & strErrMsg)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -598,7 +620,7 @@ Err_Handler:
 End Function
 
 Private Function OffsetPath(fileName As String, NewPath As String) As String
-    On Error GoTo Err_Handler:
+    On Error GoTo err_handler:
     Dim intPos As Integer
     Dim intStart As Integer
     intStart = 1
@@ -619,13 +641,13 @@ Private Function OffsetPath(fileName As String, NewPath As String) As String
         
     Loop
     
-Err_Handler:
+err_handler:
     Stop
     Resume 0
 End Function
 
 Private Sub MkDirExt(PathName As String)
-    On Error GoTo Err_Handler:
+    On Error GoTo err_handler:
     Dim intPos As Integer
     Dim intStart As Integer
     intStart = 1
@@ -638,12 +660,13 @@ Private Sub MkDirExt(PathName As String)
         intStart = intPos + 1
     Loop
     Exit Sub
-Err_Handler:
+err_handler:
     Stop
     Resume 0
 End Sub
 
 Private Sub LoadPalette(oPalette As frmPalette)
+    On Error GoTo err_handler
     Dim oTaskTemplateLoader As TaskTemplateLoader
     Dim oTaskTemplate As TaskTemplate
     Set oTaskTemplateLoader = New TaskTemplateLoader
@@ -656,9 +679,12 @@ Private Sub LoadPalette(oPalette As frmPalette)
     Next
    
     oPalette.Redraw
-   
+    Exit Sub
+err_handler:
+    stackError Err, Me, "loadPalette"
 End Sub
 Private Sub loadAddinMenus()
+    On Error GoTo err_handler
     Dim XMLAddins As New XMLAddinLoader
     Set mAddins = XMLAddins.loadAddins(getTemplatePath() & "..\Addins")
     Dim cAddin As Addin
@@ -667,8 +693,12 @@ Private Sub loadAddinMenus()
         Set cmd = ds.Commands.AddToolButton(cAddin.ClassName, cAddin.MenuName, , ds.Categories("Addins"))
         ds.Commands.GetPopupMenu("mnuAddins").CommandBar.Controls.Add cmd.ID
     Next
+    Exit Sub
+err_handler:
+    stackError Err, Me, "loadAddinMenus"
 End Sub
 Private Sub LoadProcessTemplates()
+    On Error GoTo err_handler
     Dim oXMLProcessTemplate As XMLProcessTemplate
     
     Set oXMLProcessTemplate = New XMLProcessTemplate
@@ -679,6 +709,9 @@ Private Sub LoadProcessTemplates()
     If Not oXMLProcessTemplate.LoadTemplates(strTemplatePath & "processes", moProcessTemplates) Then
         MsgBox "Failed to load process templates", vbCritical
     End If
+    Exit Sub
+err_handler:
+    stackError Err, Me, "loadProcessTemplates"
 End Sub
 
 Public Function getTemplatePath() As String
@@ -697,7 +730,7 @@ End Function
 Private Sub MenuHandlerEdit(Command As InnovaDSXP.Command)
     Dim oPropWin As frmPropList
     Set oPropWin = ds.DockWindows.GetForm("dwProperties").Form
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Select Case LCase$(Command.Name)
         Case "tlpropertyadd"
             frmPropertyAdd.AddProp oPropWin
@@ -706,12 +739,12 @@ Private Sub MenuHandlerEdit(Command As InnovaDSXP.Command)
             
     End Select
     '# ignore errors, like I care
-Err_Handler:
+err_handler:
     
 End Sub
 
 Private Sub combineVersions()
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Const cstrFunc = "combineVersions"
     Dim pathBase As String
     Dim pathCombine As String
@@ -784,7 +817,7 @@ Private Sub combineVersions()
             If Err.Number <> 0 Then
                 FileCopy pathCombine & "\" & oProcessDef.Name & ".acgwfd.xml", strFileName
             End If
-            On Error GoTo Err_Handler
+            On Error GoTo err_handler
         End If
 
         oSave.FileSaveXML strFileName, oVersions, oProcessDef
@@ -792,8 +825,8 @@ Private Sub combineVersions()
 
     MsgBox "Process Definitions combined!", vbInformation
     Exit Sub
-Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc)
+err_handler:
+    Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
         Case vbRetry
@@ -804,7 +837,7 @@ Err_Handler:
 End Sub
 
 Private Function loadProcessVersions(fromPath As String, Optional destConvertPath As String) As Collection
-    On Error GoTo Err_Handler:
+    On Error GoTo err_handler:
     Const cstrFunc = "loadProcessVersions"
     Dim oRtn As New Collection
     Dim oScan As ACGWFDHelper.ScanPath
@@ -822,8 +855,8 @@ Private Function loadProcessVersions(fromPath As String, Optional destConvertPat
     Loop
     Set loadProcessVersions = oRtn
     Exit Function
-Err_Handler:
-    Select Case StdErrMsg(Err, mcstrModule, cstrFunc & vbCrLf & "Process: " & strErrMsg)
+err_handler:
+    Select Case reportError(Err, Me, cstrFunc, "Process: " & strErrMsg)
         Case vbIgnore
             Resume Next
         Case vbRetry

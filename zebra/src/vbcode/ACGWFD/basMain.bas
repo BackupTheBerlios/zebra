@@ -24,16 +24,20 @@ Public Const mcstrSettingSection = "Settings"
 
 '/ called on application startup
 Sub Main()
+    On Error GoTo err_handler
     frmMDI.Show
     
     If Len(Command$) > 0 Then
         '# load the flow specified in the command$
         frmMDI.CommandLineLoadProcess Mid$(Command$, 2, Len(Command$) - 2)
     End If
+    Exit Sub
+err_handler:
+    reportError Err, "basMain", "main"
 End Sub
 
 Public Sub CopyPropGroup(oPGSource As PropertyGroup, oPGDest As PropertyGroup, Optional EraseUnmatchedValues As Boolean = False, Optional OverwriteExistingValues As Boolean = False, Optional EnforceSourceNames As Boolean = False)
-    On Error GoTo Err_Handler:
+    On Error GoTo err_handler:
     Dim oProps As Properties
     Dim oDestProps As Properties
     
@@ -48,7 +52,7 @@ Public Sub CopyPropGroup(oPGSource As PropertyGroup, oPGDest As PropertyGroup, O
         
     Next
     Exit Sub
-Err_Handler:
+err_handler:
     Stop
     Resume 0
 End Sub
