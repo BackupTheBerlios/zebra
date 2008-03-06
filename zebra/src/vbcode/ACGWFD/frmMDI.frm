@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F74DBB97-4C02-4B5D-AB22-1D7E188F4415}#1.0#0"; "innovadsxp.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmMDI 
    Caption         =   "ACG Workflow Designer"
    ClientHeight    =   8505
@@ -251,8 +251,8 @@ Private Sub MakeNewFlow()
     CopyPropGroup oProcessTemplate.ProcessProperties, oProcess.PropertyGroup, False, True
     
     dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
-    dlg.filterIndex = 1
-    dlg.dialogTitle = "New Process"
+    dlg.FilterIndex = 1
+    dlg.DialogTitle = "New Process"
     dlg.fileName = "New " & oProcessTemplate.Name & " Process"
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
@@ -328,7 +328,7 @@ Private Sub ExportAll()
     oScan.StartScan strProcessPath & "\", ".acgwfd.xml"
     Dim oFlow As frmFlow
     Do Until oScan.FileList.Count = 0
-        Set oFlow = LoadFromFile(oScan.FileList(1))
+        Set oFlow = LoadFromFile(oScan.FileList(1), False)
         If (oFlow Is Nothing) Then
             MsgBox "Could not load " & oScan.FileList(1), vbExclamation
         Else
@@ -341,8 +341,8 @@ Private Sub ExportAll()
 End Sub
 Private Function loadProcess() As frmFlow
     dlg.Filter = "ACG Process Format|*.acgwfd.xml"
-    dlg.filterIndex = 1
-    dlg.dialogTitle = "Load Process"
+    dlg.FilterIndex = 1
+    dlg.DialogTitle = "Load Process"
     '/dlg.FileName = Me.Caption
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
@@ -360,11 +360,11 @@ Public Sub CommandLineLoadProcess(fileName As String)
         Set oDW = ds.DocumentWindows.AddForm(CreateGUID, oFlow.getCaption, , oFlow, True)
     End If
 End Sub
-Private Function LoadFromFile(fileName As String) As frmFlow
+Private Function LoadFromFile(fileName As String, Optional showVersions As Boolean = True) As frmFlow
     Dim oFlow As frmFlow
     Set oFlow = New frmFlow
     oFlow.init moContainer, New ProcessTemplate, moTemplates, moProcessTemplates
-    If Not oFlow.LoadFlow(fileName) Then
+    If Not oFlow.LoadFlow(fileName, showVersions) Then
         Unload oFlow
         Set oFlow = Nothing
     End If

@@ -429,7 +429,7 @@ End Function
 
 Private Sub FlowGUI_DragDrop(Source As Control, X As Single, y As Single)
     Const cstrFunc = "flow_DragDrop"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Dim oNode As AddFlow4Lib.afNode
     Dim oTaskDef As TaskDef
     Dim oTaskTemplate As TaskTemplate
@@ -460,7 +460,7 @@ Private Sub FlowGUI_DragDrop(Source As Control, X As Single, y As Single)
     Call ShowPropWin
     FlowGUI.SetFocus
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -480,12 +480,12 @@ Private Sub DoTaskProps(oTaskDef As TaskDef, oTaskTemplate As TaskTemplate)
 End Sub
 Private Sub FlowGUI_KeyUp(KeyCode As Integer, Shift As Integer)
     Const cstrFunc As String = "FlowGUI_KeyUp"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     If KeyCode = vbKeyDelete Then
         DeleteSelected
     End If
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -835,14 +835,14 @@ Private Sub documentProcess()
     
     Set dlg = Parent.dlg
     dlg.Filter = "HTML Documents|*.html"
-    dlg.filterIndex = 1
-    dlg.dialogTitle = "Document Process"
+    dlg.FilterIndex = 1
+    dlg.DialogTitle = "Document Process"
     dlg.fileName = mProcessDef.Name
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowSave
     If Err.Number <> 0 Then Exit Sub
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     strErrFunc = "Deleting existing file"
     If Len(Dir$(dlg.fileName)) > 0 Then
         Kill dlg.fileName
@@ -853,7 +853,7 @@ Private Sub documentProcess()
     Set oDocProcess = New DocFlow
     oDocProcess.DocProcess mProcessDef, dlg.fileName, False
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc, strErrFunc)
         Case vbIgnore
             Resume Next
@@ -953,7 +953,7 @@ End Function
 '/ resets the currently select item (flow, task or routing) back to the template specified default
 Private Sub ResetToTemplate()
     Const cstrFunc = "ResetToTemplate"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     
     If MsgBox("Are you SURE you want to reset the selected items to their template-supplied default values?", vbYesNo + vbDefaultButton2) = vbNo Then Exit Sub
     Dim oNode As afNode
@@ -976,7 +976,7 @@ Private Sub ResetToTemplate()
     End If
     Call Sanitize
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1050,7 +1050,7 @@ End Function
 Private Function CopySelected() As Boolean
     '/r TRUE if the selection could be copied (cannot copy routing when destination steps is not selected)
     Const cstrFunc = "CopySelected"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     
     Dim oNewProcess As ProcessDef
     Dim oNode As afNode
@@ -1097,13 +1097,13 @@ Private Function CopySelected() As Boolean
         On Error Resume Next
         Set oTaskOrg = Nothing
         Set oTaskOrg = oNewProcess.Tasks(oLink.Org.key)
-        On Error GoTo Err_Handler
+        On Error GoTo err_handler
         '/ we only copy the routing into the clipboard IF the source and dest tasks have also been selected
         If Not (oTaskOrg Is Nothing) Then
             On Error Resume Next
             Set oTaskDest = Nothing
             Set oTaskDest = oNewProcess.Tasks(oLink.Dst.key)
-            On Error GoTo Err_Handler
+            On Error GoTo err_handler
             If Not (oTaskDest Is Nothing) Then
                 ' all present and correct, make new GUID for routing to prevent paste errors
                 Set oNewRouting = oNewProcess.Routings.Add(oTaskOrg, oTaskDest, CreateGUID)
@@ -1135,7 +1135,7 @@ Private Function CopySelected() As Boolean
     CopySelected = True
     
     Exit Function
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1150,7 +1150,7 @@ End Function
 '/ pastes data in from the clipboard
 Private Function Paste() As Boolean
     Const cstrFunc = "Paste"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     
     Dim oXML As MSXML2.DOMDocument
     Dim oRoot As MSXML2.IXMLDOMNode
@@ -1267,7 +1267,7 @@ Private Function Paste() As Boolean
     Call Sanitize
     Paste = True
     Exit Function
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1282,26 +1282,26 @@ End Function
 
 Private Sub ExportImage()
     Const cstrFunc = "ExportImage"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     
     Dim dlg As MSComDlg.CommonDialog
     
     Set dlg = Parent.dlg
     dlg.Filter = "Windows MetaFile|*.wmf|Enhanced Windows MetaFile|*.emf"
-    dlg.filterIndex = 1
-    dlg.dialogTitle = "Export Flow Image"
+    dlg.FilterIndex = 1
+    dlg.DialogTitle = "Export Flow Image"
     dlg.fileName = mProcessDef.Name
     dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
     On Error Resume Next
     dlg.ShowSave
     If Err.Number <> 0 Then Exit Sub
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     
     SaveImage dlg.fileName
     MsgBox "Export Complete"
     
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1317,7 +1317,7 @@ Public Property Get ProcessDef() As ACGProcessDefs.ProcessDef
 End Property
 
 Public Sub SaveImage(fileName As String)
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Const cstrFunc = "SaveImage"
     If Len(Dir$(fileName)) > 0 Then
         Kill fileName
@@ -1330,7 +1330,7 @@ Public Sub SaveImage(fileName As String)
     End If
     
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1362,9 +1362,9 @@ Private Sub ShowPropWin()
     End If
     moPropList.init moParent, moTaskTemplates, moProcessTemplates
 End Sub
-Public Function LoadFlow(fileName As String) As Boolean
+Public Function LoadFlow(fileName As String, Optional showVersions As Boolean = True) As Boolean
     Const cstrFunc = "LoadFlow"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Dim oLoad As XMLProcessVersion
     Set oLoad = New XMLProcessVersion
     Set moVersions = New Versions
@@ -1392,9 +1392,13 @@ Public Function LoadFlow(fileName As String) As Boolean
         oLoad.FileSaveXML mstrFileName, moVersions, mProcessDef
     Else
         '// pop up versions dialog
-        Set mProcessVersion = frmVersions.showVersions(moVersions)
-        mForUpdate = frmVersions.forUpdate
-        
+        If (showVersions) Then
+            Set mProcessVersion = frmVersions.showVersions(moVersions)
+            mForUpdate = frmVersions.forUpdate
+        Else
+            Set mProcessVersion = moVersions(moVersions.MaxVer)
+            mForUpdate = False
+        End If
         Set mProcessDef = mProcessVersion.ProcessDef
         '/Set mProcessDef = oVersions(oVersions.MaxVer).ProcessDef
     End If
@@ -1409,7 +1413,7 @@ Public Function LoadFlow(fileName As String) As Boolean
     Call LoadFromFlow
     LoadFlow = True
     Exit Function
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1459,7 +1463,7 @@ Private Sub SaveFlow(saveAs As Boolean)
     Const cstrFunc = "SaveFlow"
     Dim strErrFunc As String
     strErrFunc = "Initialisation"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     Call Sanitize
     If mProcessDef.isValid = False Then
         MsgBox "Warning - the current flow is not valid will not work correctly in the engine", vbExclamation
@@ -1507,14 +1511,14 @@ Private Sub SaveFlow(saveAs As Boolean)
         
         Set dlg = Parent.dlg
         dlg.Filter = "ACG WorkFlow Format|*.acgwfd.xml"
-        dlg.filterIndex = 1
-        dlg.dialogTitle = "New Process"
+        dlg.FilterIndex = 1
+        dlg.DialogTitle = "New Process"
         dlg.fileName = "Copy of " & mProcessDef.Name & " Process"
         dlg.Flags = MSComDlg.cdlOFNOverwritePrompt
         On Error Resume Next
         dlg.ShowSave
         If Err.Number <> 0 Then Exit Sub
-        On Error GoTo Err_Handler
+        On Error GoTo err_handler
         strErrFunc = "Deleting existing file"
         If Len(Dir$(dlg.fileName)) > 0 Then
             Kill dlg.fileName
@@ -1538,7 +1542,7 @@ Private Sub SaveFlow(saveAs As Boolean)
     FlowGUI.SetChangedFlag False
     
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc, strErrFunc)
         Case vbIgnore
             Resume Next
@@ -1551,7 +1555,7 @@ End Sub
 
 Private Function AddGUINode(oTaskDef As TaskDef, Optional OffsetX As Single = 0, Optional OffsetY As Single = 0) As afNode
     Const cstrFunc = "AddGUINode"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     
     '/ create a GUI node from a FlowNode class
     Dim oNode As AddFlow4Lib.afNode
@@ -1565,7 +1569,7 @@ Private Function AddGUINode(oTaskDef As TaskDef, Optional OffsetX As Single = 0,
     End With
     Set AddGUINode = oNode
     Exit Function
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1646,7 +1650,7 @@ End Sub
 
 Private Sub PrintFlow()
     Const cstrFunc = "PrintFlow"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     prn.hWndFlow = FlowGUI.hWnd
 
     Dim strName As String
@@ -1685,7 +1689,7 @@ Private Sub PrintFlow()
     prn.PrintDoc
     FlowGUI.ShowGrid = True
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
@@ -1706,7 +1710,7 @@ End Sub
 '/ calls Excel late bound, so as to not fail on machines that dont have excel installed and to be version independant
 Private Sub SpellCheck()
     Const cstrFunc = "SpellCheck"
-    On Error GoTo Err_Handler
+    On Error GoTo err_handler
     
     Dim oXLApp As Object
     Dim oXLBook As Object
@@ -1757,7 +1761,7 @@ Private Sub SpellCheck()
     oXLApp.Application.Quit
     Set oXLApp = Nothing
     Exit Sub
-Err_Handler:
+err_handler:
     Select Case reportError(Err, Me, cstrFunc)
         Case vbIgnore
             Resume Next
